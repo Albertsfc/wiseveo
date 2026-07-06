@@ -1,0 +1,172 @@
+import { NextResponse, type NextRequest } from "next/server"
+
+import { prisma } from "@/lib/prisma"
+import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
+
+export interface ExpenseGroupItem {
+  groupCode: string
+  groupName: string
+  amount: number
+  paid: number
+  scheduled: number
+  percentage: number
+}
+
+function parseDateBoundary(value: string, endOfDay: boolean): Date | null {
+  const dateMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})/)
+
+  if (dateMatch) {
+    const [, y, m, d] = dateMatch
+    const year = Number(y)
+    const month = Number(m)
+    const day = Number(d)
+
+    return endOfDay
+      ? new Date(Date.UTC(year, month - 1, day, 23, 59, 59, 999))
+      : new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0))
+  }
+
+  const parsed = new Date(value)
+  if (Number.isNaN(parsed.getTime())) return null
+
+  return endOfDay
+    ? new Date(
+      Date.UTC(
+        parsed.getUTCFullYear(),
+        parsed.getUTCMonth(),
+        parsed.getUTCDate(),
+        23, 59, 59, 999,
+      ),
+    )
+    : new Date(
+      Date.UTC(
+        parsed.getUTCFullYear(),
+        parsed.getUTCMonth(),
+        parsed.getUTCDate(),
+        0, 0, 0, 0,
+      ),
+    )
+}
+
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl
+  const fromParam = searchParams.get("from")
+  const toParam = searchParams.get("to")
+
+  if (!fromParam || !toParam) {
+    return NextResponse.json(
+      { error: "Parâmetros 'from' e 'to' são obrigatórios" },
+      { status: 400 },
+    )
+  }
+
+  const from = parseDateBoundary(fromParam, false)
+  const to = parseDateBoundary(toParam, true)
+
+  if (!from || !to || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) {
+    return NextResponse.json({ error: "Datas inválidas" }, { status: 400 })
+  }
+
+  const userId = await getDefaultUserId()
+
+  if (!userId) {
+    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+  }
+
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId,
+      date: { gte: from, lte: to },
+      OR: [
+        { type: "EXPENSE" },
+        { type: "TRANSFER", amount: { lt: 0 } },
+      ],
+    },
+    select: {
+      amount: true,
+      groupCode: true,
+      type: true,
+      statusLookup: {
+        select: {
+          name: true,
+        },
+      },
+      category: {
+        select: {
+          group: {
+            select: {
+              code: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  const groupMap = new Map<number, { name: string; total: number; paid: number; scheduled: number }>()
+
+  for (const tx of transactions) {
+    const isTransfer = tx.type === "TRANSFER"
+    const code = isTransfer ? -1 : (tx.groupCode ?? tx.category?.group?.code ?? 0)
+    let name = isTransfer ? "OUTROS" : (tx.category?.group?.name ?? "OUTROS")
+
+    if (name.toLowerCase() === "outros") {
+      name = "OUTROS"
+    }
+
+    const absAmount = Math.abs(Number(tx.amount ?? 0))
+    const isPaid = tx.statusLookup?.name?.toLowerCase() === "pago"
+
+    const existing = groupMap.get(code)
+    if (existing) {
+      existing.total += absAmount
+      if (isPaid) existing.paid += absAmount
+      else existing.scheduled += absAmount
+    } else {
+      groupMap.set(code, {
+        name,
+        total: absAmount,
+        paid: isPaid ? absAmount : 0,
+        scheduled: isPaid ? 0 : absAmount,
+      })
+    }
+  }
+
+  const totalExpense = Array.from(groupMap.values()).reduce(
+    (sum, g) => sum + g.total,
+    0,
+  )
+
+  let sortedGroups: ExpenseGroupItem[] = Array.from(groupMap.entries())
+    .map(([groupCode, { name, total, paid, scheduled }]) => ({
+      groupCode: String(groupCode),
+      groupName: name,
+      amount: total,
+      paid,
+      scheduled,
+      percentage: totalExpense > 0 ? (total / totalExpense) * 100 : 0,
+    }))
+    .sort((a, b) => b.amount - a.amount)
+
+  if (sortedGroups.length > 5) {
+    const top5 = sortedGroups.slice(0, 5)
+    const others = sortedGroups.slice(5)
+    const othersTotal = others.reduce((sum, g) => sum + g.amount, 0)
+    const othersPaid = others.reduce((sum, g) => sum + g.paid, 0)
+    const othersScheduled = others.reduce((sum, g) => sum + g.scheduled, 0)
+    
+    top5.push({
+      groupCode: "others",
+      groupName: "OUTROS",
+      amount: othersTotal,
+      paid: othersPaid,
+      scheduled: othersScheduled,
+      percentage: totalExpense > 0 ? (othersTotal / totalExpense) * 100 : 0,
+    })
+    
+    sortedGroups = top5
+  }
+
+  return NextResponse.json({ groups: sortedGroups, totalExpense })
+}

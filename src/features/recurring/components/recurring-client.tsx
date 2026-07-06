@@ -1,0 +1,1001 @@
+"use client"
+
+import { useEffect, useMemo, useState } from "react"
+import { ArrowRightLeft, TrendingDown, TrendingUp } from "lucide-react"
+import { toast } from "sonner"
+
+import { DataTable } from "./data-table"
+import { getRecurringColumns } from "./columns"
+import { Button } from "@/components/ui/button"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { DetailPanel, DetailPanelCloseButton } from "@/components/detail-panel"
+import type {
+  FormCategory,
+  FormCategoryGroup,
+  FormPayee,
+  TransactionFormOptions,
+} from "@/features/transactions/types"
+import type {
+  SerializedRecurringTransaction,
+  RecurringFilterOptions,
+} from "../types"
+
+type TransactionType = "INCOME" | "EXPENSE" | "TRANSFER"
+
+interface RecurringClientProps {
+  initialRecurring: SerializedRecurringTransaction[]
+  filterOptions: RecurringFilterOptions
+  formOptions: TransactionFormOptions
+}
+
+interface EditFormState {
+  date: string
+  note: string
+  description: string
+  reference: string
+  amount: string
+  type: TransactionType
+  accountId: string
+  groupCode: string
+  categoryCode: string
+  statusCode: string
+  payeeId: string
+}
+
+function getTypeDotClass(type: TransactionType) {
+  if (type === "INCOME") return "bg-chart-2"
+  if (type === "EXPENSE") return "bg-destructive"
+  return "bg-chart-1"
+}
+
+function getTypeTextClass(type: TransactionType) {
+  if (type === "INCOME") return "text-chart-2"
+  if (type === "EXPENSE") return "text-destructive"
+  return "text-chart-1"
+}
+
+function getTypeAccentClass(type: TransactionType) {
+  if (type === "INCOME") return "text-chart-2 border-l-chart-2"
+  if (type === "EXPENSE") return "text-destructive border-l-destructive"
+  return "text-chart-1 border-l-chart-1"
+}
+
+function getInitialEditForm(): EditFormState {
+  return {
+    date: new Date().toISOString().split("T")[0],
+    note: "",
+    description: "",
+    reference: "",
+    amount: "",
+    type: "EXPENSE",
+    accountId: "",
+    groupCode: "",
+    categoryCode: "",
+    statusCode: "",
+    payeeId: "none",
+  }
+}
+
+export function RecurringClient({
+  initialRecurring,
+  filterOptions,
+  formOptions,
+}: RecurringClientProps) {
+  const monetary = useMonetaryFormattingSafe()
+  const columns = useMemo(() => getRecurringColumns(monetary), [monetary])
+  const [recurringData, setRecurringData] = useState(initialRecurring)
+  const [launchTarget, setLaunchTarget] =
+    useState<SerializedRecurringTransaction | null>(null)
+  const [deleteTarget, setDeleteTarget] =
+    useState<SerializedRecurringTransaction | null>(null)
+  const [editTarget, setEditTarget] =
+    useState<SerializedRecurringTransaction | null>(null)
+  const [actionLoading, setActionLoading] = useState(false)
+  const [batchLoading, setBatchLoading] = useState(false)
+  const [editForm, setEditForm] = useState<EditFormState>(getInitialEditForm)
+  const [filteredGroups, setFilteredGroups] = useState<FormCategoryGroup[]>([])
+  const [filteredCategories, setFilteredCategories] = useState<FormCategory[]>(
+    []
+  )
+  const [payeeOptions, setPayeeOptions] = useState<FormPayee[]>(formOptions.payees)
+  const [suggestions, setSuggestions] = useState<FormPayee[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+
+  const closeEditDialog = () => {
+    setEditTarget(null)
+    setEditForm(getInitialEditForm())
+    setFilteredGroups([])
+    setFilteredCategories([])
+    setSuggestions([])
+    setShowSuggestions(false)
+  }
+
+  const openEditDialog = (recurring: SerializedRecurringTransaction) => {
+    const groupsForType = formOptions.groups.filter((g) => g.type === recurring.type)
+    const selectedGroup =
+      groupsForType.find((g) => g.code === recurring.groupCode) ??
+      groupsForType[0]
+    const categoriesForGroup = selectedGroup
+      ? formOptions.categories.filter((c) => c.groupId === selectedGroup.id)
+      : []
+    const selectedCategory =
+      categoriesForGroup.find((c) => c.code === recurring.categoryCode) ??
+      categoriesForGroup[0]
+
+    const accountExists = formOptions.accounts.some(
+      (account) => account.id === recurring.accountId
+    )
+    const statusExists = formOptions.statuses.some(
+      (status) => status.code === recurring.statusCode
+    )
+    const payeeExists =
+      recurring.payeeId === null
+        ? true
+        : payeeOptions.some((payee) => payee.id === recurring.payeeId)
+
+    setFilteredGroups(groupsForType)
+    setFilteredCategories(categoriesForGroup)
+    setEditForm({
+      date: recurring.lastDate
+        ? recurring.lastDate.slice(0, 10)
+        : new Date().toISOString().split("T")[0],
+      note: recurring.note ?? "",
+      description: recurring.description ?? "",
+      reference: recurring.reference ?? "",
+      amount: String(Math.abs(recurring.amount)),
+      type: recurring.type,
+      accountId: accountExists
+        ? String(recurring.accountId)
+        : formOptions.accounts[0]
+          ? String(formOptions.accounts[0].id)
+          : "",
+      groupCode: selectedGroup ? String(selectedGroup.code) : "",
+      categoryCode: selectedCategory?.code ?? "",
+      statusCode: statusExists
+        ? String(recurring.statusCode)
+        : formOptions.statuses[0]
+          ? String(formOptions.statuses[0].code)
+          : "",
+      payeeId:
+        recurring.payeeId === null || !payeeExists
+          ? "none"
+          : String(recurring.payeeId),
+    })
+    setSuggestions([])
+    setShowSuggestions(false)
+    setEditTarget(recurring)
+  }
+
+  useEffect(() => {
+    if (!editTarget) return
+
+    const groupsForType = formOptions.groups.filter(
+      (group) => group.type === editForm.type
+    )
+    const selectedGroup =
+      groupsForType.find(
+        (group) => String(group.code) === editForm.groupCode
+      ) ?? groupsForType[0]
+
+    const categoriesForGroup = selectedGroup
+      ? formOptions.categories.filter(
+          (category) => category.groupId === selectedGroup.id
+        )
+      : []
+    const selectedCategory =
+      categoriesForGroup.find(
+        (category) => category.code === editForm.categoryCode
+      ) ?? categoriesForGroup[0]
+
+    setFilteredGroups(groupsForType)
+    setFilteredCategories(categoriesForGroup)
+
+    const nextGroupCode = selectedGroup ? String(selectedGroup.code) : ""
+    const nextCategoryCode = selectedCategory?.code ?? ""
+
+    if (
+      nextGroupCode !== editForm.groupCode ||
+      nextCategoryCode !== editForm.categoryCode
+    ) {
+      setEditForm((prev) => ({
+        ...prev,
+        groupCode: nextGroupCode,
+        categoryCode: nextCategoryCode,
+      }))
+    }
+  }, [
+    editTarget,
+    editForm.type,
+    editForm.groupCode,
+    editForm.categoryCode,
+    formOptions.groups,
+    formOptions.categories,
+  ])
+
+  const handleLaunchConfirm = async () => {
+    if (!launchTarget) return
+    setActionLoading(true)
+    try {
+      const response = await fetch(
+        `/api/recurring-transactions/${launchTarget.id}/launch`,
+        { method: "POST" }
+      )
+      const payload = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        toast.error(payload.error || "Erro ao lançar transação recorrente")
+        return
+      }
+
+      setRecurringData((prev) =>
+        prev.map((item) =>
+          item.id === launchTarget.id
+            ? {
+                ...item,
+                lastDate: payload.recurring?.lastDate
+                  ? String(payload.recurring.lastDate)
+                  : payload.transaction?.date
+                    ? String(payload.transaction.date)
+                    : item.lastDate,
+                period:
+                  typeof payload.recurring?.period === "string"
+                    ? payload.recurring.period
+                    : item.period,
+              }
+            : item
+        )
+      )
+
+      toast.success("Transação lançada com sucesso")
+      setLaunchTarget(null)
+    } catch {
+      toast.error("Erro ao lançar transação recorrente")
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return
+    setActionLoading(true)
+    try {
+      const response = await fetch(`/api/recurring-transactions/${deleteTarget.id}`, {
+        method: "DELETE",
+      })
+      const payload = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        toast.error(payload.error || "Erro ao excluir recorrência")
+        return
+      }
+
+      setRecurringData((prev) => prev.filter((item) => item.id !== deleteTarget.id))
+      toast.success("Recorrência excluída com sucesso")
+      setDeleteTarget(null)
+    } catch {
+      toast.error("Erro ao excluir recorrência")
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editTarget) return
+
+    if (
+      !editForm.date ||
+      !editForm.amount ||
+      !editForm.accountId ||
+      !editForm.groupCode ||
+      !editForm.categoryCode ||
+      !editForm.statusCode
+    ) {
+      toast.error("Preencha todos os campos obrigatórios")
+      return
+    }
+
+    const parsedAmount = Number(editForm.amount.replace(",", "."))
+    if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+      toast.error("Informe um valor válido")
+      return
+    }
+
+    const normalizedAmount =
+      editForm.type === "EXPENSE"
+        ? -Math.abs(parsedAmount)
+        : Math.abs(parsedAmount)
+
+    setActionLoading(true)
+    try {
+      const response = await fetch(`/api/recurring-transactions/${editTarget.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          lastDate: editForm.date,
+          note: editForm.note.trim() || null,
+          description: editForm.description.trim() || null,
+          reference: editForm.reference.trim() || null,
+          amount: normalizedAmount,
+          type: editForm.type,
+          accountId: Number(editForm.accountId),
+          groupCode: Number(editForm.groupCode),
+          categoryCode: editForm.categoryCode,
+          statusCode: Number(editForm.statusCode),
+          payeeId: editForm.payeeId === "none" ? null : Number(editForm.payeeId),
+          payeeName: editForm.note.trim() || null,
+        }),
+      })
+
+      const payload = await response.json().catch(() => ({}))
+      if (!response.ok) {
+        toast.error(payload.error || "Erro ao editar recorrência")
+        return
+      }
+
+      const account = formOptions.accounts.find(
+        (item) => String(item.id) === editForm.accountId
+      )
+      const category = formOptions.categories.find(
+        (item) => item.code === editForm.categoryCode
+      )
+      const group = category
+        ? formOptions.groups.find((item) => item.id === category.groupId)
+        : undefined
+      const status = formOptions.statuses.find(
+        (item) => String(item.code) === editForm.statusCode
+      )
+      const resolvedPayeeId =
+        typeof payload.payeeId === "number"
+          ? payload.payeeId
+          : editForm.payeeId === "none"
+            ? null
+            : Number(editForm.payeeId)
+      const resolvedPayeeName =
+        payload?.payee?.name ??
+        (resolvedPayeeId && editForm.note.trim() ? editForm.note.trim() : null)
+
+      if (
+        resolvedPayeeId &&
+        resolvedPayeeName &&
+        !payeeOptions.some((item) => item.id === resolvedPayeeId)
+      ) {
+        setPayeeOptions((prev) => [
+          ...prev,
+          { id: resolvedPayeeId, name: resolvedPayeeName },
+        ])
+      }
+
+      setRecurringData((prev) =>
+        prev.map((item) =>
+          item.id === editTarget.id
+            ? {
+                ...item,
+                lastDate: payload.lastDate
+                  ? String(payload.lastDate)
+                  : `${editForm.date}T12:00:00.000Z`,
+                period:
+                  typeof payload.period === "string"
+                    ? payload.period
+                    : item.period,
+                note: editForm.note.trim() || null,
+                description: editForm.description.trim() || null,
+                reference: editForm.reference.trim() || null,
+                amount: normalizedAmount,
+                type: editForm.type,
+                accountId: Number(editForm.accountId),
+                groupCode: Number(editForm.groupCode),
+                categoryCode: editForm.categoryCode,
+                statusCode: Number(editForm.statusCode),
+                payeeId: resolvedPayeeId,
+                account: {
+                  id: String(editForm.accountId),
+                  name: account?.name ?? item.account.name,
+                },
+                category: {
+                  id: category?.id ?? item.category.id,
+                  name: category?.name ?? item.category.name,
+                  group: {
+                    id: group?.id ?? item.category.group.id,
+                    name: group?.name ?? item.category.group.name,
+                  },
+                },
+                status: {
+                  name: status?.name ?? item.status.name,
+                },
+                payee:
+                  resolvedPayeeId && resolvedPayeeName
+                    ? { id: String(resolvedPayeeId), name: resolvedPayeeName }
+                  : null,
+              }
+            : item
+        )
+      )
+
+      toast.success("Recorrência atualizada com sucesso")
+      closeEditDialog()
+    } catch {
+      toast.error("Erro ao editar recorrência")
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  const handleBatchLaunch = async (
+    items: SerializedRecurringTransaction[]
+  ): Promise<boolean> => {
+    if (items.length === 0) return true
+
+    setBatchLoading(true)
+    try {
+      const launched: Array<{ id: string; date: string; period: string | null }> = []
+      let failed = 0
+
+      for (const recurring of items) {
+        try {
+          const response = await fetch(
+            `/api/recurring-transactions/${recurring.id}/launch`,
+            { method: "POST" }
+          )
+          const payload = await response.json().catch(() => ({}))
+          if (!response.ok) {
+            failed += 1
+            continue
+          }
+          const launchedDate =
+            payload.recurring?.lastDate
+              ? String(payload.recurring.lastDate)
+              : payload.transaction?.date
+                ? String(payload.transaction.date)
+                : recurring.lastDate ?? new Date().toISOString()
+          const launchedPeriod =
+            typeof payload.recurring?.period === "string"
+              ? payload.recurring.period
+              : null
+          launched.push({ id: recurring.id, date: launchedDate, period: launchedPeriod })
+        } catch {
+          failed += 1
+        }
+      }
+
+      if (launched.length > 0) {
+        const launchedMap = new Map(
+          launched.map((item) => [item.id, { date: item.date, period: item.period }])
+        )
+        setRecurringData((prev) =>
+          prev.map((item) =>
+            launchedMap.has(item.id)
+              ? {
+                  ...item,
+                  lastDate: launchedMap.get(item.id)?.date ?? item.lastDate,
+                  period: launchedMap.get(item.id)?.period ?? item.period,
+                }
+              : item
+          )
+        )
+      }
+
+      if (failed === 0) {
+        toast.success(
+          `${launched.length} transa${launched.length === 1 ? "ção lançada" : "ções lançadas"} com sucesso`
+        )
+      } else if (launched.length > 0) {
+        toast.warning(
+          `${launched.length} lançada(s) e ${failed} com falha`
+        )
+      } else {
+        toast.error("Falha ao lançar recorrências selecionadas")
+      }
+
+      return true
+    } finally {
+      setBatchLoading(false)
+    }
+  }
+
+  const handleBatchEditDate = async (
+    items: SerializedRecurringTransaction[],
+    date: string
+  ): Promise<boolean> => {
+    if (items.length === 0) return true
+
+    setBatchLoading(true)
+    try {
+      const updatedRows: Array<{ id: string; lastDate: string; period: string | null }> = []
+      let failed = 0
+
+      for (const recurring of items) {
+        try {
+          const response = await fetch(`/api/recurring-transactions/${recurring.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lastDate: date }),
+          })
+          const payload = await response.json().catch(() => ({}))
+          if (!response.ok) {
+            failed += 1
+            continue
+          }
+          updatedRows.push({
+            id: recurring.id,
+            lastDate: payload.lastDate
+              ? String(payload.lastDate)
+              : `${date}T12:00:00.000Z`,
+            period:
+              typeof payload.period === "string" ? payload.period : null,
+          })
+        } catch {
+          failed += 1
+        }
+      }
+
+      if (updatedRows.length > 0) {
+        const updatedMap = new Map(
+          updatedRows.map((item) => [
+            item.id,
+            { lastDate: item.lastDate, period: item.period },
+          ])
+        )
+        setRecurringData((prev) =>
+          prev.map((item) =>
+            updatedMap.has(item.id)
+              ? {
+                  ...item,
+                  lastDate: updatedMap.get(item.id)?.lastDate ?? item.lastDate,
+                  period: updatedMap.get(item.id)?.period ?? item.period,
+                }
+              : item
+          )
+        )
+      }
+
+      if (failed === 0) {
+        toast.success(
+          `Data atualizada em ${updatedRows.length} recorrência${updatedRows.length > 1 ? "s" : ""}`
+        )
+      } else if (updatedRows.length > 0) {
+        toast.warning(
+          `${updatedRows.length} atualizada(s) e ${failed} com falha`
+        )
+      } else {
+        toast.error("Falha ao atualizar data das recorrências selecionadas")
+      }
+
+      return true
+    } finally {
+      setBatchLoading(false)
+    }
+  }
+
+  const handleBatchDelete = async (
+    items: SerializedRecurringTransaction[]
+  ): Promise<boolean> => {
+    if (items.length === 0) return true
+
+    setBatchLoading(true)
+    try {
+      const deletedIds: string[] = []
+      let failed = 0
+
+      for (const recurring of items) {
+        try {
+          const response = await fetch(`/api/recurring-transactions/${recurring.id}`, {
+            method: "DELETE",
+          })
+          if (!response.ok) {
+            failed += 1
+            continue
+          }
+          deletedIds.push(recurring.id)
+        } catch {
+          failed += 1
+        }
+      }
+
+      if (deletedIds.length > 0) {
+        const deletedSet = new Set(deletedIds)
+        setRecurringData((prev) =>
+          prev.filter((item) => !deletedSet.has(item.id))
+        )
+      }
+
+      if (failed === 0) {
+        toast.success(
+          `${deletedIds.length} recorrência${deletedIds.length > 1 ? "s excluídas" : " excluída"} com sucesso`
+        )
+      } else if (deletedIds.length > 0) {
+        toast.warning(
+          `${deletedIds.length} excluída(s) e ${failed} com falha`
+        )
+      } else {
+        toast.error("Falha ao excluir recorrências selecionadas")
+      }
+
+      return true
+    } finally {
+      setBatchLoading(false)
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-6 px-4 py-6 md:px-6">
+
+      <DataTable
+        columns={columns}
+        data={recurringData}
+        filterOptions={filterOptions}
+        onLaunchRecurring={(recurring) => setLaunchTarget(recurring)}
+        onEditRecurring={openEditDialog}
+        onDeleteRecurring={(recurring) => setDeleteTarget(recurring)}
+        onLaunchSelectedRecurring={handleBatchLaunch}
+        onEditSelectedRecurringDate={handleBatchEditDate}
+        onDeleteSelectedRecurring={handleBatchDelete}
+        batchLoading={batchLoading}
+      />
+
+      <AlertDialog
+        open={!!launchTarget}
+        onOpenChange={(open) => !open && setLaunchTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Lançar Transação</AlertDialogTitle>
+            <AlertDialogDescription>
+              Confirmar lançamento de uma nova transação a partir desta recorrência?
+              {launchTarget && (
+                <span className="mt-2 block text-foreground">
+                  {(launchTarget.note || "Sem histórico")} •{" "}
+                  {monetary.formatMonetaryValue(launchTarget.amount)}
+                </span>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={actionLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={actionLoading}
+              onClick={() => void handleLaunchConfirm()}
+            >
+              {actionLoading ? "Lançando..." : "Lançar"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <DetailPanel
+        open={!!editTarget}
+        onOpenChange={(open) => !open && closeEditDialog()}
+        title={
+          <span className="flex items-center gap-2.5">
+            <span className={`inline-block size-2 rounded-full ${getTypeDotClass(editForm.type)}`} />
+            Editar Recorrência
+          </span>
+        }
+        description="Atualize os dados da recorrência selecionada."
+        footer={
+          <>
+            <DetailPanelCloseButton onClick={closeEditDialog} />
+            <Button
+              onClick={() => void handleSaveEdit()}
+              disabled={actionLoading}
+              className="flex-1 sm:flex-none cursor-pointer"
+            >
+              {actionLoading ? "Salvando..." : "Atualizar"}
+            </Button>
+          </>
+        }
+      >
+        {/* Type Switcher */}
+        <div className="flex gap-1 rounded-lg bg-muted p-1 mb-4">
+          {(
+            [
+              { key: "INCOME", label: "Receita", Icon: TrendingUp },
+              { key: "EXPENSE", label: "Despesa", Icon: TrendingDown },
+              { key: "TRANSFER", label: "Transf.", Icon: ArrowRightLeft },
+            ] as const
+          ).map(({ key, label, Icon }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() =>
+                setEditForm((prev) => ({ ...prev, type: key }))
+              }
+              className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-xs font-medium transition-all cursor-pointer ${
+                editForm.type === key
+                  ? `bg-background shadow-sm ${getTypeTextClass(key)}`
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <Icon className="size-3.5" />
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[180px_1fr_140px]">
+            <div className="space-y-1.5">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                Data <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                type="date"
+                value={editForm.date}
+                onChange={(event) =>
+                  setEditForm((prev) => ({ ...prev, date: event.target.value }))
+                }
+                className="w-full"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                REF
+              </Label>
+              <Input
+                value={editForm.reference}
+                onChange={(event) =>
+                  setEditForm((prev) => ({ ...prev, reference: event.target.value }))
+                }
+                placeholder="ex: Boleto FIES"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                Valor <span className="text-destructive">*</span>
+              </Label>
+              <Input
+                type="number"
+                min="0"
+                step="0.01"
+                value={editForm.amount}
+                onChange={(event) =>
+                  setEditForm((prev) => ({ ...prev, amount: event.target.value }))
+                }
+                className={`font-bold text-right font-mono border-l-4 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${getTypeAccentClass(
+                  editForm.type
+                )}`}
+              />
+            </div>
+          </div>
+
+          <div className="relative space-y-1.5">
+            <div className="flex items-center gap-2">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                Histórico
+              </Label>
+              {showSuggestions && suggestions.length > 0 && (
+                <span className="text-[10px] text-chart-1 font-medium">
+                  {suggestions.length} sugestões
+                </span>
+              )}
+            </div>
+            <Input
+              value={editForm.note}
+              onChange={(event) => {
+                const value = event.target.value
+                const normalized = value.trim().toLowerCase()
+                const matches =
+                  normalized.length > 0
+                    ? payeeOptions
+                        .filter((payee) =>
+                          payee.name.toLowerCase().includes(normalized)
+                        )
+                        .slice(0, 5)
+                    : []
+                const exact = payeeOptions.find(
+                  (payee) => payee.name.trim().toLowerCase() === normalized
+                )
+
+                setEditForm((prev) => ({
+                  ...prev,
+                  note: value,
+                  payeeId: exact ? String(exact.id) : "none",
+                }))
+                setSuggestions(matches)
+                setShowSuggestions(matches.length > 0)
+              }}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              autoComplete="off"
+              placeholder="Beneficiário ou descrição rápida..."
+            />
+            {showSuggestions && suggestions.length > 0 && (
+              <ul className="absolute z-50 left-0 right-0 top-full mt-0.5 bg-popover border border-border rounded-md shadow-lg overflow-hidden max-h-36 overflow-y-auto">
+                {suggestions.map((payee) => (
+                  <li
+                    key={payee.id}
+                    onMouseDown={() => {
+                      setEditForm((prev) => ({
+                        ...prev,
+                        note: payee.name,
+                        payeeId: String(payee.id),
+                      }))
+                      setSuggestions([])
+                      setShowSuggestions(false)
+                    }}
+                    className="px-3 py-2 text-xs cursor-pointer hover:bg-accent transition-colors border-b border-border/50 last:border-0"
+                  >
+                    {payee.name}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+              Descrição
+            </Label>
+            <Input
+              value={editForm.description}
+              onChange={(event) =>
+                setEditForm((prev) => ({ ...prev, description: event.target.value }))
+              }
+              placeholder="Detalhes opcionais..."
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                Grupo <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={editForm.groupCode}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, groupCode: value }))
+                }
+              >
+                <SelectTrigger className="w-full cursor-pointer">
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredGroups.map((group) => (
+                    <SelectItem
+                      key={group.id}
+                      value={String(group.code)}
+                      className="cursor-pointer"
+                    >
+                      {group.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                Categoria <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={editForm.categoryCode}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, categoryCode: value }))
+                }
+                disabled={!editForm.groupCode}
+              >
+                <SelectTrigger className="w-full cursor-pointer">
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {filteredCategories.map((category) => (
+                    <SelectItem
+                      key={category.id}
+                      value={category.code}
+                      className="cursor-pointer"
+                    >
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                Banco <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={editForm.accountId}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, accountId: value }))
+                }
+              >
+                <SelectTrigger className="w-full cursor-pointer">
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {formOptions.accounts.map((account) => (
+                    <SelectItem
+                      key={account.id}
+                      value={String(account.id)}
+                      className="cursor-pointer"
+                    >
+                      {account.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-1.5">
+              <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
+                Status <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={editForm.statusCode}
+                onValueChange={(value) =>
+                  setEditForm((prev) => ({ ...prev, statusCode: value }))
+                }
+              >
+                <SelectTrigger className="w-full cursor-pointer">
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {formOptions.statuses.map((status) => (
+                    <SelectItem
+                      key={status.id}
+                      value={String(status.code)}
+                      className="cursor-pointer"
+                    >
+                      {status.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      </DetailPanel>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir Recorrência</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação excluirá definitivamente o modelo recorrente.
+              {deleteTarget && (
+                <span className="mt-2 block text-foreground">
+                  {(deleteTarget.note || "Sem histórico")} •{" "}
+                  {monetary.formatMonetaryValue(deleteTarget.amount)}
+                </span>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={actionLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              variant="destructive"
+              disabled={actionLoading}
+              onClick={() => void handleDeleteConfirm()}
+            >
+              {actionLoading ? "Excluindo..." : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  )
+}

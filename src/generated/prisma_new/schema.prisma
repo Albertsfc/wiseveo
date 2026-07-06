@@ -1,0 +1,328 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma_new"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                           String                       @id @default(cuid())
+  name                         String
+  email                        String                       @unique
+  passwordHash                 String?                      @map("password_hash")
+  googleId                     String?                      @unique @map("google_id")
+  phone                        String?
+  photo                        String?
+  preferencesJson              Json?                        @map("preferences_json")
+  createdAt                    DateTime                     @default(now()) @map("created_at")
+  updatedAt                    DateTime                     @updatedAt @map("updated_at")
+  themePreferences             Json?
+  role                         Role                         @default(USER)
+  status                       UserStatus                   @default(PENDING)
+  googleAccessToken            String?                      @map("google_access_token")
+  googleRefreshToken           String?                      @map("google_refresh_token")
+  googleTokenExpiresAt         DateTime?                    @map("google_token_expires_at")
+  accounts                     Account[]
+  budgets                      Budget[]
+  categories                   Category[]
+  categoryGroups               CategoryGroup[]
+  excludedTransactions         ExcludedTransaction[]
+  payees                       Payee[]
+  recurringTransactions        RecurringTransaction[]
+  transactionMessages          TransactionMessage[]
+  transactionStatuses          TransactionStatusLookup[]
+  transactions                 Transaction[]
+  telegramConnection           TelegramConnection?
+  telegramConversationMemories TelegramConversationMemory[]
+  telegramPendingTokens        TelegramPendingToken[]
+
+  @@map("users")
+}
+
+model Account {
+  id                    Int                    @id @map("COD_ACC")
+  name                  String                 @map("CONTA")
+  balance               Float                  @default(0) @map("SLD_INI")
+  legacyDate            DateTime               @map("DATA")
+  userId                String                 @map("user_id")
+  active                Boolean                @default(true)
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  type                  AccountType            @default(CHECKING) @map("TIPO")
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recurringTransactions RecurringTransaction[] @relation("RecurringTransactionAccount")
+  transfers             Transaction[]          @relation("TransferDestination")
+  transactions          Transaction[]          @relation("TransactionAccount")
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+model CategoryGroup {
+  id                    String                 @id
+  code                  Int                    @unique @map("COD_GRU")
+  name                  String                 @map("GRUPO")
+  type                  TransactionType        @default(EXPENSE)
+  userId                String                 @map("user_id")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  budgets               Budget[]
+  categories            Category[]
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recurringTransactions RecurringTransaction[] @relation("RecurringTransactionCategoryGroup")
+  transactions          Transaction[]          @relation("TransactionCategoryGroup")
+
+  @@index([userId, type])
+  @@map("category_groups")
+}
+
+model Category {
+  id                    String                 @id
+  code                  String                 @unique @map("COD_CAT")
+  name                  String                 @map("CATEGORIA")
+  type                  TransactionType        @map("TIPO")
+  groupId               String                 @map("group_id")
+  userId                String                 @map("user_id")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  budgets               Budget[]
+  group                 CategoryGroup          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recurringTransactions RecurringTransaction[] @relation("RecurringTransactionCategory")
+  transactions          Transaction[]          @relation("TransactionCategory")
+
+  @@map("categories")
+}
+
+model Payee {
+  id                    Int                    @id @map("COD_BEN")
+  name                  String                 @map("BENEFICIARIO")
+  userId                String                 @map("user_id")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recurringTransactions RecurringTransaction[] @relation("RecurringTransactionPayee")
+  transactions          Transaction[]          @relation("TransactionPayee")
+
+  @@index([userId])
+  @@map("payees")
+}
+
+model TransactionStatusLookup {
+  id                    String                 @id
+  code                  Int                    @unique @map("COD_ST")
+  name                  String                 @map("STATUS")
+  userId                String                 @map("user_id")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  recurringTransactions RecurringTransaction[] @relation("RecurringTransactionStatus")
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions          Transaction[]          @relation("TransactionStatus")
+
+  @@map("transaction_statuses")
+}
+
+model Transaction {
+  id            String                  @id
+  num           Int?                    @map("NUM")
+  period        String                  @map("PERIODO") @db.Char(6)
+  date          DateTime                @map("DATA")
+  reference     String?                 @map("REF")
+  note          String?                 @map("HISTORICO")
+  description   String?                 @map("DESCRICAO")
+  amount        Float                   @map("VALOR")
+  type          TransactionType         @default(EXPENSE) @map("TIPO")
+  userId        String                  @map("user_id")
+  accountId     Int                     @map("COD_ACC")
+  destAccountId Int?                    @map("COD_ACC_DEST")
+  groupCode     Int                     @map("COD_GRU")
+  categoryCode  String                  @map("COD_CAT")
+  statusCode    Int                     @map("COD_ST")
+  payeeId       Int?                    @map("COD_BEN")
+  createdAt     DateTime                @default(now()) @map("created_at")
+  updatedAt     DateTime                @updatedAt @map("updated_at")
+  attachments   TransactionAttachment[]
+  messages      TransactionMessage[]
+  destAccount   Account?                @relation("TransferDestination", fields: [destAccountId], references: [id])
+  account       Account                 @relation("TransactionAccount", fields: [accountId], references: [id])
+  payee         Payee?                  @relation("TransactionPayee", fields: [payeeId], references: [id])
+  category      Category                @relation("TransactionCategory", fields: [categoryCode], references: [code])
+  group         CategoryGroup           @relation("TransactionCategoryGroup", fields: [groupCode], references: [code])
+  statusLookup  TransactionStatusLookup @relation("TransactionStatus", fields: [statusCode], references: [code])
+  user          User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+  @@index([userId, type, date])
+  @@index([categoryCode])
+  @@map("transactions")
+}
+
+model TransactionAttachment {
+  id            String      @id
+  transactionId String      @map("transaction_id")
+  fileName      String      @map("file_name")
+  fileSize      Int         @map("file_size")
+  mimeType      String      @map("mime_type")
+  fileData      Bytes       @map("file_data")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+  @@map("transaction_attachments")
+}
+
+model TransactionMessage {
+  id            String      @id
+  transactionId String      @map("transaction_id")
+  userId        String      @map("user_id")
+  content       String
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+  @@index([userId])
+  @@map("transaction_messages")
+}
+
+model ExcludedTransaction {
+  id            String          @id
+  num           Int?            @map("NUM")
+  period        String          @map("PERIODO") @db.Char(6)
+  date          DateTime        @map("DATA")
+  reference     String?         @map("REF")
+  note          String?         @map("HISTORICO")
+  description   String?         @map("DESCRICAO")
+  amount        Float           @map("VALOR")
+  type          TransactionType @default(EXPENSE) @map("TIPO")
+  userId        String          @map("user_id")
+  accountId     Int             @map("COD_ACC")
+  destAccountId Int?            @map("COD_ACC_DEST")
+  groupCode     Int             @map("COD_GRU")
+  categoryCode  String          @map("COD_CAT")
+  statusCode    Int             @map("COD_ST")
+  payeeId       Int?            @map("COD_BEN")
+  excludedAt    DateTime        @default(now()) @map("excluded_at")
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("excluded_transactions")
+}
+
+model RecurringTransaction {
+  id           String                  @id
+  period       String                  @map("PERIODO") @db.Char(6)
+  note         String?                 @map("HISTORICO")
+  description  String?                 @map("DESCRICAO")
+  amount       Float                   @map("VALOR")
+  type         TransactionType         @default(EXPENSE) @map("TIPO")
+  userId       String                  @map("user_id")
+  accountId    Int                     @map("COD_ACC")
+  groupCode    Int                     @map("COD_GRU")
+  categoryCode String                  @map("COD_CAT")
+  statusCode   Int                     @map("COD_ST")
+  payeeId      Int?                    @map("COD_BEN")
+  createdAt    DateTime                @default(now()) @map("created_at")
+  updatedAt    DateTime                @updatedAt @map("updated_at")
+  lastDate     DateTime?               @map("last_date")
+  reference    String?                 @map("REF")
+  account      Account                 @relation("RecurringTransactionAccount", fields: [accountId], references: [id])
+  payee        Payee?                  @relation("RecurringTransactionPayee", fields: [payeeId], references: [id])
+  category     Category                @relation("RecurringTransactionCategory", fields: [categoryCode], references: [code])
+  group        CategoryGroup           @relation("RecurringTransactionCategoryGroup", fields: [groupCode], references: [code])
+  statusLookup TransactionStatusLookup @relation("RecurringTransactionStatus", fields: [statusCode], references: [code])
+  user         User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("recurring_transactions")
+}
+
+model Budget {
+  id         String         @id
+  amount     Float          @default(0) @map("VALOR")
+  month      Int
+  year       Int
+  categoryId String?        @map("category_id")
+  userId     String         @map("user_id")
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+  spent      Float          @default(0) @map("GASTO")
+  groupId    String?        @map("group_id")
+  rule       String?        @map("REGRA")
+  customName String?        @map("nome_customizado")
+  category   Category?      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  group      CategoryGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, month, year])
+  @@map("budgets")
+}
+
+enum AccountType {
+  WALLET
+  CHECKING
+  SAVINGS
+  INVESTMENT
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+  TRANSFER
+
+  @@map("CategoryType")
+}
+
+enum TransactionStatus {
+  PAID
+  PENDING
+  OVERDUE
+  SCHEDULED
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+}
+
+model TelegramConnection {
+  id               String   @id @default(cuid())
+  userId           String   @unique @map("user_id")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  telegramChatId   BigInt   @unique @map("telegram_chat_id")
+  telegramUsername String?  @map("telegram_username")
+  connectedAt      DateTime @default(now()) @map("connected_at")
+  isActive         Boolean  @default(true) @map("is_active")
+
+  @@map("telegram_connections")
+}
+
+model TelegramConversationMemory {
+  id             String   @id @default(cuid())
+  userId         String   @map("user_id")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  telegramChatId BigInt   @unique @map("telegram_chat_id")
+  memoryJson     Json     @default("{}") @map("memory_json")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("telegram_conversation_memories")
+}
+
+model TelegramPendingToken {
+  token     String   @id @default(cuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime @map("expires_at")
+  used      Boolean  @default(false)
+
+  @@map("telegram_pending_tokens")
+}

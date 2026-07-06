@@ -1,0 +1,23 @@
+DO $$
+BEGIN
+  CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN', 'SUPERADMIN');
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
+
+ALTER TABLE "users"
+ADD COLUMN IF NOT EXISTS "role" "Role";
+
+UPDATE "users"
+SET "role" = CASE
+  WHEN COALESCE("is_admin", false) THEN 'ADMIN'::"Role"
+  ELSE 'USER'::"Role"
+END
+WHERE "role" IS NULL;
+
+ALTER TABLE "users"
+ALTER COLUMN "role" SET DEFAULT 'USER',
+ALTER COLUMN "role" SET NOT NULL;
+
+ALTER TABLE "users"
+DROP COLUMN IF EXISTS "is_admin";

@@ -1,0 +1,271 @@
+import type { FormulaId, FormulaParams, HistoryData, CustomFormulaDefinition } from "../types"
+import { formatMonetaryValue, formatPercentValue } from "@/lib/monetary"
+
+// ── Formula Definitions (metadata for UI) ──
+
+export interface FormulaVariable {
+  key: keyof FormulaParams
+  label: string
+  type: "number" | "percent" | "currency"
+  min: number
+  max: number
+  step: number
+  defaultValue: number
+}
+
+export interface FormulaDefinition {
+  id: FormulaId
+  name: string
+  description: string
+  icon: string
+  variables: FormulaVariable[]
+}
+
+export const FORMULA_DEFINITIONS: FormulaDefinition[] = [
+  {
+    id: "simple_avg",
+    name: "Média Simples",
+    description: "Média dos gastos dos últimos N meses",
+    icon: "📊",
+    variables: [
+      { key: "months", label: "Meses", type: "number", min: 1, max: 24, step: 1, defaultValue: 3 },
+      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+    ],
+  },
+  {
+    id: "moving_avg",
+    name: "Média Móvel",
+    description: "Média ponderada com mais peso nos meses recentes",
+    icon: "📈",
+    variables: [
+      { key: "months", label: "Meses", type: "number", min: 2, max: 24, step: 1, defaultValue: 3 },
+      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+    ],
+  },
+  {
+    id: "income_pct",
+    name: "% da Receita",
+    description: "Percentual da receita média do período",
+    icon: "💰",
+    variables: [
+      { key: "months", label: "Meses de receita", type: "number", min: 1, max: 12, step: 1, defaultValue: 3 },
+      { key: "percentage", label: "Percentual", type: "percent", min: 1, max: 100, step: 1, defaultValue: 30 },
+      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+    ],
+  },
+  {
+    id: "fixed_target",
+    name: "Meta Fixa",
+    description: "Valor fixo definido manualmente",
+    icon: "🎯",
+    variables: [
+      { key: "amount", label: "Valor", type: "currency", min: 0, max: 999999, step: 50, defaultValue: 0 },
+      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+    ],
+  },
+  {
+    id: "historical_max",
+    name: "Limite Histórico",
+    description: "Máximo histórico com margem de segurança",
+    icon: "🛡️",
+    variables: [
+      { key: "months", label: "Meses", type: "number", min: 2, max: 24, step: 1, defaultValue: 6 },
+      { key: "margin", label: "Margem", type: "percent", min: 0, max: 100, step: 5, defaultValue: 10 },
+      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+    ],
+  },
+]
+
+export const DEFAULT_FORMULA_CONFIG = {
+  id: "simple_avg" as FormulaId,
+  params: { months: 3, containment: 0 },
+}
+
+// ── Pure Calculation Functions ──
+
+function applyContainment(value: number, containment: number): number {
+  return value * (1 - containment / 100)
+}
+
+function calcSimpleAvg(history: HistoryData, params: FormulaParams): number {
+  const months = params.months ?? 3
+  const spent = history.monthlySpent.slice(0, months)
+  if (spent.length === 0) return 0
+  const avg = spent.reduce((s, v) => s + v, 0) / spent.length
+  return applyContainment(avg, params.containment ?? 0)
+}
+
+function calcMovingAvg(history: HistoryData, params: FormulaParams): number {
+  const months = params.months ?? 3
+  const spent = history.monthlySpent.slice(0, months)
+  if (spent.length === 0) return 0
+
+  // Weights: most recent = N, oldest = 1
+  let weightedSum = 0
+  let totalWeight = 0
+  for (let i = 0; i < spent.length; i++) {
+    const weight = spent.length - i // Most recent gets highest weight
+    weightedSum += spent[i] * weight
+    totalWeight += weight
+  }
+
+  const avg = totalWeight > 0 ? weightedSum / totalWeight : 0
+  return applyContainment(avg, params.containment ?? 0)
+}
+
+function calcIncomePct(history: HistoryData, params: FormulaParams): number {
+  const months = params.months ?? 3
+  const percentage = params.percentage ?? 30
+  const income = history.monthlyIncome.slice(0, months)
+  if (income.length === 0) return 0
+  const avgIncome = income.reduce((s, v) => s + v, 0) / income.length
+  const result = avgIncome * (percentage / 100)
+  return applyContainment(result, params.containment ?? 0)
+}
+
+function calcFixedTarget(_history: HistoryData, params: FormulaParams): number {
+  const amount = params.amount ?? 0
+  return applyContainment(amount, params.containment ?? 0)
+}
+
+function calcHistoricalMax(history: HistoryData, params: FormulaParams): number {
+  const months = params.months ?? 6
+  const margin = params.margin ?? 10
+  const spent = history.monthlySpent.slice(0, months)
+  if (spent.length === 0) return 0
+  const max = Math.max(...spent)
+  const result = max * (1 + margin / 100)
+  return applyContainment(result, params.containment ?? 0)
+}
+
+const CALCULATORS: Record<FormulaId, (h: HistoryData, p: FormulaParams) => number> = {
+  simple_avg: calcSimpleAvg,
+  moving_avg: calcMovingAvg,
+  income_pct: calcIncomePct,
+  fixed_target: calcFixedTarget,
+  historical_max: calcHistoricalMax,
+}
+
+// ── Math Expression Evaluator ──
+
+function calculateStdDev(values: number[]): number {
+  if (values.length === 0) return 0
+  const mean = values.reduce((s, v) => s + v, 0) / values.length
+  const sqDiffs = values.map((v) => Math.pow(v - mean, 2))
+  const variance = sqDiffs.reduce((s, v) => s + v, 0) / values.length
+  return Math.sqrt(variance)
+}
+
+function evaluateCustomExpression(
+  expression: string,
+  history: HistoryData,
+  params: FormulaParams
+): number {
+  const months = params.months ?? 3
+  const containment = params.containment ?? 0
+  const margin = params.margin ?? 0
+
+  const spent = history.monthlySpent.slice(0, months)
+  const income = history.monthlyIncome.slice(0, months)
+  
+  const media = spent.length ? spent.reduce((s, v) => s + v, 0) / spent.length : 0
+  const max = spent.length ? Math.max(...spent) : 0
+  const min = spent.length ? Math.min(...spent) : 0
+  const desvio_p = calculateStdDev(spent)
+  const ultimo = history.monthlySpent[0] ?? 0
+  
+  const m_receitas = income.length ? income.reduce((s, v) => s + v, 0) / income.length : 0
+  const u_receita = history.monthlyIncome[0] ?? 0
+
+  let parsedExpr = expression.toUpperCase()
+  
+  parsedExpr = parsedExpr.replace(/\[MEDIA\]/g, media.toString())
+  parsedExpr = parsedExpr.replace(/\[MAX\]/g, max.toString())
+  parsedExpr = parsedExpr.replace(/\[MIN\]/g, min.toString())
+  parsedExpr = parsedExpr.replace(/\[DESVIO_P\]/g, desvio_p.toString())
+  parsedExpr = parsedExpr.replace(/\[ULTIMO\]/g, ultimo.toString())
+  parsedExpr = parsedExpr.replace(/\[M_RECEITAS\]/g, m_receitas.toString())
+  parsedExpr = parsedExpr.replace(/\[U_RECEITA\]/g, u_receita.toString())
+  parsedExpr = parsedExpr.replace(/\[CONTENCAO\]/g, (containment / 100).toString())
+  parsedExpr = parsedExpr.replace(/\[MARGEM\]/g, (margin / 100).toString())
+
+  // Secure eval: only digits, Math operators, dots, parens, spaces
+  const safeRegex = /^[\d.+\-*/\(\)\s]+$/
+  if (!safeRegex.test(parsedExpr)) {
+    console.error("Invalid Math Expression (blocked by security regex):", parsedExpr)
+    return 0
+  }
+
+  try {
+    // eslint-disable-next-line no-new-func
+    const result = new Function(`return ${parsedExpr}`)()
+    return isNaN(result) ? 0 : Number(result)
+  } catch (error) {
+    console.error("Failed to evaluate formula:", parsedExpr, error)
+    return 0
+  }
+}
+
+export function calculateFormulaLimit(
+  formulaId: FormulaId,
+  params: FormulaParams,
+  history: HistoryData,
+  customDefinitions?: CustomFormulaDefinition[]
+): number {
+  if (customDefinitions) {
+    const customMatch = customDefinitions.find((def) => def.id === formulaId)
+    if (customMatch) {
+      const result = evaluateCustomExpression(customMatch.expression, history, params)
+      return Math.round(result * 100) / 100
+    }
+  }
+
+  const calc = CALCULATORS[formulaId]
+  if (!calc) return 0
+  const result = calc(history, params)
+  return Math.round(result * 100) / 100 // Round to 2 decimal places
+}
+
+export function getFormulaDescription(
+  formulaId: FormulaId, 
+  params: FormulaParams,
+  customDefinitions?: CustomFormulaDefinition[]
+): string {
+  let name = "Fórmula desconhecida"
+  
+  if (customDefinitions) {
+    const customMatch = customDefinitions.find((def) => def.id === formulaId)
+    if (customMatch) {
+      name = customMatch.name
+    }
+  }
+
+  const def = FORMULA_DEFINITIONS.find((f) => f.id === formulaId)
+  if (def) {
+    name = def.name
+  }
+
+  const parts: string[] = [name]
+
+  if (params.months && formulaId !== "fixed_target") {
+    parts.push(`${params.months} meses`)
+  }
+  if (params.percentage) {
+    parts.push(`${params.percentage}%`)
+  }
+  if (params.amount && formulaId === "fixed_target") {
+    parts.push(formatMonetaryValue(params.amount))
+  }
+  if (params.margin) {
+    parts.push(`+${params.margin}% margem`)
+  }
+  if (params.containment && params.containment > 0) {
+    parts.push(`${formatPercentValue(-params.containment, 0)} contenção`)
+  }
+
+  return parts.join(" · ")
+}
+
+export function getFormulaDefinition(formulaId: FormulaId): FormulaDefinition | undefined {
+  return FORMULA_DEFINITIONS.find((f) => f.id === formulaId)
+}

@@ -1,0 +1,254 @@
+"use client"
+
+import { Shield, AlertTriangle, Flame, GripVertical, FlaskConical, Clock } from "lucide-react"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { MoreVertical, Settings, Trash2, Edit2 } from "lucide-react"
+import { SplitProgressBar } from "./split-progress-bar"
+import { getFormulaDescription } from "../services/formula-engine"
+import { deleteBudgetCard } from "../services/save-budget-formula"
+import { ConfigCardFormulaDialog } from "./config-card-formula-dialog"
+import type { BudgetItem, BudgetFormulaPreferences } from "../types"
+import { useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
+import { formatPercentValue } from "@/lib/monetary"
+import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+
+function getZoneInfo(pct: number) {
+  if (pct <= 50)
+    return {
+      color: "text-chart-2",
+      bgColor: "bg-chart-2/15",
+      borderColor: "border-chart-2/30",
+      icon: <Shield className="h-3 w-3" />,
+      label: "Seguro",
+    }
+  if (pct <= 80)
+    return {
+      color: "text-chart-4",
+      bgColor: "bg-chart-4/15",
+      borderColor: "border-chart-4/30",
+      icon: <AlertTriangle className="h-3 w-3" />,
+      label: "Alerta",
+    }
+  return {
+    color: "text-destructive",
+    bgColor: "bg-destructive/15",
+    borderColor: "border-destructive/30",
+    icon: <Flame className="h-3 w-3" />,
+    label: "Perigo",
+  }
+}
+
+interface BudgetItemCardProps {
+  item: BudgetItem
+  index: number
+  dragHandleProps?: any
+  isDragging?: boolean
+  formulaConfig?: BudgetFormulaPreferences
+  onEdit?: (item: BudgetItem) => void
+}
+
+export function BudgetItemCard({ 
+  item, 
+  index, 
+  dragHandleProps,
+  isDragging,
+  formulaConfig,
+  onEdit
+}: BudgetItemCardProps) {
+  const monetary = useMonetaryFormattingSafe()
+  const router = useRouter()
+  const [isPending, startTransition] = useTransition()
+  const [isFormulaConfigOpen, setIsFormulaConfigOpen] = useState(false)
+
+  const pct = item.limit > 0 ? (item.spent / item.limit) * 100 : 0
+  const paidPct = item.limit > 0 ? (item.paidAmount / item.limit) * 100 : 0
+  const zone = getZoneInfo(pct)
+  const remaining = item.limit - item.spent
+  const wouldExceed =
+    item.paidAmount + item.scheduledAmount > item.limit && item.paidAmount <= item.limit
+
+  const formulaDesc = item.formulaId
+    ? getFormulaDescription(item.formulaId, {})
+    : undefined
+
+  const handleDelete = () => {
+    // Determine if custom card by ID prefix.
+    const isCustom = item.id.startsWith("custom_")
+    startTransition(async () => {
+      await deleteBudgetCard(item.id, isCustom)
+      router.refresh()
+    })
+  }
+
+  return (
+    <Card className={`@container/card transition-all duration-200 ${isDragging ? "scale-[1.03] z-[100] border-primary shadow-2xl ring-4 ring-primary/10" : ""}`} style={{ background: "linear-gradient(to top, color-mix(in oklch, var(--primary) 5%, transparent), var(--card))" }}>
+      <CardHeader className="relative pr-10">
+        <div className="absolute right-4 top-4 flex w-fit items-center flex-row-reverse gap-1">
+          <DropdownMenu>
+            <DropdownMenuTrigger className="p-1 text-muted-foreground/30 hover:text-primary transition-colors focus:outline-none">
+              <MoreVertical className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {onEdit && (
+                <DropdownMenuItem onClick={() => onEdit(item)}>
+                  <Edit2 className="w-4 h-4 mr-2" />
+                  Editar Cartão
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem onClick={() => setIsFormulaConfigOpen(true)}>
+                <Settings className="w-4 h-4 mr-2" />
+                Configurar Fórmula
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem 
+                onClick={handleDelete}
+                className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                disabled={isPending}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Excluir
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <div 
+            {...dragHandleProps}
+            title="Arraste para reordenar"
+            className="p-1 text-muted-foreground/30 hover:text-primary transition-colors cursor-grab active:cursor-grabbing"
+          >
+            <GripVertical className="h-4 w-4" />
+          </div>
+        </div>
+        <CardDescription className="flex items-center gap-2">
+          <span className="text-base">{item.icon}</span>
+          {item.isGroup ? "Grupo" : "Categoria"}
+          {item.name !== item.originalName && (
+            <span className="text-xs opacity-60">({item.originalName})</span>
+          )}
+          {/* Formula indicator */}
+          {item.formulaId && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className={`inline-flex items-center ${item.isCustomFormula ? "text-chart-1" : "text-muted-foreground/50"}`}>
+                    <FlaskConical className="h-3 w-3" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs">
+                    {formulaDesc}
+                    {item.isCustomFormula && " (personalizada)"}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </CardDescription>
+        <CardTitle className="text-lg font-semibold @[250px]/card:text-xl">
+          {item.name}
+        </CardTitle>
+        <div className="flex flex-wrap items-center gap-1.5 mt-1">
+          {!item.hasHistory && (
+            <Badge variant="outline" className="bg-chart-4/10 text-chart-4 border-chart-4/30 text-[10px]">
+              Sem dados
+            </Badge>
+          )}
+          {item.isCustomFormula && (
+            <Badge variant="outline" className="bg-chart-1/10 text-chart-1 border-chart-1/30 text-[10px]">
+              Personalizada
+            </Badge>
+          )}
+          <Badge
+            variant="outline"
+            className={`${zone.bgColor} ${zone.color} ${zone.borderColor}`}
+          >
+            {zone.icon}
+            <span className="ml-1">{zone.label}</span>
+          </Badge>
+          {wouldExceed && (
+            <Badge variant="outline" className="bg-chart-4/10 text-chart-4 border-chart-4/30 text-[10px]">
+              <AlertTriangle className="h-2.5 w-2.5" />
+              <span className="ml-1">Pode estourar</span>
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col gap-3">
+          {/* Percentage + Progress */}
+          <div className="flex items-baseline gap-1.5">
+            <span className={`text-2xl font-bold tabular-nums ${zone.color}`}>
+              {formatPercentValue(pct, 0)}
+            </span>
+            <span className="text-xs text-muted-foreground">utilizado</span>
+          </div>
+          <SplitProgressBar paidPct={paidPct} totalPct={pct} delay={index * 60} />
+
+          {/* Values — 3 colunas: Orçado | Pago | Agendado */}
+          <div className="grid grid-cols-3 gap-1 pt-1">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] text-muted-foreground">Orçado</span>
+              <span className="text-xs font-medium tabular-nums font-mono">
+                {monetary.formatMonetaryValue(item.limit)}
+              </span>
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] text-muted-foreground">Pago</span>
+              <span className="text-xs font-medium tabular-nums font-mono">
+                {monetary.formatMonetaryValue(item.paidAmount)}
+              </span>
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                <Clock className="h-2.5 w-2.5" />
+                Agendado
+              </span>
+              <span className={`text-xs font-medium tabular-nums font-mono ${item.scheduledAmount === 0 ? "text-muted-foreground/40" : ""}`}>
+                {monetary.formatMonetaryValue(item.scheduledAmount)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter className="flex items-center justify-between border-t pt-3">
+        <span className="text-xs text-muted-foreground">
+          {remaining >= 0 ? "Restante" : "Excedido"}
+        </span>
+        <span className={`text-sm font-semibold tabular-nums font-mono ${zone.color}`}>
+          {monetary.formatMonetaryValue(remaining)}
+        </span>
+      </CardFooter>
+      {formulaConfig && (
+        <ConfigCardFormulaDialog
+          open={isFormulaConfigOpen}
+          onOpenChange={setIsFormulaConfigOpen}
+          cardId={item.id}
+          cardName={item.name}
+          formulaConfig={formulaConfig}
+        />
+      )}
+    </Card>
+  )
+}

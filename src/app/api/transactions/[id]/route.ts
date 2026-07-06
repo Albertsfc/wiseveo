@@ -1,0 +1,92 @@
+import { NextResponse, type NextRequest } from "next/server"
+
+import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
+import { updateTransaction } from "@/features/transactions/services/update-transaction"
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const userId = await getDefaultUserId()
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Usuário não encontrado" },
+      { status: 401 }
+    )
+  }
+
+  const { id } = await params
+
+  let body: Record<string, unknown>
+  try {
+    body = await request.json()
+  } catch {
+    return NextResponse.json(
+      { error: "JSON inválido" },
+      { status: 400 }
+    )
+  }
+
+  const { date, amount, type, accountId, groupCode, categoryCode, statusCode } =
+    body
+
+  if (
+    !date ||
+    amount === undefined ||
+    !type ||
+    !accountId ||
+    !groupCode ||
+    !categoryCode ||
+    !statusCode
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Campos obrigatórios: date, amount, type, accountId, groupCode, categoryCode, statusCode",
+      },
+      { status: 400 }
+    )
+  }
+
+  if (!["INCOME", "EXPENSE", "TRANSFER"].includes(type as string)) {
+    return NextResponse.json({ error: "Tipo inválido" }, { status: 400 })
+  }
+
+  try {
+    const transaction = await updateTransaction({
+      id,
+      userId,
+      date: String(date),
+      period: body.period ? String(body.period) : undefined,
+      reference: body.reference ? String(body.reference) : undefined,
+      note: body.note ? String(body.note) : undefined,
+      description: body.description ? String(body.description) : undefined,
+      amount: Number(amount),
+      type: type as "INCOME" | "EXPENSE" | "TRANSFER",
+      accountId: Number(accountId),
+      groupCode: Number(groupCode),
+      categoryCode: String(categoryCode),
+      statusCode: Number(statusCode),
+      payeeId: body.payeeId ? Number(body.payeeId) : undefined,
+      payeeName: body.payeeName ? String(body.payeeName) : undefined,
+      destAccountId: body.destAccountId
+        ? Number(body.destAccountId)
+        : undefined,
+    })
+
+    if (!transaction) {
+      return NextResponse.json(
+        { error: "Transação não encontrada" },
+        { status: 404 }
+      )
+    }
+
+    return NextResponse.json({ transaction })
+  } catch (error) {
+    console.error("Error updating transaction:", error)
+    return NextResponse.json(
+      { error: "Erro ao atualizar transação" },
+      { status: 500 }
+    )
+  }
+}

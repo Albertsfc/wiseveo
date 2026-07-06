@@ -1,0 +1,232 @@
+"use client"
+
+import * as React from "react"
+import { Dices, ExternalLink, Moon, Palette, Sun, Upload, MonitorCog } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { colorThemes, tweakcnThemes } from "@/config/theme-data"
+import { radiusOptions, baseColors } from "@/config/theme-customizer-constants"
+import { ColorPicker } from "@/components/color-picker"
+import type { ThemeMode } from "@/lib/theme-preferences"
+
+interface ThemeTabProps {
+  currentBrandColorValues: Record<string, string>
+  onColorOverrideChange: (cssVar: string, value: string) => void
+  onImportClick: () => void
+  onSelectedRadiusChange: (radius: string) => void
+  onSelectedThemeChange: (theme: string) => void
+  onSelectedTweakcnThemeChange: (theme: string) => void
+  onThemeModeChange: (mode: ThemeMode) => void
+  selectedRadius: string
+  selectedTheme: string
+  selectedTweakcnTheme: string
+  themeMode: ThemeMode
+}
+
+export function ThemeTab({
+  currentBrandColorValues,
+  onColorOverrideChange,
+  onImportClick,
+  onSelectedRadiusChange,
+  onSelectedThemeChange,
+  onSelectedTweakcnThemeChange,
+  onThemeModeChange,
+  selectedRadius,
+  selectedTheme,
+  selectedTweakcnTheme,
+  themeMode,
+}: ThemeTabProps) {
+  const handleRandomShadcn = React.useCallback(() => {
+    const randomTheme = colorThemes[Math.floor(Math.random() * colorThemes.length)]
+    onSelectedThemeChange(randomTheme.value)
+  }, [onSelectedThemeChange])
+
+  const handleRandomTweakcn = React.useCallback(() => {
+    const randomTheme = tweakcnThemes[Math.floor(Math.random() * tweakcnThemes.length)]
+    onSelectedTweakcnThemeChange(randomTheme.value)
+  }, [onSelectedTweakcnThemeChange])
+
+  return (
+    <div className="space-y-6 p-4">
+      <div className="space-y-3">
+        <Label className="text-sm font-medium">Modo</Label>
+        <div className="grid grid-cols-3 gap-2">
+          <Button
+            variant={themeMode === "light" ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => onThemeModeChange("light")}
+            className="cursor-pointer"
+          >
+            <Sun className="mr-1 h-4 w-4" />
+            Claro
+          </Button>
+          <Button
+            variant={themeMode === "dark" ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => onThemeModeChange("dark")}
+            className="cursor-pointer"
+          >
+            <Moon className="mr-1 h-4 w-4" />
+            Escuro
+          </Button>
+          <Button
+            variant={themeMode === "system" ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => onThemeModeChange("system")}
+            className="cursor-pointer"
+          >
+            <MonitorCog className="mr-1 h-4 w-4" />
+            Sistema
+          </Button>
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium">Presets Shadcn UI</Label>
+          <Button variant="outline" size="sm" onClick={handleRandomShadcn} className="cursor-pointer">
+            <Dices className="mr-1.5 h-3.5 w-3.5" />
+            Aleatório
+          </Button>
+        </div>
+
+        <Select value={selectedTheme || undefined} onValueChange={onSelectedThemeChange}>
+          <SelectTrigger className="w-full cursor-pointer">
+            <SelectValue placeholder="Escolha um preset Shadcn" />
+          </SelectTrigger>
+          <SelectContent className="max-h-60">
+            <div className="p-2">
+              {colorThemes.map((theme) => (
+                <SelectItem key={theme.value} value={theme.value} className="cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.primary }} />
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.secondary }} />
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.accent }} />
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.muted }} />
+                    </div>
+                    <span>{theme.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </div>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label className="text-sm font-medium">Presets Tweakcn</Label>
+          <Button variant="outline" size="sm" onClick={handleRandomTweakcn} className="cursor-pointer">
+            <Dices className="mr-1.5 h-3.5 w-3.5" />
+            Aleatório
+          </Button>
+        </div>
+
+        <Select value={selectedTweakcnTheme || undefined} onValueChange={onSelectedTweakcnThemeChange}>
+          <SelectTrigger className="w-full cursor-pointer">
+            <SelectValue placeholder="Escolha um preset Tweakcn" />
+          </SelectTrigger>
+          <SelectContent className="max-h-60">
+            <div className="p-2">
+              {tweakcnThemes.map((theme) => (
+                <SelectItem key={theme.value} value={theme.value} className="cursor-pointer">
+                  <div className="flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.primary }} />
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.secondary }} />
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.accent }} />
+                      <div className="h-3 w-3 rounded-full border border-border/20" style={{ backgroundColor: theme.preset.styles.light.muted }} />
+                    </div>
+                    <span>{theme.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </div>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-3">
+        <Label className="text-sm font-medium">Raio</Label>
+        <div className="grid grid-cols-5 gap-2">
+          {radiusOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              className={`relative rounded-md border p-3 text-center transition-colors ${
+                selectedRadius === option.value
+                  ? "border-primary"
+                  : "border-border hover:border-border/60"
+              }`}
+              onClick={() => onSelectedRadiusChange(option.value)}
+            >
+              <span className="text-xs font-medium">{option.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="space-y-3">
+        <Button
+          variant="outline"
+          size="lg"
+          onClick={onImportClick}
+          className="w-full cursor-pointer"
+        >
+          <Upload className="mr-1.5 h-3.5 w-3.5" />
+          Importar tema
+        </Button>
+      </div>
+
+      <Accordion type="single" collapsible className="w-full rounded-lg border-b">
+        <AccordionItem value="brand-colors" className="overflow-hidden rounded-lg border border-border">
+          <AccordionTrigger className="px-4 py-3 transition-colors hover:bg-muted/50 hover:no-underline">
+            <Label className="cursor-pointer text-sm font-medium">Cores de marca</Label>
+          </AccordionTrigger>
+          <AccordionContent className="space-y-3 border-t border-border bg-muted/20 px-4 pb-4 pt-2">
+            {baseColors.map((color) => (
+              <ColorPicker
+                key={color.cssVar}
+                label={color.name}
+                cssVar={color.cssVar}
+                value={currentBrandColorValues[color.cssVar] || ""}
+                onChange={onColorOverrideChange}
+              />
+            ))}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <div className="space-y-3 rounded-lg bg-muted p-4">
+        <div className="flex items-center gap-2">
+          <Palette className="h-4 w-4 text-primary" />
+          <span className="text-sm font-medium">Customização avançada</span>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Para edição avançada com preview visual e centenas de presets prontos, abra o editor do Tweakcn.
+        </p>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full cursor-pointer"
+          onClick={() => typeof window !== "undefined" && window.open("https://tweakcn.com/editor/theme", "_blank")}
+        >
+          <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
+          Abrir Tweakcn
+        </Button>
+      </div>
+    </div>
+  )
+}
