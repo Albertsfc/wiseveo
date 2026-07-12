@@ -126,7 +126,7 @@ export async function GET(request: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 4, // 4 hours (aligned with cron cleanup window)
+      maxAge: 60 * 60 * 24, // 24 hours (aligned with daily cron cleanup)
       path: "/",
     })
 

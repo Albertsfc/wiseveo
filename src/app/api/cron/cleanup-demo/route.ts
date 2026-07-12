@@ -16,9 +16,11 @@ export async function GET(request: Request) {
   }
 
   try {
-    // Delete phantom users created more than 4 hours ago.
+    // Delete phantom users created more than 25 hours ago.
+    // Window is 25h to ensure users are cleaned up on the daily cron cycle
+    // (Vercel Hobby only allows daily cron jobs).
     // Safety double-guard: email MUST start with "demo_" — never touches real users.
-    const fourHoursAgo = new Date(Date.now() - 4 * 60 * 60 * 1000)
+    const twentyFiveHoursAgo = new Date(Date.now() - 25 * 60 * 60 * 1000)
 
     const result = await prisma.user.deleteMany({
       where: {
@@ -26,7 +28,7 @@ export async function GET(request: Request) {
           startsWith: 'demo_'
         },
         createdAt: {
-          lt: fourHoursAgo
+          lt: twentyFiveHoursAgo
         }
       }
     })
