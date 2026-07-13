@@ -48,17 +48,17 @@ Ao finalizar o wizard, o sistema aplica as migrações, salva tudo com seguranç
 
 ---
 
-## 🧪 Rodando a versão de Demonstração (Demo Seed)
+## 🧪 Modo Demonstração (Cloud Demo)
 
-Deseja testar o sistema com dados fictícios pré-populados para ver as análises, gráficos e forecasting funcionando?
-Execute o comando de seed de demonstração:
-```bash
-npm run db:seed:demo
-```
-Isso criará a conta demo:
-- **Usuário**: `demo@wiseveo.com`
-- **Senha**: `demo1234`
-- Contém **~200 transações** realistas distribuídas ao longo de 6 meses (Receitas, Despesas, Transferências, Orçamentos e Recorrências).
+Quer ver o sistema funcionando em produção com dados fictícios sem precisar instalar nada?
+
+👉 **[demo.wiseveo.com](https://demo.wiseveo.com)** — A demo é provisionada automaticamente ao acessar: um usuário temporário isolado é criado com 300 transações realistas cobrindo os últimos 9 meses, e você é autenticado instantaneamente no dashboard.
+
+- ✅ Nenhuma conta necessária
+- ✅ Dados 100% fictícios e isolados por sessão
+- ✅ Usuário temporário apagado automaticamente após 24h
+
+Para rodar localmente com dados de seed, consulte o arquivo `docs/SETUP.md`.
 
 ---
 
