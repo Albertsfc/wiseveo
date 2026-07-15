@@ -22,9 +22,9 @@ export function LocaleSwitcher() {
           <SelectValue placeholder="Idioma" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="pt-BR">Português</SelectItem>
-          <SelectItem value="en">English</SelectItem>
-          <SelectItem value="es">Español</SelectItem>
+          <SelectItem value="pt-BR">Português (BR)</SelectItem>
+          <SelectItem value="en-US">English (US)</SelectItem>
+          <SelectItem value="es-AM">Español (AM)</SelectItem>
         </SelectContent>
       </Select>
     </div>
