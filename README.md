@@ -28,8 +28,7 @@ O WISEVEO conta com um **Wizard de Configuração Visual**. Você não precisa e
 
 ### Passo 1: Instalação
 ```bash
-git clone https://github.com/afild/wiseveo.git
-cd wiseveo
+git clone https://github.com/afild/wiseveo.git .
 npm install
 ```
 
