@@ -206,8 +206,11 @@ const data: { navGroups: SidebarNavGroup[] } = {
   ],
 }
 
+import { useTranslations } from "next-intl"
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useCurrentUser()
+  const t = useTranslations("sidebar")
   const userData = user ?? { name: "...", email: "", avatar: "" }
   const isAdmin = user?.role === "ADMIN" || user?.role === "SUPERADMIN"
   const navGroups = React.useMemo(() => {
@@ -250,8 +253,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <Logo size={24} className="text-current" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">WISEVEO</span>
-                  <span className="truncate text-xs">Aceleração Financeira</span>
+                  <span className="truncate font-medium">{t("title")}</span>
+                  <span className="truncate text-xs">{t("subtitle")}</span>
                 </div>
               </Link>
             </SidebarMenuButton>

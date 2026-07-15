@@ -48,9 +48,11 @@ const BAR_COLORS = [
   "var(--primary)",
 ]
 
-function buildChartConfig(data: ChartDataPoint[]): ChartConfig {
+import { useTranslations } from "next-intl"
+
+function buildChartConfig(data: ChartDataPoint[], label: string): ChartConfig {
   const config: ChartConfig = {
-    amount: { label: "Despesa" },
+    amount: { label },
   }
 
   for (const item of data) {
@@ -82,6 +84,7 @@ interface ExpenseTooltipProps {
 
 function ExpenseTooltipContent({ active, payload }: ExpenseTooltipProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("dashboard.ExpensesChart")
 
   if (!active || !payload?.length) return null
 
@@ -104,7 +107,7 @@ function ExpenseTooltipContent({ active, payload }: ExpenseTooltipProps) {
               className="size-2 shrink-0 rounded-full"
               style={{ backgroundColor: data.fill }}
             />
-            Pago:
+            {t("paid")}
           </span>
           <span className="text-foreground font-mono font-medium tabular-nums">
             {monetary.formatMonetaryValue(data.paid)}
@@ -117,7 +120,7 @@ function ExpenseTooltipContent({ active, payload }: ExpenseTooltipProps) {
               className="size-2 shrink-0 rounded-full opacity-35"
               style={{ backgroundColor: data.fill }}
             />
-            A Pagar:
+            {t("toPay")}
           </span>
           <span className="text-foreground font-mono font-medium tabular-nums">
             {monetary.formatMonetaryValue(data.scheduled)}
@@ -125,7 +128,7 @@ function ExpenseTooltipContent({ active, payload }: ExpenseTooltipProps) {
         </div>
 
         <div className="mt-0.5 flex items-center justify-between gap-4 border-t border-border/50 pt-1">
-          <span className="text-foreground font-medium">Total:</span>
+          <span className="text-foreground font-medium">{t("total")}</span>
           <span className="text-foreground font-mono font-bold tabular-nums">
             {monetary.formatMonetaryValue(data.amount)}
           </span>
@@ -178,6 +181,9 @@ export function ExpensesByGroupChart() {
   const [data, setData] = React.useState<ChartDataPoint[]>([])
   const [totalExpense, setTotalExpense] = React.useState(0)
   const [loading, setLoading] = React.useState(false)
+
+  const t = useTranslations("dashboard.ExpensesChart")
+  const tSectionCards = useTranslations("dashboard.SectionCards")
 
   // Dynamic height: taller per bar on mobile (48px) vs desktop (40px)
   const barHeightPx = isMobile ? 52 : 40
@@ -239,19 +245,19 @@ export function ExpensesByGroupChart() {
     }
   }, [dateRange.from, dateRange.to])
 
-  const chartConfig = React.useMemo(() => buildChartConfig(data), [data])
+  const chartConfig = React.useMemo(() => buildChartConfig(data, tSectionCards("expense")), [data, tSectionCards])
 
   return (
     <Card className="@container/card h-full bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card">
       <CardHeader>
-        <CardTitle>Despesas por Grupo</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
-          Distribuição de gastos no período selecionado
+          {t("description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-sm text-muted-foreground">
-          Total de despesas:{" "}
+          {t("totalExpenses")}{" "}
           <span className="font-mono tabular-nums text-foreground text-destructive">
             {monetary.formatMonetaryValue(Math.abs(totalExpense))}
           </span>
@@ -259,12 +265,12 @@ export function ExpensesByGroupChart() {
 
         {loading ? (
           <div className="flex items-center justify-center" style={{ height: minHeight }}>
-            <p className="text-sm text-muted-foreground">Carregando...</p>
+            <p className="text-sm text-muted-foreground">{t("loading")}</p>
           </div>
         ) : data.length === 0 ? (
           <div className="flex items-center justify-center" style={{ height: minHeight }}>
             <p className="text-sm text-muted-foreground">
-              Sem despesas no período
+              {t("noExpenses")}
             </p>
           </div>
         ) : (

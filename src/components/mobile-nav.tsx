@@ -14,9 +14,11 @@ import {
 import { cn } from "@/lib/utils"
 import { MobileMoreSheet } from "@/components/mobile-more-sheet"
 
+import { useTranslations } from "next-intl"
+
 // ─── Primary navigation items (max 5 for ergonomics) ─────────────────────────
 interface NavItem {
-  label: string
+  id: string
   href: string
   icon: LucideIcon
   /** Treat any path that starts with this prefix as active */
@@ -24,10 +26,10 @@ interface NavItem {
 }
 
 const PRIMARY_NAV: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Transações", href: "/transactions", icon: ArrowLeftRight },
-  { label: "Orçamento", href: "/budget", icon: Wallet },
-  { label: "Calendário", href: "/calendar", icon: Calendar },
+  { id: "dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { id: "transacoes", href: "/transactions", icon: ArrowLeftRight },
+  { id: "orcamento", href: "/budget", icon: Wallet },
+  { id: "calendario", href: "/calendar", icon: Calendar },
 ]
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -44,6 +46,7 @@ const PRIMARY_NAV: NavItem[] = [
 export function MobileNav() {
   const pathname = usePathname()
   const [moreOpen, setMoreOpen] = React.useState(false)
+  const t = useTranslations("sidebar")
 
   function isActive(item: NavItem) {
     if (item.matchPrefix) return pathname.startsWith(item.matchPrefix)
@@ -54,7 +57,7 @@ export function MobileNav() {
     <>
       {/* Bottom navigation bar */}
       <nav
-        aria-label="Navegação principal"
+        aria-label={t("mainNavigation")}
         className={cn(
           // Positioning — fixed at the bottom, above safe-area
           "fixed bottom-0 inset-x-0 z-[30]",
@@ -98,7 +101,7 @@ export function MobileNav() {
                   aria-hidden="true"
                 />
                 <span className="text-[10px] font-medium leading-none tracking-tight">
-                  {item.label}
+                  {t(item.id)}
                 </span>
               </Link>
             )
@@ -107,7 +110,7 @@ export function MobileNav() {
           {/* "More" trigger */}
           <button
             type="button"
-            aria-label="Mais opções de navegação"
+            aria-label={t("moreOptions")}
             aria-expanded={moreOpen}
             onClick={() => setMoreOpen(true)}
             className={cn(
@@ -125,7 +128,7 @@ export function MobileNav() {
               aria-hidden="true"
             />
             <span className="text-[10px] font-medium leading-none tracking-tight">
-              Mais
+              {t("more")}
             </span>
           </button>
         </div>

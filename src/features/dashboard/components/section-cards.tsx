@@ -21,6 +21,7 @@ import {
 import { SectionCardsGrid } from "@/components/section-cards-grid"
 import { formatPercentValue } from "@/lib/monetary"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import { useTranslations } from "next-intl"
 
 // ---------------------------------------------------------------------------
 // Types
@@ -48,39 +49,41 @@ export interface SectionCardsProps {
 
 export function SectionCards({ balance, income, expense, savings }: SectionCardsProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("dashboard.SectionCards")
+
   const cards = [
     {
-      label: "Saldo",
+      label: t("balance"),
       value: balance.total,
       change: balance.change,
-      footerText: "Saldo consolidado",
+      footerText: t("balanceDesc"),
       icon: Wallet,
       colorClass: balance.total >= 0 ? "text-chart-2" : "text-destructive",
       invertTrend: false,
     },
     {
-      label: "Receitas",
+      label: t("income"),
       value: income.value,
       change: income.change,
-      footerText: "Entradas do mês",
+      footerText: t("incomeDesc"),
       icon: ArrowUpCircle,
       colorClass: "text-chart-2",
       invertTrend: false,
     },
     {
-      label: "Despesas",
+      label: t("expense"),
       value: expense.value,
       change: expense.change,
-      footerText: "Saídas do mês",
+      footerText: t("expenseDesc"),
       icon: ArrowDownCircle,
       colorClass: "text-destructive",
       invertTrend: true,
     },
     {
-      label: "Economias",
+      label: t("savings"),
       value: savings.value,
       change: savings.change,
-      footerText: "Economia do mês",
+      footerText: t("savingsDesc"),
       icon: PiggyBank,
       colorClass: savings.value >= 0 ? "text-chart-2" : "text-destructive",
       invertTrend: false,
@@ -119,7 +122,7 @@ export function SectionCards({ balance, income, expense, savings }: SectionCards
                   <TrendingDown className="size-3.5 md:size-4" />
                 )}
               </div>
-              <div className="text-muted-foreground">vs mês anterior</div>
+              <div className="text-muted-foreground">{t("vsPreviousMonth")}</div>
             </CardFooter>
           </Card>
         )

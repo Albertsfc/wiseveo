@@ -24,23 +24,26 @@ import { Logo } from "@/components/logo"
 import { toast } from "sonner"
 import * as React from "react"
 
-const profileFormSchema = z.object({
-  firstName: z.string().min(1, "O nome é obrigatório"),
-  lastName: z.string().min(1, "O sobrenome é obrigatório"),
-  email: z.string().email("Endereço de e-mail inválido"),
-  phone: z.string().optional(),
-  website: z.string().optional(),
-  location: z.string().optional(),
-  role: z.string().optional(),
-  bio: z.string().optional(),
-  company: z.string().optional(),
-  timezone: z.string().optional(),
-  language: z.string().optional(),
-})
-
-type ProfileFormValues = z.infer<typeof profileFormSchema>
+import { useTranslations } from "next-intl"
 
 export function ProfileForm() {
+  const t = useTranslations("settings.profile")
+
+  const profileFormSchema = z.object({
+    firstName: z.string().min(1, t("firstNameReq")),
+    lastName: z.string().min(1, t("lastNameReq")),
+    email: z.string().email(t("emailReq")),
+    phone: z.string().optional(),
+    website: z.string().optional(),
+    location: z.string().optional(),
+    role: z.string().optional(),
+    bio: z.string().optional(),
+    company: z.string().optional(),
+    timezone: z.string().optional(),
+    language: z.string().optional(),
+  })
+
+  type ProfileFormValues = z.infer<typeof profileFormSchema>
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [profileImage, setProfileImage] = useState<string | null>(null)
   const [useDefaultIcon, setUseDefaultIcon] = useState(true)
@@ -110,12 +113,12 @@ export function ProfileForm() {
       })
 
       if (res.ok) {
-        toast.success("Perfil atualizado com sucesso!")
+        toast.success(t("success"))
       } else {
-        toast.error("Erro ao atualizar perfil.")
+        toast.error(t("error"))
       }
     } catch (error) {
-      toast.error("Erro de conexão ao salvar perfil.")
+      toast.error(t("connError"))
     }
   }
 
@@ -148,8 +151,8 @@ export function ProfileForm() {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="border-0 shadow-none">
           <CardHeader className="px-0">
-            <CardTitle>Configurações de Perfil</CardTitle>
-            <CardDescription>Atualize suas informações pessoais e preferências</CardDescription>
+            <CardTitle>{t("title")}</CardTitle>
+            <CardDescription>{t("description")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6 px-0">
             {/* Profile Picture Section */}
@@ -174,7 +177,7 @@ export function ProfileForm() {
                     className="cursor-pointer"
                   >
                     <Upload className="mr-2 h-4 w-4" />
-                    Enviar nova foto
+                    {t("uploadPhoto")}
                   </Button>
                   <Button 
                     variant="outline" 
@@ -183,11 +186,11 @@ export function ProfileForm() {
                     type="button"
                     className="cursor-pointer"
                   >
-                    Redefinir
+                    {t("reset")}
                   </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Permitido JPG, GIF ou PNG. Tamanho máximo de 800K.
+                  {t("photoLimits")}
                 </p>
               </div>
               <input
@@ -209,9 +212,9 @@ export function ProfileForm() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome</FormLabel>
+                    <FormLabel>{t("firstName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Digite seu nome" {...field} />
+                      <Input placeholder={t("firstNamePl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -224,9 +227,9 @@ export function ProfileForm() {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Sobrenome</FormLabel>
+                    <FormLabel>{t("lastName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Digite seu sobrenome" {...field} />
+                      <Input placeholder={t("lastNamePl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -239,9 +242,9 @@ export function ProfileForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>E-mail</FormLabel>
+                    <FormLabel>{t("email")}</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Digite seu e-mail" {...field} />
+                      <Input type="email" placeholder={t("emailPl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -254,9 +257,9 @@ export function ProfileForm() {
                 name="company"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Empresa</FormLabel>
+                    <FormLabel>{t("company")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Digite o nome da empresa" {...field} />
+                      <Input placeholder={t("companyPl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -269,9 +272,9 @@ export function ProfileForm() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Telefone</FormLabel>
+                    <FormLabel>{t("phone")}</FormLabel>
                     <FormControl>
-                      <Input type="tel" placeholder="Digite seu número de telefone" {...field} />
+                      <Input type="tel" placeholder={t("phonePl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -284,9 +287,9 @@ export function ProfileForm() {
                 name="location"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Localização</FormLabel>
+                    <FormLabel>{t("location")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Sua localização (ex: São Paulo, Brasil)" {...field} />
+                      <Input placeholder={t("locationPl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -299,9 +302,9 @@ export function ProfileForm() {
                 name="website"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Website</FormLabel>
+                    <FormLabel>{t("website")}</FormLabel>
                     <FormControl>
-                      <Input type="url" placeholder="https://seu-site.com" {...field} />
+                      <Input type="url" placeholder={t("websitePl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -314,17 +317,17 @@ export function ProfileForm() {
                 name="language"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Idioma</FormLabel>
+                    <FormLabel>{t("language")}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Selecione o idioma" />
+                          <SelectValue placeholder={t("languagePl")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="portuguese">Português (BR)</SelectItem>
-                        <SelectItem value="english">Inglês</SelectItem>
-                        <SelectItem value="spanish">Espanhol</SelectItem>
+                        <SelectItem value="portuguese">{t("langPt")}</SelectItem>
+                        <SelectItem value="english">{t("langEn")}</SelectItem>
+                        <SelectItem value="spanish">{t("langEs")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -338,9 +341,9 @@ export function ProfileForm() {
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Cargo</FormLabel>
+                    <FormLabel>{t("role")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Diretor Financeiro" {...field} />
+                      <Input placeholder={t("rolePl")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -353,11 +356,11 @@ export function ProfileForm() {
                 name="timezone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Fuso Horário</FormLabel>
+                    <FormLabel>{t("timezone")}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Selecione o fuso horário" />
+                          <SelectValue placeholder={t("timezonePl")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -379,10 +382,10 @@ export function ProfileForm() {
               name="bio"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Biografia</FormLabel>
+                  <FormLabel>{t("bio")}</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="Conte-nos um pouco sobre você..." 
+                      placeholder={t("bioPl")} 
                       className="min-h-[100px]"
                       {...field}
                     />
@@ -395,10 +398,10 @@ export function ProfileForm() {
             {/* Action Buttons */}
             <div className="flex justify-start gap-3">
               <Button type="submit" className="cursor-pointer">
-                Salvar Alterações
+                {t("save")}
               </Button>
               <Button variant="outline" type="button" className="cursor-pointer">
-                Cancelar
+                {t("cancel")}
               </Button>
             </div>
           </CardContent>

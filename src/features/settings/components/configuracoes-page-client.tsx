@@ -16,6 +16,7 @@ import { ProfileForm } from "./profile-form"
 import { AccountForm } from "./account-form"
 import { AdminUsersForm } from "./admin-users-form"
 import { PartyPopper } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 interface ConfiguracoesPageClientProps {
   initialTab?: "general" | "appearance" | "monetary" | "profile" | "account" | "admin"
@@ -36,6 +37,7 @@ export function ConfiguracoesPageClient({
 }: ConfiguracoesPageClientProps) {
   const searchParams = useSearchParams()
   const isOnboarding = searchParams.get("onboarding") === "true"
+  const t = useTranslations("settings")
 
   return (
     <div className="flex-1 space-y-6 px-4 lg:px-6 pt-0">
@@ -46,24 +48,20 @@ export function ConfiguracoesPageClient({
             <PartyPopper className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h3 className="font-semibold text-primary">Setup concluído com sucesso! 🎉</h3>
-            <p className="text-sm text-muted-foreground mt-1">
-              Bem-vindo ao WISEVEO. Seu banco de dados e usuário administrador foram configurados.
-              Recomendamos que você revise as abas abaixo (como <strong>Moeda</strong> e <strong>Geral</strong>) e 
-              depois navegue pelo menu lateral para configurar o Plano de Contas definitivo (Categorias e Contas).
-            </p>
+            <h3 className="font-semibold text-primary">{t("onboardingSuccess")}</h3>
+            <p className="text-sm text-muted-foreground mt-1" dangerouslySetInnerHTML={{ __html: t("onboardingDesc") }} />
           </div>
         </div>
       )}
 
       <Tabs defaultValue={initialTab} className="space-y-6">
         <TabsList className={`grid w-full grid-cols-2 gap-2 sm:grid-cols-3 ${isAdmin ? "lg:w-[840px] lg:grid-cols-6" : "lg:w-[720px] lg:grid-cols-5"}`}>
-          <TabsTrigger value="general" className="cursor-pointer">Geral</TabsTrigger>
-          <TabsTrigger value="appearance" className="cursor-pointer">Aparência</TabsTrigger>
-          <TabsTrigger value="monetary" className="cursor-pointer">Moeda</TabsTrigger>
-          <TabsTrigger value="profile" className="cursor-pointer">Perfil</TabsTrigger>
-          <TabsTrigger value="account" className="cursor-pointer">Conta</TabsTrigger>
-          {isAdmin && <TabsTrigger value="admin" className="cursor-pointer">Admin</TabsTrigger>}
+          <TabsTrigger value="general" className="cursor-pointer">{t("tabs.general")}</TabsTrigger>
+          <TabsTrigger value="appearance" className="cursor-pointer">{t("tabs.appearance")}</TabsTrigger>
+          <TabsTrigger value="monetary" className="cursor-pointer">{t("tabs.monetary")}</TabsTrigger>
+          <TabsTrigger value="profile" className="cursor-pointer">{t("tabs.profile")}</TabsTrigger>
+          <TabsTrigger value="account" className="cursor-pointer">{t("tabs.account")}</TabsTrigger>
+          {isAdmin && <TabsTrigger value="admin" className="cursor-pointer">{t("tabs.admin")}</TabsTrigger>}
         </TabsList>
 
         <TabsContent value="general" className="border-none p-0 mt-6 outline-none">

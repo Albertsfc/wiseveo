@@ -116,10 +116,12 @@ const CommandItem = React.forwardRef<
 ))
 CommandItem.displayName = CommandPrimitive.Item.displayName
 
+import { useTranslations } from "next-intl"
+
 interface SearchItem {
-  title: string
+  id: string
   url: string
-  group: string
+  groupId: string
   icon?: LucideIcon
 }
 
@@ -131,60 +133,62 @@ interface CommandSearchProps {
 export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
   const router = useRouter()
   const commandRef = React.useRef<HTMLDivElement>(null)
+  const tSidebar = useTranslations("sidebar")
+  const tCommon = useTranslations("common")
 
   const searchItems: SearchItem[] = [
     // Dashboards
-    { title: "Dashboard", url: "/dashboard", group: "Dashboards", icon: LayoutDashboard },
-    { title: "Insights", url: "/insights", group: "Dashboards", icon: LayoutPanelLeft },
-    { title: "Transações", url: "/transactions", group: "Dashboards", icon: ArrowLeftRight },
-    { title: "Recorrentes", url: "/recurring", group: "Dashboards", icon: RotateCcw },
-    { title: "Orçamento", url: "/budget", group: "Dashboards", icon: Wallet },
-    { title: "Análise", url: "/analysis", group: "Dashboards", icon: Calculator },
-    { title: "Forecasting", url: "/forecasting", group: "Dashboards", icon: LineChart },
-    { title: "Bancos", url: "/banks", group: "Dashboards", icon: Landmark },
-    { title: "Calendário", url: "/calendar", group: "Dashboards", icon: Calendar },
-    { title: "Configurações", url: "/configuracoes?tab=general", group: "Dashboards", icon: Settings },
+    { id: "dashboard", url: "/dashboard", groupId: "dashboards", icon: LayoutDashboard },
+    { id: "insights", url: "/insights", groupId: "dashboards", icon: LayoutPanelLeft },
+    { id: "transacoes", url: "/transactions", groupId: "dashboards", icon: ArrowLeftRight },
+    { id: "recorrentes", url: "/recurring", groupId: "dashboards", icon: RotateCcw },
+    { id: "orcamento", url: "/budget", groupId: "dashboards", icon: Wallet },
+    { id: "analise", url: "/analysis", groupId: "dashboards", icon: Calculator },
+    { id: "forecasting", url: "/forecasting", groupId: "dashboards", icon: LineChart },
+    { id: "bancos", url: "/banks", groupId: "dashboards", icon: Landmark },
+    { id: "calendario", url: "/calendar", groupId: "dashboards", icon: Calendar },
+    { id: "configuracoes", url: "/configuracoes?tab=general", groupId: "dashboards", icon: Settings },
 
     // Apps
-    { title: "Mail", url: "/mail", group: "Apps", icon: Mail },
-    { title: "Tasks", url: "/tasks", group: "Apps", icon: CheckSquare },
-    { title: "Chat", url: "/chat", group: "Apps", icon: MessageCircle },
-    { title: "Calendar", url: "/calendar", group: "Apps", icon: Calendar },
+    { id: "mail", url: "/mail", groupId: "apps", icon: Mail },
+    { id: "tasks", url: "/tasks", groupId: "apps", icon: CheckSquare },
+    { id: "chat", url: "/chat", groupId: "apps", icon: MessageCircle },
+    { id: "calendario", url: "/calendar", groupId: "apps", icon: Calendar },
 
     // Auth Pages
-    { title: "Sign In 1", url: "/auth/sign-in", group: "Auth Pages", icon: Shield },
-    { title: "Sign In 2", url: "/auth/sign-in-2", group: "Auth Pages", icon: Shield },
-    { title: "Sign Up 1", url: "/auth/sign-up", group: "Auth Pages", icon: Shield },
-    { title: "Sign Up 2", url: "/auth/sign-up-2", group: "Auth Pages", icon: Shield },
-    { title: "Forgot Password 1", url: "/auth/forgot-password", group: "Auth Pages", icon: Shield },
-    { title: "Forgot Password 2", url: "/auth/forgot-password-2", group: "Auth Pages", icon: Shield },
+    { id: "signIn1", url: "/auth/sign-in", groupId: "authPages", icon: Shield },
+    { id: "signIn2", url: "/auth/sign-in-2", groupId: "authPages", icon: Shield },
+    { id: "signUp1", url: "/auth/sign-up", groupId: "authPages", icon: Shield },
+    { id: "signUp2", url: "/auth/sign-up-2", groupId: "authPages", icon: Shield },
+    { id: "forgotPass1", url: "/auth/forgot-password", groupId: "authPages", icon: Shield },
+    { id: "forgotPass2", url: "/auth/forgot-password-2", groupId: "authPages", icon: Shield },
 
     // Errors
-    { title: "Unauthorized", url: "/errors/unauthorized", group: "Errors", icon: AlertTriangle },
-    { title: "Forbidden", url: "/errors/forbidden", group: "Errors", icon: AlertTriangle },
-    { title: "Not Found", url: "/errors/not-found", group: "Errors", icon: AlertTriangle },
-    { title: "Internal Server Error", url: "/errors/internal-server-error", group: "Errors", icon: AlertTriangle },
-    { title: "Under Maintenance", url: "/errors/under-maintenance", group: "Errors", icon: AlertTriangle },
+    { id: "unauthorized", url: "/errors/unauthorized", groupId: "errorsGroup", icon: AlertTriangle },
+    { id: "forbidden", url: "/errors/forbidden", groupId: "errorsGroup", icon: AlertTriangle },
+    { id: "notFound", url: "/errors/not-found", groupId: "errorsGroup", icon: AlertTriangle },
+    { id: "internalError", url: "/errors/internal-server-error", groupId: "errorsGroup", icon: AlertTriangle },
+    { id: "underMaintenance", url: "/errors/under-maintenance", groupId: "errorsGroup", icon: AlertTriangle },
 
     // Settings
-    { title: "Geral", url: "/configuracoes?tab=general", group: "Settings", icon: Settings },
-    { title: "User Settings", url: "/configuracoes?tab=profile", group: "Settings", icon: User },
-    { title: "Account Settings", url: "/configuracoes?tab=account", group: "Settings", icon: Settings },
-    { title: "Plans & Billing", url: "/settings/billing", group: "Settings", icon: CreditCard },
-    { title: "Appearance", url: "/configuracoes?tab=appearance", group: "Settings", icon: Palette },
-    { title: "Notifications", url: "/settings/notifications", group: "Settings", icon: Bell },
-    { title: "Connections", url: "/settings/connections", group: "Settings", icon: Link2 },
+    { id: "geral", url: "/configuracoes?tab=general", groupId: "settings", icon: Settings },
+    { id: "usersettings", url: "/configuracoes?tab=profile", groupId: "settings", icon: User },
+    { id: "accountsettings", url: "/configuracoes?tab=account", groupId: "settings", icon: Settings },
+    { id: "plansbilling", url: "/settings/billing", groupId: "settings", icon: CreditCard },
+    { id: "appearance", url: "/configuracoes?tab=appearance", groupId: "settings", icon: Palette },
+    { id: "notifications", url: "/settings/notifications", groupId: "settings", icon: Bell },
+    { id: "connections", url: "/settings/connections", groupId: "settings", icon: Link2 },
 
     // Pages
-    { title: "FAQs", url: "/faqs", group: "Pages", icon: HelpCircle },
-    { title: "Pricing", url: "/pricing", group: "Pages", icon: CreditCard },
+    { id: "faqs", url: "/faqs", groupId: "pages", icon: HelpCircle },
+    { id: "pricing", url: "/pricing", groupId: "pages", icon: CreditCard },
   ]
 
   const groupedItems = searchItems.reduce((acc, item) => {
-    if (!acc[item.group]) {
-      acc[item.group] = []
+    if (!acc[item.groupId]) {
+      acc[item.groupId] = []
     }
-    acc[item.group].push(item)
+    acc[item.groupId].push(item)
     return acc
   }, {} as Record<string, SearchItem[]>)
 
@@ -210,21 +214,21 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
           ref={commandRef}
           className="transition-transform duration-100 ease-out"
         >
-          <CommandInput placeholder="What do you need?" autoFocus />
+          <CommandInput placeholder={tCommon("searchPlaceholder")} autoFocus />
           <CommandList>
-            <CommandEmpty>No results found.</CommandEmpty>
-            {Object.entries(groupedItems).map(([group, items]) => (
-              <CommandGroup key={group} heading={group}>
+            <CommandEmpty>{tCommon("noResults")}</CommandEmpty>
+            {Object.entries(groupedItems).map(([groupId, items]) => (
+              <CommandGroup key={groupId} heading={tSidebar(groupId)}>
                 {items.map((item) => {
                   const Icon = item.icon
                   return (
                     <CommandItem
                       key={item.url}
-                      value={item.title}
+                      value={tSidebar(item.id)}
                       onSelect={() => handleSelect(item.url)}
                     >
                       {Icon && <Icon className="mr-2 h-4 w-4" />}
-                      {item.title}
+                      {tSidebar(item.id)}
                     </CommandItem>
                   )
                 })}
@@ -238,14 +242,15 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
 }
 
 export function SearchTrigger({ onClick }: { onClick: () => void }) {
+  const tCommon = useTranslations("common")
   return (
     <button
       onClick={onClick}
       className="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-8 px-3 py-1 relative w-full justify-start text-muted-foreground sm:pr-12 md:w-36 lg:w-56"
     >
       <Search className="mr-2 h-3.5 w-3.5" />
-      <span className="hidden lg:inline-flex">Search...</span>
-      <span className="inline-flex lg:hidden">Search...</span>
+      <span className="hidden lg:inline-flex">{tCommon("search")}</span>
+      <span className="inline-flex lg:hidden">{tCommon("search")}</span>
       <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-4 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
         <span className="text-xs">⌘</span>K
       </kbd>

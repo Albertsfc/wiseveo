@@ -37,6 +37,7 @@ import {
   type MonetarySettings,
 } from "@/lib/monetary"
 import { useMonetaryPreferences } from "@/contexts/monetary-preferences-context"
+import { useTranslations } from "next-intl"
 
 const monetaryFormatSchema = z.object({
   currency: z.enum(["BRL", "USD", "EUR"]),
@@ -94,6 +95,8 @@ function LoadedMonetaryFormatForm({
   initialValues,
   savePreferences,
 }: LoadedMonetaryFormatFormProps) {
+  const t = useTranslations("settings.monetary")
+
   const form = useForm<MonetaryFormatValues>({
     resolver: zodResolver(monetaryFormatSchema),
     defaultValues: initialValues,
@@ -113,11 +116,11 @@ function LoadedMonetaryFormatForm({
     form.reset(result.data)
 
     if (result.success) {
-      toast.success("Formatação monetária atualizada com sucesso!")
+      toast.success(t("success"))
       return
     }
 
-    toast.error("Não foi possível salvar a formatação monetária.")
+    toast.error(t("error"))
   }
 
   function handleCancel() {
@@ -127,9 +130,9 @@ function LoadedMonetaryFormatForm({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Formatação Monetária</h1>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">
-          Defina como valores financeiros devem ser exibidos em todo o sistema.
+          {t("description")}
         </p>
       </div>
 
@@ -137,9 +140,9 @@ function LoadedMonetaryFormatForm({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Preferências Globais</CardTitle>
+              <CardTitle className="text-lg">{t("globalPrefs")}</CardTitle>
               <CardDescription>
-                Estas opções afetam cards, tabelas, gráficos e resumos financeiros.
+                {t("globalPrefsDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -148,7 +151,7 @@ function LoadedMonetaryFormatForm({
                 name="currency"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Moeda</FormLabel>
+                    <FormLabel>{t("currency")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
@@ -156,17 +159,17 @@ function LoadedMonetaryFormatForm({
                     >
                       <FormControl>
                         <SelectTrigger className="cursor-pointer">
-                          <SelectValue placeholder="Selecione a moeda" />
+                          <SelectValue placeholder={t("selectCurrency")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="BRL">Real brasileiro (BRL)</SelectItem>
-                        <SelectItem value="USD">Dólar americano (USD)</SelectItem>
-                        <SelectItem value="EUR">Euro (EUR)</SelectItem>
+                        <SelectItem value="BRL">{t("brl")}</SelectItem>
+                        <SelectItem value="USD">{t("usd")}</SelectItem>
+                        <SelectItem value="EUR">{t("eur")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      Define símbolo, código e separadores numéricos padrão.
+                      {t("currencyDesc")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -180,7 +183,7 @@ function LoadedMonetaryFormatForm({
                 name="displayMode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Formato de Exibição</FormLabel>
+                    <FormLabel>{t("displayMode")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
@@ -188,17 +191,17 @@ function LoadedMonetaryFormatForm({
                     >
                       <FormControl>
                         <SelectTrigger className="cursor-pointer">
-                          <SelectValue placeholder="Selecione o formato" />
+                          <SelectValue placeholder={t("selectFormat")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="symbol">Símbolo monetário</SelectItem>
-                        <SelectItem value="code">Código da moeda</SelectItem>
-                        <SelectItem value="number">Somente número</SelectItem>
+                        <SelectItem value="symbol">{t("symbol")}</SelectItem>
+                        <SelectItem value="code">{t("code")}</SelectItem>
+                        <SelectItem value="number">{t("number")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      Exemplo: R$, BRL ou apenas o valor numérico.
+                      {t("displayModeDesc")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -212,7 +215,7 @@ function LoadedMonetaryFormatForm({
                 name="negativeFormat"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Valores Negativos</FormLabel>
+                    <FormLabel>{t("negativeFormat")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
@@ -220,16 +223,16 @@ function LoadedMonetaryFormatForm({
                     >
                       <FormControl>
                         <SelectTrigger className="cursor-pointer">
-                          <SelectValue placeholder="Selecione o formato" />
+                          <SelectValue placeholder={t("selectFormat")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="parentheses">Entre parênteses</SelectItem>
-                        <SelectItem value="minus">Com sinal de menos</SelectItem>
+                        <SelectItem value="parentheses">{t("parentheses")}</SelectItem>
+                        <SelectItem value="minus">{t("minus")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      Escolha como saídas, prejuízos e demais valores negativos serão mostrados.
+                      {t("negativeFormatDesc")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -240,20 +243,20 @@ function LoadedMonetaryFormatForm({
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Pré-visualização em Tempo Real</CardTitle>
+              <CardTitle className="text-lg">{t("previewTitle")}</CardTitle>
               <CardDescription>
-                Veja como o mesmo valor ficará em versões positiva e negativa.
+                {t("previewDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3 sm:grid-cols-2">
               <div className="rounded-lg border bg-muted/30 p-4">
-                <div className="text-sm text-muted-foreground">Valor positivo</div>
+                <div className="text-sm text-muted-foreground">{t("posValue")}</div>
                 <div className="mt-2 font-mono text-2xl font-semibold text-chart-2">
                   {previewFormatter.formatMonetaryValue(previewValues.positive)}
                 </div>
               </div>
               <div className="rounded-lg border bg-muted/30 p-4">
-                <div className="text-sm text-muted-foreground">Valor negativo</div>
+                <div className="text-sm text-muted-foreground">{t("negValue")}</div>
                 <div className="mt-2 font-mono text-2xl font-semibold text-destructive">
                   {previewFormatter.formatMonetaryValue(previewValues.negative)}
                 </div>
@@ -267,7 +270,7 @@ function LoadedMonetaryFormatForm({
               className="cursor-pointer"
               disabled={form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? "Salvando..." : "Salvar Formatação"}
+              {form.formState.isSubmitting ? t("saving") : t("save")}
             </Button>
             <Button
               type="button"
@@ -276,7 +279,7 @@ function LoadedMonetaryFormatForm({
               onClick={handleCancel}
               disabled={form.formState.isSubmitting}
             >
-              Cancelar
+              {t("cancel")}
             </Button>
           </div>
         </form>

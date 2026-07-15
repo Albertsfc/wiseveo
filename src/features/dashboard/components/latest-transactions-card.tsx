@@ -42,6 +42,8 @@ function amountColorClass(value: number): string {
   return "text-foreground"
 }
 
+import { useTranslations } from "next-intl"
+
 export function LatestTransactionsCard() {
   const monetary = useMonetaryFormattingSafe()
   const { dateRange } = useDateRange()
@@ -51,6 +53,8 @@ export function LatestTransactionsCard() {
   const [visibleRows, setVisibleRows] = React.useState(0)
   const listViewportRef = React.useRef<HTMLDivElement | null>(null)
   const measureRowRef = React.useRef<HTMLDivElement | null>(null)
+  
+  const t = useTranslations("dashboard.LatestTransactions")
 
   const recalcVisibleRows = React.useCallback(() => {
     const viewport = listViewportRef.current
@@ -83,7 +87,7 @@ export function LatestTransactionsCard() {
 
         const res = await fetch(`/api/dashboard/latest-transactions?${params.toString()}`)
         if (!res.ok) {
-          throw new Error("Falha ao carregar últimas transações")
+          throw new Error("error") // Handled below
         }
 
         const payload = (await res.json()) as { items: LatestTransactionItem[] }
@@ -94,7 +98,7 @@ export function LatestTransactionsCard() {
         console.error("Failed to fetch latest transactions:", err)
         if (!isCancelled) {
           setItems([])
-          setError("Não foi possível carregar as últimas transações.")
+          setError(t("loadError") || "Não foi possível carregar as últimas transações.")
         }
       } finally {
         if (!isCancelled) {
@@ -108,7 +112,7 @@ export function LatestTransactionsCard() {
     return () => {
       isCancelled = true
     }
-  }, [dateRange.from, dateRange.to])
+  }, [dateRange.from, dateRange.to, t])
 
   React.useEffect(() => {
     recalcVisibleRows()
@@ -134,9 +138,9 @@ export function LatestTransactionsCard() {
   return (
     <Card className="@container/card h-full min-h-0 overflow-hidden bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card flex flex-col">
       <CardHeader>
-        <CardTitle>Últimos Pagamentos</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
-          Acompanhe os pagamentos recentes
+          {t("description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 min-h-0 overflow-hidden p-0 font-[system-ui]">
@@ -168,7 +172,7 @@ export function LatestTransactionsCard() {
           </div>
 
           {loading ? (
-            <div className="px-4 py-6 text-center text-sm text-muted-foreground">Carregando...</div>
+            <div className="px-4 py-6 text-center text-sm text-muted-foreground">{t("loading")}</div>
           ) : items.length ? (
             <div className="border-t">
               {visibleItems.map((item) => {
@@ -212,7 +216,7 @@ export function LatestTransactionsCard() {
             </div>
           ) : (
             <div className="px-4 py-6 text-center text-sm text-muted-foreground">
-              Sem pagamentos no período
+              {t("noTransactions")}
             </div>
           )}
         </div>

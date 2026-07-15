@@ -30,17 +30,16 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { useTranslations } from "next-intl"
 import type {
   QuickPaymentOptions,
   QuickPaymentSettings,
 } from "../services/user-settings-service"
 
-const generalSettingsSchema = z.object({
-  defaultAccountId: z.string().min(1, "Selecione o banco padrão."),
-  defaultStatusCode: z.string().min(1, "Selecione o status padrão."),
-})
-
-type GeneralSettingsValues = z.infer<typeof generalSettingsSchema>
+type GeneralSettingsValues = {
+  defaultAccountId: string
+  defaultStatusCode: string
+}
 
 interface GeneralFormProps {
   initialQuickPaymentSettings: QuickPaymentSettings
@@ -92,6 +91,13 @@ export function GeneralForm({
   initialQuickPaymentSettings,
   quickPaymentOptions,
 }: GeneralFormProps) {
+  const t = useTranslations("settings.general")
+
+  const generalSettingsSchema = z.object({
+    defaultAccountId: z.string().min(1, t("defaultAccountReq")),
+    defaultStatusCode: z.string().min(1, t("defaultStatusReq")),
+  })
+
   const initialValues = React.useMemo(
     () =>
       buildFormValues(initialQuickPaymentSettings, quickPaymentOptions),
@@ -146,8 +152,7 @@ export function GeneralForm({
 
       if (!response.ok || !payload?.success) {
         throw new Error(
-          payload?.message ??
-            "Não foi possível salvar as configurações gerais.",
+          payload?.message ?? t("error")
         )
       }
 
@@ -155,12 +160,12 @@ export function GeneralForm({
       setPersistedValues(nextValues)
       setHasUnavailableConfig(false)
       form.reset(nextValues)
-      toast.success("Configurações gerais atualizadas com sucesso!")
+      toast.success(t("success"))
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
-          : "Não foi possível salvar as configurações gerais."
+          : t("error")
 
       toast.error(message)
     }
@@ -173,10 +178,9 @@ export function GeneralForm({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Geral</h1>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">
-          Defina preferências globais usadas pelos fluxos compartilhados do
-          sistema.
+          {t("description")}
         </p>
       </div>
 
@@ -184,24 +188,21 @@ export function GeneralForm({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Pagamento Rápido Padrão</CardTitle>
+              <CardTitle className="text-lg">{t("defaultQuickPayment")}</CardTitle>
               <CardDescription>
-                Usado no menu da coluna de ações e no menu de ações em lote da
-                página de Transações.
+                {t("defaultQuickPaymentDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {!canSave && (
                 <div className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground">
-                  Cadastre pelo menos um banco ativo e um status no banco de
-                  dados para habilitar este recurso global.
+                  {t("unavailableFeatures")}
                 </div>
               )}
 
               {hasUnavailableConfig && (
                 <div className="rounded-lg border border-dashed border-destructive/30 bg-destructive/5 p-4 text-sm text-muted-foreground">
-                  A configuração salva não corresponde mais a um banco ou
-                  status disponível. Selecione novos valores e salve novamente.
+                  {t("invalidConfig")}
                 </div>
               )}
 
@@ -210,7 +211,7 @@ export function GeneralForm({
                 name="defaultAccountId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Banco padrão</FormLabel>
+                    <FormLabel>{t("defaultAccount")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
@@ -218,7 +219,7 @@ export function GeneralForm({
                     >
                       <FormControl>
                         <SelectTrigger className="cursor-pointer">
-                          <SelectValue placeholder="Selecione o banco padrão" />
+                          <SelectValue placeholder={t("selectDefaultAccount")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -233,8 +234,7 @@ export function GeneralForm({
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      Esta conta será aplicada automaticamente quando o
-                      Pagamento Rápido for confirmado.
+                      {t("defaultAccountDesc")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -248,7 +248,7 @@ export function GeneralForm({
                 name="defaultStatusCode"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status padrão</FormLabel>
+                    <FormLabel>{t("defaultStatus")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       value={field.value}
@@ -256,7 +256,7 @@ export function GeneralForm({
                     >
                       <FormControl>
                         <SelectTrigger className="cursor-pointer">
-                          <SelectValue placeholder="Selecione o status padrão" />
+                          <SelectValue placeholder={t("selectDefaultStatus")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -271,8 +271,7 @@ export function GeneralForm({
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      O lançamento será atualizado para este status ao usar o
-                      Pagamento Rápido.
+                      {t("defaultStatusDesc")}
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -288,13 +287,13 @@ export function GeneralForm({
               onClick={handleCancel}
               disabled={form.formState.isSubmitting}
             >
-              Cancelar
+              {t("cancel")}
             </Button>
             <Button
               type="submit"
               disabled={!canSave || form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? "Salvando..." : "Salvar"}
+              {form.formState.isSubmitting ? t("saving") : t("save")}
             </Button>
           </div>
         </form>

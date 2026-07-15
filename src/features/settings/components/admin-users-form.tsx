@@ -21,23 +21,24 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { AdminUserSummary } from "../services/admin-users-service"
+import { useTranslations } from "next-intl"
 
 interface AdminUsersFormProps {
   initialUsers: AdminUserSummary[]
 }
 
-function statusBadge(status: AdminUserSummary["status"]) {
+function statusBadge(status: AdminUserSummary["status"], t: any) {
   if (status === "ACTIVE") {
     return (
       <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-        Ativo
+        {t("active")}
       </Badge>
     )
   }
 
   return (
     <Badge variant="secondary" className="bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
-      Pendente
+      {t("pending")}
     </Badge>
   )
 }
@@ -63,6 +64,7 @@ function formatDate(value: string) {
 }
 
 export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
+  const t = useTranslations("settings.adminUsers")
   const [users, setUsers] = React.useState(initialUsers)
   const [approvingId, setApprovingId] = React.useState<string | null>(null)
   const pendingCount = users.filter((user) => user.status === "PENDING").length
@@ -79,7 +81,7 @@ export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
       const payload = await response.json().catch(() => null)
 
       if (!response.ok || !payload?.success) {
-        throw new Error(payload?.message ?? "Não foi possível aprovar o usuário.")
+        throw new Error(payload?.message ?? t("approveError"))
       }
 
       setUsers((current) =>
@@ -87,12 +89,12 @@ export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
           user.id === userId ? payload.data : user,
         ),
       )
-      toast.success("Usuário aprovado com sucesso.")
+      toast.success(t("approveSuccess"))
     } catch (error) {
       toast.error(
         error instanceof Error
           ? error.message
-          : "Não foi possível aprovar o usuário.",
+          : t("approveError"),
       )
     } finally {
       setApprovingId(null)
@@ -102,34 +104,34 @@ export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Admin</h1>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground">
-          Cadastros pendentes: {pendingCount}
+          {t("pendingCount", { count: pendingCount })}
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Usuários</CardTitle>
+          <CardTitle className="text-lg">{t("usersTitle")}</CardTitle>
           <CardDescription>
-            Liberação de novos acessos ao WISEVEO.
+            {t("usersDesc")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {users.length === 0 ? (
             <div className="rounded-lg border border-dashed border-border bg-muted/30 p-4 text-sm text-muted-foreground">
-              Nenhum usuário encontrado.
+              {t("noUsers")}
             </div>
           ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Usuário</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Perfil</TableHead>
-                    <TableHead>Cadastro</TableHead>
-                    <TableHead className="text-right">Ação</TableHead>
+                    <TableHead>{t("colUser")}</TableHead>
+                    <TableHead>{t("colStatus")}</TableHead>
+                    <TableHead>{t("colRole")}</TableHead>
+                    <TableHead>{t("colDate")}</TableHead>
+                    <TableHead className="text-right">{t("colAction")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -139,7 +141,7 @@ export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
                         <div className="font-medium">{user.name}</div>
                         <div className="text-sm text-muted-foreground">{user.email}</div>
                       </TableCell>
-                      <TableCell>{statusBadge(user.status)}</TableCell>
+                      <TableCell>{statusBadge(user.status, t)}</TableCell>
                       <TableCell>{roleBadge(user.role)}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {formatDate(user.createdAt)}
@@ -154,12 +156,12 @@ export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
                             onClick={() => approve(user.id)}
                           >
                             <UserCheck className="size-4" />
-                            {approvingId === user.id ? "Aprovando..." : "Aprovar"}
+                            {approvingId === user.id ? t("approving") : t("approve")}
                           </Button>
                         ) : (
                           <Button type="button" size="sm" variant="outline" disabled>
                             <CheckCircle2 className="size-4" />
-                            Liberado
+                            {t("approved")}
                           </Button>
                         )}
                       </TableCell>

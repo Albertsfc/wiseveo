@@ -18,20 +18,22 @@ import { Separator } from "@/components/ui/separator"
 import { toast } from "sonner"
 import * as React from "react"
 import { TelegramConnect } from "@/features/telegram/components/TelegramConnect"
-
-const accountFormSchema = z.object({
-  firstName: z.string().min(1, "O nome é obrigatório"),
-  lastName: z.string().min(1, "O sobrenome é obrigatório"),
-  email: z.string().email("Endereço de e-mail inválido"),
-  username: z.string().min(3, "O nome de usuário deve ter pelo menos 3 caracteres"),
-  currentPassword: z.string().optional(),
-  newPassword: z.string().optional(),
-  confirmPassword: z.string().optional(),
-})
-
-type AccountFormValues = z.infer<typeof accountFormSchema>
+import { useTranslations } from "next-intl"
 
 export function AccountForm() {
+  const t = useTranslations("settings.account")
+
+  const accountFormSchema = z.object({
+    firstName: z.string().min(1, t("firstNameReq")),
+    lastName: z.string().min(1, t("lastNameReq")),
+    email: z.string().email(t("emailReq")),
+    username: z.string().min(3, t("usernameReq")),
+    currentPassword: z.string().optional(),
+    newPassword: z.string().optional(),
+    confirmPassword: z.string().optional(),
+  })
+
+  type AccountFormValues = z.infer<typeof accountFormSchema>
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
@@ -75,7 +77,7 @@ export function AccountForm() {
 
   async function onSubmit(data: AccountFormValues) {
     if (data.newPassword && data.newPassword !== data.confirmPassword) {
-      toast.error("As senhas não coincidem.")
+      toast.error(t("passwordMismatch"))
       return
     }
 
@@ -89,24 +91,24 @@ export function AccountForm() {
       const responseData = await res.json()
 
       if (res.ok) {
-        toast.success("Dados da conta atualizados!")
+        toast.success(t("success"))
         form.setValue("currentPassword", "")
         form.setValue("newPassword", "")
         form.setValue("confirmPassword", "")
       } else {
-        toast.error(responseData.message || "Erro ao atualizar conta.")
+        toast.error(responseData.message || t("error"))
       }
     } catch (error) {
-      toast.error("Erro de conexão ao salvar dados da conta.")
+      toast.error(t("connError"))
     }
   }
 
   return (
     <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Conta</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground">
-            Gerencie as credenciais e o acesso à sua conta.
+            {t("description")}
           </p>
         </div>
 
@@ -114,9 +116,9 @@ export function AccountForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <Card className="border-0 shadow-none border-b rounded-none mb-6">
               <CardHeader className="px-0">
-                <CardTitle>Dados de Acesso</CardTitle>
+                <CardTitle>{t("accessDataTitle")}</CardTitle>
                 <CardDescription>
-                  Atualize suas credenciais básicas de acesso e exibição.
+                  {t("accessDataDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 px-0">
@@ -126,9 +128,9 @@ export function AccountForm() {
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nome</FormLabel>
+                        <FormLabel>{t("firstName")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Digite seu nome" {...field} />
+                          <Input placeholder={t("firstNamePl")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -139,9 +141,9 @@ export function AccountForm() {
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Sobrenome</FormLabel>
+                        <FormLabel>{t("lastName")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Digite seu sobrenome" {...field} />
+                          <Input placeholder={t("lastNamePl")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -153,9 +155,9 @@ export function AccountForm() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Endereço de E-mail</FormLabel>
+                      <FormLabel>{t("email")}</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="Digite seu e-mail" {...field} />
+                        <Input type="email" placeholder={t("emailPl")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -166,9 +168,9 @@ export function AccountForm() {
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome de Usuário</FormLabel>
+                      <FormLabel>{t("username")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Digite seu nome de usuário (username)" {...field} />
+                        <Input placeholder={t("usernamePl")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -179,9 +181,9 @@ export function AccountForm() {
 
             <Card className="border-0 shadow-none border-b rounded-none mb-6">
               <CardHeader className="px-0">
-                <CardTitle>Alterar Senha</CardTitle>
+                <CardTitle>{t("changePassword")}</CardTitle>
                 <CardDescription>
-                  Mantenha sua conta segura atualizando sua senha regularmente.
+                  {t("changePasswordDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 px-0">
@@ -190,9 +192,9 @@ export function AccountForm() {
                   name="currentPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Senha Atual</FormLabel>
+                      <FormLabel>{t("currentPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Digite sua senha atual" {...field} />
+                        <Input type="password" placeholder={t("currentPasswordPl")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -203,9 +205,9 @@ export function AccountForm() {
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nova Senha</FormLabel>
+                      <FormLabel>{t("newPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Digite a nova senha" {...field} />
+                        <Input type="password" placeholder={t("newPasswordPl")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -216,9 +218,9 @@ export function AccountForm() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirmar Nova Senha</FormLabel>
+                      <FormLabel>{t("confirmPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Repita a nova senha" {...field} />
+                        <Input type="password" placeholder={t("confirmPasswordPl")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -231,30 +233,30 @@ export function AccountForm() {
 
             <Card className="border-0 shadow-none mb-6 bg-destructive/5 rounded-xl border-destructive/20 border p-2">
               <CardHeader className="px-4">
-                <CardTitle className="text-destructive">Zona de Perigo</CardTitle>
+                <CardTitle className="text-destructive">{t("dangerZone")}</CardTitle>
                 <CardDescription>
-                  Ações destrutivas e irreversíveis.
+                  {t("dangerZoneDesc")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 px-4 pb-4">
                 <Separator className="bg-destructive/10" />
                 <div className="flex flex-wrap gap-2 items-center justify-between">
                   <div>
-                    <h4 className="font-semibold text-destructive">Excluir Conta</h4>
+                    <h4 className="font-semibold text-destructive">{t("deleteAccount")}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Excluir permanentemente a sua conta e todos os dados financeiros associados a ela.
+                      {t("deleteAccountDesc")}
                     </p>
                   </div>
                   <Button variant="destructive" type="button" className="cursor-pointer font-semibold shadow-sm">
-                    Excluir Conta
+                    {t("deleteAccount")}
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
             <div className="flex space-x-2 pt-4">
-              <Button type="submit" className="cursor-pointer">Salvar Alterações</Button>
-              <Button variant="outline" type="reset" className="cursor-pointer">Cancelar</Button>
+              <Button type="submit" className="cursor-pointer">{t("save")}</Button>
+              <Button variant="outline" type="reset" className="cursor-pointer">{t("cancel")}</Button>
             </div>
           </form>
         </Form>

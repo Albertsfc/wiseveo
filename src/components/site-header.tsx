@@ -12,42 +12,13 @@ import { useDateRange } from "@/contexts/date-range-context"
 import { useDeviceClass } from "@/hooks/use-device-class"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface SiteHeaderProps {
   onOpenThemeCustomizer?: () => void
 }
 
-const ROUTES: Record<string, { title: string; description: string }> = {
-  "/dashboard": { title: "Dashboard", description: "Visão geral das suas finanças" },
-  "/insights": { title: "Insights", description: "Análises detalhadas e tendências" },
-  "/transactions": { title: "Transações", description: "Gerencie suas receitas e despesas" },
-  "/recurring": { title: "Recorrentes", description: "Controle de assinaturas e contas fixas" },
-  "/budget": { title: "Orçamento", description: "Planejamento e metas financeiras" },
-  "/analysis": { title: "Análise", description: "Relatórios e métricas de desempenho" },
-  "/forecasting": { title: "Forecasting", description: "Projeções financeiras e tendências" },
-  "/banks": { title: "Bancos", description: "Sincronize e gerencie suas contas" },
-  "/calendar": { title: "Calendário", description: "Visualize seus vencimentos e recebimentos" },
-  "/configuracoes": { title: "Configurações", description: "Gerencie suas preferências" },
-  "/mail": { title: "Mail", description: "Caixa de entrada" },
-  "/tasks": { title: "Tasks", description: "Gerencie suas tarefas" },
-  "/chat": { title: "Chat", description: "Comunique-se com a equipe" },
-  "/users": { title: "Usuários", description: "Gerencie os membros da equipe" },
-  "/faqs": { title: "FAQs", description: "Perguntas frequentes" },
-  "/pricing": { title: "Planos", description: "Opções de assinatura" },
-  "/settings/billing": { title: "Faturamento", description: "Gerencie seus pagamentos" },
-  "/settings/notifications": { title: "Notificações", description: "Configure seus alertas" },
-  "/settings/connections": { title: "Conexões", description: "Integrações com outros apps" },
-  "/settings/components": { title: "Componentes", description: "Guia de estilo do sistema" },
-}
 
-function getPageInfo(path: string) {
-  if (ROUTES[path]) return ROUTES[path]
-  const baseRoute = Object.keys(ROUTES).find(
-    (route) => path.startsWith(route) && route !== "/"
-  )
-  if (baseRoute) return ROUTES[baseRoute]
-  return { title: "WISEVEO", description: "Aceleração Financeira" }
-}
 
 // ─── Mobile DatePicker Sheet ──────────────────────────────────────────────────
 
@@ -64,11 +35,13 @@ function MobileDatePickerSheet({
   dateRange,
   onChangeDateRange,
 }: MobileDatePickerSheetProps) {
+  const t = useTranslations("common")
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="bottom" className="pb-safe rounded-t-2xl max-h-[92dvh] overflow-y-auto">
         <SheetHeader className="mb-2">
-          <SheetTitle className="text-sm font-semibold">Selecionar período</SheetTitle>
+          <SheetTitle className="text-sm font-semibold">{t("selectPeriod")}</SheetTitle>
         </SheetHeader>
         <DatePicker
           value={dateRange}
@@ -92,6 +65,31 @@ export function SiteHeader({ onOpenThemeCustomizer }: SiteHeaderProps) {
   const pathname = usePathname()
   const { isMobile, isTablet } = useDeviceClass()
   const [mobileDatePickerOpen, setMobileDatePickerOpen] = React.useState(false)
+  const t = useTranslations("Routes")
+  const tCommon = useTranslations("common")
+
+  const routeKeys = [
+    "/dashboard", "/insights", "/transactions", "/recurring", "/budget",
+    "/analysis", "/forecasting", "/banks", "/calendar", "/configuracoes",
+    "/mail", "/tasks", "/chat", "/users", "/faqs", "/pricing",
+    "/settings/billing", "/settings/notifications", "/settings/connections", "/settings/components"
+  ];
+
+  const getPageInfo = (path: string) => {
+    let match = routeKeys.find(route => path === route);
+    if (!match) {
+      match = routeKeys.find(route => path.startsWith(route) && route !== "/");
+    }
+
+    if (match) {
+      const key = match.replace(/\//g, "_").replace(/^_/, "");
+      return {
+        title: t(`${key}.title`),
+        description: t(`${key}.description`),
+      }
+    }
+    return { title: t("default.title"), description: t("default.description") }
+  }
 
   const { title, description } = getPageInfo(pathname)
 
@@ -145,7 +143,7 @@ export function SiteHeader({ onOpenThemeCustomizer }: SiteHeaderProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                aria-label="Selecionar período"
+                aria-label={tCommon("selectPeriod")}
                 onClick={() => setMobileDatePickerOpen(true)}
                 className="touch-target"
               >
@@ -175,7 +173,7 @@ export function SiteHeader({ onOpenThemeCustomizer }: SiteHeaderProps) {
                 className="cursor-pointer"
               >
                 <Settings className="h-[1.2rem] w-[1.2rem]" />
-                <span className="sr-only">Abrir customizador de aparência</span>
+                <span className="sr-only">{tCommon("openAppearanceCustomizer")}</span>
               </Button>
             )}
           </div>

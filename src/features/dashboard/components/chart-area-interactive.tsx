@@ -31,6 +31,7 @@ import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
 import { useDeviceClass } from "@/hooks/use-device-class"
 import { normalizeDate } from "@/lib/financial"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface CashflowPoint {
   date: string
@@ -56,17 +57,14 @@ const chartConfig = {
 
 const tooltipSeriesMap = {
   income: {
-    label: "Entradas",
     labelClassName: "text-chart-2",
     dotClassName: "bg-chart-2",
   },
   expense: {
-    label: "Saídas",
     labelClassName: "text-destructive",
     dotClassName: "bg-destructive",
   },
   balance: {
-    label: "Saldo",
     labelClassName: "text-primary",
     dotClassName: "bg-primary",
   },
@@ -127,6 +125,7 @@ function renderNegativeBalanceDot({ cx, cy, payload }: BalanceDotProps) {
 
 function TrialTooltipContent({ active, label, payload }: TrialTooltipContentProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("dashboard.SectionCards")
 
   if (!active || !payload?.length) return null
 
@@ -167,7 +166,7 @@ function TrialTooltipContent({ active, label, payload }: TrialTooltipContentProp
             >
               <span className={cn("flex items-center gap-2 text-xs font-medium", series.labelClassName)}>
                 <span className={cn("size-2.5 shrink-0 rounded-full", series.dotClassName)} />
-                {series.label}:
+                {t(row.key)}:
               </span>
               <span className="text-foreground font-mono font-medium tabular-nums">
                 {monetary.formatMonetaryValue(row.value)}
@@ -292,6 +291,24 @@ export function ChartAreaInteractive() {
   const [points, setPoints] = React.useState<CashflowPoint[]>([])
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+  
+  const t = useTranslations("dashboard.ChartArea")
+  const tSectionCards = useTranslations("dashboard.SectionCards")
+
+  const dynamicChartConfig = {
+    income: {
+      label: tSectionCards("income"),
+      color: "var(--chart-2)",
+    },
+    expense: {
+      label: tSectionCards("expense"),
+      color: "var(--destructive)",
+    },
+    balance: {
+      label: tSectionCards("balance"),
+      color: "var(--primary)",
+    },
+  } satisfies ChartConfig
 
   React.useEffect(() => {
     let isCancelled = false
@@ -309,7 +326,7 @@ export function ChartAreaInteractive() {
         const res = await fetch(`/api/dashboard/cashflow?${params.toString()}`)
 
         if (!res.ok) {
-          throw new Error("Falha ao carregar dados do gráfico de teste")
+          throw new Error(t("fetchError"))
         }
 
         const payload = (await res.json()) as { points: CashflowPoint[] }
@@ -326,7 +343,7 @@ export function ChartAreaInteractive() {
       } catch (err) {
         console.error("Failed to fetch trial cashflow chart:", err)
         if (!isCancelled) {
-          setError("Não foi possível carregar o gráfico de teste.")
+          setError(t("loadError"))
         }
       } finally {
         if (!isCancelled) {
@@ -340,7 +357,7 @@ export function ChartAreaInteractive() {
     return () => {
       isCancelled = true
     }
-  }, [dateRange.from, dateRange.to])
+  }, [dateRange.from, dateRange.to, t])
 
   const yAxis = React.useMemo(() => buildYAxis(points), [points])
   const xTicks = React.useMemo(() => buildXTicks(points, isMobile), [points, isMobile])
@@ -358,9 +375,9 @@ export function ChartAreaInteractive() {
   return (
     <Card className="@container/card bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card">
       <CardHeader>
-        <CardTitle>Fluxo de Caixa do Período</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
-          Acompanhe entradas, saídas e a evolução do saldo no intervalo selecionado
+          {t("description")}
         </CardDescription>
         <CardAction className="mr-3">
           <div className="inline-flex items-center rounded-md border p-1">
@@ -371,8 +388,6 @@ export function ChartAreaInteractive() {
                 : "text-muted-foreground hover:text-foreground"
                 }`}
               onClick={() => setChartType("area")}
-              aria-label="Exibir gráfico de área"
-              title="Exibir gráfico de área"
             >
               <LineChartIcon className="size-4" />
             </button>
@@ -383,8 +398,6 @@ export function ChartAreaInteractive() {
                 : "text-muted-foreground hover:text-foreground"
                 }`}
               onClick={() => setChartType("bar")}
-              aria-label="Exibir gráfico de barras"
-              title="Exibir gráfico de barras"
             >
               <BarChart3 className="size-4" />
             </button>
@@ -393,7 +406,7 @@ export function ChartAreaInteractive() {
       </CardHeader>
       <CardContent className="space-y-4">
         <p className="text-sm text-muted-foreground">
-          Saldo atual no período:{" "}
+          {t("currentBalance")}{" "}
           <span className="font-mono tabular-nums text-foreground">
             {monetary.formatMonetaryValue(currentBalance)}
           </span>
@@ -405,7 +418,7 @@ export function ChartAreaInteractive() {
           </div>
         ) : (
           <ChartContainer
-            config={chartConfig}
+            config={dynamicChartConfig}
             className={cn(
               "aspect-auto w-full",
               // Shorter chart on mobile to leave room for content below

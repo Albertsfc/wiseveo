@@ -24,6 +24,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { useTranslations } from "next-intl"
+
 interface DailyMovementRow {
   date: string
   income: number
@@ -46,6 +48,8 @@ export function DailyMovementCard() {
   const [rows, setRows] = React.useState<DailyMovementRow[]>([])
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
+  
+  const t = useTranslations("dashboard.DailyMovement")
 
   React.useEffect(() => {
     let isCancelled = false
@@ -63,7 +67,7 @@ export function DailyMovementCard() {
         const res = await fetch(`/api/dashboard/daily-movement?${params.toString()}`)
 
         if (!res.ok) {
-          throw new Error("Falha ao carregar a movimentação diária")
+          throw new Error("error") // Handled below
         }
 
         const payload = (await res.json()) as { rows: DailyMovementRow[] }
@@ -74,7 +78,7 @@ export function DailyMovementCard() {
         console.error("Failed to fetch daily movement:", err)
         if (!isCancelled) {
           setRows([])
-          setError("Não foi possível carregar a movimentação diária.")
+          setError(t("loadError") || "Não foi possível carregar a movimentação diária.")
         }
       } finally {
         if (!isCancelled) {
@@ -88,7 +92,7 @@ export function DailyMovementCard() {
     return () => {
       isCancelled = true
     }
-  }, [dateRange.from, dateRange.to])
+  }, [dateRange.from, dateRange.to, t])
 
   const totalIncome = rows.reduce((sum, row) => sum + row.income, 0)
   const totalExpense = rows.reduce((sum, row) => sum + row.expense, 0)
@@ -109,9 +113,9 @@ export function DailyMovementCard() {
   return (
     <Card className="@container/card bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card">
       <CardHeader>
-        <CardTitle>Movimentação Diária</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
-          Consulte entradas, saídas, saldo diário e acumulado no intervalo selecionado
+          {t("description")}
         </CardDescription>
       </CardHeader>
       {/* Reduce horizontal padding on mobile so all 5 columns fit */}
@@ -127,19 +131,19 @@ export function DailyMovementCard() {
               {/* Mobile: +, -, SALDO, ACUM. — max density; all centered
                   Desktop: ENTRADAS, SAÍDAS, SALDO, ACUMULADO */}
               <TableHead className={headBase}>
-                DATA
+                {t("date")}
               </TableHead>
               <TableHead className={headBase}>
-                {isMobile ? "+" : "ENTRADAS"}
+                {isMobile ? t("mobilePlus") : t("income")}
               </TableHead>
               <TableHead className={headBase}>
-                {isMobile ? "-" : "SAÍDAS"}
+                {isMobile ? t("mobileMinus") : t("expense")}
               </TableHead>
               <TableHead className={headBase}>
-                SALDO
+                {t("balance")}
               </TableHead>
               <TableHead className={headBase}>
-                {isMobile ? "ACUM." : "ACUMULADO"}
+                {isMobile ? t("mobileAccum") : t("accumulated")}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -147,7 +151,7 @@ export function DailyMovementCard() {
             {loading ? (
               <TableRow>
                 <TableCell colSpan={5} className="text-muted-foreground text-center">
-                  Carregando...
+                  {t("loading")}
                 </TableCell>
               </TableRow>
             ) : rows.length ? (
@@ -188,7 +192,7 @@ export function DailyMovementCard() {
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="text-muted-foreground text-center">
-                  Sem movimentação no período
+                  {t("noMovement")}
                 </TableCell>
               </TableRow>
             )}

@@ -26,6 +26,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 
+import { useTranslations } from "next-intl"
+
 export function NavUser({
   user,
 }: {
@@ -36,6 +38,7 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const t = useTranslations("sidebar")
 
   return (
     <SidebarMenu>
@@ -82,19 +85,19 @@ export function NavUser({
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/configuracoes?tab=account">
                   <CircleUser />
-                  Account
+                  {t("accountsettings")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/settings/billing">
                   <CreditCard />
-                  Billing
+                  {t("plansbilling")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer">
                 <Link href="/settings/notifications">
                   <BellDot />
-                  Notifications
+                  {t("notifications")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
@@ -107,7 +110,7 @@ export function NavUser({
               }}
             >
               <LogOut />
-              Log out
+              {t("logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -42,6 +42,8 @@ function amountColorClass(value: number): string {
   return "text-foreground"
 }
 
+import { useTranslations } from "next-intl"
+
 export function UpcomingTransactionsCard() {
   const monetary = useMonetaryFormattingSafe()
   const { dateRange } = useDateRange()
@@ -51,6 +53,8 @@ export function UpcomingTransactionsCard() {
   const [visibleRows, setVisibleRows] = React.useState(0)
   const listViewportRef = React.useRef<HTMLDivElement | null>(null)
   const measureRowRef = React.useRef<HTMLDivElement | null>(null)
+  
+  const t = useTranslations("dashboard.UpcomingTransactions")
 
   const recalcVisibleRows = React.useCallback(() => {
     const viewport = listViewportRef.current
@@ -83,7 +87,7 @@ export function UpcomingTransactionsCard() {
 
         const res = await fetch(`/api/dashboard/upcoming-transactions?${params.toString()}`)
         if (!res.ok) {
-          throw new Error("Falha ao carregar próximos vencimentos")
+          throw new Error("error") // Handled below
         }
 
         const payload = (await res.json()) as { items: UpcomingTransactionItem[] }
@@ -94,7 +98,7 @@ export function UpcomingTransactionsCard() {
         console.error("Failed to fetch upcoming transactions:", err)
         if (!isCancelled) {
           setItems([])
-          setError("Não foi possível carregar os próximos vencimentos.")
+          setError(t("loadError") || "Não foi possível carregar os próximos vencimentos.")
         }
       } finally {
         if (!isCancelled) {
@@ -108,7 +112,7 @@ export function UpcomingTransactionsCard() {
     return () => {
       isCancelled = true
     }
-  }, [dateRange.from, dateRange.to])
+  }, [dateRange.from, dateRange.to, t])
 
   React.useEffect(() => {
     recalcVisibleRows()
@@ -134,9 +138,9 @@ export function UpcomingTransactionsCard() {
   return (
     <Card className="@container/card h-full min-h-0 overflow-hidden bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card flex flex-col">
       <CardHeader>
-        <CardTitle>Próximos Vencimentos</CardTitle>
+        <CardTitle>{t("title")}</CardTitle>
         <CardDescription>
-          Acompanhe as próximas entradas e saídas
+          {t("description")}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 min-h-0 overflow-hidden p-0 font-[system-ui]">
@@ -168,7 +172,7 @@ export function UpcomingTransactionsCard() {
           </div>
 
           {loading ? (
-            <div className="px-4 py-6 text-center text-sm text-muted-foreground">Carregando...</div>
+            <div className="px-4 py-6 text-center text-sm text-muted-foreground">{t("loading")}</div>
           ) : items.length ? (
             <div className="border-t">
               {visibleItems.map((item) => {
@@ -210,7 +214,7 @@ export function UpcomingTransactionsCard() {
             </div>
           ) : (
             <div className="px-4 py-6 text-center text-sm text-muted-foreground">
-              Sem vencimentos no período
+              {t("noTransactions")}
             </div>
           )}
         </div>
