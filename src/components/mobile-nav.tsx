@@ -101,7 +101,7 @@ export function MobileNav() {
                   aria-hidden="true"
                 />
                 <span className="text-[10px] font-medium leading-none tracking-tight">
-                  {t(item.id)}
+                  {t(item.id as never)}
                 </span>
               </Link>
             )

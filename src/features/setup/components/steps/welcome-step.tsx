@@ -5,6 +5,7 @@ import { Logo } from "@/components/logo"
 import { Globe } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
+import { LOCALES, LOCALE_META } from "@/i18n/config"
 
 interface WelcomeStepProps {
   locale: string
@@ -12,11 +13,7 @@ interface WelcomeStepProps {
   onNext: () => void
 }
 
-const locales = [
-  { code: "pt-BR", label: "Português (BR)", flag: "🇧🇷" },
-  { code: "en", label: "English", flag: "🇺🇸" },
-  { code: "es", label: "Español", flag: "🇪🇸" },
-]
+const locales = LOCALES.map((code) => ({ code, ...LOCALE_META[code] }))
 
 export function WelcomeStep({ locale, onLocaleChange, onNext }: WelcomeStepProps) {
   const t = useTranslations("setup.welcome")

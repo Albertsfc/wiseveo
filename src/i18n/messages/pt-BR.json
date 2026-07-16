@@ -39,6 +39,7 @@
     "error": "Erro",
     "openAppearanceCustomizer": "Abrir customizador de aparência",
     "searchPlaceholder": "O que você precisa?",
+    "selectPeriod": "Selecionar período",
     "noResults": "Nenhum resultado encontrado."
   },
   "sidebar": {
@@ -161,18 +162,21 @@
       "mobilePlus": "+",
       "mobileMinus": "-",
       "mobileAccum": "ACUM.",
+      "loadError": "Erro ao carregar dados",
       "loading": "Carregando...",
       "noMovement": "Sem movimentação no período"
     },
     "LatestTransactions": {
       "title": "Últimos Pagamentos",
       "description": "Acompanhe os pagamentos recentes",
+      "loadError": "Erro ao carregar dados",
       "loading": "Carregando...",
       "noTransactions": "Sem pagamentos no período"
     },
     "UpcomingTransactions": {
       "title": "Próximos Vencimentos",
       "description": "Acompanhe as próximas entradas e saídas",
+      "loadError": "Erro ao carregar dados",
       "loading": "Carregando...",
       "noTransactions": "Sem vencimentos no período"
     }

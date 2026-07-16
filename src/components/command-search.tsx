@@ -218,17 +218,17 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
           <CommandList>
             <CommandEmpty>{tCommon("noResults")}</CommandEmpty>
             {Object.entries(groupedItems).map(([groupId, items]) => (
-              <CommandGroup key={groupId} heading={tSidebar(groupId)}>
+              <CommandGroup key={groupId} heading={tSidebar(groupId as never)}>
                 {items.map((item) => {
                   const Icon = item.icon
                   return (
                     <CommandItem
                       key={item.url}
-                      value={tSidebar(item.id)}
+                      value={tSidebar(item.id as never)}
                       onSelect={() => handleSelect(item.url)}
                     >
                       {Icon && <Icon className="mr-2 h-4 w-4" />}
-                      {tSidebar(item.id)}
+                      {tSidebar(item.id as never)}
                     </CommandItem>
                   )
                 })}

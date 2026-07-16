@@ -4,6 +4,7 @@ import { useLocale } from "next-intl"
 import { useRouter } from "next/navigation"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Globe } from "lucide-react"
+import { LOCALES, LOCALE_META } from "@/i18n/config"
 
 export function LocaleSwitcher() {
   const locale = useLocale()
@@ -22,9 +23,11 @@ export function LocaleSwitcher() {
           <SelectValue placeholder="Idioma" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="pt-BR">Português (BR)</SelectItem>
-          <SelectItem value="en-US">English (US)</SelectItem>
-          <SelectItem value="es-AM">Español (AM)</SelectItem>
+          {LOCALES.map((code) => (
+            <SelectItem key={code} value={code}>
+              {LOCALE_META[code].label}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>

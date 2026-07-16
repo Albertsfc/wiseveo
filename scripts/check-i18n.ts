@@ -30,7 +30,7 @@ function checkI18n() {
     process.exit(1);
   }
 
-  const expectedLocales = ['pt-BR.json', 'en-US.json', 'es-AM.json'];
+  const expectedLocales = ['pt-BR.json', 'en-US.json', 'es-419.json'];
   const missingFiles = expectedLocales.filter(f => !files.includes(f));
   if (missingFiles.length > 0) {
     console.error(`❌ Arquivos de idioma faltando: ${missingFiles.join(', ')}`);

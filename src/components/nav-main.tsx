@@ -55,7 +55,7 @@ export function NavMain({
 
   const translate = (key: string) => {
     const formattedKey = normalizeKey(key)
-    return t.has(formattedKey) ? t(formattedKey) : key
+    return t.has(formattedKey as never) ? t(formattedKey as never) : key
   }
 
   // Check if any subitem is active to determine if parent should be open

@@ -39,6 +39,7 @@
     "error": "Error",
     "openAppearanceCustomizer": "Open appearance customizer",
     "searchPlaceholder": "What do you need?",
+    "selectPeriod": "Select period",
     "noResults": "No results found."
   },
   "sidebar": {
@@ -161,18 +162,21 @@
       "mobilePlus": "+",
       "mobileMinus": "-",
       "mobileAccum": "ACCUM.",
+      "loadError": "Failed to load data",
       "loading": "Loading...",
       "noMovement": "No movement in period"
     },
     "LatestTransactions": {
       "title": "Latest Payments",
       "description": "Track recent payments",
+      "loadError": "Failed to load data",
       "loading": "Loading...",
       "noTransactions": "No payments in period"
     },
     "UpcomingTransactions": {
       "title": "Upcoming Due Dates",
       "description": "Track upcoming income and expenses",
+      "loadError": "Failed to load data",
       "loading": "Loading...",
       "noTransactions": "No due dates in period"
     }

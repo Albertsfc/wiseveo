@@ -12,6 +12,7 @@ import {
 } from "@/lib/theme-preferences"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getLocale } from "next-intl/server"
+import { getIntlLocale } from "@/i18n/format"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -67,7 +68,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={locale}
+      lang={getIntlLocale(locale)}
       suppressHydrationWarning
       className={htmlClassName}
       style={htmlStyle}
