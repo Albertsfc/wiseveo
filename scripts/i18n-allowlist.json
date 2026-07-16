@@ -1,0 +1,22 @@
+[
+  "src/app/api",
+  "src/app/(dashboard)",
+  "src/app/cadastro-pendente",
+  "src/app/layout.tsx",
+  "src/components",
+  "src/config",
+  "src/features/accounts",
+  "src/features/analysis",
+  "src/features/auth",
+  "src/features/budget",
+  "src/features/calendar",
+  "src/features/component-library",
+  "src/features/dashboard",
+  "src/features/forecasting",
+  "src/features/recurring",
+  "src/features/settings",
+  "src/features/setup",
+  "src/features/telegram",
+  "src/features/transactions",
+  "src/middleware.ts"
+]

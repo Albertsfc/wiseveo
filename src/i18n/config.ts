@@ -9,10 +9,11 @@ interface LocaleMeta {
   flag: string
 }
 
+// i18n-ignore: nomes nativos dos idiomas — sempre exibidos no próprio idioma, nunca traduzidos.
 export const LOCALE_META: Record<AppLocale, LocaleMeta> = {
-  "pt-BR": { intlLocale: "pt-BR", label: "Português (BR)", flag: "🇧🇷" },
+  "pt-BR": { intlLocale: "pt-BR", label: "Português (BR)", flag: "🇧🇷" }, // i18n-ignore
   "en-US": { intlLocale: "en-US", label: "English (US)", flag: "🇺🇸" },
-  "es-419": { intlLocale: "es-419", label: "Español (LatAm)", flag: "🌎" },
+  "es-419": { intlLocale: "es-419", label: "Español (LatAm)", flag: "🌎" }, // i18n-ignore
 }
 
 export function isAppLocale(value: unknown): value is AppLocale {
