@@ -1,0 +1,31 @@
+# WISEVEO — Regras do projeto para agentes
+
+## Internacionalização (OBRIGATÓRIO — o build bloqueia violações)
+
+O sistema é trilíngue: **pt-BR, en-US, es-419 (Español LatAm)**. Toda feature/alteração nasce nos 3 idiomas.
+
+1. **Nunca** escreva texto de UI hardcoded (JSX, toasts, placeholders, aria-labels, mensagens de erro).
+   Use `useTranslations()` (client) / `getTranslations()` (server) do next-intl.
+2. Toda chave nova entra nos **3** arquivos `src/i18n/messages/{pt-BR,en-US,es-419}.json`, mesma
+   estrutura, ordem alfabética. Termos genéricos reutilizam `common.*`. `npm run i18n:translate`
+   preenche en/es a partir do pt-BR via IA (revise o diff antes de commitar).
+3. **Datas e números não monetários:** helpers de `src/i18n/format.ts` (`formatAppDate`,
+   `createDateFormatter`, `createNumberFormatter`, `getDateFnsLocale`). Proibido `Intl.*` com locale
+   fixo, `toLocaleDateString("pt-BR")` ou importar `ptBR`/`enUS`/`es` do date-fns fora desse arquivo.
+4. **Valores monetários:** continuam via `lib/monetary.ts` / `useMonetaryFormatting` (preferência do
+   usuário em Configurações, independente do idioma da UI). Não converter para o locale da UI.
+5. Erros de API: serviços retornam códigos estáveis; as rotas traduzem com `getTranslations("api")`.
+6. Canais sem cookie (Telegram, jobs): use o locale persistido em `User.preferencesJson.locale`
+   (helper `getUserLocale` em `src/features/settings/services/user-settings-service.ts`).
+7. **Gates — rode antes de finalizar qualquer tarefa:**
+   `npm run check:i18n && npm run check:i18n:code && npx tsc --noEmit && npm run lint`.
+   Os dois primeiros rodam dentro de `npm run build` e **bloqueiam o deploy na Vercel** (wiseveo-app
+   e wiseveo-demo). O tsc NÃO roda no build da Vercel (`ignoreBuildErrors` por causa do
+   Prisma 7/Turbopack) — por isso é obrigatório rodá-lo manualmente. Baseline tolerada: 4 erros
+   pré-existentes (auth/google/callback, auth/login, auth/signup, recurring/types.ts).
+8. `scripts/i18n-allowlist.json` é uma catraca: só encolhe. **Proibido adicionar caminhos.**
+9. String que é dado e não UI (ex.: lista de palavras-chave de detecção) pode ser isenta com
+   `// i18n-ignore` na própria linha ou na linha acima — use com parcimônia e justifique no commit.
+10. Metadados de locale centralizados em `src/i18n/config.ts` (`LOCALES`, `LOCALE_META`,
+    `resolveAppLocale`). O espanhol é `es-419` (espanhol latino-americano, rótulo "Español (LatAm)").
+    O seletor de idioma do usuário fica em Configurações → Aparência (`LocaleSwitcher`).
