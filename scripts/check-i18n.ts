@@ -16,10 +16,9 @@ function extractEntries(obj: any, prefix = ''): Map<string, string> {
   return out;
 }
 
-// Extract the sorted, comma-joined set of ICU placeholder names in a string value
+// Extract the sorted, de-duplicated, comma-joined set of ICU placeholder names in a string value
 function placeholders(value: string): string {
-  return [...value.matchAll(/\{(\w+)/g)]
-    .map(m => m[1])
+  return [...new Set([...value.matchAll(/\{(\w+)/g)].map(m => m[1]))]
     .sort()
     .join(',');
 }
@@ -49,7 +48,17 @@ function checkI18n() {
 
   files.forEach(file => {
     const filePath = path.join(MESSAGES_DIR, file);
-    const content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    let content: any;
+    try {
+      content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    } catch (err: any) {
+      console.error(`❌ JSON inválido em ${file}: ${err.message}`);
+      process.exit(1);
+    }
+    if (typeof content !== 'object' || content === null || Array.isArray(content)) {
+      console.error(`❌ Estrutura inválida em ${file}: raiz deve ser objeto`);
+      process.exit(1);
+    }
     allEntries.set(file, extractEntries(content));
   });
 
