@@ -1,22 +1,18 @@
-import { ptBR, enUS, es } from "date-fns/locale"
-import type { Locale as DateFnsLocale } from "date-fns"
-
 export const LOCALES = ["pt-BR", "en-US", "es-419"] as const
 export type AppLocale = (typeof LOCALES)[number]
 export const DEFAULT_LOCALE: AppLocale = "pt-BR"
 
 interface LocaleMeta {
-  /** Tag BCP-47 válida para <html lang>, Intl.* e navegador. */
+  /** Tag BCP-47 usada em <html lang> e Intl.*; ponto único de indireção caso um ID interno volte a divergir da tag de formatação. */
   intlLocale: string
-  dateFnsLocale: DateFnsLocale
   label: string
   flag: string
 }
 
 export const LOCALE_META: Record<AppLocale, LocaleMeta> = {
-  "pt-BR": { intlLocale: "pt-BR", dateFnsLocale: ptBR, label: "Português (BR)", flag: "🇧🇷" },
-  "en-US": { intlLocale: "en-US", dateFnsLocale: enUS, label: "English (US)", flag: "🇺🇸" },
-  "es-419": { intlLocale: "es-419", dateFnsLocale: es, label: "Español (LatAm)", flag: "🌎" },
+  "pt-BR": { intlLocale: "pt-BR", label: "Português (BR)", flag: "🇧🇷" },
+  "en-US": { intlLocale: "en-US", label: "English (US)", flag: "🇺🇸" },
+  "es-419": { intlLocale: "es-419", label: "Español (LatAm)", flag: "🌎" },
 }
 
 export function isAppLocale(value: unknown): value is AppLocale {
