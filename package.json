@@ -6,6 +6,7 @@
     "dev": "next dev",
     "check:i18n": "tsx scripts/check-i18n.ts",
     "check:i18n:code": "tsx scripts/check-hardcoded-strings.ts",
+    "i18n:translate": "tsx scripts/i18n-translate.ts",
     "postinstall": "prisma generate",
     "build": "npm run check:i18n && npm run check:i18n:code && prisma generate && cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
     "start": "next start",
