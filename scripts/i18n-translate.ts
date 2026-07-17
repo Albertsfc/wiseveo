@@ -18,6 +18,9 @@ dotenv.config()
 const DIR = path.join(process.cwd(), "src/i18n/messages")
 const BASE_LOCALE = "pt-BR"
 const TARGET_LOCALES = ["en-US", "es-419"] as const
+// Batch size per model call: keeps each response comfortably below the output
+// token budget, so a large sweep of missing keys can't be silently truncated.
+const CHUNK_SIZE = 40
 type TargetLocale = (typeof TARGET_LOCALES)[number]
 
 const TARGET_LANGUAGE_LABEL: Record<TargetLocale, string> = {
@@ -63,14 +66,23 @@ function flat(tree: Tree, prefix = "", out: Map<string, string> = new Map()): Ma
   return out
 }
 
-function setDeep(tree: Tree, dotKey: string, value: string): void {
+function setDeep(tree: Tree, dotKey: string, value: string, target: string): void {
   const parts = dotKey.split(".")
   let node = tree
   for (let i = 0; i < parts.length - 1; i++) {
     const part = parts[i]
     const existing = node[part]
-    if (typeof existing !== "object" || existing === null) {
+    if (existing === undefined) {
       node[part] = {}
+    } else if (typeof existing !== "object" || existing === null) {
+      // The target file has a LEAF (string) where pt-BR has a BRANCH (object).
+      // Silently replacing it would destroy an existing translation — abort so
+      // a human resolves the structural divergence first.
+      const conflictPath = parts.slice(0, i + 1).join(".")
+      console.error(
+        `❌ Conflito de estrutura em ${target}: ${conflictPath} é folha no alvo mas objeto no pt-BR`
+      )
+      process.exit(1)
     }
     node = node[part] as Tree
   }
@@ -118,7 +130,6 @@ async function translateMissing(
     system:
       "Você é um tradutor especializado em localização de interfaces de software financeiro. Responda sempre com JSON válido, nunca com explicações ou markdown.",
     prompt: buildPrompt(target, missing),
-    temperature: 0.2,
     maxOutputTokens: 8192,
   })
 
@@ -165,12 +176,23 @@ async function processTarget(target: TargetLocale, baseFlat: Map<string, string>
     process.exit(1)
   }
 
-  const missingSource: Record<string, string> = {}
-  for (const key of missingKeys) {
-    missingSource[key] = baseFlat.get(key)!
+  // Translate in batches of CHUNK_SIZE keys: one model call per batch, merging
+  // the results. A single call over hundreds of keys risks hitting the output
+  // token budget and getting a truncated (unparseable) JSON response.
+  const chunks: string[][] = []
+  for (let i = 0; i < missingKeys.length; i += CHUNK_SIZE) {
+    chunks.push(missingKeys.slice(i, i + CHUNK_SIZE))
   }
 
-  const translated = await translateMissing(target, missingSource)
+  const translated: Record<string, string> = {}
+  for (let i = 0; i < chunks.length; i++) {
+    console.log(`🔎 ${target}: lote ${i + 1}/${chunks.length}`)
+    const chunkSource: Record<string, string> = {}
+    for (const key of chunks[i]) {
+      chunkSource[key] = baseFlat.get(key)!
+    }
+    Object.assign(translated, await translateMissing(target, chunkSource))
+  }
 
   // Only ever write keys that were actually missing — existing translations
   // in the target file are never touched/overwritten.
@@ -179,7 +201,7 @@ async function processTarget(target: TargetLocale, baseFlat: Map<string, string>
   for (const key of missingKeys) {
     const value = translated[key]
     if (typeof value === "string" && value.trim() !== "") {
-      setDeep(targetTree, key, value)
+      setDeep(targetTree, key, value, target)
       appliedCount++
     } else {
       stillMissing.push(key)
