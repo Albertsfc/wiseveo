@@ -4,6 +4,8 @@
 
 O sistema é trilíngue: **pt-BR, en-US, es-419 (Español LatAm)**. Toda feature/alteração nasce nos 3 idiomas.
 
+> Migração em andamento: caminhos em scripts/i18n-allowlist.json ainda violam estas regras temporariamente — a catraca garante que a lista só encolhe até zerar (plano: docs/superpowers/plans/2026-07-15-i18n-trilingue-completo.md).
+
 1. **Nunca** escreva texto de UI hardcoded (JSX, toasts, placeholders, aria-labels, mensagens de erro).
    Use `useTranslations()` (client) / `getTranslations()` (server) do next-intl.
 2. Toda chave nova entra nos **3** arquivos `src/i18n/messages/{pt-BR,en-US,es-419}.json`, mesma
@@ -12,7 +14,7 @@ O sistema é trilíngue: **pt-BR, en-US, es-419 (Español LatAm)**. Toda feature
 3. **Datas e números não monetários:** helpers de `src/i18n/format.ts` (`formatAppDate`,
    `createDateFormatter`, `createNumberFormatter`, `getDateFnsLocale`). Proibido `Intl.*` com locale
    fixo, `toLocaleDateString("pt-BR")` ou importar `ptBR`/`enUS`/`es` do date-fns fora desse arquivo.
-4. **Valores monetários:** continuam via `lib/monetary.ts` / `useMonetaryFormatting` (preferência do
+4. **Valores monetários:** continuam via `src/lib/monetary.ts` / `useMonetaryFormatting` (preferência do
    usuário em Configurações, independente do idioma da UI). Não converter para o locale da UI.
 5. Erros de API: serviços retornam códigos estáveis; as rotas traduzem com `getTranslations("api")`.
 6. Canais sem cookie (Telegram, jobs): use o locale persistido em `User.preferencesJson.locale`

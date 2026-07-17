@@ -1,4 +1,5 @@
 import { Prisma } from "@/generated/prisma_new/client"
+import { isAppLocale, resolveAppLocale, type AppLocale } from "@/i18n/config"
 import { prisma } from "@/lib/prisma"
 import {
   resolveMonetarySettings,
@@ -188,6 +189,36 @@ export async function getUserMonetarySettings(userId: string) {
 export async function getUserQuickPaymentSettings(userId: string) {
   const prefs = await getUserPreferences(userId)
   return resolveQuickPaymentSettings(prefs.quickPayment)
+}
+
+/**
+ * Locale de UI persistido do usuário (User.preferencesJson.locale).
+ * Fonte de verdade para canais sem cookie (Telegram, jobs); cai no
+ * DEFAULT_LOCALE quando ausente ou inválido.
+ */
+export async function getUserLocale(userId: string): Promise<AppLocale> {
+  const prefs = await getUserPreferences(userId)
+  return resolveAppLocale(prefs.locale)
+}
+
+/**
+ * Persiste o locale de UI do usuário em User.preferencesJson.locale.
+ * Valores fora de LOCALES são ignorados silenciosamente (no-op).
+ */
+export async function setUserLocale(userId: string, locale: string): Promise<void> {
+  if (!isAppLocale(locale)) return
+
+  const currentPreferences = await getUserPreferences(userId)
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      preferencesJson: toInputJsonValue({
+        ...currentPreferences,
+        locale,
+      }),
+    },
+  })
 }
 
 export async function getQuickPaymentOptions(
