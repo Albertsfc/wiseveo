@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -101,6 +102,8 @@ export function DataTable<TData extends SerializedTransaction, TValue>({
   onDateRangeChange,
 }: DataTableProps<TData, TValue>) {
   const { isMobile } = useDeviceClass()
+  const t = useTranslations("transactions.table")
+  const tCommon = useTranslations("common")
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
@@ -246,7 +249,7 @@ export function DataTable<TData extends SerializedTransaction, TValue>({
             onClick={onAddTransaction}
           >
             <Plus className="h-5 w-5 sm:h-4 sm:w-4" />
-            <span className="hidden sm:inline ml-2">Nova Transação</span>
+            <span className="hidden sm:inline ml-2">{t("addButton")}</span>
           </Button>
         </div>
       </div>
@@ -254,7 +257,7 @@ export function DataTable<TData extends SerializedTransaction, TValue>({
         <div className="flex flex-col border-t">
           {loading ? (
             <div className="flex h-24 items-center justify-center text-muted-foreground">
-              Carregando...
+              {tCommon("loading")}
             </div>
           ) : table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -275,7 +278,7 @@ export function DataTable<TData extends SerializedTransaction, TValue>({
             ))
           ) : (
             <div className="flex h-24 items-center justify-center text-muted-foreground">
-              Nenhum resultado encontrado.
+              {tCommon("noResults")}
             </div>
           )}
         </div>
@@ -307,7 +310,7 @@ export function DataTable<TData extends SerializedTransaction, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center text-muted-foreground"
                   >
-                    Carregando...
+                    {tCommon("loading")}
                   </TableCell>
                 </TableRow>
               ) : table.getRowModel().rows?.length ? (
@@ -331,7 +334,7 @@ export function DataTable<TData extends SerializedTransaction, TValue>({
                     colSpan={columns.length}
                     className="h-24 text-center text-muted-foreground"
                   >
-                    Nenhum resultado encontrado.
+                    {tCommon("noResults")}
                   </TableCell>
                 </TableRow>
               )}

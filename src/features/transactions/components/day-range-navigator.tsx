@@ -1,12 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { addDays, format, startOfDay } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import { addDays, startOfDay } from "date-fns"
+import { useLocale, useTranslations } from "next-intl"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { formatAppDate } from "@/i18n/format"
 import type { DateRange } from "@/contexts/date-range-context"
 
 interface DayRangeNavigatorProps {
@@ -14,12 +15,15 @@ interface DayRangeNavigatorProps {
   onDateRangeChange: (range: DateRange) => void
 }
 
-function weekdayLabel(date: Date): string {
-  const normalized = format(date, "EEEE", { locale: ptBR }).replace("-feira", "")
-  return normalized.charAt(0).toUpperCase() + normalized.slice(1)
+function weekdayLabel(date: Date, locale: string): string {
+  const normalized = formatAppDate(date, "EEEE", locale)
+  const trimmed = locale === "pt-BR" ? normalized.replace("-feira", "") : normalized
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1)
 }
 
 export function DayRangeNavigator({ dateRange, onDateRangeChange }: DayRangeNavigatorProps) {
+  const t = useTranslations("transactions.dayNav")
+  const locale = useLocale()
   const [focusedDate, setFocusedDate] = React.useState(() => startOfDay(dateRange.from))
 
   React.useEffect(() => {
@@ -43,7 +47,7 @@ export function DayRangeNavigator({ dateRange, onDateRangeChange }: DayRangeNavi
           variant="ghost"
           size="icon"
           onClick={() => navigateDay(-1)}
-          aria-label="Dia anterior"
+          aria-label={t("previousDayAria")}
           className="h-7 w-7 cursor-pointer rounded-lg"
         >
           <ChevronLeft className="h-[15px] w-[15px]" />
@@ -70,9 +74,9 @@ export function DayRangeNavigator({ dateRange, onDateRangeChange }: DayRangeNavi
             >
               <div className="grid h-full w-full grid-rows-[24px_10px] items-center justify-items-center">
                 <span className={cn("font-bold leading-none", isCenter ? "text-[22.5px]" : "text-[17.5px]")}>
-                  {format(targetDate, "d")}
+                  {formatAppDate(targetDate, "d", locale)}
                 </span>
-                <span className="text-[9px] font-medium leading-none">{weekdayLabel(targetDate)}</span>
+                <span className="text-[9px] font-medium leading-none">{weekdayLabel(targetDate, locale)}</span>
               </div>
             </button>
           )
@@ -82,7 +86,7 @@ export function DayRangeNavigator({ dateRange, onDateRangeChange }: DayRangeNavi
           variant="ghost"
           size="icon"
           onClick={() => navigateDay(1)}
-          aria-label="Próximo dia"
+          aria-label={t("nextDayAria")}
           className="h-7 w-7 cursor-pointer rounded-lg"
         >
           <ChevronRight className="h-[15px] w-[15px]" />

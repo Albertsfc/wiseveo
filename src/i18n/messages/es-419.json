@@ -1,4 +1,90 @@
 {
+  "Routes": {
+    "analysis": {
+      "description": "Informes y métricas de rendimiento",
+      "title": "Análisis"
+    },
+    "banks": {
+      "description": "Sincroniza y gestiona tus cuentas",
+      "title": "Bancos"
+    },
+    "budget": {
+      "description": "Planificación y metas financieras",
+      "title": "Presupuesto"
+    },
+    "calendar": {
+      "description": "Visualiza tus vencimientos y cobros",
+      "title": "Calendario"
+    },
+    "chat": {
+      "description": "Comunícate con el equipo",
+      "title": "Chat"
+    },
+    "configuracoes": {
+      "description": "Gestiona tus preferencias",
+      "title": "Configuraciones"
+    },
+    "dashboard": {
+      "description": "Resumen de tus finanzas",
+      "title": "Dashboard"
+    },
+    "default": {
+      "description": "Aceleración Financiera",
+      "title": "WISEVEO"
+    },
+    "faqs": {
+      "description": "Preguntas frecuentes",
+      "title": "FAQs"
+    },
+    "forecasting": {
+      "description": "Proyecciones financieras y tendencias",
+      "title": "Pronóstico"
+    },
+    "insights": {
+      "description": "Análisis detallados y tendencias",
+      "title": "Insights"
+    },
+    "mail": {
+      "description": "Bandeja de entrada",
+      "title": "Correo"
+    },
+    "pricing": {
+      "description": "Opciones de suscripción",
+      "title": "Planes"
+    },
+    "recurring": {
+      "description": "Control de suscripciones y facturas fijas",
+      "title": "Recurrentes"
+    },
+    "settings_billing": {
+      "description": "Gestiona tus pagos",
+      "title": "Facturación"
+    },
+    "settings_components": {
+      "description": "Guía de estilo del sistema",
+      "title": "Componentes"
+    },
+    "settings_connections": {
+      "description": "Integraciones con otras apps",
+      "title": "Conexiones"
+    },
+    "settings_notifications": {
+      "description": "Configura tus alertas",
+      "title": "Notificaciones"
+    },
+    "tasks": {
+      "description": "Gestiona tus tareas",
+      "title": "Tareas"
+    },
+    "transactions": {
+      "description": "Gestiona tus ingresos y gastos",
+      "title": "Transacciones"
+    },
+    "users": {
+      "description": "Gestiona los miembros del equipo",
+      "title": "Usuarios"
+    }
+  },
   "common": {
     "actions": "Acciones",
     "add": "Añadir",
@@ -112,8 +198,6 @@
     "yes": "Sí"
   },
   "dashboard": {
-    "balance": "Saldo General",
-    "cashflow": "Flujo de Caja",
     "ChartArea": {
       "currentBalance": "Saldo actual en el período:",
       "description": "Sigue entradas, salidas y la evolución del saldo en el intervalo seleccionado",
@@ -121,7 +205,6 @@
       "loadError": "No se pudo cargar el gráfico.",
       "title": "Flujo de Caja del Período"
     },
-    "dailyMovement": "Movimiento Diario",
     "DailyMovement": {
       "accumulated": "ACUMULADO",
       "balance": "SALDO",
@@ -137,8 +220,6 @@
       "noMovement": "Sin movimiento en el período",
       "title": "Movimiento Diario"
     },
-    "expenses": "Gastos",
-    "expensesByGroup": "Gastos por Grupo",
     "ExpensesChart": {
       "description": "Distribución de gastos en el período seleccionado",
       "loading": "Cargando...",
@@ -149,8 +230,6 @@
       "total": "Total:",
       "totalExpenses": "Total de gastos:"
     },
-    "income": "Ingresos",
-    "latestTransactions": "Últimos Movimientos",
     "LatestTransactions": {
       "description": "Sigue los pagos recientes",
       "loadError": "Error al cargar los datos",
@@ -158,7 +237,6 @@
       "noTransactions": "Sin pagos en el período",
       "title": "Últimos Pagos"
     },
-    "savings": "Ahorros",
     "SectionCards": {
       "balance": "Saldo",
       "balanceFooter": "Saldo consolidado",
@@ -170,16 +248,24 @@
       "savingsFooter": "Ahorro del mes",
       "vsPreviousMonth": "vs mes anterior"
     },
-    "subtitle": "Visión general de tu salud financiera",
-    "title": "Dashboard",
-    "upcomingTransactions": "Próximos Vencimientos",
     "UpcomingTransactions": {
       "description": "Sigue las próximas entradas y salidas",
       "loadError": "Error al cargar los datos",
       "loading": "Cargando...",
       "noTransactions": "Sin vencimientos en el período",
       "title": "Próximos Vencimientos"
-    }
+    },
+    "balance": "Saldo General",
+    "cashflow": "Flujo de Caja",
+    "dailyMovement": "Movimiento Diario",
+    "expenses": "Gastos",
+    "expensesByGroup": "Gastos por Grupo",
+    "income": "Ingresos",
+    "latestTransactions": "Últimos Movimientos",
+    "savings": "Ahorros",
+    "subtitle": "Visión general de tu salud financiera",
+    "title": "Dashboard",
+    "upcomingTransactions": "Próximos Vencimientos"
   },
   "login": {
     "confirmPassword": "Confirmar contraseña",
@@ -196,92 +282,6 @@
     "password": "Contraseña",
     "signup": "Crear Cuenta",
     "title": "Acceda a su cuenta"
-  },
-  "Routes": {
-    "analysis": {
-      "description": "Informes y métricas de rendimiento",
-      "title": "Análisis"
-    },
-    "banks": {
-      "description": "Sincroniza y gestiona tus cuentas",
-      "title": "Bancos"
-    },
-    "budget": {
-      "description": "Planificación y metas financieras",
-      "title": "Presupuesto"
-    },
-    "calendar": {
-      "description": "Visualiza tus vencimientos y cobros",
-      "title": "Calendario"
-    },
-    "chat": {
-      "description": "Comunícate con el equipo",
-      "title": "Chat"
-    },
-    "configuracoes": {
-      "description": "Gestiona tus preferencias",
-      "title": "Configuraciones"
-    },
-    "dashboard": {
-      "description": "Resumen de tus finanzas",
-      "title": "Dashboard"
-    },
-    "default": {
-      "description": "Aceleración Financiera",
-      "title": "WISEVEO"
-    },
-    "faqs": {
-      "description": "Preguntas frecuentes",
-      "title": "FAQs"
-    },
-    "forecasting": {
-      "description": "Proyecciones financieras y tendencias",
-      "title": "Pronóstico"
-    },
-    "insights": {
-      "description": "Análisis detallados y tendencias",
-      "title": "Insights"
-    },
-    "mail": {
-      "description": "Bandeja de entrada",
-      "title": "Correo"
-    },
-    "pricing": {
-      "description": "Opciones de suscripción",
-      "title": "Planes"
-    },
-    "recurring": {
-      "description": "Control de suscripciones y facturas fijas",
-      "title": "Recurrentes"
-    },
-    "settings_billing": {
-      "description": "Gestiona tus pagos",
-      "title": "Facturación"
-    },
-    "settings_components": {
-      "description": "Guía de estilo del sistema",
-      "title": "Componentes"
-    },
-    "settings_connections": {
-      "description": "Integraciones con otras apps",
-      "title": "Conexiones"
-    },
-    "settings_notifications": {
-      "description": "Configura tus alertas",
-      "title": "Notificaciones"
-    },
-    "tasks": {
-      "description": "Gestiona tus tareas",
-      "title": "Tareas"
-    },
-    "transactions": {
-      "description": "Gestiona tus ingresos y gastos",
-      "title": "Transacciones"
-    },
-    "users": {
-      "description": "Gestiona los miembros del equipo",
-      "title": "Usuarios"
-    }
   },
   "settings": {
     "account": {
@@ -327,9 +327,9 @@
     "adminUsers": {
       "active": "Activo",
       "approve": "Aprobar",
-      "approved": "Aprobado",
       "approveError": "No se pudo aprobar al usuario.",
       "approveSuccess": "Usuario aprobado con éxito.",
+      "approved": "Aprobado",
       "approving": "Aprobando...",
       "colAction": "Acción",
       "colDate": "Registro",
@@ -395,9 +395,9 @@
       "globalPrefs": "Preferencias Globales",
       "globalPrefsDesc": "Estas opciones afectan tarjetas, tablas, gráficos y resúmenes financieros.",
       "minus": "Con signo menos",
+      "negValue": "Valor negativo",
       "negativeFormat": "Valores Negativos",
       "negativeFormatDesc": "Elija cómo se mostrarán las salidas, pérdidas y otros valores negativos.",
-      "negValue": "Valor negativo",
       "number": "Solo número",
       "parentheses": "Entre paréntesis",
       "posValue": "Valor positivo",
@@ -754,5 +754,315 @@
     "tabLayout": "Diseño",
     "tabTheme": "Tema",
     "tweakcnPresets": "Presets de Tweakcn"
+  },
+  "transactions": {
+    "actions": {
+      "attachments": "Adjuntos",
+      "copy": "Copiar Movimiento",
+      "delete": "Eliminar Movimiento",
+      "edit": "Editar Movimiento",
+      "makeRecurring": "Volver recurrente",
+      "notes": "Notas/Mensajes",
+      "quickPay": "Pagar (Pago Rápido)"
+    },
+    "batch": {
+      "cancel": "Cancelar",
+      "clear": "Limpiar",
+      "copy": "Copiar",
+      "copyDescription": "Defina la fecha de los nuevos registros para {count, plural, one {# movimiento seleccionado} other {# movimientos seleccionados}}.",
+      "copyTitle": "Copiar Movimientos en lote",
+      "copyTooltip": "Copiar Movimientos",
+      "copying": "Copiando...",
+      "creating": "Creando...",
+      "dateLabel": "Fecha",
+      "delete": "Eliminar",
+      "deleteDescription": "Esta acción eliminará {count, plural, one {# movimiento} other {# movimientos}} de los registros activos y los moverá al historial de eliminados.",
+      "deleteTitle": "Eliminar Movimientos en lote",
+      "deleteTooltip": "Eliminar Movimiento",
+      "deleting": "Eliminando...",
+      "editDate": "Editar Fecha",
+      "editDateDescription": "Defina la fecha para {count, plural, one {# movimiento seleccionado} other {# movimientos seleccionados}}.",
+      "editDateTitle": "Editar Fecha en lote",
+      "editPeriod": "Editar Período",
+      "editPeriodDescription": "Defina el período (AAAAMM) para {count, plural, one {# movimiento seleccionado} other {# movimientos seleccionados}}.",
+      "editPeriodTitle": "Editar Período en lote",
+      "makeRecurring": "Volver recurrente",
+      "makeRecurringDescription": "¿Confirmar la creación de recurrencia para {count, plural, one {# movimiento} other {# movimientos}}?",
+      "makeRecurringTitle": "Volver Recurrente en lote",
+      "newDateLabel": "Nueva Fecha",
+      "notes": "Notas",
+      "notesTooltip": "Notas/Mensajes",
+      "pay": "Pagar",
+      "payTooltip": "Pagar (Pago Rápido)",
+      "periodLabel": "Período",
+      "periodPlaceholder": "AAAAMM",
+      "processing": "Procesando...",
+      "quickPayDescription": "¿Confirmar el pago rápido para {count, plural, one {# movimiento} other {# movimientos}} usando la configuración predeterminada definida en Configuración > General?",
+      "quickPayTitle": "Pago Rápido en lote",
+      "saveDate": "Guardar fecha",
+      "savePeriod": "Guardar período",
+      "saving": "Guardando..."
+    },
+    "card": {
+      "periodLabel": "Período:",
+      "refLabel": "REF:"
+    },
+    "columns": {
+      "account": "BANCO",
+      "actions": "ACCIONES",
+      "amount": "MONTO",
+      "category": "CATEGORÍA",
+      "date": "FECHA",
+      "description": "DESCRIPCIÓN",
+      "group": "GRUPO",
+      "note": "HISTORIAL",
+      "num": "NÚM",
+      "payee": "BENEFICIARIO",
+      "period": "PERÍODO",
+      "reference": "REF",
+      "selectAllAria": "Seleccionar todo",
+      "selectRowAria": "Seleccionar fila",
+      "status": "ESTADO",
+      "statusOverdue": "Vencido",
+      "statusPaid": "Pagado",
+      "statusPending": "Pendiente",
+      "statusScheduled": "Programado",
+      "type": "TIPO",
+      "typeExpense": "Gasto",
+      "typeIncome": "Ingreso",
+      "typeTransfer": "Transferencia"
+    },
+    "dayNav": {
+      "nextDayAria": "Día siguiente",
+      "previousDayAria": "Día anterior"
+    },
+    "dialogs": {
+      "attachments": {
+        "addButton": "Agregar Adjunto",
+        "deleteAction": "Eliminar adjunto",
+        "deleteConfirmText": "¿Está seguro de que desea eliminar este adjunto?",
+        "deleteError": "Error al eliminar el adjunto",
+        "deleteSuccess": "Adjunto eliminado con éxito",
+        "deleteTitle": "Eliminar Adjunto",
+        "deleting": "Eliminando...",
+        "downloadAction": "Descargar adjunto",
+        "downloadButton": "Descargar Adjunto",
+        "downloadError": "Error al iniciar la descarga del adjunto",
+        "downloadStarted": "Descarga iniciada",
+        "dropHintSubtitle": "o haga clic para seleccionar (imágenes y PDF, hasta 3 MB)",
+        "dropHintTitle": "Arrastre y suelte archivos aquí",
+        "fileTooLarge": "{fileName}: excede 3 MB",
+        "fileTypeNotAllowed": "{fileName}: tipo no permitido",
+        "loadError": "Error al cargar los adjuntos",
+        "noAttachments": "No se encontraron adjuntos.",
+        "noPreviewAvailable": "Este tipo de archivo no tiene vista previa integrada. Use la descarga para abrirlo localmente.",
+        "openAction": "Abrir adjunto",
+        "previewAction": "Ver adjunto",
+        "previewFallbackTitle": "Ver adjunto",
+        "previewLabel": "Vista previa del adjunto",
+        "previewUnavailable": "Vista previa no disponible para este tipo de archivo. Use la descarga.",
+        "someFilesFailed": "Algunos archivos fallaron: {errors}",
+        "title": "Adjuntos",
+        "uploadError": "Error al enviar los adjuntos",
+        "uploadSuccess": "{count, plural, one {# adjunto enviado} other {# adjuntos enviados}} con éxito!",
+        "uploading": "Enviando..."
+      },
+      "deleteConfirm": {
+        "confirmText": "¿Está seguro de que desea eliminar este movimiento?",
+        "deleting": "Eliminando...",
+        "title": "Eliminar Movimiento",
+        "undoNote": "Esta acción puede deshacerse por el administrador."
+      },
+      "makeRecurringConfirm": {
+        "confirmButton": "Crear Recurrente",
+        "confirmText": "¿Desea crear un movimiento recurrente a partir de este?",
+        "creating": "Creando...",
+        "note": "El movimiento original no se verá afectado. Se creará una nueva plantilla recurrente en la página Recurrentes.",
+        "title": "Volver Recurrente"
+      },
+      "messages": {
+        "deleteAction": "Eliminar mensaje",
+        "deleteConfirmText": "Este mensaje se eliminará permanentemente.",
+        "deleteError": "Error al eliminar el mensaje",
+        "deleteTitle": "Eliminar Mensaje",
+        "deleted": "Eliminar",
+        "deletedSuccess": "Mensaje eliminado",
+        "deleting": "Eliminando...",
+        "emptyMessageError": "Escriba un mensaje antes de enviar",
+        "loadError": "Error al cargar los mensajes",
+        "loadingMessages": "Cargando mensajes...",
+        "noMessages": "No hay mensajes registrados.",
+        "placeholder": "Escriba su mensaje...",
+        "previousMessages": "Mensajes anteriores",
+        "remainingChars": "{count, plural, one {# carácter restante} other {# caracteres restantes}}",
+        "send": "Enviar",
+        "sendError": "Error al enviar el mensaje",
+        "sending": "Enviando...",
+        "sentSuccess": "Mensaje enviado",
+        "title": "Notas/Mensajes",
+        "unreadNotice": "Tiene {count, plural, one {# mensaje anterior} other {# mensajes anteriores}} para leer."
+      },
+      "newTransaction": {
+        "accountLabel": "Banco",
+        "addFileButton": "+ Agregar archivo",
+        "amountLabel": "Monto",
+        "amountPlaceholder": "0,00",
+        "attachmentsLabel": "Adjuntos",
+        "automaticPlaceholder": "Automático",
+        "categoryLabel": "Categoría",
+        "dropHint": "Arrastre o haga clic para adjuntar imagen / PDF (máx. 3 MB)",
+        "dueDateLabel": "Vencimiento",
+        "editTitle": "Editar Movimiento",
+        "fileInputTitle": "Selección de archivos",
+        "fileSizeKb": "{size} KB",
+        "formDescription": "Formulario de movimiento financiero",
+        "groupLabel": "Grupo",
+        "historyLabel": "Descripción",
+        "historyPlaceholder": "Beneficiario o descripción rápida...",
+        "installmentsLabel": "Cuotas",
+        "installmentsPreviewHint": "Edite fechas o montos si es necesario",
+        "installmentsPreviewTitle": "Plan de cuotas",
+        "newTitle": "Nuevo Movimiento",
+        "notesLabel": "Notas",
+        "notesPlaceholder": "Detalles opcionales...",
+        "numLabel": "NÚM",
+        "periodLabel": "Período",
+        "periodPlaceholder": "AAAAMM",
+        "proRataAccrualHint": "Devengado: toda la serie usará el PERÍODO del primer pago.",
+        "proRataCashHint": "Caja: cada cuota usará el PERÍODO de su propio vencimiento.",
+        "proRataLabel": "Prorrateo",
+        "refCustomHint": "Personalizado (Ref-1, Ref-2...)",
+        "refDefaultHint": "Predeterminado (#01/NN)",
+        "refLabel": "REF",
+        "refPlaceholderInstallment": "ej: Compra",
+        "refPlaceholderSingle": "ej: Factura de servicios",
+        "removeFileAria": "Quitar archivo",
+        "save": "Guardar",
+        "saveInstallments": "Guardar {count} cuotas",
+        "saving": "Guardando...",
+        "selectPlaceholder": "Seleccionar...",
+        "statusLabel": "Estado",
+        "suggestionsCount": "{count, plural, one {# sugerencia} other {# sugerencias}}",
+        "typeExpense": "Gasto",
+        "typeIncome": "Ingreso",
+        "typeTransfer": "Transf.",
+        "update": "Actualizar",
+        "updating": "Actualizando..."
+      },
+      "quickPayConfirm": {
+        "confirmButton": "Confirmar Pago",
+        "confirmText": "¿Desea marcar este movimiento como pagado usando la configuración predeterminada definida en Configuración > General?",
+        "processing": "Procesando...",
+        "title": "Pago Rápido"
+      },
+      "transactionFallback": "Movimiento"
+    },
+    "filters": {
+      "accountFieldLabel": "Cuenta",
+      "allAccounts": "Todas las cuentas",
+      "allStatuses": "Todos los estados",
+      "allTypes": "Todos los tipos",
+      "apply": "Aplicar",
+      "clear": "Limpiar",
+      "clearFiltersButton": "Limpiar filtros",
+      "filterSheetTitle": "Filtrar Movimientos",
+      "filtersButton": "Filtros",
+      "searchPlaceholderDesktop": "Búsqueda inteligente...",
+      "searchPlaceholderMobile": "Buscar...",
+      "statusFieldLabel": "Estado",
+      "typeFieldLabel": "Tipo"
+    },
+    "form": {
+      "attachmentsCreateWarning": "Movimiento creado, pero falló el envío de adjuntos",
+      "attachmentsUpdateWarning": "Movimiento actualizado, pero falló el envío de adjuntos",
+      "autoNum": "Auto",
+      "createError": "Error al crear el movimiento",
+      "createSuccess": "¡Movimiento creado con éxito!",
+      "fileRejected": "{count, plural, one {# archivo ignorado} other {# archivos ignorados}}: solo imágenes/PDF de hasta 3 MB",
+      "installmentsCreateSuccess": "¡{count} cuotas creadas con éxito!",
+      "negativeAmount": "El monto no puede ser negativo",
+      "requiredFields": "Complete todos los campos obligatorios",
+      "updateError": "Error al actualizar el movimiento",
+      "updateSuccess": "¡Movimiento actualizado con éxito!"
+    },
+    "formats": {
+      "shortDate": "d 'de' MMM."
+    },
+    "pagination": {
+      "firstPageAria": "Primera página",
+      "inflows": "Entradas: {amount}",
+      "lastPageAria": "Última página",
+      "nextPageAria": "Página siguiente",
+      "outflows": "Salidas: {amount}",
+      "pageOfTotal": "Página {page} de {total}",
+      "previousPageAria": "Página anterior",
+      "rowsPerPage": "Filas por página",
+      "selectedOfTotal": "{selected} de {total} fila(s) seleccionada(s).",
+      "total": "Total: {amount}"
+    },
+    "services": {
+      "copy": {
+        "notFound": "Movimiento no encontrado o acceso denegado."
+      },
+      "quickPay": {
+        "invalidDefaults": "Los valores predeterminados de Pago Rápido guardados ya no son válidos. Actualice Configuración > General antes de continuar.",
+        "missingDefaults": "Configure los valores predeterminados de Pago Rápido en Configuración > General antes de usar esta función.",
+        "transactionNotFound": "Movimiento no encontrado"
+      }
+    },
+    "summary": {
+      "balance": "Saldo",
+      "balanceAtDate": "Saldo al {date}",
+      "balanceOfPeriod": "Saldo del período",
+      "balancesByAccount": "Saldos por Cuenta",
+      "inflows": "Entradas",
+      "inflowsOfPeriod": "Entradas del período",
+      "outflows": "Salidas",
+      "outflowsOfPeriod": "Salidas del período",
+      "total": "Total",
+      "vsPreviousPeriod": "vs período anterior"
+    },
+    "table": {
+      "addButton": "Nuevo Movimiento",
+      "description": "{count, plural, one {# movimiento encontrado} other {# movimientos encontrados}} en el período",
+      "title": "Registro de Movimientos",
+      "viewOptions": {
+        "columnsButton": "Columnas",
+        "displayColumnsLabel": "Mostrar columnas"
+      }
+    },
+    "toasts": {
+      "attachmentsOpenError": "Error al abrir los adjuntos del movimiento",
+      "attachmentsOpened": "Administrador de adjuntos abierto",
+      "batchCopyError": "Error al copiar los movimientos seleccionados",
+      "batchCopyPartial": "{succeeded} exitoso(s) y {failed} con error",
+      "batchCopySuccess": "{count, plural, one {# movimiento copiado} other {# movimientos copiados}}",
+      "batchDeleteError": "Error al eliminar los movimientos seleccionados",
+      "batchDeletePartial": "{succeeded} eliminado(s) y {failed} con error",
+      "batchDeleteSuccess": "{count, plural, one {# movimiento eliminado} other {# movimientos eliminados}} con éxito",
+      "batchEditDateError": "Error al actualizar la fecha de los movimientos seleccionados",
+      "batchEditDateSuccess": "Fecha actualizada en {count, plural, one {# movimiento} other {# movimientos}}",
+      "batchEditPeriodError": "Error al actualizar el período de los movimientos seleccionados",
+      "batchEditPeriodSuccess": "Período actualizado en {count, plural, one {# movimiento} other {# movimientos}}",
+      "batchMakeRecurringError": "Error al crear recurrencias de los movimientos seleccionados",
+      "batchMakeRecurringPartial": "{succeeded} creada(s) y {failed} con error",
+      "batchMakeRecurringSuccess": "{count, plural, one {# recurrencia creada} other {# recurrencias creadas}} con éxito",
+      "batchNotesInDevelopment": "Notas/Mensajes en desarrollo",
+      "batchPartialUpdated": "{succeeded} actualizado(s) y {failed} con error",
+      "batchQuickPayError": "Error al aplicar el pago rápido a los movimientos seleccionados",
+      "batchQuickPayPartial": "{succeeded} procesado(s) y {failed} con error",
+      "batchQuickPaySuccess": "{count, plural, one {# movimiento actualizado} other {# movimientos actualizados}} con pago rápido",
+      "copyOpenError": "Error al abrir la copia del movimiento",
+      "copyOpened": "Copia de movimiento abierta",
+      "deleteError": "Error al eliminar el movimiento",
+      "deleteSuccess": "Movimiento eliminado con éxito",
+      "editOpenError": "Error al abrir la edición del movimiento",
+      "editOpened": "Edición de movimiento abierta",
+      "quickPayError": "Error al efectuar el pago rápido",
+      "quickPaySuccess": "Pago rápido efectuado con éxito",
+      "recurringError": "Error al crear el movimiento recurrente",
+      "recurringSuccess": "Movimiento recurrente creado con éxito",
+      "syncError": "Error al sincronizar los movimientos con el período seleccionado"
+    }
   }
 }

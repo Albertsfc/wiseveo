@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { format, endOfMonth } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import { useLocale, useTranslations } from "next-intl"
 import { usePathname } from "next/navigation"
 import { toast } from "sonner"
 
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card"
 import { useDateRange } from "@/contexts/date-range-context"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import { formatAppDate } from "@/i18n/format"
 import type { AccountWithBalance } from "@/features/accounts/types"
 import type { FinancialSummary } from "@/features/shared/services/get-financial-summary"
 
@@ -24,7 +25,11 @@ import type {
   TransactionFormOptions,
 } from "../types"
 import { useTransactionForm } from "../hooks/use-transaction-form"
-import { createTransactionGlobalFilter, getTransactionColumns } from "./columns"
+import {
+  createTransactionGlobalFilter,
+  getTransactionColumns,
+  type TransactionColumnLabels,
+} from "./columns"
 import { useDeviceClass } from "@/hooks/use-device-class"
 import { DataTable } from "./data-table"
 import { NewTransactionDialog } from "./new-transaction-dialog"
@@ -55,6 +60,8 @@ export function TransactionsClient({
   initialSummary,
 }: TransactionsClientProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions")
+  const locale = useLocale()
   const { dateRange, setDateRange } = useDateRange()
   const pathname = usePathname()
   const [transactions, setTransactions] = useState(initialTransactions)
@@ -76,7 +83,7 @@ export function TransactionsClient({
         to: format(to, "yyyy-MM-dd"),
       })
       const res = await fetch(`/api/transactions?${params}`, { cache: "no-store" })
-      if (!res.ok) throw new Error("Erro ao buscar transações")
+      if (!res.ok) throw new Error(t("toasts.syncError"))
       const data = await res.json()
       if (requestId !== latestRequestRef.current) return
       setTransactions(data.transactions)
@@ -87,12 +94,12 @@ export function TransactionsClient({
     } catch (error) {
       if (requestId !== latestRequestRef.current) return
       console.error("Failed to fetch transactions:", error)
-      toast.error("Erro ao sincronizar transações com o período selecionado")
+      toast.error(t("toasts.syncError"))
     } finally {
       if (requestId !== latestRequestRef.current) return
       setLoading(false)
     }
-  }, [])
+  }, [t])
 
   const form = useTransactionForm({
     formOptions,
@@ -122,18 +129,18 @@ export function TransactionsClient({
       })
       if (!res.ok) {
         const data = await res.json()
-        toast.error(data.error || "Erro ao excluir transação")
+        toast.error(data.error || t("toasts.deleteError"))
         return
       }
-      toast.success("Lançamento excluído com sucesso")
+      toast.success(t("toasts.deleteSuccess"))
       setTxToDelete(null)
       refetch()
     } catch {
-      toast.error("Erro ao excluir transação")
+      toast.error(t("toasts.deleteError"))
     } finally {
       setActionLoading(false)
     }
-  }, [txToDelete, refetch])
+  }, [txToDelete, refetch, t])
 
   const handleQuickPayConfirm = useCallback(async () => {
     if (!txToPay) return
@@ -144,18 +151,18 @@ export function TransactionsClient({
       })
       const data = await res.json()
       if (!res.ok) {
-        toast.error(data.error || "Erro ao efetuar pagamento rápido")
+        toast.error(data.error || t("toasts.quickPayError"))
         return
       }
-      toast.success("Pagamento rápido efetuado com sucesso")
+      toast.success(t("toasts.quickPaySuccess"))
       setTxToPay(null)
       refetch()
     } catch {
-      toast.error("Erro ao efetuar pagamento rápido")
+      toast.error(t("toasts.quickPayError"))
     } finally {
       setActionLoading(false)
     }
-  }, [txToPay, refetch])
+  }, [txToPay, refetch, t])
 
   const handleMakeRecurringConfirm = useCallback(async () => {
     if (!txToRecur) return
@@ -166,44 +173,44 @@ export function TransactionsClient({
       })
       if (!res.ok) {
         const data = await res.json()
-        toast.error(data.error || "Erro ao criar transação recorrente")
+        toast.error(data.error || t("toasts.recurringError"))
         return
       }
-      toast.success("Transação recorrente criada com sucesso")
+      toast.success(t("toasts.recurringSuccess"))
       setTxToRecur(null)
     } catch {
-      toast.error("Erro ao criar transação recorrente")
+      toast.error(t("toasts.recurringError"))
     } finally {
       setActionLoading(false)
     }
-  }, [txToRecur])
+  }, [txToRecur, t])
 
   const handleEditTransaction = useCallback((tx: SerializedTransaction) => {
     try {
       form.openEditDialog(tx)
-      toast.success("Edição de lançamento aberta")
+      toast.success(t("toasts.editOpened"))
     } catch {
-      toast.error("Erro ao abrir edição do lançamento")
+      toast.error(t("toasts.editOpenError"))
     }
-  }, [form])
+  }, [form, t])
 
   const handleCopyTransaction = useCallback((tx: SerializedTransaction) => {
     try {
       form.openCopyDialog(tx)
-      toast.success("Cópia de lançamento aberta")
+      toast.success(t("toasts.copyOpened"))
     } catch {
-      toast.error("Erro ao abrir cópia do lançamento")
+      toast.error(t("toasts.copyOpenError"))
     }
-  }, [form])
+  }, [form, t])
 
   const handleOpenAttachments = useCallback((tx: SerializedTransaction) => {
     try {
       setTxForAttachments(tx)
-      toast.success("Gerenciador de anexos aberto")
+      toast.success(t("toasts.attachmentsOpened"))
     } catch {
-      toast.error("Erro ao abrir anexos do lançamento")
+      toast.error(t("toasts.attachmentsOpenError"))
     }
-  }, [])
+  }, [t])
 
   const handleNotes = useCallback((tx: SerializedTransaction) => {
     setTxForMessages(tx)
@@ -249,13 +256,11 @@ export function TransactionsClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `${succeeded} lançamento${succeeded > 1 ? "s atualizados" : " atualizado"} com pagamento rápido`
-        )
+        toast.success(t("toasts.batchQuickPaySuccess", { count: succeeded }))
       } else if (succeeded > 0) {
-        toast.warning(`${succeeded} processado(s) e ${failed} com falha`)
+        toast.warning(t("toasts.batchQuickPayPartial", { succeeded, failed }))
       } else {
-        toast.error("Falha ao aplicar pagamento rápido nos lançamentos selecionados")
+        toast.error(t("toasts.batchQuickPayError"))
       }
 
       await refetch()
@@ -263,7 +268,7 @@ export function TransactionsClient({
     } finally {
       setBatchLoading(false)
     }
-  }, [refetch])
+  }, [refetch, t])
 
   const handleBatchEditDate = useCallback(async (
     items: SerializedTransaction[],
@@ -294,13 +299,11 @@ export function TransactionsClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `Data atualizada em ${succeeded} lançamento${succeeded > 1 ? "s" : ""}`
-        )
+        toast.success(t("toasts.batchEditDateSuccess", { count: succeeded }))
       } else if (succeeded > 0) {
-        toast.warning(`${succeeded} atualizado(s) e ${failed} com falha`)
+        toast.warning(t("toasts.batchPartialUpdated", { succeeded, failed }))
       } else {
-        toast.error("Falha ao atualizar data dos lançamentos selecionados")
+        toast.error(t("toasts.batchEditDateError"))
       }
 
       await refetch()
@@ -308,7 +311,7 @@ export function TransactionsClient({
     } finally {
       setBatchLoading(false)
     }
-  }, [refetch])
+  }, [refetch, t])
 
   const handleBatchEditPeriod = useCallback(async (
     items: SerializedTransaction[],
@@ -339,13 +342,11 @@ export function TransactionsClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `Período atualizado em ${succeeded} lançamento${succeeded > 1 ? "s" : ""}`
-        )
+        toast.success(t("toasts.batchEditPeriodSuccess", { count: succeeded }))
       } else if (succeeded > 0) {
-        toast.warning(`${succeeded} atualizado(s) e ${failed} com falha`)
+        toast.warning(t("toasts.batchPartialUpdated", { succeeded, failed }))
       } else {
-        toast.error("Falha ao atualizar período dos lançamentos selecionados")
+        toast.error(t("toasts.batchEditPeriodError"))
       }
 
       await refetch()
@@ -353,7 +354,7 @@ export function TransactionsClient({
     } finally {
       setBatchLoading(false)
     }
-  }, [refetch])
+  }, [refetch, t])
 
   const handleBatchCopyTransactions = useCallback(async (
     items: SerializedTransaction[],
@@ -384,13 +385,11 @@ export function TransactionsClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `${succeeded} lançamento${succeeded > 1 ? "s" : ""} copiado${succeeded > 1 ? "s" : ""}`
-        )
+        toast.success(t("toasts.batchCopySuccess", { count: succeeded }))
       } else if (succeeded > 0) {
-        toast.warning(`${succeeded} copiado(s) e ${failed} com falha`)
+        toast.warning(t("toasts.batchCopyPartial", { succeeded, failed }))
       } else {
-        toast.error("Falha ao copiar os lançamentos selecionados")
+        toast.error(t("toasts.batchCopyError"))
       }
 
       await refetch()
@@ -398,7 +397,7 @@ export function TransactionsClient({
     } finally {
       setBatchLoading(false)
     }
-  }, [refetch])
+  }, [refetch, t])
 
   const handleBatchMakeRecurring = useCallback(async (
     items: SerializedTransaction[]
@@ -426,28 +425,26 @@ export function TransactionsClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `${succeeded} recorrência${succeeded > 1 ? "s criadas" : " criada"} com sucesso`
-        )
+        toast.success(t("toasts.batchMakeRecurringSuccess", { count: succeeded }))
       } else if (succeeded > 0) {
-        toast.warning(`${succeeded} criada(s) e ${failed} com falha`)
+        toast.warning(t("toasts.batchMakeRecurringPartial", { succeeded, failed }))
       } else {
-        toast.error("Falha ao criar recorrências dos lançamentos selecionados")
+        toast.error(t("toasts.batchMakeRecurringError"))
       }
 
       return true
     } finally {
       setBatchLoading(false)
     }
-  }, [])
+  }, [t])
 
   const handleBatchNotes = useCallback(async (
     items: SerializedTransaction[]
   ): Promise<boolean> => {
     if (items.length === 0) return true
-    toast.error("Observações/Mensagens em desenvolvimento")
+    toast.error(t("toasts.batchNotesInDevelopment"))
     return true
-  }, [])
+  }, [t])
 
   const handleBatchDelete = useCallback(async (
     items: SerializedTransaction[]
@@ -475,13 +472,11 @@ export function TransactionsClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `${succeeded} lançamento${succeeded > 1 ? "s excluídos" : " excluído"} com sucesso`
-        )
+        toast.success(t("toasts.batchDeleteSuccess", { count: succeeded }))
       } else if (succeeded > 0) {
-        toast.warning(`${succeeded} excluído(s) e ${failed} com falha`)
+        toast.warning(t("toasts.batchDeletePartial", { succeeded, failed }))
       } else {
-        toast.error("Falha ao excluir lançamentos selecionados")
+        toast.error(t("toasts.batchDeleteError"))
       }
 
       await refetch()
@@ -489,7 +484,7 @@ export function TransactionsClient({
     } finally {
       setBatchLoading(false)
     }
-  }, [refetch])
+  }, [refetch, t])
 
   useEffect(() => {
     if (pathname !== "/transactions") return
@@ -516,13 +511,13 @@ export function TransactionsClient({
   }, [dateRange, form])
 
   const dateLabel = useMemo(
-    () => format(dateRange.to, "d 'de' MMM.", { locale: ptBR }),
-    [dateRange.to],
+    () => formatAppDate(dateRange.to, t("formats.shortDate"), locale),
+    [dateRange.to, t, locale],
   )
 
   const endOfMonthLabel = useMemo(
-    () => format(endOfMonth(dateRange.to), "d 'de' MMM.", { locale: ptBR }),
-    [dateRange.to],
+    () => formatAppDate(endOfMonth(dateRange.to), t("formats.shortDate"), locale),
+    [dateRange.to, t, locale],
   )
 
   const sortingScopeKey = useMemo(
@@ -531,10 +526,38 @@ export function TransactionsClient({
   )
 
   const { isMobile } = useDeviceClass()
-  const columns = useMemo(() => getTransactionColumns(monetary, isMobile), [monetary, isMobile])
+  const columnLabels: TransactionColumnLabels = useMemo(() => ({
+    num: t("columns.num"),
+    period: t("columns.period"),
+    date: t("columns.date"),
+    reference: t("columns.reference"),
+    note: t("columns.note"),
+    description: t("columns.description"),
+    group: t("columns.group"),
+    category: t("columns.category"),
+    amount: t("columns.amount"),
+    account: t("columns.account"),
+    status: t("columns.status"),
+    type: t("columns.type"),
+    actions: t("columns.actions"),
+    payee: t("columns.payee"),
+    selectAllAria: t("columns.selectAllAria"),
+    selectRowAria: t("columns.selectRowAria"),
+    statusPaid: t("columns.statusPaid"),
+    statusPending: t("columns.statusPending"),
+    statusOverdue: t("columns.statusOverdue"),
+    statusScheduled: t("columns.statusScheduled"),
+    typeIncome: t("columns.typeIncome"),
+    typeExpense: t("columns.typeExpense"),
+    typeTransfer: t("columns.typeTransfer"),
+  }), [t])
+  const columns = useMemo(
+    () => getTransactionColumns(monetary, isMobile, columnLabels, locale),
+    [monetary, isMobile, columnLabels, locale],
+  )
   const globalFilterFn = useMemo(
-    () => createTransactionGlobalFilter(monetary),
-    [monetary],
+    () => createTransactionGlobalFilter(monetary, columnLabels, locale),
+    [monetary, columnLabels, locale],
   )
 
   return (
@@ -555,10 +578,9 @@ export function TransactionsClient({
       <div className="px-4 lg:px-6">
         <Card>
           <CardHeader>
-            <CardTitle>Registro de Transações</CardTitle>
+            <CardTitle>{t("table.title")}</CardTitle>
             <CardDescription>
-              {transactions.length} transação{transactions.length !== 1 && "ões"}{" "}
-              encontrada{transactions.length !== 1 && "s"} no período
+              {t("table.description", { count: transactions.length })}
             </CardDescription>
           </CardHeader>
           <CardContent>
