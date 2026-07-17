@@ -109,7 +109,7 @@ export async function approveUser(userId: string): Promise<AdminUserSummary> {
 
   if (!target) {
     const t = await getTranslations("settings.adminUsers.errors")
-    throw new Error(t("userNotFound"))
+    throw new AdminAccessError(404, t("userNotFound"))
   }
 
   const updatedUser = await prisma.user.update({

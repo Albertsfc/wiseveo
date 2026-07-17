@@ -19,10 +19,7 @@ function errorResponse(error: unknown) {
   const message =
     error instanceof Error ? error.message : "Erro interno do servidor"
 
-  return NextResponse.json(
-    { success: false, message },
-    { status: message === "Usuário não encontrado" ? 404 : 500 },
-  )
+  return NextResponse.json({ success: false, message }, { status: 500 })
 }
 
 export async function PATCH(
