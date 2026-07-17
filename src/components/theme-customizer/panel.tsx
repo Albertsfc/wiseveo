@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { Layout, Palette, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -21,6 +22,7 @@ interface ThemeCustomizerPanelProps {
 export function ThemeCustomizerPanel({
   description,
 }: ThemeCustomizerPanelProps) {
+  const t = useTranslations("themeCustomizer")
   const { preferences, savePreferences } = useThemePreferences()
   const { isDarkMode, setTheme } = useThemeManager()
 
@@ -105,14 +107,14 @@ export function ThemeCustomizerPanel({
       <div className="space-y-4 rounded-xl border bg-card shadow-xs">
         <div className="flex flex-col gap-3 border-b px-4 py-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-1">
-            <p className="text-sm font-medium">Fonte global de aparência</p>
+            <p className="text-sm font-medium">{t("appearanceSource")}</p>
             <p className="text-sm text-muted-foreground">
               {description}
             </p>
           </div>
           <Button variant="outline" size="sm" onClick={handleReset} className="cursor-pointer">
             <RotateCcw className="mr-1.5 h-3.5 w-3.5" />
-            Restaurar padrão
+            {t("restoreDefault")}
           </Button>
         </div>
 
@@ -121,11 +123,11 @@ export function ThemeCustomizerPanel({
             <TabsList className="grid h-12 w-full grid-cols-2 p-1.5">
               <TabsTrigger value="theme" className="cursor-pointer data-[state=active]:bg-background">
                 <Palette className="mr-1 h-4 w-4" />
-                Tema
+                {t("tabTheme")}
               </TabsTrigger>
               <TabsTrigger value="layout" className="cursor-pointer data-[state=active]:bg-background">
                 <Layout className="mr-1 h-4 w-4" />
-                Layout
+                {t("tabLayout")}
               </TabsTrigger>
             </TabsList>
           </div>

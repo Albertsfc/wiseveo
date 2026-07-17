@@ -16,7 +16,9 @@ import {
   ArrowLeftRight,
 } from "lucide-react"
 
-// Default groups and categories matching prisma/data/default-chart-of-accounts.ts
+// Default groups and categories matching prisma/data/default-chart-of-accounts.ts.
+// These names are SEED DATA (editable defaults persisted to the DB, mirroring the
+// backend seed) — not UI copy — so they are exempt from i18n (i18n-ignore below).
 const defaultChartOfAccounts = [
   {
     id: "grp-income-100",
@@ -24,8 +26,8 @@ const defaultChartOfAccounts = [
     name: "RECEITAS E RENDIMENTOS",
     type: "INCOME" as const,
     categories: [
-      { id: "cat-salario", code: "100.001", name: "Salário" },
-      { id: "cat-freelance", code: "100.002", name: "Freelance / Serviços" },
+      { id: "cat-salario", code: "100.001", name: "Salário" }, // i18n-ignore
+      { id: "cat-freelance", code: "100.002", name: "Freelance / Serviços" }, // i18n-ignore
       { id: "cat-rendimentos", code: "100.003", name: "Rendimentos" },
     ],
   },
@@ -35,16 +37,16 @@ const defaultChartOfAccounts = [
     name: "MORADIA",
     type: "EXPENSE" as const,
     categories: [
-      { id: "cat-aluguel", code: "200.001", name: "Aluguel / Prestação" },
-      { id: "cat-condominio", code: "200.002", name: "Condomínio" },
-      { id: "cat-consumo", code: "200.003", name: "Contas de Consumo (Luz/Água/Gás)" },
+      { id: "cat-aluguel", code: "200.001", name: "Aluguel / Prestação" }, // i18n-ignore
+      { id: "cat-condominio", code: "200.002", name: "Condomínio" }, // i18n-ignore
+      { id: "cat-consumo", code: "200.003", name: "Contas de Consumo (Luz/Água/Gás)" }, // i18n-ignore
       { id: "cat-internet", code: "200.004", name: "Internet / TV" },
     ],
   },
   {
     id: "grp-food-300",
     code: 300,
-    name: "ALIMENTAÇÃO",
+    name: "ALIMENTAÇÃO", // i18n-ignore
     type: "EXPENSE" as const,
     categories: [
       { id: "cat-supermercado", code: "300.001", name: "Supermercado" },
@@ -57,18 +59,18 @@ const defaultChartOfAccounts = [
     name: "TRANSPORTE",
     type: "EXPENSE" as const,
     categories: [
-      { id: "cat-combustivel", code: "400.001", name: "Combustível" },
-      { id: "cat-transp-publico", code: "400.002", name: "Transporte Público / Uber" },
-      { id: "cat-manut-veiculo", code: "400.003", name: "Manutenção Veículo" },
+      { id: "cat-combustivel", code: "400.001", name: "Combustível" }, // i18n-ignore
+      { id: "cat-transp-publico", code: "400.002", name: "Transporte Público / Uber" }, // i18n-ignore
+      { id: "cat-manut-veiculo", code: "400.003", name: "Manutenção Veículo" }, // i18n-ignore
     ],
   },
   {
     id: "grp-health-500",
     code: 500,
-    name: "SAÚDE",
+    name: "SAÚDE", // i18n-ignore
     type: "EXPENSE" as const,
     categories: [
-      { id: "cat-saude-geral", code: "500.001", name: "Plano de Saúde / Farmácia" },
+      { id: "cat-saude-geral", code: "500.001", name: "Plano de Saúde / Farmácia" }, // i18n-ignore
     ],
   },
   {
@@ -84,7 +86,7 @@ const defaultChartOfAccounts = [
   {
     id: "grp-education-700",
     code: 700,
-    name: "EDUCAÇÃO",
+    name: "EDUCAÇÃO", // i18n-ignore
     type: "EXPENSE" as const,
     categories: [
       { id: "cat-cursos", code: "700.001", name: "Cursos / Faculdade / Livros" },
@@ -103,10 +105,10 @@ const defaultChartOfAccounts = [
   {
     id: "grp-transfer-900",
     code: 900,
-    name: "TRANSFERÊNCIAS",
+    name: "TRANSFERÊNCIAS", // i18n-ignore
     type: "TRANSFER" as const,
     categories: [
-      { id: "cat-transferencia", code: "900.001", name: "Transferência entre Contas" },
+      { id: "cat-transferencia", code: "900.001", name: "Transferência entre Contas" }, // i18n-ignore
     ],
   },
 ]
@@ -233,9 +235,7 @@ export function ChartOfAccountsStep({
         </div>
         <h2 className="text-2xl font-bold">{t("title")}</h2>
         <p className="text-muted-foreground mt-1 text-sm">
-          {isReadOnly 
-            ? "Seu banco já possui dados — o plano de contas existente será preservado. (Somente leitura)"
-            : "Personalize seus grupos, categorias e contas bancárias. Você pode editá-los depois nas Configurações."}
+          {isReadOnly ? t("subtitleReadOnly") : t("subtitleEditable")}
         </p>
       </div>
 
@@ -245,13 +245,13 @@ export function ChartOfAccountsStep({
             onClick={() => onUseExistingDataChange(true)}
             className={`flex-1 text-sm py-1.5 rounded-md transition-colors ${useExistingData ? 'bg-background shadow font-medium' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            Manter Existente
+            {t("keepExisting")}
           </button>
           <button
             onClick={() => onUseExistingDataChange(false)}
             className={`flex-1 text-sm py-1.5 rounded-md transition-colors ${!useExistingData ? 'bg-background shadow font-medium' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            Criar Novo (Padrão)
+            {t("createNew")}
           </button>
         </div>
       )}
@@ -261,7 +261,7 @@ export function ChartOfAccountsStep({
       <div className="space-y-2">
         <h3 className="text-sm font-semibold flex items-center gap-2">
           <Wallet className="w-4 h-4" />
-          Contas Bancárias
+          {t("bankAccounts")}
         </h3>
         <div className="space-y-1.5">
           {displayAccounts.map((account) => (
@@ -286,7 +286,7 @@ export function ChartOfAccountsStep({
             <Input
               value={newAccountName}
               onChange={(e) => setNewAccountName(e.target.value)}
-              placeholder="Nova conta..."
+              placeholder={t("newAccountPlaceholder")}
               className="text-sm h-8"
               onKeyDown={(e) => e.key === "Enter" && addAccount()}
             />
@@ -302,7 +302,7 @@ export function ChartOfAccountsStep({
       <div className="space-y-2">
         <h3 className="text-sm font-semibold flex items-center gap-2">
           <LayoutList className="w-4 h-4" />
-          Grupos e Categorias
+          {t("groupsAndCategories")}
         </h3>
         <div className="space-y-1 max-h-[320px] overflow-y-auto pr-1">
           {displayGroups.map((group) => {
@@ -373,7 +373,7 @@ export function ChartOfAccountsStep({
                           }))
                         }
                         onKeyDown={(e) => e.key === "Enter" && addCategory(group.id)}
-                        placeholder="Nova categoria..."
+                        placeholder={t("newCategoryPlaceholder")}
                         className="text-xs h-6 border-none bg-transparent p-0 shadow-none focus-visible:ring-0 placeholder:text-muted-foreground/40"
                       />
                       <button

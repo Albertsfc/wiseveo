@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { useSidebarConfig } from "@/contexts/sidebar-context"
@@ -12,6 +13,7 @@ import {
 import { useThemePreferences } from "@/contexts/theme-preferences-context"
 
 export function LayoutTab() {
+  const t = useTranslations("themeCustomizer")
   const { config: sidebarConfig, updateConfig: updateSidebarConfig } = useSidebarConfig()
   const { toggleSidebar, state: sidebarState } = useSidebar()
   const { savePreferences } = useThemePreferences()
@@ -39,12 +41,12 @@ export function LayoutTab() {
     <div className="space-y-6 p-4">
       <div className="space-y-3">
         <div>
-          <Label className="text-sm font-medium">Variação da sidebar</Label>
+          <Label className="text-sm font-medium">{t("sidebarVariantLabel")}</Label>
           {sidebarConfig.variant && (
             <p className="mt-1 text-xs text-muted-foreground">
-              {sidebarConfig.variant === "sidebar" && "Padrão: estrutura tradicional com sidebar fixa."}
-              {sidebarConfig.variant === "floating" && "Flutuante: sidebar destacada com borda e respiro visual."}
-              {sidebarConfig.variant === "inset" && "Inset: sidebar encaixada com cantos arredondados."}
+              {sidebarConfig.variant === "sidebar" && t("sidebarVariantDesc.sidebar")}
+              {sidebarConfig.variant === "floating" && t("sidebarVariantDesc.floating")}
+              {sidebarConfig.variant === "inset" && t("sidebarVariantDesc.inset")}
             </p>
           )}
         </div>
@@ -61,7 +63,9 @@ export function LayoutTab() {
               onClick={() => handleSidebarVariantSelect(variant.value)}
             >
               <div className="space-y-2">
-                <div className="text-center text-xs font-semibold">{variant.name}</div>
+                <div className="text-center text-xs font-semibold">
+                  {t(`sidebarVariant.${variant.name}` as never)}
+                </div>
                 <div className={`flex h-12 rounded border ${variant.value === "inset" ? "bg-muted" : "bg-background"}`}>
                   <div
                     className={`w-3 flex-shrink-0 bg-muted p-1 ${
@@ -87,12 +91,12 @@ export function LayoutTab() {
 
       <div className="space-y-3">
         <div>
-          <Label className="text-sm font-medium">Colapso da sidebar</Label>
+          <Label className="text-sm font-medium">{t("sidebarCollapseLabel")}</Label>
           {sidebarConfig.collapsible && (
             <p className="mt-1 text-xs text-muted-foreground">
-              {sidebarConfig.collapsible === "offcanvas" && "Off-canvas: a sidebar sai totalmente da tela."}
-              {sidebarConfig.collapsible === "icon" && "Ícones: a sidebar recolhe para o modo compacto."}
-              {sidebarConfig.collapsible === "none" && "Fixa: a sidebar permanece sempre visível."}
+              {sidebarConfig.collapsible === "offcanvas" && t("sidebarCollapseDesc.offcanvas")}
+              {sidebarConfig.collapsible === "icon" && t("sidebarCollapseDesc.icon")}
+              {sidebarConfig.collapsible === "none" && t("sidebarCollapseDesc.none")}
             </p>
           )}
         </div>
@@ -109,7 +113,9 @@ export function LayoutTab() {
               onClick={() => handleSidebarCollapsibleSelect(option.value)}
             >
               <div className="space-y-2">
-                <div className="text-center text-xs font-semibold">{option.name}</div>
+                <div className="text-center text-xs font-semibold">
+                  {t(`sidebarCollapsible.${option.name}` as never)}
+                </div>
                 <div className="flex h-12 rounded border bg-background">
                   {option.value === "offcanvas" ? (
                     <div className="m-1 flex flex-1 items-center justify-start rounded-sm border border-dashed border-muted-foreground/20 bg-background/50 pl-2">
@@ -150,11 +156,11 @@ export function LayoutTab() {
 
       <div className="space-y-3">
         <div>
-          <Label className="text-sm font-medium">Posição da sidebar</Label>
+          <Label className="text-sm font-medium">{t("sidebarPositionLabel")}</Label>
           {sidebarConfig.side && (
             <p className="mt-1 text-xs text-muted-foreground">
-              {sidebarConfig.side === "left" && "Esquerda: navegação principal à esquerda do conteúdo."}
-              {sidebarConfig.side === "right" && "Direita: navegação principal à direita do conteúdo."}
+              {sidebarConfig.side === "left" && t("sidebarPositionDesc.left")}
+              {sidebarConfig.side === "right" && t("sidebarPositionDesc.right")}
             </p>
           )}
         </div>
@@ -171,7 +177,9 @@ export function LayoutTab() {
               onClick={() => handleSidebarSideSelect(side.value)}
             >
               <div className="space-y-2">
-                <div className="text-center text-xs font-semibold">{side.name}</div>
+                <div className="text-center text-xs font-semibold">
+                  {t(`sidebarPosition.${side.name}` as never)}
+                </div>
                 <div className="flex h-12 rounded border bg-background">
                   {side.value === "left" ? (
                     <>

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Badge } from "@/components/ui/badge"
 import { Sparkles, Check } from "lucide-react"
 import { cn } from '@/lib/utils'
+import { useTranslations } from "next-intl"
 
 export interface PricingPlan {
   id: string
@@ -72,21 +73,23 @@ export function PricingPlans({
   currentPlanId,
   onPlanSelect 
 }: PricingPlansProps) {
+  const t = useTranslations("common.pricingPlans")
+
   const getButtonText = (plan: PricingPlan) => {
     if (mode === 'billing') {
       if (currentPlanId === plan.id) {
-        return 'Current Plan'
+        return t('currentPlan')
       }
       const currentIndex = plans.findIndex(p => p.id === currentPlanId)
       const planIndex = plans.findIndex(p => p.id === plan.id)
-      
+
       if (planIndex > currentIndex) {
-        return 'Upgrade Plan'
+        return t('upgradePlan')
       } else if (planIndex < currentIndex) {
-        return 'Downgrade Plan'
+        return t('downgradePlan')
       }
     }
-    return 'Get Started'
+    return t('getStarted')
   }
 
   const getButtonVariant = (plan: PricingPlan) => {
@@ -116,10 +119,10 @@ export function PricingPlans({
               <Badge className='mx-auto flex w-fit gap-1.5 rounded-full font-medium'>
                 <Sparkles className='!size-4' />
                 {mode === 'pricing' && (
-                <span>Most Popular</span>
+                <span>{t('mostPopular')}</span>
                 )}
                 {currentPlanId === tier.id && mode === 'billing' && (
-                  <span>Current Plan</span>
+                  <span>{t('currentPlan')}</span>
                 )}
               </Badge>
             </div>

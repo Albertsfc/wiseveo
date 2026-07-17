@@ -31,7 +31,8 @@ import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
 import { useDeviceClass } from "@/hooks/use-device-class"
 import { normalizeDate } from "@/lib/financial"
 import { cn } from "@/lib/utils"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { createDateFormatter } from "@/i18n/format"
 
 interface CashflowPoint {
   date: string
@@ -39,21 +40,6 @@ interface CashflowPoint {
   expense: number
   balance: number
 }
-
-const chartConfig = {
-  income: {
-    label: "Entradas",
-    color: "var(--chart-2)",
-  },
-  expense: {
-    label: "Saídas",
-    color: "var(--destructive)",
-  },
-  balance: {
-    label: "Saldo",
-    color: "var(--primary)",
-  },
-} satisfies ChartConfig
 
 const tooltipSeriesMap = {
   income: {
@@ -70,22 +56,22 @@ const tooltipSeriesMap = {
   },
 } as const
 
-function formatDateLabel(dateIso: string) {
+function formatDateLabel(dateIso: string, locale: string) {
   const date = normalizeDate(dateIso)
-  return date.toLocaleDateString("pt-BR", {
+  return createDateFormatter(locale, {
     day: "2-digit",
     month: "2-digit",
     timeZone: "UTC",
-  })
+  }).format(date)
 }
 
-function formatTooltipTitle(value: unknown) {
+function formatTooltipTitle(value: unknown, locale: string) {
   if (typeof value !== "string") return "—"
 
   const normalized = normalizeDate(value.trim())
   if (Number.isNaN(normalized.getTime())) return "—"
 
-  return normalized.toLocaleDateString("pt-BR", { timeZone: "UTC" })
+  return createDateFormatter(locale, { timeZone: "UTC" }).format(normalized)
 }
 
 interface TrialTooltipPayloadItem {
@@ -126,6 +112,7 @@ function renderNegativeBalanceDot({ cx, cy, payload }: BalanceDotProps) {
 function TrialTooltipContent({ active, label, payload }: TrialTooltipContentProps) {
   const monetary = useMonetaryFormattingSafe()
   const t = useTranslations("dashboard.SectionCards")
+  const locale = useLocale()
 
   if (!active || !payload?.length) return null
 
@@ -151,7 +138,7 @@ function TrialTooltipContent({ active, label, payload }: TrialTooltipContentProp
 
   return (
     <div className="border-border/50 bg-background/75 text-card-foreground grid min-w-[220px] items-start gap-1.5 rounded-xl border px-3 py-2 text-xs shadow-xl backdrop-blur-md">
-      <p className="text-foreground font-medium">{formatTooltipTitle(label)}</p>
+      <p className="text-foreground font-medium">{formatTooltipTitle(label, locale)}</p>
       <div className="mt-1.5 grid gap-1.5">
         {rows.map((row) => {
           const series = tooltipSeriesMap[row.key]
@@ -294,6 +281,7 @@ export function ChartAreaInteractive() {
   
   const t = useTranslations("dashboard.ChartArea")
   const tSectionCards = useTranslations("dashboard.SectionCards")
+  const locale = useLocale()
 
   const dynamicChartConfig = {
     income: {
@@ -462,7 +450,7 @@ export function ChartAreaInteractive() {
                       ? new Date(`${value}T00:00:00Z`)
                         .getUTCDate()
                         .toString()
-                      : formatDateLabel(value)
+                      : formatDateLabel(value, locale)
                   }
                 />
                 <YAxis
@@ -544,7 +532,7 @@ export function ChartAreaInteractive() {
                       ? new Date(`${value}T00:00:00Z`)
                         .getUTCDate()
                         .toString()
-                      : formatDateLabel(value)
+                      : formatDateLabel(value, locale)
                   }
                 />
                 <YAxis

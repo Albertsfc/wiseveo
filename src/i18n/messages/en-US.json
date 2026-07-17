@@ -1,4 +1,202 @@
 {
+  "common": {
+    "actions": "Actions",
+    "add": "Add",
+    "back": "Back",
+    "cancel": "Cancel",
+    "close": "Close",
+    "commandSearchTitle": "Command Search",
+    "confirm": "Confirm",
+    "datePicker": {
+      "dayCountBadge": "{count}d",
+      "fullMonth": "Full month",
+      "last3Months": "Last 3 months",
+      "lastMonth": "Last month",
+      "lastWeek": "Last week",
+      "next3Months": "Next 3 months",
+      "nextMonth": "Next month",
+      "openPicker": "Open date picker",
+      "prevMonth": "Previous month",
+      "selectDate": "Select date",
+      "shortcuts": "Shortcuts",
+      "shortcutsAria": "Period shortcuts",
+      "thisMonth": "This month",
+      "thisWeek": "This week",
+      "today": "Today"
+    },
+    "delete": "Delete",
+    "edit": "Edit",
+    "error": "Error",
+    "loading": "Loading...",
+    "loginDemo": {
+      "createAccount": "Create an account",
+      "email": "Email*",
+      "forgotPassword": "Forgot password?",
+      "loginToAccount": "Login to your account now",
+      "noAccount": "Don't have an account?",
+      "orSignInWith": "or sign in with",
+      "password": "Password*",
+      "rememberDevice": "Remember this device",
+      "signIn": "Sign in",
+      "signInWithGithub": "Sign in with Github",
+      "signInWithGoogle": "Sign in with Google",
+      "welcomeTo": "Welcome to Shadcn Space"
+    },
+    "mobileMoreSheet": {
+      "descriptions": {
+        "analysis": "P&L and period reports",
+        "banks": "Accounts and balances",
+        "forecasting": "Financial projections",
+        "insights": "KPIs and financial analytics",
+        "recurring": "Subscriptions and fixed bills",
+        "settings": "System preferences"
+      },
+      "secondaryNav": "Secondary navigation",
+      "title": "More options"
+    },
+    "modeToggle": {
+      "switchToDark": "Switch to dark mode",
+      "switchToLight": "Switch to light mode"
+    },
+    "more": "More",
+    "no": "No",
+    "noResults": "No results found.",
+    "openActions": "Open actions",
+    "openAppearanceCustomizer": "Open appearance customizer",
+    "pricingPlans": {
+      "currentPlan": "Current Plan",
+      "downgradePlan": "Downgrade Plan",
+      "getStarted": "Get Started",
+      "mostPopular": "Most Popular",
+      "upgradePlan": "Upgrade Plan"
+    },
+    "save": "Save",
+    "search": "Search...",
+    "searchPlaceholder": "What do you need?",
+    "selectPeriod": "Select period",
+    "sidebarNotification": {
+      "blocks": "premium Shadcn UI blocks",
+      "brandName": "ShadcnStore",
+      "closeNotification": "Close notification",
+      "exploreBlocks": "Explore our",
+      "toBuildFaster": "to build your next project faster.",
+      "welcomeTo": "Welcome to"
+    },
+    "sidebarPrimitive": {
+      "description": "Displays the mobile sidebar.",
+      "title": "Sidebar",
+      "toggle": "Toggle Sidebar"
+    },
+    "sidebarRadar": {
+      "currentBalance": "Current Balance",
+      "projected": "Projected:",
+      "tooltipCollapsed": "Today: {today} | Projected: {projected}",
+      "tooltipExpanded": "Projected for month end: {projected}"
+    },
+    "siteFooter": {
+      "brandName": "WISEVEO",
+      "by": "by",
+      "madeWith": "Made with",
+      "tagline": "Building beautiful, accessible blocks, templates and dashboards for modern web applications."
+    },
+    "success": "Success",
+    "upgradeToPro": {
+      "comingSoon": "Coming soon",
+      "description": "Get access to exclusive premium blocks and dashboards for your next project. Elevate your UI instantly!",
+      "live": "Live",
+      "proBlocks": "Pro Blocks",
+      "proDashboards": "Pro Dashboards",
+      "unlockPremiumBlocks": "Unlock Premium Blocks",
+      "upgradeToPro": "Upgrade to Pro"
+    },
+    "yes": "Yes"
+  },
+  "dashboard": {
+    "balance": "Total Balance",
+    "cashflow": "Cash Flow",
+    "ChartArea": {
+      "currentBalance": "Current balance in period:",
+      "description": "Track income, expenses and balance evolution in the selected interval",
+      "fetchError": "Failed to load chart data",
+      "loadError": "Could not load the chart.",
+      "title": "Period Cash Flow"
+    },
+    "dailyMovement": "Daily Movement",
+    "DailyMovement": {
+      "accumulated": "ACCUMULATED",
+      "balance": "BALANCE",
+      "date": "DATE",
+      "description": "Check income, expenses, daily and accumulated balance in the selected interval",
+      "expense": "EXPENSES",
+      "income": "INCOME",
+      "loadError": "Failed to load data",
+      "loading": "Loading...",
+      "mobileAccum": "ACCUM.",
+      "mobileMinus": "-",
+      "mobilePlus": "+",
+      "noMovement": "No movement in period",
+      "title": "Daily Movement"
+    },
+    "expenses": "Expenses",
+    "expensesByGroup": "Expenses by Group",
+    "ExpensesChart": {
+      "description": "Expense distribution in the selected period",
+      "loading": "Loading...",
+      "noExpenses": "No expenses in period",
+      "paid": "Paid:",
+      "title": "Expenses by Group",
+      "toPay": "To Pay:",
+      "total": "Total:",
+      "totalExpenses": "Total expenses:"
+    },
+    "income": "Income",
+    "latestTransactions": "Latest Transactions",
+    "LatestTransactions": {
+      "description": "Track recent payments",
+      "loadError": "Failed to load data",
+      "loading": "Loading...",
+      "noTransactions": "No payments in period",
+      "title": "Latest Payments"
+    },
+    "savings": "Savings",
+    "SectionCards": {
+      "balance": "Balance",
+      "balanceFooter": "Consolidated balance",
+      "expense": "Expenses",
+      "expenseFooter": "Monthly expenses",
+      "income": "Income",
+      "incomeFooter": "Monthly income",
+      "savings": "Savings",
+      "savingsFooter": "Monthly savings",
+      "vsPreviousMonth": "vs previous month"
+    },
+    "subtitle": "Overview of your financial health",
+    "title": "Dashboard",
+    "upcomingTransactions": "Upcoming Due Dates",
+    "UpcomingTransactions": {
+      "description": "Track upcoming income and expenses",
+      "loadError": "Failed to load data",
+      "loading": "Loading...",
+      "noTransactions": "No due dates in period",
+      "title": "Upcoming Due Dates"
+    }
+  },
+  "login": {
+    "confirmPassword": "Confirm password",
+    "createAccount": "Create account",
+    "creatingAccount": "Creating account...",
+    "email": "Email",
+    "forgotPassword": "Forgot password?",
+    "fullName": "Full name",
+    "google": "Continue with Google",
+    "googleSyncNote": "By connecting with Google, you will be able to sync your calendar (soon)",
+    "loggingIn": "Logging in...",
+    "login": "Login",
+    "orContinue": "Or continue with",
+    "password": "Password",
+    "signup": "Create Account",
+    "title": "Access your account"
+  },
   "Routes": {
     "analysis": {
       "description": "Performance reports and metrics",
@@ -85,112 +283,6 @@
       "title": "Users"
     }
   },
-  "common": {
-    "actions": "Actions",
-    "add": "Add",
-    "back": "Back",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "delete": "Delete",
-    "edit": "Edit",
-    "error": "Error",
-    "loading": "Loading...",
-    "no": "No",
-    "noResults": "No results found.",
-    "openAppearanceCustomizer": "Open appearance customizer",
-    "save": "Save",
-    "search": "Search...",
-    "searchPlaceholder": "What do you need?",
-    "selectPeriod": "Select period",
-    "success": "Success",
-    "yes": "Yes"
-  },
-  "dashboard": {
-    "ChartArea": {
-      "currentBalance": "Current balance in period:",
-      "description": "Track income, expenses and balance evolution in the selected interval",
-      "fetchError": "Failed to load chart data",
-      "loadError": "Could not load the chart.",
-      "title": "Period Cash Flow"
-    },
-    "DailyMovement": {
-      "accumulated": "ACCUMULATED",
-      "balance": "BALANCE",
-      "date": "DATE",
-      "description": "Check income, expenses, daily and accumulated balance in the selected interval",
-      "expense": "EXPENSES",
-      "income": "INCOME",
-      "loadError": "Failed to load data",
-      "loading": "Loading...",
-      "mobileAccum": "ACCUM.",
-      "mobileMinus": "-",
-      "mobilePlus": "+",
-      "noMovement": "No movement in period",
-      "title": "Daily Movement"
-    },
-    "ExpensesChart": {
-      "description": "Expense distribution in the selected period",
-      "loading": "Loading...",
-      "noExpenses": "No expenses in period",
-      "paid": "Paid:",
-      "title": "Expenses by Group",
-      "toPay": "To Pay:",
-      "total": "Total:",
-      "totalExpenses": "Total expenses:"
-    },
-    "LatestTransactions": {
-      "description": "Track recent payments",
-      "loadError": "Failed to load data",
-      "loading": "Loading...",
-      "noTransactions": "No payments in period",
-      "title": "Latest Payments"
-    },
-    "SectionCards": {
-      "balance": "Balance",
-      "balanceFooter": "Consolidated balance",
-      "expense": "Expenses",
-      "expenseFooter": "Monthly expenses",
-      "income": "Income",
-      "incomeFooter": "Monthly income",
-      "savings": "Savings",
-      "savingsFooter": "Monthly savings",
-      "vsPreviousMonth": "vs previous month"
-    },
-    "UpcomingTransactions": {
-      "description": "Track upcoming income and expenses",
-      "loadError": "Failed to load data",
-      "loading": "Loading...",
-      "noTransactions": "No due dates in period",
-      "title": "Upcoming Due Dates"
-    },
-    "balance": "Total Balance",
-    "cashflow": "Cash Flow",
-    "dailyMovement": "Daily Movement",
-    "expenses": "Expenses",
-    "expensesByGroup": "Expenses by Group",
-    "income": "Income",
-    "latestTransactions": "Latest Transactions",
-    "savings": "Savings",
-    "subtitle": "Overview of your financial health",
-    "title": "Dashboard",
-    "upcomingTransactions": "Upcoming Due Dates"
-  },
-  "login": {
-    "confirmPassword": "Confirm password",
-    "createAccount": "Create account",
-    "creatingAccount": "Creating account...",
-    "email": "Email",
-    "forgotPassword": "Forgot password?",
-    "fullName": "Full name",
-    "google": "Continue with Google",
-    "googleSyncNote": "By connecting with Google, you will be able to sync your calendar (soon)",
-    "loggingIn": "Logging in...",
-    "login": "Login",
-    "orContinue": "Or continue with",
-    "password": "Password",
-    "signup": "Create Account",
-    "title": "Access your account"
-  },
   "settings": {
     "account": {
       "accessDataDesc": "Update your basic access and display credentials.",
@@ -212,6 +304,10 @@
       "emailPl": "Enter your email",
       "emailReq": "Invalid email address",
       "error": "Error updating account.",
+      "errors": {
+        "currentPasswordIncorrect": "The current password is incorrect.",
+        "noLocalPassword": "User does not have a locally defined password."
+      },
       "firstName": "First Name",
       "firstNamePl": "Enter your first name",
       "firstNameReq": "First name is required",
@@ -231,15 +327,20 @@
     "adminUsers": {
       "active": "Active",
       "approve": "Approve",
+      "approved": "Approved",
       "approveError": "Could not approve the user.",
       "approveSuccess": "User approved successfully.",
-      "approved": "Approved",
       "approving": "Approving...",
       "colAction": "Action",
       "colDate": "Registered",
       "colRole": "Role",
       "colStatus": "Status",
       "colUser": "User",
+      "errors": {
+        "adminOnly": "Access restricted to administrators",
+        "notAuthenticated": "Not authenticated",
+        "userNotFound": "User not found"
+      },
       "noUsers": "No users found.",
       "pending": "Pending",
       "pendingCount": "Pending registrations: {count}",
@@ -266,6 +367,11 @@
       "defaultStatusReq": "Select the default status.",
       "description": "Set global preferences used by shared system flows.",
       "error": "Could not save general settings.",
+      "errors": {
+        "quickPaymentAccountUnavailable": "The bank selected for Quick Payment is not available.",
+        "quickPaymentSelectionRequired": "Select a bank and a status for Quick Payment.",
+        "quickPaymentStatusUnavailable": "The status selected for Quick Payment is not available."
+      },
       "invalidConfig": "The saved configuration no longer matches an available bank or status. Select new values and save again.",
       "save": "Save",
       "saving": "Saving...",
@@ -289,9 +395,9 @@
       "globalPrefs": "Global Preferences",
       "globalPrefsDesc": "These options affect cards, tables, charts, and financial summaries.",
       "minus": "With a minus sign",
-      "negValue": "Negative value",
       "negativeFormat": "Negative Values",
       "negativeFormatDesc": "Choose how outflows, losses, and other negative values will be shown.",
+      "negValue": "Negative value",
       "number": "Number only",
       "parentheses": "In parentheses",
       "posValue": "Positive value",
@@ -344,6 +450,10 @@
       "timezone": "Timezone",
       "timezonePl": "Select timezone",
       "title": "Profile Settings",
+      "tzBrt": "BRT (Brasília Time)",
+      "tzEst": "EST (Eastern Standard Time)",
+      "tzPst": "PST (Pacific Standard Time)",
+      "tzUtc": "UTC (Coordinated Universal Time)",
       "uploadPhoto": "Upload new photo",
       "website": "Website",
       "websitePl": "https://your-site.com"
@@ -380,19 +490,27 @@
     },
     "chartOfAccounts": {
       "asset": "Asset",
+      "bankAccounts": "Bank Accounts",
+      "createNew": "Create New (Default)",
       "currentAssets": "Current Assets (Accounts, Cash)",
       "customizationNote": "You can edit, add, and remove accounts, groups, and categories later in system settings.",
       "existingDataNotice": "Your database already has data. We will not inject the default chart of accounts to avoid duplication.",
       "expense": "Expense",
       "expenseCategories": "Housing, Food, Leisure, Transport",
       "fixedAssets": "Non-Current Assets (Real Estate, Vehicles)",
+      "groupsAndCategories": "Groups and Categories",
+      "keepExisting": "Keep Existing",
       "liability": "Liability",
       "longTerm": "Non-Current Liabilities (Loans, Mortgages)",
+      "newAccountPlaceholder": "New account...",
+      "newCategoryPlaceholder": "New category...",
       "preview": "Chart of Accounts Preview",
       "revenue": "Revenue",
       "revenueCategories": "Salary, Sales, Yields",
       "shortTerm": "Current Liabilities (Credit Cards, Bills)",
       "subtitle": "The financial heart of the system. This is the default plan to be created.",
+      "subtitleEditable": "Customize your groups, categories and bank accounts. You can edit them later in Settings.",
+      "subtitleReadOnly": "Your database already has data — the existing chart of accounts will be preserved. (Read-only)",
       "title": "Chart of Accounts"
     },
     "common": {
@@ -404,6 +522,7 @@
       "cantConnect": "Could not connect to the database.",
       "categories": "Categories",
       "connectionFailed": "Connection failed",
+      "connectionPlaceholder": "postgresql://user:password@host:5432/database",
       "connectionString": "Connection String (DATABASE_URL)",
       "dockerSubtitle": "New database via Docker Compose",
       "dockerTitle": "Local Docker",
@@ -414,36 +533,52 @@
       "groups": "Groups",
       "helpNeon": "In your Dashboard, go to Dashboard > Connection Details. Select Postgres and check the box to show the password. Copy the provided URL.",
       "helpSupabase": "Go to Project Settings > Database. Scroll down to Connection string. Select the URI tab. Copy the link (usually uses port 6543 for Transaction Pooler) and replace [YOUR-PASSWORD] with your password.",
+      "helpSupabaseStep2": "Scroll down to the <strong>Connection string</strong> section",
+      "helpSupabaseStep3": "Select the <strong>URI</strong> tab",
+      "helpSupabaseStep4": "Copy the link (it usually uses port <code>6543</code> for the Transaction Pooler) and replace <code>[YOUR-PASSWORD]</code> with your password.",
       "helpTitle": "How to get my connection URL?",
+      "neonLabel": "🟢 Neon.tech:",
       "networkError": "Network error. Check if the server is running.",
       "preserveDataMsg": "The database will be connected preserving existing data.",
       "subtitle": "Connect to an existing PostgreSQL database or use local Docker.",
       "success": "Connection established successfully!",
+      "supabaseLabel": "🟢 Supabase:",
       "testConnection": "Test Connection",
       "testing": "Testing connection...",
       "title": "Database",
       "transactions": "Transactions"
     },
     "integrations": {
+      "configureCredentials": "Configure credentials",
       "google": {
         "clientId": "Client ID",
         "clientSecret": "Client Secret",
         "desc": "Allows login with Google and syncing financial events to calendar.",
+        "shortDesc": "Google login and calendar sync",
         "title": "Google Calendar & OAuth"
       },
+      "heading": "Integrations",
+      "hideFields": "Hide fields",
+      "intro": "Configure optional integrations. You can skip and set them up later.",
       "openai": {
         "apiKey": "API Key",
         "desc": "Required for automatic categorization and smart replies on Telegram.",
+        "shortDesc": "Natural language understanding on Telegram",
         "title": "OpenAI (AI Assistant)"
       },
       "optional": "Optional",
       "subtitle": "Enable extra modules to expand the system's features.",
       "telegram": {
         "botToken": "Bot Token (BotFather)",
+        "botTokenLabel": "Bot Token",
         "botUsername": "Bot Username (@your_bot)",
+        "botUsernameLabel": "Bot Username",
         "desc": "Get notifications, budget alerts, and log transactions via chat.",
+        "shortDesc": "Record transactions via text or voice message",
         "title": "Telegram Bot",
-        "webhookSecret": "Webhook Secret (Your choice)"
+        "webhookSecret": "Webhook Secret (Your choice)",
+        "webhookSecretLabel": "Webhook Secret",
+        "webhookSecretPlaceholder": "Random key to validate webhooks"
       },
       "title": "Optional Integrations"
     },
@@ -457,20 +592,32 @@
     },
     "summary": {
       "adminAccount": "Admin Account",
+      "chartNew": "New chart of accounts initialized",
+      "chartPreserved": "Preserved from the existing database",
       "configuring": "Configuring...",
       "dbConnection": "Database Connection",
+      "dbExisting": "Connected with existing data",
+      "dbNew": "New database (Docker / Clean)",
+      "finish": "Finish Setup 🎉",
+      "finishNote": "When you finish, the system will apply the database migrations, save your settings and restart the server automatically.",
       "freshInstall": "Clean Install (Default seed)",
       "google": "Google",
       "initialize": "Initialize System",
+      "integrationCount": "{count, plural, one {# configured} other {# configured}}",
       "integrations": "Active Integrations",
       "keepExisting": "Keep Existing Data",
       "none": "None",
       "openai": "OpenAI",
+      "sectionAdmin": "Administrator",
+      "sectionChart": "Chart of Accounts",
+      "sectionDatabase": "Database",
+      "sectionIntegrations": "Integrations",
       "subtitle": "Review your settings before initializing the system.",
       "telegram": "Telegram",
       "title": "All Set!"
     },
     "welcome": {
+      "brand": "WISEVEO",
       "chooseLanguage": "Choose your language",
       "info": "This wizard will guide you through the initial configuration in a few minutes. You will configure the database, create your account, and customize your chart of accounts.",
       "start": "Start Configuration →",
@@ -535,5 +682,77 @@
     "underMaintenance": "Under Maintenance",
     "users": "Users",
     "usersettings": "User Settings"
+  },
+  "themeCustomizer": {
+    "advancedCustomization": "Advanced customization",
+    "advancedCustomizationDesc": "For advanced editing with visual preview and hundreds of ready-made presets, open the Tweakcn editor.",
+    "appearanceSource": "Global appearance source",
+    "brandColor": {
+      "accent": "Accent",
+      "accentForeground": "Accent Foreground",
+      "muted": "Muted",
+      "mutedForeground": "Muted Foreground",
+      "primary": "Primary",
+      "primaryForeground": "Primary Foreground",
+      "secondary": "Secondary",
+      "secondaryForeground": "Secondary Foreground"
+    },
+    "brandColors": "Brand colors",
+    "chooseShadcnPreset": "Choose a Shadcn preset",
+    "chooseTweakcnPreset": "Choose a Tweakcn preset",
+    "customizer": "Customizer",
+    "dark": "Dark",
+    "importModal": {
+      "description": "Paste your theme's CSS below. Include the <code>:root</code> (light mode) and <code>.dark</code> (dark mode) sections with variables like <code>--primary</code>, <code>--background</code> and others. The system will automatically switch between light and dark.",
+      "importErrorLog": "Error importing theme:",
+      "importTheme": "Import Theme",
+      "noCssContent": "No CSS content was provided",
+      "title": "Import Custom CSS"
+    },
+    "importTheme": "Import theme",
+    "light": "Light",
+    "mode": "Mode",
+    "openTweakcn": "Open Tweakcn",
+    "panelDescription": "Centralize here the global preferences that affect the entire project.",
+    "radius": "Radius",
+    "random": "Random",
+    "restoreDefault": "Restore default",
+    "shadcnPresets": "Shadcn UI Presets",
+    "sheetDescription": "Customize the project's theme and layout.",
+    "sidebarCollapseDesc": {
+      "icon": "Icons: the sidebar collapses to compact mode.",
+      "none": "Fixed: the sidebar always stays visible.",
+      "offcanvas": "Off-canvas: the sidebar slides fully off the screen."
+    },
+    "sidebarCollapseLabel": "Sidebar collapse",
+    "sidebarCollapsible": {
+      "icon": "Icons",
+      "none": "Fixed",
+      "offcanvas": "Off Canvas"
+    },
+    "sidebarPosition": {
+      "left": "Left",
+      "right": "Right"
+    },
+    "sidebarPositionDesc": {
+      "left": "Left: main navigation to the left of the content.",
+      "right": "Right: main navigation to the right of the content."
+    },
+    "sidebarPositionLabel": "Sidebar position",
+    "sidebarVariant": {
+      "floating": "Floating",
+      "inset": "Inset",
+      "sidebar": "Default"
+    },
+    "sidebarVariantDesc": {
+      "floating": "Floating: sidebar detached with a border and visual breathing room.",
+      "inset": "Inset: sidebar embedded with rounded corners.",
+      "sidebar": "Default: traditional structure with a fixed sidebar."
+    },
+    "sidebarVariantLabel": "Sidebar variant",
+    "system": "System",
+    "tabLayout": "Layout",
+    "tabTheme": "Theme",
+    "tweakcnPresets": "Tweakcn Presets"
   }
 }

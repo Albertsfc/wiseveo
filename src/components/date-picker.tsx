@@ -18,7 +18,8 @@ import {
   startOfDay,
   differenceInDays,
 } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale, formatAppDate } from '@/i18n/format';
 import { useDeviceClass } from '@/hooks/use-device-class';
 import {
   Sheet,
@@ -34,29 +35,31 @@ interface DatePickerProps {
   highlightDate?: Date;
 }
 
-const PRESET_GROUPS = [
-  {
-    items: [
-      { key: 'last3Months', label: 'Últimos 3 meses' },
-      { key: 'lastMonth', label: 'Último mês' },
-    ],
-  },
-  {
-    items: [
-      { key: 'lastWeek', label: 'Última semana' },
-      { key: 'today', label: 'Hoje', highlight: true },
-      { key: 'thisWeek', label: 'Esta semana' },
-      { key: 'thisMonth', label: 'Este mês' },
-      { key: 'fullMonth', label: 'Mês completo' },
-    ],
-  },
-  {
-    items: [
-      { key: 'nextMonth', label: 'Próximo mês' },
-      { key: 'next3Months', label: 'Próximos 3 meses' },
-    ],
-  },
-];
+function getPresetGroups(t: ReturnType<typeof useTranslations<'common.datePicker'>>) {
+  return [
+    {
+      items: [
+        { key: 'last3Months', label: t('last3Months') },
+        { key: 'lastMonth', label: t('lastMonth') },
+      ],
+    },
+    {
+      items: [
+        { key: 'lastWeek', label: t('lastWeek') },
+        { key: 'today', label: t('today'), highlight: true },
+        { key: 'thisWeek', label: t('thisWeek') },
+        { key: 'thisMonth', label: t('thisMonth') },
+        { key: 'fullMonth', label: t('fullMonth') },
+      ],
+    },
+    {
+      items: [
+        { key: 'nextMonth', label: t('nextMonth') },
+        { key: 'next3Months', label: t('next3Months') },
+      ],
+    },
+  ];
+}
 
 const SINGLE_DROPDOWN_HEIGHT = 340;
 
@@ -67,6 +70,14 @@ export default function DatePicker({
   highlightDate,
 }: DatePickerProps) {
   const { isMobile } = useDeviceClass();
+  const t = useTranslations('common.datePicker');
+  const tCommon = useTranslations('common');
+  const locale = useLocale();
+  const dateFnsLocale = getDateFnsLocale(locale);
+  const PRESET_GROUPS = getPresetGroups(t);
+  const weekDays = Array.from({ length: 7 }, (_, i) =>
+    dateFnsLocale.localize?.day((i as 0 | 1 | 2 | 3 | 4 | 5 | 6), { width: 'narrow' }) ?? ''
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [activePreset, setActivePreset] = useState<string | null>(null);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -241,7 +252,6 @@ export default function DatePicker({
     const monthEnd = endOfMonth(monthStart);
     const startDate = startOfWeek(monthStart, { weekStartsOn: 0 });
     const endDate = endOfWeek(monthEnd, { weekStartsOn: 0 });
-    const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 
     const rows: React.ReactElement[] = [];
     let days: React.ReactElement[] = [];
@@ -316,7 +326,7 @@ export default function DatePicker({
     return (
       <div className="flex flex-col gap-2">
         <div className="text-center text-sm font-medium capitalize text-foreground">
-          {format(month, 'MMMM yyyy', { locale: ptBR })}
+          {formatAppDate(month, 'MMMM yyyy', locale)}
         </div>
         <div className="grid grid-cols-7 gap-0.5">
           {weekDays.map((d, i) => (
@@ -337,13 +347,13 @@ export default function DatePicker({
     if (mode === 'single') {
       return value instanceof Date
         ? format(value, 'dd/MM/yyyy')
-        : 'Selecionar data';
+        : t('selectDate');
     }
     if (value && 'from' in value) {
       const v = value as { from: Date; to: Date };
       return `${format(v.from, 'dd/MM/yyyy')} – ${format(v.to, 'dd/MM/yyyy')}`;
     }
-    return 'Selecionar período';
+    return tCommon('selectPeriod');
   };
 
   const dayCount = (() => {
@@ -365,7 +375,7 @@ export default function DatePicker({
       {mode === 'range' && (
         <nav
           className="flex w-[160px] flex-col gap-1 border-r border-border p-3"
-          aria-label="Atalhos de período"
+          aria-label={t('shortcutsAria')}
         >
           {PRESET_GROUPS.map((group, gi) => (
             <div key={gi} className="flex flex-col gap-0.5">
@@ -400,7 +410,7 @@ export default function DatePicker({
             type="button"
             className="absolute left-3 top-3 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             onClick={handlePrevMonth}
-            title="Mês anterior"
+            title={t('prevMonth')}
           >
             <ChevronLeft size={16} />
           </button>
@@ -414,7 +424,7 @@ export default function DatePicker({
             type="button"
             className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
             onClick={handleNextMonth}
-            title="Próximo mês"
+            title={t('nextMonth')}
           >
             <ChevronRight size={16} />
           </button>
@@ -430,7 +440,7 @@ export default function DatePicker({
               setIsOpen(false);
             }}
           >
-            Cancelar
+            {tCommon('cancel')}
           </button>
           {mode === 'single' && (
             <button
@@ -445,7 +455,7 @@ export default function DatePicker({
                 }
               }}
             >
-              Confirmar
+              {tCommon('confirm')}
             </button>
           )}
         </div>
@@ -463,13 +473,13 @@ export default function DatePicker({
           type="button"
           className="flex h-8 items-center gap-1.5 rounded-md border border-border bg-background px-3 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
           onClick={() => setIsOpen(true)}
-          aria-label="Abrir seletor de datas"
+          aria-label={t('openPicker')}
         >
           <CalendarIcon size={14} className="text-muted-foreground" />
           <span>{displayValue()}</span>
           {dayCount !== null && dayCount > 1 && (
             <span className="ml-1 flex h-5 items-center rounded-full bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
-              {dayCount}d
+              {t('dayCountBadge', { count: dayCount })}
             </span>
           )}
         </button>
@@ -478,7 +488,7 @@ export default function DatePicker({
           <SheetContent side="bottom" className="h-auto max-h-[90dvh] flex flex-col gap-0 pb-safe px-0">
             <SheetHeader className="px-4 pt-4 pb-3 border-b">
               <SheetTitle className="text-sm font-semibold">
-                {mode === 'single' ? 'Selecionar data' : 'Selecionar período'}
+                {mode === 'single' ? t('selectDate') : tCommon('selectPeriod')}
               </SheetTitle>
             </SheetHeader>
 
@@ -486,7 +496,7 @@ export default function DatePicker({
               {/* Presets em lista (mobile) */}
               {mode === 'range' && (
                 <div className="px-4 py-3 border-b">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">Atalhos</p>
+                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold mb-2">{t('shortcuts')}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {PRESET_GROUPS.flatMap(g => g.items).map(({ key, label }) => (
                       <button
@@ -514,18 +524,18 @@ export default function DatePicker({
                     type="button"
                     className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent"
                     onClick={handlePrevMonth}
-                    title="Mês anterior"
+                    title={t('prevMonth')}
                   >
                     <ChevronLeft size={16} />
                   </button>
                   <span className="text-sm font-medium capitalize">
-                    {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
+                    {formatAppDate(currentMonth, 'MMMM yyyy', locale)}
                   </span>
                   <button
                     type="button"
                     className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent"
                     onClick={handleNextMonth}
-                    title="Próximo mês"
+                    title={t('nextMonth')}
                   >
                     <ChevronRight size={16} />
                   </button>
@@ -536,7 +546,6 @@ export default function DatePicker({
                   const monthEnd = endOfMonth(monthStart);
                   const startDate = startOfWeek(monthStart, { weekStartsOn: 0 });
                   const endDate = endOfWeek(monthEnd, { weekStartsOn: 0 });
-                  const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
                   const rows: React.ReactElement[] = [];
                   let days: React.ReactElement[] = [];
                   let day = startDate;
@@ -620,7 +629,7 @@ export default function DatePicker({
                   setIsOpen(false);
                 }}
               >
-                Cancelar
+                {tCommon('cancel')}
               </button>
               {mode === 'single' && (
                 <button
@@ -635,7 +644,7 @@ export default function DatePicker({
                     }
                   }}
                 >
-                  Confirmar
+                  {tCommon('confirm')}
                 </button>
               )}
             </div>
@@ -654,7 +663,7 @@ export default function DatePicker({
         type="button"
         className="flex h-8 items-center gap-1.5 rounded-md border border-border bg-background px-3 text-sm text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         onClick={handleOpen}
-        aria-label="Abrir seletor de datas"
+        aria-label={t('openPicker')}
       >
         <CalendarIcon size={14} className="text-muted-foreground" />
         <span className="hidden sm:inline">{displayValue()}</span>
@@ -663,7 +672,7 @@ export default function DatePicker({
         </span>
         {dayCount !== null && dayCount > 1 && (
           <span className="ml-1 flex h-5 items-center rounded-full bg-muted px-1.5 text-[10px] font-medium text-muted-foreground">
-            {dayCount}d
+            {t('dayCountBadge', { count: dayCount })}
           </span>
         )}
       </button>

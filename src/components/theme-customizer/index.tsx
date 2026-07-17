@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { Settings, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet"
@@ -14,6 +15,7 @@ interface ThemeCustomizerProps {
 }
 
 export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
+  const t = useTranslations("themeCustomizer")
   const { config: sidebarConfig } = useSidebarConfig()
 
   return (
@@ -27,7 +29,7 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
             <div className="rounded-lg bg-primary/10 p-2">
               <Settings className="h-4 w-4" />
             </div>
-            <SheetTitle className="text-lg font-semibold">Customizer</SheetTitle>
+            <SheetTitle className="text-lg font-semibold">{t("customizer")}</SheetTitle>
             <div className="ml-auto">
               <Button
                 variant="outline"
@@ -40,12 +42,12 @@ export function ThemeCustomizer({ open, onOpenChange }: ThemeCustomizerProps) {
             </div>
           </div>
           <SheetDescription className="sr-only text-sm text-muted-foreground">
-            Personalize o tema e o layout do projeto.
+            {t("sheetDescription")}
           </SheetDescription>
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto p-4 pt-0">
-          <ThemeCustomizerPanel description="Centralize aqui as preferências globais que afetam o projeto inteiro." />
+          <ThemeCustomizerPanel description={t("panelDescription")} />
         </div>
       </SheetContent>
     </Sheet>

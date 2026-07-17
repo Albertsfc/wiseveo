@@ -28,7 +28,7 @@ export function WelcomeStep({ locale, onLocaleChange, onNext }: WelcomeStepProps
         </div>
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            {t("title")} <span className="text-primary">WISEVEO</span>
+            {t("title")} <span className="text-primary">{t("brand")}</span>
           </h1>
           <p className="text-muted-foreground mt-2 text-base max-w-md">
             {t("subtitle")}

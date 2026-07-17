@@ -57,6 +57,8 @@ function IntegrationCard({
   onToggleExpand: () => void
   children: React.ReactNode
 }) {
+  const t = useTranslations("setup.integrations")
+
   return (
     <div
       className={`rounded-xl border-2 transition-all duration-200 ${
@@ -78,7 +80,7 @@ function IntegrationCard({
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-2 cursor-pointer"
           >
             {expanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-            {expanded ? "Ocultar campos" : "Configurar credenciais"}
+            {expanded ? t("hideFields") : t("configureCredentials")}
           </button>
           {expanded && (
             <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
@@ -116,9 +118,9 @@ export function IntegrationsStep({
         <div className="inline-flex p-3 rounded-xl bg-primary/10 border border-primary/20 mb-3">
           <Puzzle className="w-6 h-6 text-primary" />
         </div>
-        <h2 className="text-2xl font-bold">Integrações</h2>
+        <h2 className="text-2xl font-bold">{t("heading")}</h2>
         <p className="text-muted-foreground mt-1 text-sm">
-          Configure integrações opcionais. Você pode pular e configurar depois.
+          {t("intro")}
         </p>
       </div>
 
@@ -127,7 +129,7 @@ export function IntegrationsStep({
         <IntegrationCard
           icon={<GoogleIcon />}
           title="Google OAuth & Calendar"
-          description="Login via Google e sincronização de calendário"
+          description={t("google.shortDesc")}
           enabled={integrations.google.enabled}
           onToggle={(val) => onIntegrationChange("google", "enabled", val)}
           expanded={expanded.google}
@@ -158,14 +160,14 @@ export function IntegrationsStep({
         <IntegrationCard
           icon={<Bot className="w-6 h-6 text-blue-400" />}
           title="Telegram Bot"
-          description="Registre transações por mensagem de texto ou áudio"
+          description={t("telegram.shortDesc")}
           enabled={integrations.telegram.enabled}
           onToggle={(val) => onIntegrationChange("telegram", "enabled", val)}
           expanded={expanded.telegram}
           onToggleExpand={() => toggleExpand("telegram")}
         >
           <div className="space-y-2">
-            <Label className="text-xs">Bot Token</Label>
+            <Label className="text-xs">{t("telegram.botTokenLabel")}</Label>
             <Input
               value={integrations.telegram.botToken}
               onChange={(e) => onIntegrationChange("telegram", "botToken", e.target.value)}
@@ -174,7 +176,7 @@ export function IntegrationsStep({
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-xs">Bot Username</Label>
+            <Label className="text-xs">{t("telegram.botUsernameLabel")}</Label>
             <Input
               value={integrations.telegram.botUsername}
               onChange={(e) => onIntegrationChange("telegram", "botUsername", e.target.value)}
@@ -183,12 +185,12 @@ export function IntegrationsStep({
             />
           </div>
           <div className="space-y-2">
-            <Label className="text-xs">Webhook Secret</Label>
+            <Label className="text-xs">{t("telegram.webhookSecretLabel")}</Label>
             <Input
               type="password"
               value={integrations.telegram.webhookSecret}
               onChange={(e) => onIntegrationChange("telegram", "webhookSecret", e.target.value)}
-              placeholder="Chave aleatória para validar webhooks"
+              placeholder={t("telegram.webhookSecretPlaceholder")}
               className="text-xs"
             />
           </div>
@@ -198,7 +200,7 @@ export function IntegrationsStep({
         <IntegrationCard
           icon={<Brain className="w-6 h-6 text-emerald-500" />}
           title="OpenAI (IA)"
-          description="Interpretação de texto natural no Telegram"
+          description={t("openai.shortDesc")}
           enabled={integrations.openai.enabled}
           onToggle={(val) => onIntegrationChange("openai", "enabled", val)}
           expanded={expanded.openai}

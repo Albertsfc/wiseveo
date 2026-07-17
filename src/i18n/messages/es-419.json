@@ -1,4 +1,202 @@
 {
+  "common": {
+    "actions": "Acciones",
+    "add": "Añadir",
+    "back": "Volver",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "commandSearchTitle": "Búsqueda de Comandos",
+    "confirm": "Confirmar",
+    "datePicker": {
+      "dayCountBadge": "{count}d",
+      "fullMonth": "Mes completo",
+      "last3Months": "Últimos 3 meses",
+      "lastMonth": "Mes pasado",
+      "lastWeek": "Semana pasada",
+      "next3Months": "Próximos 3 meses",
+      "nextMonth": "Próximo mes",
+      "openPicker": "Abrir selector de fechas",
+      "prevMonth": "Mes anterior",
+      "selectDate": "Seleccionar fecha",
+      "shortcuts": "Atajos",
+      "shortcutsAria": "Atajos de período",
+      "thisMonth": "Este mes",
+      "thisWeek": "Esta semana",
+      "today": "Hoy"
+    },
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "error": "Error",
+    "loading": "Cargando...",
+    "loginDemo": {
+      "createAccount": "Crear una cuenta",
+      "email": "Correo electrónico*",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "loginToAccount": "Inicia sesión en tu cuenta ahora",
+      "noAccount": "¿No tienes una cuenta?",
+      "orSignInWith": "o inicia sesión con",
+      "password": "Contraseña*",
+      "rememberDevice": "Recordar este dispositivo",
+      "signIn": "Iniciar sesión",
+      "signInWithGithub": "Iniciar sesión con Github",
+      "signInWithGoogle": "Iniciar sesión con Google",
+      "welcomeTo": "Bienvenido a Shadcn Space"
+    },
+    "mobileMoreSheet": {
+      "descriptions": {
+        "analysis": "Estado de resultados e informes de período",
+        "banks": "Cuentas y saldos",
+        "forecasting": "Proyecciones financieras",
+        "insights": "KPIs y análisis financieros",
+        "recurring": "Suscripciones y gastos fijos",
+        "settings": "Preferencias del sistema"
+      },
+      "secondaryNav": "Navegación secundaria",
+      "title": "Más opciones"
+    },
+    "modeToggle": {
+      "switchToDark": "Cambiar a modo oscuro",
+      "switchToLight": "Cambiar a modo claro"
+    },
+    "more": "Más",
+    "no": "No",
+    "noResults": "No se encontraron resultados.",
+    "openActions": "Abrir acciones",
+    "openAppearanceCustomizer": "Abrir personalizador de apariencia",
+    "pricingPlans": {
+      "currentPlan": "Plan Actual",
+      "downgradePlan": "Bajar de Plan",
+      "getStarted": "Comenzar",
+      "mostPopular": "Más Popular",
+      "upgradePlan": "Mejorar Plan"
+    },
+    "save": "Guardar",
+    "search": "Buscar...",
+    "searchPlaceholder": "¿Qué necesitas?",
+    "selectPeriod": "Seleccionar período",
+    "sidebarNotification": {
+      "blocks": "bloques premium de Shadcn UI",
+      "brandName": "ShadcnStore",
+      "closeNotification": "Cerrar notificación",
+      "exploreBlocks": "Explora nuestros",
+      "toBuildFaster": "para construir tu próximo proyecto más rápido.",
+      "welcomeTo": "Bienvenido a"
+    },
+    "sidebarPrimitive": {
+      "description": "Muestra la barra lateral en el móvil.",
+      "title": "Barra Lateral",
+      "toggle": "Alternar Barra Lateral"
+    },
+    "sidebarRadar": {
+      "currentBalance": "Saldo Actual",
+      "projected": "Proyectado:",
+      "tooltipCollapsed": "Hoy: {today} | Proyectado: {projected}",
+      "tooltipExpanded": "Proyectado para fin de mes: {projected}"
+    },
+    "siteFooter": {
+      "brandName": "WISEVEO",
+      "by": "por",
+      "madeWith": "Hecho con",
+      "tagline": "Construyendo bloques, plantillas y paneles hermosos y accesibles para aplicaciones web modernas."
+    },
+    "success": "Éxito",
+    "upgradeToPro": {
+      "comingSoon": "Próximamente",
+      "description": "Obtén acceso a bloques y paneles premium exclusivos para tu próximo proyecto. ¡Eleva tu UI al instante!",
+      "live": "En vivo",
+      "proBlocks": "Bloques Pro",
+      "proDashboards": "Paneles Pro",
+      "unlockPremiumBlocks": "Desbloquear Bloques Premium",
+      "upgradeToPro": "Mejorar a Pro"
+    },
+    "yes": "Sí"
+  },
+  "dashboard": {
+    "balance": "Saldo General",
+    "cashflow": "Flujo de Caja",
+    "ChartArea": {
+      "currentBalance": "Saldo actual en el período:",
+      "description": "Sigue entradas, salidas y la evolución del saldo en el intervalo seleccionado",
+      "fetchError": "Fallo al cargar datos del gráfico",
+      "loadError": "No se pudo cargar el gráfico.",
+      "title": "Flujo de Caja del Período"
+    },
+    "dailyMovement": "Movimiento Diario",
+    "DailyMovement": {
+      "accumulated": "ACUMULADO",
+      "balance": "SALDO",
+      "date": "FECHA",
+      "description": "Consulta entradas, salidas, saldo diario y acumulado en el intervalo seleccionado",
+      "expense": "GASTOS",
+      "income": "INGRESOS",
+      "loadError": "Error al cargar los datos",
+      "loading": "Cargando...",
+      "mobileAccum": "ACUM.",
+      "mobileMinus": "-",
+      "mobilePlus": "+",
+      "noMovement": "Sin movimiento en el período",
+      "title": "Movimiento Diario"
+    },
+    "expenses": "Gastos",
+    "expensesByGroup": "Gastos por Grupo",
+    "ExpensesChart": {
+      "description": "Distribución de gastos en el período seleccionado",
+      "loading": "Cargando...",
+      "noExpenses": "Sin gastos en el período",
+      "paid": "Pagado:",
+      "title": "Gastos por Grupo",
+      "toPay": "Por Pagar:",
+      "total": "Total:",
+      "totalExpenses": "Total de gastos:"
+    },
+    "income": "Ingresos",
+    "latestTransactions": "Últimos Movimientos",
+    "LatestTransactions": {
+      "description": "Sigue los pagos recientes",
+      "loadError": "Error al cargar los datos",
+      "loading": "Cargando...",
+      "noTransactions": "Sin pagos en el período",
+      "title": "Últimos Pagos"
+    },
+    "savings": "Ahorros",
+    "SectionCards": {
+      "balance": "Saldo",
+      "balanceFooter": "Saldo consolidado",
+      "expense": "Gastos",
+      "expenseFooter": "Gastos del mes",
+      "income": "Ingresos",
+      "incomeFooter": "Ingresos del mes",
+      "savings": "Ahorros",
+      "savingsFooter": "Ahorro del mes",
+      "vsPreviousMonth": "vs mes anterior"
+    },
+    "subtitle": "Visión general de tu salud financiera",
+    "title": "Dashboard",
+    "upcomingTransactions": "Próximos Vencimientos",
+    "UpcomingTransactions": {
+      "description": "Sigue las próximas entradas y salidas",
+      "loadError": "Error al cargar los datos",
+      "loading": "Cargando...",
+      "noTransactions": "Sin vencimientos en el período",
+      "title": "Próximos Vencimientos"
+    }
+  },
+  "login": {
+    "confirmPassword": "Confirmar contraseña",
+    "createAccount": "Crear cuenta",
+    "creatingAccount": "Creando cuenta...",
+    "email": "Correo electrónico",
+    "forgotPassword": "¿Olvidó su contraseña?",
+    "fullName": "Nombre completo",
+    "google": "Continuar con Google",
+    "googleSyncNote": "Al conectar con Google, será posible sincronizar su agenda (pronto)",
+    "loggingIn": "Ingresando...",
+    "login": "Ingresar",
+    "orContinue": "O continuar con",
+    "password": "Contraseña",
+    "signup": "Crear Cuenta",
+    "title": "Acceda a su cuenta"
+  },
   "Routes": {
     "analysis": {
       "description": "Informes y métricas de rendimiento",
@@ -85,112 +283,6 @@
       "title": "Usuarios"
     }
   },
-  "common": {
-    "actions": "Acciones",
-    "add": "Añadir",
-    "back": "Volver",
-    "cancel": "Cancelar",
-    "confirm": "Confirmar",
-    "delete": "Eliminar",
-    "edit": "Editar",
-    "error": "Error",
-    "loading": "Cargando...",
-    "no": "No",
-    "noResults": "No se encontraron resultados.",
-    "openAppearanceCustomizer": "Abrir personalizador de apariencia",
-    "save": "Guardar",
-    "search": "Buscar...",
-    "searchPlaceholder": "¿Qué necesitas?",
-    "selectPeriod": "Seleccionar período",
-    "success": "Éxito",
-    "yes": "Sí"
-  },
-  "dashboard": {
-    "ChartArea": {
-      "currentBalance": "Saldo actual en el período:",
-      "description": "Sigue entradas, salidas y la evolución del saldo en el intervalo seleccionado",
-      "fetchError": "Fallo al cargar datos del gráfico",
-      "loadError": "No se pudo cargar el gráfico.",
-      "title": "Flujo de Caja del Período"
-    },
-    "DailyMovement": {
-      "accumulated": "ACUMULADO",
-      "balance": "SALDO",
-      "date": "FECHA",
-      "description": "Consulta entradas, salidas, saldo diario y acumulado en el intervalo seleccionado",
-      "expense": "GASTOS",
-      "income": "INGRESOS",
-      "loadError": "Error al cargar los datos",
-      "loading": "Cargando...",
-      "mobileAccum": "ACUM.",
-      "mobileMinus": "-",
-      "mobilePlus": "+",
-      "noMovement": "Sin movimiento en el período",
-      "title": "Movimiento Diario"
-    },
-    "ExpensesChart": {
-      "description": "Distribución de gastos en el período seleccionado",
-      "loading": "Cargando...",
-      "noExpenses": "Sin gastos en el período",
-      "paid": "Pagado:",
-      "title": "Gastos por Grupo",
-      "toPay": "Por Pagar:",
-      "total": "Total:",
-      "totalExpenses": "Total de gastos:"
-    },
-    "LatestTransactions": {
-      "description": "Sigue los pagos recientes",
-      "loadError": "Error al cargar los datos",
-      "loading": "Cargando...",
-      "noTransactions": "Sin pagos en el período",
-      "title": "Últimos Pagos"
-    },
-    "SectionCards": {
-      "balance": "Saldo",
-      "balanceFooter": "Saldo consolidado",
-      "expense": "Gastos",
-      "expenseFooter": "Gastos del mes",
-      "income": "Ingresos",
-      "incomeFooter": "Ingresos del mes",
-      "savings": "Ahorros",
-      "savingsFooter": "Ahorro del mes",
-      "vsPreviousMonth": "vs mes anterior"
-    },
-    "UpcomingTransactions": {
-      "description": "Sigue las próximas entradas y salidas",
-      "loadError": "Error al cargar los datos",
-      "loading": "Cargando...",
-      "noTransactions": "Sin vencimientos en el período",
-      "title": "Próximos Vencimientos"
-    },
-    "balance": "Saldo General",
-    "cashflow": "Flujo de Caja",
-    "dailyMovement": "Movimiento Diario",
-    "expenses": "Gastos",
-    "expensesByGroup": "Gastos por Grupo",
-    "income": "Ingresos",
-    "latestTransactions": "Últimos Movimientos",
-    "savings": "Ahorros",
-    "subtitle": "Visión general de tu salud financiera",
-    "title": "Dashboard",
-    "upcomingTransactions": "Próximos Vencimientos"
-  },
-  "login": {
-    "confirmPassword": "Confirmar contraseña",
-    "createAccount": "Crear cuenta",
-    "creatingAccount": "Creando cuenta...",
-    "email": "Correo electrónico",
-    "forgotPassword": "¿Olvidó su contraseña?",
-    "fullName": "Nombre completo",
-    "google": "Continuar con Google",
-    "googleSyncNote": "Al conectar con Google, será posible sincronizar su agenda (pronto)",
-    "loggingIn": "Ingresando...",
-    "login": "Ingresar",
-    "orContinue": "O continuar con",
-    "password": "Contraseña",
-    "signup": "Crear Cuenta",
-    "title": "Acceda a su cuenta"
-  },
   "settings": {
     "account": {
       "accessDataDesc": "Actualice sus credenciales básicas de acceso y visualización.",
@@ -212,6 +304,10 @@
       "emailPl": "Ingrese su correo",
       "emailReq": "Dirección de correo inválida",
       "error": "Error al actualizar cuenta.",
+      "errors": {
+        "currentPasswordIncorrect": "La contraseña actual es incorrecta.",
+        "noLocalPassword": "El usuario no tiene una contraseña definida localmente."
+      },
       "firstName": "Nombre",
       "firstNamePl": "Ingrese su nombre",
       "firstNameReq": "El nombre es obligatorio",
@@ -231,15 +327,20 @@
     "adminUsers": {
       "active": "Activo",
       "approve": "Aprobar",
+      "approved": "Aprobado",
       "approveError": "No se pudo aprobar al usuario.",
       "approveSuccess": "Usuario aprobado con éxito.",
-      "approved": "Aprobado",
       "approving": "Aprobando...",
       "colAction": "Acción",
       "colDate": "Registro",
       "colRole": "Perfil",
       "colStatus": "Estado",
       "colUser": "Usuario",
+      "errors": {
+        "adminOnly": "Acceso restringido a administradores",
+        "notAuthenticated": "No autenticado",
+        "userNotFound": "Usuario no encontrado"
+      },
       "noUsers": "No se encontraron usuarios.",
       "pending": "Pendiente",
       "pendingCount": "Registros pendientes: {count}",
@@ -266,6 +367,11 @@
       "defaultStatusReq": "Seleccione el estado predeterminado.",
       "description": "Establezca preferencias globales utilizadas por los flujos compartidos del sistema.",
       "error": "No se pudieron guardar las configuraciones generales.",
+      "errors": {
+        "quickPaymentAccountUnavailable": "El banco seleccionado para el Pago Rápido no está disponible.",
+        "quickPaymentSelectionRequired": "Selecciona un banco y un estado para el Pago Rápido.",
+        "quickPaymentStatusUnavailable": "El estado seleccionado para el Pago Rápido no está disponible."
+      },
       "invalidConfig": "La configuración guardada ya no coincide con un banco o estado disponible. Seleccione nuevos valores y guarde nuevamente.",
       "save": "Guardar",
       "saving": "Guardando...",
@@ -289,9 +395,9 @@
       "globalPrefs": "Preferencias Globales",
       "globalPrefsDesc": "Estas opciones afectan tarjetas, tablas, gráficos y resúmenes financieros.",
       "minus": "Con signo menos",
-      "negValue": "Valor negativo",
       "negativeFormat": "Valores Negativos",
       "negativeFormatDesc": "Elija cómo se mostrarán las salidas, pérdidas y otros valores negativos.",
+      "negValue": "Valor negativo",
       "number": "Solo número",
       "parentheses": "Entre paréntesis",
       "posValue": "Valor positivo",
@@ -344,6 +450,10 @@
       "timezone": "Zona Horaria",
       "timezonePl": "Seleccione zona horaria",
       "title": "Configuración de Perfil",
+      "tzBrt": "BRT (Hora de Brasilia)",
+      "tzEst": "EST (Hora Estándar del Este)",
+      "tzPst": "PST (Hora Estándar del Pacífico)",
+      "tzUtc": "UTC (Tiempo Universal Coordinado)",
       "uploadPhoto": "Subir nueva foto",
       "website": "Sitio Web",
       "websitePl": "https://su-sitio.com"
@@ -380,19 +490,27 @@
     },
     "chartOfAccounts": {
       "asset": "Activo",
+      "bankAccounts": "Cuentas Bancarias",
+      "createNew": "Crear Nuevo (Predeterminado)",
       "currentAssets": "Activo Corriente (Cuentas, Efectivo)",
       "customizationNote": "Podrás editar, añadir y eliminar cuentas, grupos y categorías después, en configuraciones.",
       "existingDataNotice": "Tu base de datos ya tiene información. No inyectaremos el plan por defecto para evitar duplicidad.",
       "expense": "Gastos",
       "expenseCategories": "Vivienda, Alimentación, Ocio, Transporte",
       "fixedAssets": "Activo No Corriente (Inmuebles, Vehículos)",
+      "groupsAndCategories": "Grupos y Categorías",
+      "keepExisting": "Mantener Existente",
       "liability": "Pasivo",
       "longTerm": "Pasivo No Corriente (Préstamos, Hipotecas)",
+      "newAccountPlaceholder": "Nueva cuenta...",
+      "newCategoryPlaceholder": "Nueva categoría...",
       "preview": "Vista previa del Plan de Cuentas",
       "revenue": "Ingresos",
       "revenueCategories": "Salario, Ventas, Rendimientos",
       "shortTerm": "Pasivo Corriente (Tarjetas, Cuentas por Pagar)",
       "subtitle": "El corazón financiero del sistema. Este es el plan por defecto.",
+      "subtitleEditable": "Personaliza tus grupos, categorías y cuentas bancarias. Puedes editarlos después en Configuración.",
+      "subtitleReadOnly": "Tu base de datos ya tiene datos — el plan de cuentas existente será preservado. (Solo lectura)",
       "title": "Plan de Cuentas"
     },
     "common": {
@@ -404,6 +522,7 @@
       "cantConnect": "No se pudo conectar a la base de datos.",
       "categories": "Categorías",
       "connectionFailed": "Fallo en la conexión",
+      "connectionPlaceholder": "postgresql://usuario:contrasena@host:5432/basededatos",
       "connectionString": "Cadena de Conexión (DATABASE_URL)",
       "dockerSubtitle": "Base de datos nueva vía Docker Compose",
       "dockerTitle": "Docker Local",
@@ -414,36 +533,52 @@
       "groups": "Grupos",
       "helpNeon": "En tu Dashboard, ve a Dashboard > Connection Details. Selecciona Postgres y marca la casilla para mostrar la contraseña. Copia la URL.",
       "helpSupabase": "Ve a Project Settings > Database. Baja a Connection string. Selecciona la pestaña URI. Copia el enlace (usualmente el puerto 6543 para Transaction Pooler) y reemplaza [YOUR-PASSWORD] por tu contraseña.",
+      "helpSupabaseStep2": "Baja hasta la sección <strong>Connection string</strong>",
+      "helpSupabaseStep3": "Selecciona la pestaña <strong>URI</strong>",
+      "helpSupabaseStep4": "Copia el enlace (generalmente usa el puerto <code>6543</code> para el Transaction Pooler) y reemplaza <code>[YOUR-PASSWORD]</code> con tu contraseña.",
       "helpTitle": "¿Cómo obtener mi URL de conexión?",
+      "neonLabel": "🟢 Neon.tech:",
       "networkError": "Error de red. Verifica si el servidor está funcionando.",
       "preserveDataMsg": "La base de datos se conectará preservando los datos existentes.",
       "subtitle": "Conéctate a una base de datos PostgreSQL existente o usa Docker local.",
       "success": "¡Conexión establecida con éxito!",
+      "supabaseLabel": "🟢 Supabase:",
       "testConnection": "Probar Conexión",
       "testing": "Probando conexión...",
       "title": "Base de Datos",
       "transactions": "Transacciones"
     },
     "integrations": {
+      "configureCredentials": "Configurar credenciales",
       "google": {
         "clientId": "Client ID",
         "clientSecret": "Client Secret",
         "desc": "Permite iniciar sesión con Google y sincronizar eventos financieros.",
+        "shortDesc": "Inicio de sesión con Google y sincronización de calendario",
         "title": "Google Calendar & OAuth"
       },
+      "heading": "Integraciones",
+      "hideFields": "Ocultar campos",
+      "intro": "Configura integraciones opcionales. Puedes omitirlas y configurarlas después.",
       "openai": {
         "apiKey": "API Key",
         "desc": "Necesario para la categorización automática y respuestas inteligentes.",
+        "shortDesc": "Interpretación de lenguaje natural en Telegram",
         "title": "OpenAI (Asistente IA)"
       },
       "optional": "Opcional",
       "subtitle": "Activa módulos extras para expandir las funciones del sistema.",
       "telegram": {
         "botToken": "Bot Token (BotFather)",
+        "botTokenLabel": "Bot Token",
         "botUsername": "Bot Username (@tu_bot)",
+        "botUsernameLabel": "Bot Username",
         "desc": "Recibe notificaciones, alertas y registra transacciones vía chat.",
+        "shortDesc": "Registra movimientos por mensaje de texto o audio",
         "title": "Bot de Telegram",
-        "webhookSecret": "Webhook Secret (Tu elección)"
+        "webhookSecret": "Webhook Secret (Tu elección)",
+        "webhookSecretLabel": "Webhook Secret",
+        "webhookSecretPlaceholder": "Clave aleatoria para validar webhooks"
       },
       "title": "Integraciones Opcionales"
     },
@@ -457,20 +592,32 @@
     },
     "summary": {
       "adminAccount": "Cuenta Admin",
+      "chartNew": "Nuevo plan de cuentas inicializado",
+      "chartPreserved": "Preservado de la base de datos existente",
       "configuring": "Configurando...",
       "dbConnection": "Conexión con Base de Datos",
+      "dbExisting": "Conectado con datos existentes",
+      "dbNew": "Base de datos nueva (Docker / Limpia)",
+      "finish": "Finalizar Configuración 🎉",
+      "finishNote": "Al finalizar, el sistema aplicará las migraciones en la base de datos, guardará tu configuración y reiniciará el servidor automáticamente.",
       "freshInstall": "Instalación Limpia (Datos por defecto)",
       "google": "Google",
       "initialize": "Inicializar Sistema",
+      "integrationCount": "{count, plural, one {# configurada} other {# configuradas}}",
       "integrations": "Integraciones Activas",
       "keepExisting": "Mantener Datos Existentes",
       "none": "Ninguna",
       "openai": "OpenAI",
+      "sectionAdmin": "Administrador",
+      "sectionChart": "Plan de Cuentas",
+      "sectionDatabase": "Base de Datos",
+      "sectionIntegrations": "Integraciones",
       "subtitle": "Revisa tu configuración antes de inicializar el sistema.",
       "telegram": "Telegram",
       "title": "¡Todo Listo!"
     },
     "welcome": {
+      "brand": "WISEVEO",
       "chooseLanguage": "Elige tu idioma",
       "info": "Este asistente te guiará por la configuración inicial en unos minutos. Configurarás la base de datos, crearás tu cuenta y personalizarás tu plan de cuentas.",
       "start": "Iniciar Configuración →",
@@ -535,5 +682,77 @@
     "underMaintenance": "En mantenimiento",
     "users": "Usuarios",
     "usersettings": "Configuración de Usuario"
+  },
+  "themeCustomizer": {
+    "advancedCustomization": "Personalización avanzada",
+    "advancedCustomizationDesc": "Para una edición avanzada con vista previa visual y cientos de presets listos, abre el editor de Tweakcn.",
+    "appearanceSource": "Fuente global de apariencia",
+    "brandColor": {
+      "accent": "Accent",
+      "accentForeground": "Texto del Accent",
+      "muted": "Muted",
+      "mutedForeground": "Texto del Muted",
+      "primary": "Primario",
+      "primaryForeground": "Texto del Primario",
+      "secondary": "Secundario",
+      "secondaryForeground": "Texto del Secundario"
+    },
+    "brandColors": "Colores de marca",
+    "chooseShadcnPreset": "Elige un preset de Shadcn",
+    "chooseTweakcnPreset": "Elige un preset de Tweakcn",
+    "customizer": "Customizer",
+    "dark": "Oscuro",
+    "importModal": {
+      "description": "Pega abajo el CSS de tu tema. Incluye las secciones <code>:root</code> (modo claro) y <code>.dark</code> (modo oscuro) con variables como <code>--primary</code>, <code>--background</code> y otras. El sistema alternará automáticamente entre claro y oscuro.",
+      "importErrorLog": "Error al importar el tema:",
+      "importTheme": "Importar Tema",
+      "noCssContent": "No se proporcionó contenido CSS",
+      "title": "Importar CSS Personalizado"
+    },
+    "importTheme": "Importar tema",
+    "light": "Claro",
+    "mode": "Modo",
+    "openTweakcn": "Abrir Tweakcn",
+    "panelDescription": "Centraliza aquí las preferencias globales que afectan a todo el proyecto.",
+    "radius": "Radio",
+    "random": "Aleatorio",
+    "restoreDefault": "Restaurar predeterminado",
+    "shadcnPresets": "Presets de Shadcn UI",
+    "sheetDescription": "Personaliza el tema y el diseño del proyecto.",
+    "sidebarCollapseDesc": {
+      "icon": "Íconos: la barra lateral se contrae al modo compacto.",
+      "none": "Fija: la barra lateral permanece siempre visible.",
+      "offcanvas": "Off-canvas: la barra lateral sale completamente de la pantalla."
+    },
+    "sidebarCollapseLabel": "Colapso de la barra lateral",
+    "sidebarCollapsible": {
+      "icon": "Íconos",
+      "none": "Fija",
+      "offcanvas": "Off Canvas"
+    },
+    "sidebarPosition": {
+      "left": "Izquierda",
+      "right": "Derecha"
+    },
+    "sidebarPositionDesc": {
+      "left": "Izquierda: navegación principal a la izquierda del contenido.",
+      "right": "Derecha: navegación principal a la derecha del contenido."
+    },
+    "sidebarPositionLabel": "Posición de la barra lateral",
+    "sidebarVariant": {
+      "floating": "Flotante",
+      "inset": "Inset",
+      "sidebar": "Predeterminada"
+    },
+    "sidebarVariantDesc": {
+      "floating": "Flotante: barra lateral destacada con borde y respiro visual.",
+      "inset": "Inset: barra lateral encajada con esquinas redondeadas.",
+      "sidebar": "Predeterminada: estructura tradicional con barra lateral fija."
+    },
+    "sidebarVariantLabel": "Variante de la barra lateral",
+    "system": "Sistema",
+    "tabLayout": "Diseño",
+    "tabTheme": "Tema",
+    "tweakcnPresets": "Presets de Tweakcn"
   }
 }

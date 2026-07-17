@@ -52,9 +52,9 @@ export function SummaryStep({
               <Server className="w-4 h-4" />
             </div>
             <div>
-              <p className="font-medium text-sm">Banco de Dados</p>
+              <p className="font-medium text-sm">{t("sectionDatabase")}</p>
               <p className="text-xs text-muted-foreground">
-                {useExistingData ? "Conectado com dados existentes" : "Novo banco (Docker / Limpo)"}
+                {useExistingData ? t("dbExisting") : t("dbNew")}
               </p>
             </div>
           </div>
@@ -68,7 +68,7 @@ export function SummaryStep({
               <User className="w-4 h-4" />
             </div>
             <div>
-              <p className="font-medium text-sm">Administrador</p>
+              <p className="font-medium text-sm">{t("sectionAdmin")}</p>
               <p className="text-xs text-muted-foreground">
                 {adminName} ({adminEmail})
               </p>
@@ -84,9 +84,9 @@ export function SummaryStep({
               <LayoutList className="w-4 h-4" />
             </div>
             <div>
-              <p className="font-medium text-sm">Plano de Contas</p>
+              <p className="font-medium text-sm">{t("sectionChart")}</p>
               <p className="text-xs text-muted-foreground">
-                {useExistingData ? "Preservado do banco existente" : "Novo plano de contas inicializado"}
+                {useExistingData ? t("chartPreserved") : t("chartNew")}
               </p>
             </div>
           </div>
@@ -100,9 +100,9 @@ export function SummaryStep({
               <Puzzle className="w-4 h-4" />
             </div>
             <div>
-              <p className="font-medium text-sm">Integrações</p>
+              <p className="font-medium text-sm">{t("sectionIntegrations")}</p>
               <p className="text-xs text-muted-foreground">
-                {integrationCount} {integrationCount === 1 ? "configurada" : "configuradas"}
+                {t("integrationCount", { count: integrationCount })}
               </p>
             </div>
           </div>
@@ -112,8 +112,7 @@ export function SummaryStep({
 
       <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 text-sm text-center">
         <p>
-          Ao finalizar, o sistema irá aplicar as migrações no banco, salvar suas configurações
-          e reiniciar o servidor automaticamente.
+          {t("finishNote")}
         </p>
       </div>
 
@@ -138,7 +137,7 @@ export function SummaryStep({
               {t("configuring")}
             </>
           ) : (
-            "Finalizar Setup 🎉"
+            t("finish")
           )}
         </Button>
       </div>

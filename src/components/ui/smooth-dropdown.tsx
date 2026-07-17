@@ -5,6 +5,7 @@ import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "motion/react"
 import useMeasure from "react-use-measure"
 import { EllipsisVertical } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { cn } from "@/lib/utils"
 
 export interface SmoothDropdownItem {
@@ -53,6 +54,7 @@ export function SmoothDropdown({
   menuWidth = 220,
   triggerBadges = [],
 }: SmoothDropdownProps) {
+  const t = useTranslations("common")
   const [isOpen, setIsOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -180,7 +182,7 @@ export function SmoothDropdown({
             {badge.value > 99 ? "99+" : badge.value}
           </span>
         ))}
-        <span className="sr-only">Abrir ações</span>
+        <span className="sr-only">{t("openActions")}</span>
       </button>
 
       {typeof document !== "undefined" &&

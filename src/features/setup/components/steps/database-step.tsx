@@ -158,7 +158,7 @@ export function DatabaseStep({
             setAuditResult(null)
             onExistingChartChange(null)
           }}
-          placeholder="postgresql://usuario:senha@host:5432/banco"
+          placeholder={t("connectionPlaceholder")}
           className="font-mono text-sm"
         />
         <p className="text-xs text-muted-foreground flex items-center gap-1">
@@ -177,16 +177,16 @@ export function DatabaseStep({
             </AccordionTrigger>
             <AccordionContent className="text-xs text-muted-foreground space-y-3 pb-4">
               <div>
-                <strong className="text-foreground">🟢 Supabase:</strong>
+                <strong className="text-foreground">{t("supabaseLabel")}</strong>
                 <ol className="list-decimal list-inside mt-1 space-y-1 ml-1">
                   <li>{t("helpSupabase").split(". ")[0]}</li>
-                  <li>Desça até a seção <strong>Connection string</strong></li>
-                  <li>Selecione a aba <strong>URI</strong></li>
-                  <li>Copie o link (geralmente usa a porta <code className="bg-muted px-1 rounded">6543</code> para Transaction Pooler) e substitua <code className="bg-muted px-1 rounded">[YOUR-PASSWORD]</code> pela sua senha.</li>
+                  <li>{t.rich("helpSupabaseStep2", { strong: (chunks) => <strong>{chunks}</strong> })}</li>
+                  <li>{t.rich("helpSupabaseStep3", { strong: (chunks) => <strong>{chunks}</strong> })}</li>
+                  <li>{t.rich("helpSupabaseStep4", { code: (chunks) => <code className="bg-muted px-1 rounded">{chunks}</code> })}</li>
                 </ol>
               </div>
               <div>
-                <strong className="text-foreground">🟢 Neon.tech:</strong>
+                <strong className="text-foreground">{t("neonLabel")}</strong>
                 <p className="mt-1 ml-1 leading-relaxed text-muted-foreground">{t("helpNeon")}</p>
               </div>
             </AccordionContent>

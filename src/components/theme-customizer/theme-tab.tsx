@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { Dices, ExternalLink, Moon, Palette, Sun, Upload, MonitorCog } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -39,6 +40,8 @@ export function ThemeTab({
   selectedTweakcnTheme,
   themeMode,
 }: ThemeTabProps) {
+  const t = useTranslations("themeCustomizer")
+
   const handleRandomShadcn = React.useCallback(() => {
     const randomTheme = colorThemes[Math.floor(Math.random() * colorThemes.length)]
     onSelectedThemeChange(randomTheme.value)
@@ -52,7 +55,7 @@ export function ThemeTab({
   return (
     <div className="space-y-6 p-4">
       <div className="space-y-3">
-        <Label className="text-sm font-medium">Modo</Label>
+        <Label className="text-sm font-medium">{t("mode")}</Label>
         <div className="grid grid-cols-3 gap-2">
           <Button
             variant={themeMode === "light" ? "secondary" : "outline"}
@@ -61,7 +64,7 @@ export function ThemeTab({
             className="cursor-pointer"
           >
             <Sun className="mr-1 h-4 w-4" />
-            Claro
+            {t("light")}
           </Button>
           <Button
             variant={themeMode === "dark" ? "secondary" : "outline"}
@@ -70,7 +73,7 @@ export function ThemeTab({
             className="cursor-pointer"
           >
             <Moon className="mr-1 h-4 w-4" />
-            Escuro
+            {t("dark")}
           </Button>
           <Button
             variant={themeMode === "system" ? "secondary" : "outline"}
@@ -79,7 +82,7 @@ export function ThemeTab({
             className="cursor-pointer"
           >
             <MonitorCog className="mr-1 h-4 w-4" />
-            Sistema
+            {t("system")}
           </Button>
         </div>
       </div>
@@ -88,16 +91,16 @@ export function ThemeTab({
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-medium">Presets Shadcn UI</Label>
+          <Label className="text-sm font-medium">{t("shadcnPresets")}</Label>
           <Button variant="outline" size="sm" onClick={handleRandomShadcn} className="cursor-pointer">
             <Dices className="mr-1.5 h-3.5 w-3.5" />
-            Aleatório
+            {t("random")}
           </Button>
         </div>
 
         <Select value={selectedTheme || undefined} onValueChange={onSelectedThemeChange}>
           <SelectTrigger className="w-full cursor-pointer">
-            <SelectValue placeholder="Escolha um preset Shadcn" />
+            <SelectValue placeholder={t("chooseShadcnPreset")} />
           </SelectTrigger>
           <SelectContent className="max-h-60">
             <div className="p-2">
@@ -123,16 +126,16 @@ export function ThemeTab({
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-sm font-medium">Presets Tweakcn</Label>
+          <Label className="text-sm font-medium">{t("tweakcnPresets")}</Label>
           <Button variant="outline" size="sm" onClick={handleRandomTweakcn} className="cursor-pointer">
             <Dices className="mr-1.5 h-3.5 w-3.5" />
-            Aleatório
+            {t("random")}
           </Button>
         </div>
 
         <Select value={selectedTweakcnTheme || undefined} onValueChange={onSelectedTweakcnThemeChange}>
           <SelectTrigger className="w-full cursor-pointer">
-            <SelectValue placeholder="Escolha um preset Tweakcn" />
+            <SelectValue placeholder={t("chooseTweakcnPreset")} />
           </SelectTrigger>
           <SelectContent className="max-h-60">
             <div className="p-2">
@@ -157,7 +160,7 @@ export function ThemeTab({
       <Separator />
 
       <div className="space-y-3">
-        <Label className="text-sm font-medium">Raio</Label>
+        <Label className="text-sm font-medium">{t("radius")}</Label>
         <div className="grid grid-cols-5 gap-2">
           {radiusOptions.map((option) => (
             <button
@@ -186,20 +189,20 @@ export function ThemeTab({
           className="w-full cursor-pointer"
         >
           <Upload className="mr-1.5 h-3.5 w-3.5" />
-          Importar tema
+          {t("importTheme")}
         </Button>
       </div>
 
       <Accordion type="single" collapsible className="w-full rounded-lg border-b">
         <AccordionItem value="brand-colors" className="overflow-hidden rounded-lg border border-border">
           <AccordionTrigger className="px-4 py-3 transition-colors hover:bg-muted/50 hover:no-underline">
-            <Label className="cursor-pointer text-sm font-medium">Cores de marca</Label>
+            <Label className="cursor-pointer text-sm font-medium">{t("brandColors")}</Label>
           </AccordionTrigger>
           <AccordionContent className="space-y-3 border-t border-border bg-muted/20 px-4 pb-4 pt-2">
             {baseColors.map((color) => (
               <ColorPicker
                 key={color.cssVar}
-                label={color.name}
+                label={t(`brandColor.${color.name}` as never)}
                 cssVar={color.cssVar}
                 value={currentBrandColorValues[color.cssVar] || ""}
                 onChange={onColorOverrideChange}
@@ -212,10 +215,10 @@ export function ThemeTab({
       <div className="space-y-3 rounded-lg bg-muted p-4">
         <div className="flex items-center gap-2">
           <Palette className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium">Customização avançada</span>
+          <span className="text-sm font-medium">{t("advancedCustomization")}</span>
         </div>
         <p className="text-xs text-muted-foreground">
-          Para edição avançada com preview visual e centenas de presets prontos, abra o editor do Tweakcn.
+          {t("advancedCustomizationDesc")}
         </p>
         <Button
           variant="outline"
@@ -224,7 +227,7 @@ export function ThemeTab({
           onClick={() => typeof window !== "undefined" && window.open("https://tweakcn.com/editor/theme", "_blank")}
         >
           <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
-          Abrir Tweakcn
+          {t("openTweakcn")}
         </Button>
       </div>
     </div>

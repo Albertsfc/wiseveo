@@ -75,7 +75,7 @@ const data: { navGroups: SidebarNavGroup[] } = {
           icon: LayoutPanelLeft,
         },
         {
-          title: "Transações",
+          title: "Transacoes",
           url: "/transactions",
           icon: ArrowLeftRight,
         },
@@ -85,12 +85,12 @@ const data: { navGroups: SidebarNavGroup[] } = {
           icon: RotateCcw,
         },
         {
-          title: "Orçamento",
+          title: "Orcamento",
           url: "/budget",
           icon: Wallet,
         },
         {
-          title: "Análise",
+          title: "Analise",
           url: "/analysis",
           icon: Calculator,
         },
@@ -105,12 +105,12 @@ const data: { navGroups: SidebarNavGroup[] } = {
           icon: Landmark,
         },
         {
-          title: "Calendário",
+          title: "Calendario",
           url: "/calendar",
           icon: Calendar,
         },
         {
-          title: "Configurações",
+          title: "Configuracoes",
           url: "/configuracoes?tab=general",
           icon: Settings,
         },

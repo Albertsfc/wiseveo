@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
 import {
   BOOTSTRAP_ADMIN_EMAIL,
@@ -47,8 +48,10 @@ function serializeAdminUser(user: {
 }
 
 export async function requireAdminUser(userId: string | null) {
+  const t = await getTranslations("settings.adminUsers.errors")
+
   if (!userId) {
-    throw new AdminAccessError(401, "Não autenticado")
+    throw new AdminAccessError(401, t("notAuthenticated"))
   }
 
   const user = await prisma.user.findUnique({
@@ -57,7 +60,7 @@ export async function requireAdminUser(userId: string | null) {
   })
 
   if (!user || !isActiveUser(user.status) || !isAdminRole(user.role)) {
-    throw new AdminAccessError(403, "Acesso restrito a administradores")
+    throw new AdminAccessError(403, t("adminOnly"))
   }
 
   return user
@@ -105,7 +108,8 @@ export async function approveUser(userId: string): Promise<AdminUserSummary> {
   })
 
   if (!target) {
-    throw new Error("Usuário não encontrado")
+    const t = await getTranslations("settings.adminUsers.errors")
+    throw new Error(t("userNotFound"))
   }
 
   const updatedUser = await prisma.user.update({

@@ -23,51 +23,52 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import { useTranslations } from "next-intl"
 
 // ─── Secondary nav items (shown in the "More" sheet) ─────────────────────────
 interface SecondaryNavItem {
-  label: string
+  labelKey: string
   href: string
   icon: LucideIcon
-  description?: string
+  descriptionKey?: string
 }
 
 const SECONDARY_NAV: SecondaryNavItem[] = [
   {
-    label: "Insights",
+    labelKey: "insights",
     href: "/insights",
     icon: LayoutPanelLeft,
-    description: "KPIs e análises financeiras",
+    descriptionKey: "insights",
   },
   {
-    label: "Recorrentes",
+    labelKey: "recorrentes",
     href: "/recurring",
     icon: RotateCcw,
-    description: "Assinaturas e contas fixas",
+    descriptionKey: "recurring",
   },
   {
-    label: "Análise",
+    labelKey: "analise",
     href: "/analysis",
     icon: Calculator,
-    description: "DRE e relatórios de período",
+    descriptionKey: "analysis",
   },
   {
-    label: "Forecasting",
+    labelKey: "forecasting",
     href: "/forecasting",
     icon: LineChart,
-    description: "Projeções financeiras",
+    descriptionKey: "forecasting",
   },
   {
-    label: "Bancos",
+    labelKey: "bancos",
     href: "/banks",
     icon: Landmark,
-    description: "Contas e saldos",
+    descriptionKey: "banks",
   },
   {
-    label: "Configurações",
+    labelKey: "configuracoes",
     href: "/configuracoes",
     icon: Settings,
-    description: "Preferências do sistema",
+    descriptionKey: "settings",
   },
 ]
 
@@ -84,6 +85,8 @@ interface MobileMoreSheetProps {
  */
 export function MobileMoreSheet({ open, onOpenChange }: MobileMoreSheetProps) {
   const pathname = usePathname()
+  const tSidebar = useTranslations("sidebar")
+  const t = useTranslations("common.mobileMoreSheet")
 
   function isActive(href: string) {
     return pathname === href || pathname.startsWith(href + "/")
@@ -97,11 +100,11 @@ export function MobileMoreSheet({ open, onOpenChange }: MobileMoreSheetProps) {
       >
         <SheetHeader className="mb-4">
           <SheetTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-            Mais opções
+            {t("title")}
           </SheetTitle>
         </SheetHeader>
 
-        <nav aria-label="Navegação secundária">
+        <nav aria-label={t("secondaryNav")}>
           <ul className="flex flex-col gap-1" role="list">
             {SECONDARY_NAV.map((item) => {
               const active = isActive(item.href)
@@ -134,11 +137,11 @@ export function MobileMoreSheet({ open, onOpenChange }: MobileMoreSheetProps) {
                     </span>
                     <span className="flex flex-col min-w-0">
                       <span className={cn("text-sm font-medium leading-tight", active && "font-semibold")}>
-                        {item.label}
+                        {tSidebar(item.labelKey as never)}
                       </span>
-                      {item.description && (
+                      {item.descriptionKey && (
                         <span className="text-xs text-muted-foreground leading-tight mt-0.5 truncate">
-                          {item.description}
+                          {t(`descriptions.${item.descriptionKey}` as never)}
                         </span>
                       )}
                     </span>

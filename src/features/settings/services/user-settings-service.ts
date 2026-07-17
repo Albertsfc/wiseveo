@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { Prisma } from "@/generated/prisma_new/client"
 import { isAppLocale, resolveAppLocale, type AppLocale } from "@/i18n/config"
 import { prisma } from "@/lib/prisma"
@@ -158,18 +159,19 @@ export async function updateUserAccount(userId: string, data: AccountSettings) {
 
   // Lógica de troca de senha se fornecida
   if (data.currentPassword && data.newPassword) {
+    const t = await getTranslations("settings.account.errors")
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { passwordHash: true },
     })
 
     if (!user || !user.passwordHash) {
-      throw new Error("Usuário não possui senha definida localmente.")
+      throw new Error(t("noLocalPassword"))
     }
 
     const isMatch = await bcrypt.compare(data.currentPassword, user.passwordHash)
     if (!isMatch) {
-      throw new Error("A senha atual está incorreta.")
+      throw new Error(t("currentPasswordIncorrect"))
     }
 
     updateData.passwordHash = await bcrypt.hash(data.newPassword, 10)
@@ -268,12 +270,13 @@ export async function updateUserQuickPaymentSettings(
   settings: QuickPaymentSettings,
 ) {
   const nextQuickPayment = resolveQuickPaymentSettings(settings)
+  const t = await getTranslations("settings.general.errors")
 
   if (
     nextQuickPayment.defaultAccountId === null ||
     nextQuickPayment.defaultStatusCode === null
   ) {
-    throw new Error("Selecione um banco e um status para o Pagamento Rápido.")
+    throw new Error(t("quickPaymentSelectionRequired"))
   }
 
   const [account, status, currentPreferences] = await Promise.all([
@@ -296,11 +299,11 @@ export async function updateUserQuickPaymentSettings(
   ])
 
   if (!account) {
-    throw new Error("O banco selecionado para o Pagamento Rápido não está disponível.")
+    throw new Error(t("quickPaymentAccountUnavailable"))
   }
 
   if (!status) {
-    throw new Error("O status selecionado para o Pagamento Rápido não está disponível.")
+    throw new Error(t("quickPaymentStatusUnavailable"))
   }
 
   await prisma.user.update({
