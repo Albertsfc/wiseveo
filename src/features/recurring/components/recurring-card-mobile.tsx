@@ -1,12 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { format, parseISO } from "date-fns"
+import { useLocale, useTranslations } from "next-intl"
 import { Calendar, Tag, Wallet } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { formatPeriod } from "@/lib/financial"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import { createDateFormatter } from "@/i18n/format"
 import type { SerializedRecurringTransaction } from "../types"
 import { RecurringActions } from "./recurring-actions"
 
@@ -24,6 +25,8 @@ export function RecurringCardMobile({
   onDelete,
 }: RecurringCardMobileProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("recurring.card")
+  const locale = useLocale()
 
   const amountColorClass =
     recurring.type === "INCOME"
@@ -33,7 +36,12 @@ export function RecurringCardMobile({
         : "text-muted-foreground"
 
   const formattedDate = recurring.lastDate
-    ? format(parseISO(recurring.lastDate), "dd/MM/yyyy")
+    ? createDateFormatter(locale, {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        timeZone: "UTC",
+      }).format(new Date(recurring.lastDate))
     : "—"
 
   const formattedPeriod =
@@ -53,7 +61,7 @@ export function RecurringCardMobile({
         {/* Row 1: Description (Secondary) & Amount */}
         <div className="flex items-start justify-between gap-2">
           <p className="line-clamp-1 text-[13px] text-muted-foreground/80 italic font-medium uppercase tracking-tight">
-            {recurring.description || "Sem descrição"}
+            {recurring.description || t("noDescription")}
           </p>
           <div className="flex flex-col items-end gap-0.5 ml-auto">
             <div className={cn("font-mono font-bold text-sm tabular-nums", amountColorClass)}>
@@ -68,14 +76,14 @@ export function RecurringCardMobile({
         {/* Row 2: History (Primary) */}
         <div className="-mt-1">
           <h3 className="line-clamp-1 font-bold text-[15px] text-foreground leading-tight">
-            {recurring.note || "Sem histórico"}
+            {recurring.note || t("noHistory")}
           </h3>
         </div>
 
         {/* Row 3: Group & Category */}
         <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">
           <span>{recurring.category.group.name}</span>
-          <span className="opacity-50">&gt;</span>
+          <span className="opacity-50">{">"}</span>
           <span className="text-muted-foreground/70 font-medium normal-case tracking-normal text-[11px]">{recurring.category.name}</span>
         </div>
 
@@ -83,17 +91,17 @@ export function RecurringCardMobile({
         <div className="mt-1 flex items-center gap-4 text-[11px] text-muted-foreground/60 font-medium">
           <div className="flex items-center gap-1">
             <Calendar className="size-3" />
-            <span>Último: {formattedDate}</span>
+            <span>{t("lastLabel")} {formattedDate}</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="font-bold uppercase text-[10px] opacity-70">Período:</span>
+            <span className="font-bold uppercase text-[10px] opacity-70">{t("periodLabel")}</span>
             <span>{formattedPeriod}</span>
           </div>
         </div>
 
         {/* Reference Section (Small) */}
         <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground/40 font-bold truncate pr-10">
-          {recurring.reference || "Sem referência"}
+          {recurring.reference || t("noReference")}
         </div>
       </div>
 

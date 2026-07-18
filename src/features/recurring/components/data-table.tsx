@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import {
     type ColumnDef,
     type ColumnFiltersState,
@@ -59,6 +60,8 @@ export function DataTable<TData, TValue>({
     batchLoading,
 }: DataTableProps<TData, TValue>) {
     const { isMobile } = useDeviceClass()
+    const t = useTranslations("recurring.table")
+    const tCommon = useTranslations("common")
     const [rowSelection, setRowSelection] = React.useState({})
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -141,7 +144,7 @@ export function DataTable<TData, TValue>({
                 <div className="flex flex-col gap-3">
                     {loading ? (
                         <div className="h-24 flex items-center justify-center text-muted-foreground">
-                            Carregando...
+                            {tCommon("loading")}
                         </div>
                     ) : table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
@@ -155,7 +158,7 @@ export function DataTable<TData, TValue>({
                         ))
                     ) : (
                         <div className="h-24 flex items-center justify-center text-muted-foreground">
-                            Nenhuma recorrência encontrada.
+                            {t("noResults")}
                         </div>
                     )}
                 </div>
@@ -187,7 +190,7 @@ export function DataTable<TData, TValue>({
                                         colSpan={columns.length}
                                         className="h-24 text-center text-muted-foreground"
                                     >
-                                        Carregando...
+                                        {tCommon("loading")}
                                     </TableCell>
                                 </TableRow>
                             ) : table.getRowModel().rows?.length ? (
@@ -212,7 +215,7 @@ export function DataTable<TData, TValue>({
                                         colSpan={columns.length}
                                         className="h-24 text-center text-muted-foreground"
                                     >
-                                        Nenhuma recorrência encontrada.
+                                        {t("noResults")}
                                     </TableCell>
                                 </TableRow>
                             )}

@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { Play, Trash2, Pencil, RotateCcw, Filter } from "lucide-react"
 import { useDeviceClass } from "@/hooks/use-device-class"
 import type { Table } from "@tanstack/react-table"
@@ -45,12 +46,6 @@ import {
 import { DataTableViewOptions } from "@/features/transactions/components/data-table-view-options"
 import type { RecurringFilterOptions } from "../types"
 
-const typeLabels: Record<string, string> = {
-    INCOME: "Receita",
-    EXPENSE: "Despesa",
-    TRANSFER: "Transferência",
-}
-
 interface DataTableToolbarProps<TData> {
     table: Table<TData>
     filterOptions: RecurringFilterOptions
@@ -69,6 +64,17 @@ export function DataTableToolbar<TData>({
     batchLoading,
 }: DataTableToolbarProps<TData>) {
     const { isMobile } = useDeviceClass()
+    const t = useTranslations("recurring.filters")
+    const tBatch = useTranslations("recurring.batch")
+    const tColumns = useTranslations("recurring.columns")
+    const tCommon = useTranslations("common")
+
+    const typeLabels: Record<string, string> = {
+        INCOME: tColumns("typeIncome"),
+        EXPENSE: tColumns("typeExpense"),
+        TRANSFER: tColumns("typeTransfer"),
+    }
+
     const isFiltered = table.getState().columnFilters.length > 0
     const selectedRows = table.getFilteredSelectedRowModel().rows
     const selectedData = selectedRows.map((row) => row.original)
@@ -122,7 +128,7 @@ export function DataTableToolbar<TData>({
             {isMobile ? (
                 <div className="flex items-center gap-2">
                     <Input
-                        placeholder="Buscar..."
+                        placeholder={t("searchPlaceholderMobile")}
                         value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
                         onChange={(event) =>
                             table.getColumn("description")?.setFilterValue(event.target.value)
@@ -134,7 +140,7 @@ export function DataTableToolbar<TData>({
                         <SheetTrigger asChild>
                             <Button variant="outline" size="sm" className="h-9 gap-2">
                                 <Filter className="h-4 w-4" />
-                                <span className="text-xs">Filtros</span>
+                                <span className="text-xs">{t("filtersButton")}</span>
                                 {table.getState().columnFilters.length > 0 && (
                                     <span className="bg-primary text-primary-foreground flex h-4 w-4 items-center justify-center rounded-full text-[10px]">
                                         {table.getState().columnFilters.length}
@@ -144,20 +150,20 @@ export function DataTableToolbar<TData>({
                         </SheetTrigger>
                         <SheetContent side="bottom" className="px-6 pb-8">
                             <SheetHeader>
-                                <SheetTitle>Filtrar Recorrências</SheetTitle>
+                                <SheetTitle>{t("filterSheetTitle")}</SheetTitle>
                             </SheetHeader>
                             <div className="grid gap-4 py-4">
                                 <div className="space-y-2">
-                                    <span className="text-sm font-medium">Tipo</span>
+                                    <span className="text-sm font-medium">{t("typeFieldLabel")}</span>
                                     <Select
                                         value={typeFilter || "all"}
                                         onValueChange={(v) => handleFilterChange("type", v)}
                                     >
                                         <SelectTrigger className="w-full">
-                                            <SelectValue placeholder="Tipo" />
+                                            <SelectValue placeholder={t("typeFieldLabel")} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="all">Todos os tipos</SelectItem>
+                                            <SelectItem value="all">{t("allTypes")}</SelectItem>
                                             {filterOptions.types.map((type) => (
                                                 <SelectItem key={type} value={type}>
                                                     {typeLabels[type] || type}
@@ -174,10 +180,10 @@ export function DataTableToolbar<TData>({
                                     onClick={() => table.resetColumnFilters()}
                                     disabled={!isFiltered}
                                 >
-                                    Limpar
+                                    {t("clear")}
                                 </Button>
                                 <SheetClose asChild>
-                                    <Button className="flex-1">Aplicar</Button>
+                                    <Button className="flex-1">{t("apply")}</Button>
                                 </SheetClose>
                             </SheetFooter>
                         </SheetContent>
@@ -187,7 +193,7 @@ export function DataTableToolbar<TData>({
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex flex-1 items-center gap-2">
                         <Input
-                            placeholder="Busca inteligente..."
+                            placeholder={t("searchPlaceholderDesktop")}
                             value={(table.getColumn("description")?.getFilterValue() as string) ?? ""}
                             onChange={(event) =>
                                 table.getColumn("description")?.setFilterValue(event.target.value)
@@ -200,10 +206,10 @@ export function DataTableToolbar<TData>({
                             onValueChange={(v) => handleFilterChange("type", v)}
                         >
                             <SelectTrigger className="h-9 w-[150px] cursor-pointer">
-                                <SelectValue placeholder="Tipo" />
+                                <SelectValue placeholder={t("typeFieldLabel")} />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all" className="cursor-pointer">Todos os tipos</SelectItem>
+                                <SelectItem value="all" className="cursor-pointer">{t("allTypes")}</SelectItem>
                                 {filterOptions.types.map((type) => (
                                     <SelectItem key={type} value={type} className="cursor-pointer">
                                         {typeLabels[type] || type}
@@ -219,7 +225,7 @@ export function DataTableToolbar<TData>({
                                 className="h-9 px-2 lg:px-3 text-muted-foreground"
                             >
                                 <RotateCcw className="mr-2 h-4 w-4" />
-                                Limpar
+                                {t("clear")}
                             </Button>
                         )}
                     </div>
@@ -235,41 +241,41 @@ export function DataTableToolbar<TData>({
                 <div className="bg-primary/5 border-primary/20 flex items-center justify-between rounded-lg border px-3 py-2 animate-in fade-in slide-in-from-top-1 duration-200">
                     <div className="flex items-center gap-4">
                         <span className="text-primary text-sm font-semibold">
-                            {selectedRows.length} selecionado{selectedRows.length > 1 ? "s" : ""}
+                            {tBatch("selectedCount", { count: selectedRows.length })}
                         </span>
                         <div className="flex items-center gap-2">
                             <Button
                                 variant="outline"
                                 size="sm"
                                 className="text-chart-2 border-chart-2/30 hover:bg-chart-2/10 h-8 gap-2"
-                                title="Lançar selecionados"
+                                title={tBatch("launchTooltip")}
                                 disabled={batchLoading}
                                 onClick={() => setShowLaunchConfirm(true)}
                             >
                                 <Play className="h-4 w-4" />
-                                Lançar
+                                {tBatch("launch")}
                             </Button>
                             <Button
                                 variant="outline"
                                 size="sm"
                                 className="h-8 gap-2"
-                                title="Editar data dos selecionados"
+                                title={tBatch("editDateTooltip")}
                                 disabled={batchLoading}
                                 onClick={() => setShowEditDateDialog(true)}
                             >
                                 <Pencil className="h-4 w-4" />
-                                Editar Data
+                                {tBatch("editDate")}
                             </Button>
                             <Button
                                 variant="outline"
                                 size="sm"
                                 className="text-destructive border-destructive/30 hover:bg-destructive/10 h-8 gap-2"
-                                title="Excluir selecionados"
+                                title={tBatch("deleteTooltip")}
                                 disabled={batchLoading}
                                 onClick={() => setShowDeleteConfirm(true)}
                             >
                                 <Trash2 className="h-4 w-4" />
-                                Excluir
+                                {tBatch("delete")}
                             </Button>
                         </div>
                     </div>
@@ -279,7 +285,7 @@ export function DataTableToolbar<TData>({
                         onClick={() => table.resetRowSelection()}
                         className="text-muted-foreground h-8"
                     >
-                        Cancelar
+                        {tCommon("cancel")}
                     </Button>
                 </div>
             )}
@@ -287,16 +293,15 @@ export function DataTableToolbar<TData>({
             <AlertDialog open={showLaunchConfirm} onOpenChange={setShowLaunchConfirm}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Lançar Transações</AlertDialogTitle>
+                        <AlertDialogTitle>{tBatch("launchTitle")}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Confirmar lançamento de {selectedRows.length} recorrência
-                            {selectedRows.length > 1 ? "s" : ""}?
+                            {tBatch("launchDescription", { count: selectedRows.length })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel disabled={batchLoading}>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel disabled={batchLoading}>{tCommon("cancel")}</AlertDialogCancel>
                         <AlertDialogAction disabled={batchLoading} onClick={() => void handleLaunch()}>
-                            {batchLoading ? "Lançando..." : "Lançar"}
+                            {batchLoading ? tBatch("launching") : tBatch("launch")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
@@ -305,15 +310,13 @@ export function DataTableToolbar<TData>({
             <Dialog open={showEditDateDialog} onOpenChange={setShowEditDateDialog}>
                 <DialogContent className="sm:max-w-[420px]">
                     <DialogHeader>
-                        <DialogTitle>Editar Data em Lote</DialogTitle>
+                        <DialogTitle>{tBatch("editDateTitle")}</DialogTitle>
                         <DialogDescription>
-                            Defina a data para {selectedRows.length} recorrência
-                            {selectedRows.length > 1 ? "s" : ""} selecionada
-                            {selectedRows.length > 1 ? "s" : ""}.
+                            {tBatch("editDateDescription", { count: selectedRows.length })}
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-2">
-                        <Label htmlFor="batch-recurring-date">Data</Label>
+                        <Label htmlFor="batch-recurring-date">{tBatch("dateLabel")}</Label>
                         <Input
                             id="batch-recurring-date"
                             type="date"
@@ -327,13 +330,13 @@ export function DataTableToolbar<TData>({
                             onClick={() => setShowEditDateDialog(false)}
                             disabled={batchLoading}
                         >
-                            Cancelar
+                            {tCommon("cancel")}
                         </Button>
                         <Button
                             onClick={() => void handleEditDate()}
                             disabled={batchLoading || !selectedDate}
                         >
-                            {batchLoading ? "Salvando..." : "Salvar data"}
+                            {batchLoading ? tBatch("saving") : tBatch("saveDate")}
                         </Button>
                     </DialogFooter>
                 </DialogContent>
@@ -342,20 +345,19 @@ export function DataTableToolbar<TData>({
             <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Excluir Recorrências</AlertDialogTitle>
+                        <AlertDialogTitle>{tBatch("deleteTitle")}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            Esta ação excluirá {selectedRows.length} recorrência
-                            {selectedRows.length > 1 ? "s" : ""} permanentemente.
+                            {tBatch("deleteDescription", { count: selectedRows.length })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel disabled={batchLoading}>Cancelar</AlertDialogCancel>
+                        <AlertDialogCancel disabled={batchLoading}>{tCommon("cancel")}</AlertDialogCancel>
                         <AlertDialogAction
                             variant="destructive"
                             disabled={batchLoading}
                             onClick={() => void handleDelete()}
                         >
-                            {batchLoading ? "Excluindo..." : "Excluir"}
+                            {batchLoading ? tBatch("deleting") : tBatch("delete")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

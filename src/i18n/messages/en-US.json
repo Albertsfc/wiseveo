@@ -283,6 +283,127 @@
     "signup": "Create Account",
     "title": "Access your account"
   },
+  "recurring": {
+    "actions": {
+      "delete": "Delete",
+      "edit": "Edit",
+      "launchTransaction": "Launch Transaction"
+    },
+    "batch": {
+      "dateLabel": "Date",
+      "delete": "Delete",
+      "deleteDescription": "This action will permanently delete {count, plural, one {# recurrence} other {# recurrences}}.",
+      "deleteTitle": "Delete Recurrences",
+      "deleteTooltip": "Delete selected",
+      "deleting": "Deleting...",
+      "editDate": "Edit Date",
+      "editDateDescription": "Set the date for {count, plural, one {# selected recurrence} other {# selected recurrences}}.",
+      "editDateTitle": "Batch Edit Date",
+      "editDateTooltip": "Edit date of selected items",
+      "launch": "Launch",
+      "launchDescription": "Confirm launching {count, plural, one {# recurrence} other {# recurrences}}?",
+      "launchTitle": "Launch Transactions",
+      "launchTooltip": "Launch selected",
+      "launching": "Launching...",
+      "saveDate": "Save date",
+      "saving": "Saving...",
+      "selectedCount": "{count, plural, one {# selected} other {# selected}}"
+    },
+    "card": {
+      "lastLabel": "Last:",
+      "noDescription": "No description",
+      "noHistory": "No history",
+      "noReference": "No reference",
+      "periodLabel": "Period:"
+    },
+    "columns": {
+      "account": "BANK",
+      "actions": "ACTIONS",
+      "amount": "AMOUNT",
+      "category": "CATEGORY",
+      "description": "DESCRIPTION",
+      "group": "GROUP",
+      "lastLaunch": "LAST LAUNCH",
+      "note": "HISTORY",
+      "period": "PERIOD",
+      "reference": "REF",
+      "selectAllAria": "Select all",
+      "selectRowAria": "Select row",
+      "type": "TYPE",
+      "typeExpense": "Expense",
+      "typeIncome": "Income",
+      "typeTransfer": "Transfer"
+    },
+    "dialogs": {
+      "deleteConfirm": {
+        "confirmText": "This action will permanently delete the recurring template.",
+        "deleting": "Deleting...",
+        "title": "Delete Recurrence"
+      },
+      "editRecurring": {
+        "accountLabel": "Bank",
+        "amountLabel": "Amount",
+        "categoryLabel": "Category",
+        "dateLabel": "Date",
+        "description": "Update the data for the selected recurrence.",
+        "descriptionLabel": "Notes",
+        "descriptionPlaceholder": "Optional details...",
+        "groupLabel": "Group",
+        "historyLabel": "Description",
+        "historyPlaceholder": "Payee or quick description...",
+        "refLabel": "REF",
+        "refPlaceholder": "e.g.: Utility bill",
+        "saving": "Saving...",
+        "selectPlaceholder": "Select...",
+        "statusLabel": "Status",
+        "suggestionsCount": "{count, plural, one {# suggestion} other {# suggestions}}",
+        "title": "Edit Recurrence",
+        "typeExpense": "Expense",
+        "typeIncome": "Income",
+        "typeTransfer": "Transfer",
+        "updateButton": "Update"
+      },
+      "historyFallback": "No history",
+      "launchConfirm": {
+        "confirmText": "Confirm launching a new transaction from this recurrence?",
+        "launchButton": "Launch",
+        "launching": "Launching...",
+        "title": "Launch Transaction"
+      }
+    },
+    "filters": {
+      "allTypes": "All types",
+      "apply": "Apply",
+      "clear": "Clear",
+      "filterSheetTitle": "Filter Recurrences",
+      "filtersButton": "Filters",
+      "searchPlaceholderDesktop": "Smart search...",
+      "searchPlaceholderMobile": "Search...",
+      "typeFieldLabel": "Type"
+    },
+    "table": {
+      "noResults": "No recurrences found."
+    },
+    "toasts": {
+      "batchDeleteError": "Failed to delete the selected recurrences",
+      "batchDeletePartial": "{succeeded} deleted and {failed} failed",
+      "batchDeleteSuccess": "{count, plural, one {# recurrence deleted} other {# recurrences deleted}} successfully",
+      "batchEditDateError": "Failed to update the date of the selected recurrences",
+      "batchEditDatePartial": "{succeeded} updated and {failed} failed",
+      "batchEditDateSuccess": "Date updated for {count, plural, one {# recurrence} other {# recurrences}}",
+      "batchLaunchError": "Failed to launch the selected recurrences",
+      "batchLaunchPartial": "{succeeded} launched and {failed} failed",
+      "batchLaunchSuccess": "{count, plural, one {# transaction launched} other {# transactions launched}} successfully",
+      "deleteError": "Failed to delete recurrence",
+      "deleteSuccess": "Recurrence deleted successfully",
+      "editError": "Failed to edit recurrence",
+      "editSuccess": "Recurrence updated successfully",
+      "invalidAmount": "Enter a valid amount",
+      "launchError": "Failed to launch recurring transaction",
+      "launchSuccess": "Transaction launched successfully",
+      "requiredFields": "Fill in all required fields"
+    }
+  },
   "settings": {
     "account": {
       "accessDataDesc": "Update your basic access and display credentials.",

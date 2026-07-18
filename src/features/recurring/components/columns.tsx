@@ -1,21 +1,44 @@
 "use client"
 
 import type { ColumnDef, Row } from "@tanstack/react-table"
-import { format, parseISO } from "date-fns"
 
 import { Checkbox } from "@/components/ui/checkbox"
 import { formatPeriod } from "@/lib/financial"
 import type { MonetaryFormatter } from "@/lib/monetary"
 import { cn } from "@/lib/utils"
+import { createDateFormatter } from "@/i18n/format"
 
 import type { SerializedRecurringTransaction, RecurringTableMeta } from "../types"
 import { DataTableColumnHeader } from "../../transactions/components/data-table-column-header"
 import { RecurringActions } from "./recurring-actions"
 
-const typeConfig: Record<string, { label: string; className: string }> = {
-  INCOME: { label: "Receita", className: "text-chart-2" },
-  EXPENSE: { label: "Despesa", className: "text-destructive" },
-  TRANSFER: { label: "Transferência", className: "text-muted-foreground" },
+export interface RecurringColumnLabels {
+  account: string
+  actions: string
+  amount: string
+  category: string
+  description: string
+  group: string
+  lastLaunch: string
+  note: string
+  period: string
+  reference: string
+  selectAllAria: string
+  selectRowAria: string
+  type: string
+  typeExpense: string
+  typeIncome: string
+  typeTransfer: string
+}
+
+function buildTypeConfig(
+  labels: RecurringColumnLabels
+): Record<string, { label: string; className: string }> {
+  return {
+    INCOME: { label: labels.typeIncome, className: "text-chart-2" },
+    EXPENSE: { label: labels.typeExpense, className: "text-destructive" },
+    TRANSFER: { label: labels.typeTransfer, className: "text-muted-foreground" },
+  }
 }
 
 type RecurringColumnFormatter = Pick<
@@ -94,7 +117,19 @@ function matchesAmountSearch(
   return searchDigits.length > 0 && amountDigits.includes(searchDigits)
 }
 
-export function createRecurringFilter(monetary: RecurringColumnFormatter) {
+export function createRecurringFilter(
+  monetary: RecurringColumnFormatter,
+  labels: RecurringColumnLabels,
+  locale: string,
+) {
+  const typeConfig = buildTypeConfig(labels)
+  const dateFormatter = createDateFormatter(locale, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: "UTC",
+  })
+
   return (
     row: Row<SerializedRecurringTransaction>,
     _columnId: string,
@@ -119,7 +154,7 @@ export function createRecurringFilter(monetary: RecurringColumnFormatter) {
 
     const lastDate = row.getValue("lastDate") as string | null
     const formattedDate = lastDate
-      ? format(parseISO(lastDate), "dd/MM/yyyy").toLowerCase()
+      ? dateFormatter.format(new Date(lastDate)).toLowerCase()
       : ""
 
     const amountMatches = matchesAmountSearch(row.original.amount, search, monetary)
@@ -143,8 +178,17 @@ export function createRecurringFilter(monetary: RecurringColumnFormatter) {
 
 export function getRecurringColumns(
   monetary: RecurringColumnFormatter,
+  labels: RecurringColumnLabels,
+  locale: string,
 ): ColumnDef<SerializedRecurringTransaction>[] {
-  const recurringFilter = createRecurringFilter(monetary)
+  const recurringFilter = createRecurringFilter(monetary, labels, locale)
+  const typeConfig = buildTypeConfig(labels)
+  const dateFormatter = createDateFormatter(locale, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    timeZone: "UTC",
+  })
 
   return [
     {
@@ -156,7 +200,7 @@ export function getRecurringColumns(
             (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Selecionar tudo"
+          aria-label={labels.selectAllAria}
           className="translate-y-[2px] cursor-pointer"
         />
       ),
@@ -164,7 +208,7 @@ export function getRecurringColumns(
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Selecionar linha"
+          aria-label={labels.selectRowAria}
           className="translate-y-[2px] cursor-pointer"
         />
       ),
@@ -174,13 +218,13 @@ export function getRecurringColumns(
     {
       accessorKey: "lastDate",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="ÚLT. LANÇAMENTO" />
+        <DataTableColumnHeader column={column} title={labels.lastLaunch} />
       ),
       cell: ({ row }) => {
         const dateStr = row.getValue("lastDate") as string | null
         return (
           <div className="w-[110px] text-sm">
-            {dateStr ? format(parseISO(dateStr), "dd/MM/yyyy") : "—"}
+            {dateStr ? dateFormatter.format(new Date(dateStr)) : "—"}
           </div>
         )
       },
@@ -188,7 +232,7 @@ export function getRecurringColumns(
     {
       accessorKey: "period",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="PERÍODO" />
+        <DataTableColumnHeader column={column} title={labels.period} />
       ),
       cell: ({ row }) => {
         const period = (row.getValue("period") as string | null) ?? ""
@@ -199,7 +243,7 @@ export function getRecurringColumns(
     {
       accessorKey: "reference",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="REF" />
+        <DataTableColumnHeader column={column} title={labels.reference} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[140px] truncate text-sm">
@@ -210,7 +254,7 @@ export function getRecurringColumns(
     {
       accessorKey: "note",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="HISTÓRICO" />
+        <DataTableColumnHeader column={column} title={labels.note} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[220px] truncate text-sm">
@@ -221,7 +265,7 @@ export function getRecurringColumns(
     {
       accessorKey: "description",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="DESCRIÇÃO" />
+        <DataTableColumnHeader column={column} title={labels.description} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[260px] truncate text-sm">
@@ -234,7 +278,7 @@ export function getRecurringColumns(
       id: "group",
       accessorFn: (row) => row.category.group.name,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="GRUPO" />
+        <DataTableColumnHeader column={column} title={labels.group} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[160px] truncate text-sm">{row.original.category.group.name}</div>
@@ -244,7 +288,7 @@ export function getRecurringColumns(
       id: "category",
       accessorFn: (row) => row.category.name,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="CATEGORIA" />
+        <DataTableColumnHeader column={column} title={labels.category} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[180px] truncate text-sm">{row.original.category.name}</div>
@@ -253,7 +297,7 @@ export function getRecurringColumns(
     {
       accessorKey: "amount",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="VALOR" />
+        <DataTableColumnHeader column={column} title={labels.amount} />
       ),
       cell: ({ row }) => {
         const amount = row.getValue("amount") as number
@@ -275,7 +319,7 @@ export function getRecurringColumns(
       id: "account",
       accessorFn: (row) => row.account.name,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="BANCO" />
+        <DataTableColumnHeader column={column} title={labels.account} />
       ),
       cell: ({ row }) => (
         <div className="text-sm">{row.original.account.name}</div>
@@ -285,7 +329,7 @@ export function getRecurringColumns(
       id: "type",
       accessorFn: (row) => row.type,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="TIPO" />
+        <DataTableColumnHeader column={column} title={labels.type} />
       ),
       cell: ({ row }) => {
         const type = row.original.type
@@ -295,7 +339,7 @@ export function getRecurringColumns(
     },
     {
       id: "actions",
-      header: () => <div className="text-right">AÇÕES</div>,
+      header: () => <div className="text-right">{labels.actions}</div>,
       cell: ({ row, table }) => {
         const meta = table.options.meta as RecurringTableMeta | undefined
         return (

@@ -10,6 +10,5 @@
   "src/features/calendar",
   "src/features/component-library",
   "src/features/forecasting",
-  "src/features/recurring",
   "src/features/telegram"
 ]

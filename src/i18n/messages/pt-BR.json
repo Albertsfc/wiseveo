@@ -283,6 +283,127 @@
     "signup": "Criar Conta",
     "title": "Acesse sua conta"
   },
+  "recurring": {
+    "actions": {
+      "delete": "Excluir",
+      "edit": "Editar",
+      "launchTransaction": "Lançar Transação"
+    },
+    "batch": {
+      "dateLabel": "Data",
+      "delete": "Excluir",
+      "deleteDescription": "Esta ação excluirá {count, plural, one {# recorrência} other {# recorrências}} permanentemente.",
+      "deleteTitle": "Excluir Recorrências",
+      "deleteTooltip": "Excluir selecionados",
+      "deleting": "Excluindo...",
+      "editDate": "Editar Data",
+      "editDateDescription": "Defina a data para {count, plural, one {# recorrência selecionada} other {# recorrências selecionadas}}.",
+      "editDateTitle": "Editar Data em Lote",
+      "editDateTooltip": "Editar data dos selecionados",
+      "launch": "Lançar",
+      "launchDescription": "Confirmar lançamento de {count, plural, one {# recorrência} other {# recorrências}}?",
+      "launchTitle": "Lançar Transações",
+      "launchTooltip": "Lançar selecionados",
+      "launching": "Lançando...",
+      "saveDate": "Salvar data",
+      "saving": "Salvando...",
+      "selectedCount": "{count, plural, one {# selecionado} other {# selecionados}}"
+    },
+    "card": {
+      "lastLabel": "Último:",
+      "noDescription": "Sem descrição",
+      "noHistory": "Sem histórico",
+      "noReference": "Sem referência",
+      "periodLabel": "Período:"
+    },
+    "columns": {
+      "account": "BANCO",
+      "actions": "AÇÕES",
+      "amount": "VALOR",
+      "category": "CATEGORIA",
+      "description": "DESCRIÇÃO",
+      "group": "GRUPO",
+      "lastLaunch": "ÚLT. LANÇAMENTO",
+      "note": "HISTÓRICO",
+      "period": "PERÍODO",
+      "reference": "REF",
+      "selectAllAria": "Selecionar tudo",
+      "selectRowAria": "Selecionar linha",
+      "type": "TIPO",
+      "typeExpense": "Despesa",
+      "typeIncome": "Receita",
+      "typeTransfer": "Transferência"
+    },
+    "dialogs": {
+      "deleteConfirm": {
+        "confirmText": "Esta ação excluirá definitivamente o modelo recorrente.",
+        "deleting": "Excluindo...",
+        "title": "Excluir Recorrência"
+      },
+      "editRecurring": {
+        "accountLabel": "Banco",
+        "amountLabel": "Valor",
+        "categoryLabel": "Categoria",
+        "dateLabel": "Data",
+        "description": "Atualize os dados da recorrência selecionada.",
+        "descriptionLabel": "Descrição",
+        "descriptionPlaceholder": "Detalhes opcionais...",
+        "groupLabel": "Grupo",
+        "historyLabel": "Histórico",
+        "historyPlaceholder": "Beneficiário ou descrição rápida...",
+        "refLabel": "REF",
+        "refPlaceholder": "ex: Boleto FIES",
+        "saving": "Salvando...",
+        "selectPlaceholder": "Selecione...",
+        "statusLabel": "Status",
+        "suggestionsCount": "{count, plural, one {# sugestão} other {# sugestões}}",
+        "title": "Editar Recorrência",
+        "typeExpense": "Despesa",
+        "typeIncome": "Receita",
+        "typeTransfer": "Transf.",
+        "updateButton": "Atualizar"
+      },
+      "historyFallback": "Sem histórico",
+      "launchConfirm": {
+        "confirmText": "Confirmar lançamento de uma nova transação a partir desta recorrência?",
+        "launchButton": "Lançar",
+        "launching": "Lançando...",
+        "title": "Lançar Transação"
+      }
+    },
+    "filters": {
+      "allTypes": "Todos os tipos",
+      "apply": "Aplicar",
+      "clear": "Limpar",
+      "filterSheetTitle": "Filtrar Recorrências",
+      "filtersButton": "Filtros",
+      "searchPlaceholderDesktop": "Busca inteligente...",
+      "searchPlaceholderMobile": "Buscar...",
+      "typeFieldLabel": "Tipo"
+    },
+    "table": {
+      "noResults": "Nenhuma recorrência encontrada."
+    },
+    "toasts": {
+      "batchDeleteError": "Falha ao excluir recorrências selecionadas",
+      "batchDeletePartial": "{succeeded} excluída(s) e {failed} com falha",
+      "batchDeleteSuccess": "{count, plural, one {# recorrência excluída} other {# recorrências excluídas}} com sucesso",
+      "batchEditDateError": "Falha ao atualizar data das recorrências selecionadas",
+      "batchEditDatePartial": "{succeeded} atualizada(s) e {failed} com falha",
+      "batchEditDateSuccess": "Data atualizada em {count, plural, one {# recorrência} other {# recorrências}}",
+      "batchLaunchError": "Falha ao lançar recorrências selecionadas",
+      "batchLaunchPartial": "{succeeded} lançada(s) e {failed} com falha",
+      "batchLaunchSuccess": "{count, plural, one {# transação lançada} other {# transações lançadas}} com sucesso",
+      "deleteError": "Erro ao excluir recorrência",
+      "deleteSuccess": "Recorrência excluída com sucesso",
+      "editError": "Erro ao editar recorrência",
+      "editSuccess": "Recorrência atualizada com sucesso",
+      "invalidAmount": "Informe um valor válido",
+      "launchError": "Erro ao lançar transação recorrente",
+      "launchSuccess": "Transação lançada com sucesso",
+      "requiredFields": "Preencha todos os campos obrigatórios"
+    }
+  },
   "settings": {
     "account": {
       "accessDataDesc": "Atualize suas credenciais básicas de acesso e exibição.",
