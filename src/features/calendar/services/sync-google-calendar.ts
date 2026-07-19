@@ -13,12 +13,16 @@ const TYPE_COLOR_ID: Record<string, string> = {
   TRANSFER: "9",
 }
 
-// Stable, locale-independent marker (the brand name is never translated) used
-// to identify events created by WISEVEO regardless of the locale active when
-// they were synced. Do NOT swap this for the translated tag text (see
-// calendar.google.syncedTag) — that would break detection for events created
-// under a different UI locale (the approveUser comparison-hazard class).
-const WISEVEO_MARKER = "WISEVEO"
+// Conjunto fixo das frases de marcação (calendar.google.syncedTag em cada
+// locale) usadas para identificar eventos criados pelo WISEVEO em qualquer
+// idioma. Um evento do usuário que apenas MENCIONE "WISEVEO" na descrição não
+// pode ser confundido e apagado. Se o valor de syncedTag mudar nos JSONs, a
+// frase antiga DEVE permanecer nesta lista (eventos legados dependem dela).
+const WISEVEO_MARKERS = [
+  "Sincronizado via WISEVEO",
+  "Synced via WISEVEO",
+  "Sincronizado a través de WISEVEO", // i18n-ignore
+]
 
 function utcDateKey(d: Date): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`
@@ -42,7 +46,7 @@ interface GoogleEvent {
 
 function isWiseveoEvent(item: { description?: string }): boolean {
   const desc = item.description ?? ""
-  return desc.includes(WISEVEO_MARKER)
+  return WISEVEO_MARKERS.some((marker) => desc.includes(marker))
 }
 
 /**
