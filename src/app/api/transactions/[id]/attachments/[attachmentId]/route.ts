@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { prisma } from "@/lib/prisma"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
@@ -7,9 +8,10 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; attachmentId: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+    return NextResponse.json({ error: t("errors.userNotFound") }, { status: 401 })
   }
 
   const { id: transactionId, attachmentId } = await params
@@ -19,7 +21,7 @@ export async function GET(
     select: { id: true },
   })
   if (!transaction) {
-    return NextResponse.json({ error: "Transação não encontrada" }, { status: 404 })
+    return NextResponse.json({ error: t("errors.transactionNotFound") }, { status: 404 })
   }
 
   const attachment = await prisma.transactionAttachment.findFirst({
@@ -27,7 +29,7 @@ export async function GET(
     select: { fileData: true, mimeType: true, fileName: true, fileSize: true },
   })
   if (!attachment) {
-    return NextResponse.json({ error: "Anexo não encontrado" }, { status: 404 })
+    return NextResponse.json({ error: t("transactions.attachmentNotFound") }, { status: 404 })
   }
 
   const shouldDownload = request.nextUrl.searchParams.get("download") === "1"
@@ -49,9 +51,10 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string; attachmentId: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+    return NextResponse.json({ error: t("errors.userNotFound") }, { status: 401 })
   }
 
   const { id: transactionId, attachmentId } = await params
@@ -61,7 +64,7 @@ export async function DELETE(
     select: { id: true },
   })
   if (!transaction) {
-    return NextResponse.json({ error: "Transação não encontrada" }, { status: 404 })
+    return NextResponse.json({ error: t("errors.transactionNotFound") }, { status: 404 })
   }
 
   const attachment = await prisma.transactionAttachment.findFirst({
@@ -69,7 +72,7 @@ export async function DELETE(
     select: { id: true },
   })
   if (!attachment) {
-    return NextResponse.json({ error: "Anexo não encontrado" }, { status: 404 })
+    return NextResponse.json({ error: t("transactions.attachmentNotFound") }, { status: 404 })
   }
 
   await prisma.transactionAttachment.delete({

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import {
   getUserAppearanceSettings,
   updateUserAppearance,
@@ -9,11 +10,12 @@ import { normalizeThemePreferences } from "@/lib/theme-preferences"
 export const dynamic = "force-dynamic"
 
 export async function GET() {
+  const t = await getTranslations("api.errors")
   const userId = await getSettingsUserId()
 
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Usuário não encontrado" },
+      { success: false, message: t("userNotFound") },
       { status: 401 },
     )
   }
@@ -27,11 +29,12 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const t = await getTranslations("api.errors")
   const userId = await getSettingsUserId()
 
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Usuário não encontrado" },
+      { success: false, message: t("userNotFound") },
       { status: 401 },
     )
   }

@@ -173,6 +173,81 @@
     "transactionsConsidered": "{count, plural, one {# transaction considered} other {# transactions considered}}",
     "transactionsCount": "{count, plural, one {# transaction} other {# transactions}}"
   },
+  "api": {
+    "admin": {
+      "invalidAction": "Invalid administrative action",
+      "userApproved": "User approved successfully."
+    },
+    "auth": {
+      "allFieldsRequired": "All fields are required",
+      "emailAlreadyRegistered": "This email is already registered",
+      "emailPasswordRequired": "Email and password are required",
+      "googleAccountRequired": "This account uses Google sign-in. Click 'Continue with Google'.",
+      "invalidCredentials": "Incorrect email or password",
+      "loginSuccess": "Login successful",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "pendingApprovalExisting": "Your registration is already awaiting approval.",
+      "pendingApprovalLogin": "Your registration is still awaiting approval.",
+      "signupReceived": "Registration received. Please wait for an administrator's approval.",
+      "signupSuccess": "Account created successfully"
+    },
+    "calendar": {
+      "clearFailed": "Failed to clear events",
+      "syncFailed": "Failed to sync"
+    },
+    "errors": {
+      "internalError": "Internal server error",
+      "invalidDateRange": "Invalid range: 'from' must be <= 'to'",
+      "invalidDates": "Invalid dates",
+      "invalidJson": "Invalid JSON",
+      "invalidPeriod": "Invalid period (expected YYYYMM)",
+      "missingDateRange": "'from' and 'to' parameters are required",
+      "missingField": "Required field: {field}",
+      "notAuthenticated": "Not authenticated",
+      "recurrenceNotFound": "Recurrence not found",
+      "transactionNotFound": "Transaction not found",
+      "userNotFound": "User not found"
+    },
+    "recurringTransactions": {
+      "launchFailed": "Failed to launch recurring transaction"
+    },
+    "setup": {
+      "adminCreationFailed": "Failed to create admin user: {message}",
+      "migrationFailed": "Failed to migrate the database.",
+      "missingFields": "Missing required fields.",
+      "unknownError": "Unknown error"
+    },
+    "transactions": {
+      "attachmentNotFound": "Attachment not found",
+      "copyFailed": "Failed to copy transaction",
+      "createFailed": "Failed to create transaction",
+      "deleteMessageFailed": "Failed to delete message",
+      "emptyMessage": "Message cannot be empty",
+      "excludeFailed": "Failed to delete transaction",
+      "fileTooLarge": "{fileName}: exceeds 3 MB",
+      "fileTypeNotAllowed": "{fileName}: file type not allowed",
+      "invalidFormData": "Invalid form data",
+      "invalidType": "Invalid type",
+      "loadMessagesFailed": "Failed to load messages",
+      "messageNotFound": "Message not found",
+      "messageTooLong": "Message must be at most {max} characters",
+      "missingFields": "Required fields: date, amount, type, accountId, groupCode, categoryCode, statusCode",
+      "noFilesUploaded": "No files uploaded",
+      "quickPayFailed": "Failed to process quick payment",
+      "recurrentFailed": "Failed to create recurring transaction",
+      "saveMessageFailed": "Failed to save message",
+      "updateDateFailed": "Failed to update transaction date",
+      "updateFailed": "Failed to update transaction",
+      "updatePeriodFailed": "Failed to update transaction period"
+    },
+    "user": {
+      "accountUpdateSuccess": "Account updated successfully!",
+      "generalPreferencesSaveFailed": "Unable to save general settings.",
+      "invalidQuickPaySelection": "Select a valid bank and status for Quick Pay.",
+      "passwordMismatch": "Passwords do not match.",
+      "updateProfileFailed": "Failed to update profile"
+    }
+  },
   "auth": {
     "cadastroPendente": {
       "backToLogin": "Back to login",

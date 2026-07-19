@@ -35,10 +35,12 @@ export interface CalendarStatementResponse {
  * non-Portuguese locales.
  */
 export const CALENDAR_SYNC_PHASE = {
+  preparing: "preparing-sync",
   removingOld: "removing-old-events",
   syncingEvents: "syncing-events",
 } as const
 
 export const CALENDAR_CLEAR_PHASE = {
+  preparing: "preparing-clear",
   clearingEvents: "clearing-events",
 } as const

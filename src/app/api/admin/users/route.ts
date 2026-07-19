@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { getSessionUserId } from "@/lib/session"
 import {
   AdminAccessError,
@@ -8,7 +9,7 @@ import {
 
 export const dynamic = "force-dynamic"
 
-function errorResponse(error: unknown) {
+async function errorResponse(error: unknown) {
   if (error instanceof AdminAccessError) {
     return NextResponse.json(
       { success: false, message: error.message },
@@ -16,10 +17,12 @@ function errorResponse(error: unknown) {
     )
   }
 
-  console.error("[GET /api/admin/users] erro:", error)
+  console.error("[GET /api/admin/users] error:", error)
+
+  const t = await getTranslations("api.errors")
 
   return NextResponse.json(
-    { success: false, message: "Erro interno do servidor" },
+    { success: false, message: t("internalError") },
     { status: 500 },
   )
 }

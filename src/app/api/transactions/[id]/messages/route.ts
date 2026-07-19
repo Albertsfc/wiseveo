@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { prisma } from "@/lib/prisma"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
@@ -10,9 +11,10 @@ export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+    return NextResponse.json({ error: t("errors.userNotFound") }, { status: 401 })
   }
 
   const { id: transactionId } = await params
@@ -23,7 +25,7 @@ export async function GET(
   })
 
   if (!transaction) {
-    return NextResponse.json({ error: "Transação não encontrada" }, { status: 404 })
+    return NextResponse.json({ error: t("errors.transactionNotFound") }, { status: 404 })
   }
 
   try {
@@ -61,7 +63,7 @@ export async function GET(
     return NextResponse.json({ messages })
   } catch (error) {
     console.error("Error loading transaction messages:", error)
-    return NextResponse.json({ error: "Erro ao carregar mensagens" }, { status: 500 })
+    return NextResponse.json({ error: t("transactions.loadMessagesFailed") }, { status: 500 })
   }
 }
 
@@ -70,9 +72,10 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+    return NextResponse.json({ error: t("errors.userNotFound") }, { status: 401 })
   }
 
   const { id: transactionId } = await params
@@ -83,25 +86,25 @@ export async function POST(
   })
 
   if (!transaction) {
-    return NextResponse.json({ error: "Transação não encontrada" }, { status: 404 })
+    return NextResponse.json({ error: t("errors.transactionNotFound") }, { status: 404 })
   }
 
   let body: Record<string, unknown>
   try {
     body = await request.json()
   } catch {
-    return NextResponse.json({ error: "JSON inválido" }, { status: 400 })
+    return NextResponse.json({ error: t("errors.invalidJson") }, { status: 400 })
   }
 
   const content = typeof body.content === "string" ? body.content.trim() : ""
 
   if (!content) {
-    return NextResponse.json({ error: "Mensagem não pode estar vazia" }, { status: 400 })
+    return NextResponse.json({ error: t("transactions.emptyMessage") }, { status: 400 })
   }
 
   if (content.length > MAX_MESSAGE_LENGTH) {
     return NextResponse.json(
-      { error: `Mensagem deve ter no máximo ${MAX_MESSAGE_LENGTH} caracteres` },
+      { error: t("transactions.messageTooLong", { max: MAX_MESSAGE_LENGTH }) },
       { status: 400 }
     )
   }
@@ -148,7 +151,7 @@ export async function POST(
 
     const row = rows[0]
     if (!row) {
-      return NextResponse.json({ error: "Erro ao salvar mensagem" }, { status: 500 })
+      return NextResponse.json({ error: t("transactions.saveMessageFailed") }, { status: 500 })
     }
 
     const message = {
@@ -164,6 +167,6 @@ export async function POST(
     return NextResponse.json({ message }, { status: 201 })
   } catch (error) {
     console.error("Error creating transaction message:", error)
-    return NextResponse.json({ error: "Erro ao salvar mensagem" }, { status: 500 })
+    return NextResponse.json({ error: t("transactions.saveMessageFailed") }, { status: 500 })
   }
 }

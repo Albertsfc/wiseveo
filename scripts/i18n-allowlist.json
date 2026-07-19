@@ -1,4 +1,3 @@
 [
-  "src/app/api",
   "src/features/telegram"
 ]

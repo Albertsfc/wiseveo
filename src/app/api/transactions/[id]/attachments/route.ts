@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { prisma } from "@/lib/prisma"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
@@ -17,9 +18,10 @@ export async function POST(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const t = await getTranslations("api")
     const userId = await getDefaultUserId()
     if (!userId) {
-        return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+        return NextResponse.json({ error: t("errors.userNotFound") }, { status: 401 })
     }
 
     const { id: transactionId } = await params
@@ -30,19 +32,19 @@ export async function POST(
         select: { id: true },
     })
     if (!transaction) {
-        return NextResponse.json({ error: "Transação não encontrada" }, { status: 404 })
+        return NextResponse.json({ error: t("errors.transactionNotFound") }, { status: 404 })
     }
 
     let formData: FormData
     try {
         formData = await request.formData()
     } catch {
-        return NextResponse.json({ error: "FormData inválido" }, { status: 400 })
+        return NextResponse.json({ error: t("transactions.invalidFormData") }, { status: 400 })
     }
 
     const files = formData.getAll("files") as File[]
     if (!files || files.length === 0) {
-        return NextResponse.json({ error: "Nenhum arquivo enviado" }, { status: 400 })
+        return NextResponse.json({ error: t("transactions.noFilesUploaded") }, { status: 400 })
     }
 
     const saved: { id: string; fileName: string; mimeType: string; fileSize: number }[] = []
@@ -51,12 +53,12 @@ export async function POST(
     for (const file of files) {
         // Validate type
         if (!ALLOWED_MIME.includes(file.type)) {
-            errors.push(`${file.name}: tipo não permitido`)
+            errors.push(t("transactions.fileTypeNotAllowed", { fileName: file.name }))
             continue
         }
         // Validate size
         if (file.size > MAX_FILE_SIZE) {
-            errors.push(`${file.name}: excede 3 MB`)
+            errors.push(t("transactions.fileTooLarge", { fileName: file.name }))
             continue
         }
 
@@ -87,9 +89,10 @@ export async function GET(
     _request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const t = await getTranslations("api.errors")
     const userId = await getDefaultUserId()
     if (!userId) {
-        return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+        return NextResponse.json({ error: t("userNotFound") }, { status: 401 })
     }
 
     const { id: transactionId } = await params
@@ -99,7 +102,7 @@ export async function GET(
         select: { id: true },
     })
     if (!transaction) {
-        return NextResponse.json({ error: "Transação não encontrada" }, { status: 404 })
+        return NextResponse.json({ error: t("transactionNotFound") }, { status: 404 })
     }
 
     const attachments = await prisma.transactionAttachment.findMany({

@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server"
 import { endOfMonth } from "date-fns"
+import { getTranslations } from "next-intl/server"
 
 import { createTransaction } from "@/features/transactions/services/create-transaction"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
@@ -9,13 +10,14 @@ import { getFinancialSummary } from "@/features/shared/services/get-financial-su
 import { startOfUTCDay, endOfUTCDay } from "@/lib/financial"
 
 export async function GET(request: NextRequest) {
+  const t = await getTranslations("api.errors")
   const { searchParams } = request.nextUrl
   const fromParam = searchParams.get("from")
   const toParam = searchParams.get("to")
 
   if (!fromParam || !toParam) {
     return NextResponse.json(
-      { error: "Parâmetros 'from' e 'to' são obrigatórios" },
+      { error: t("missingDateRange") },
       { status: 400 }
     )
   }
@@ -25,7 +27,7 @@ export async function GET(request: NextRequest) {
 
   if (isNaN(from.getTime()) || isNaN(to.getTime())) {
     return NextResponse.json(
-      { error: "Datas inválidas" },
+      { error: t("invalidDates") },
       { status: 400 }
     )
   }
@@ -34,7 +36,7 @@ export async function GET(request: NextRequest) {
 
   if (!userId) {
     return NextResponse.json(
-      { error: "Usuário não encontrado" },
+      { error: t("userNotFound") },
       { status: 401 }
     )
   }
@@ -58,10 +60,11 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
     return NextResponse.json(
-      { error: "Usuário não encontrado" },
+      { error: t("errors.userNotFound") },
       { status: 401 }
     )
   }
@@ -71,7 +74,7 @@ export async function POST(request: NextRequest) {
     body = await request.json()
   } catch {
     return NextResponse.json(
-      { error: "JSON inválido" },
+      { error: t("errors.invalidJson") },
       { status: 400 }
     )
   }
@@ -89,16 +92,13 @@ export async function POST(request: NextRequest) {
     !statusCode
   ) {
     return NextResponse.json(
-      {
-        error:
-          "Campos obrigatórios: date, amount, type, accountId, groupCode, categoryCode, statusCode",
-      },
+      { error: t("transactions.missingFields") },
       { status: 400 }
     )
   }
 
   if (!["INCOME", "EXPENSE", "TRANSFER"].includes(type as string)) {
-    return NextResponse.json({ error: "Tipo inválido" }, { status: 400 })
+    return NextResponse.json({ error: t("transactions.invalidType") }, { status: 400 })
   }
 
   try {
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error creating transaction:", error)
     return NextResponse.json(
-      { error: "Erro ao criar transação" },
+      { error: t("transactions.createFailed") },
       { status: 500 }
     )
   }

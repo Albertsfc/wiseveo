@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { copyTransaction } from "@/features/transactions/services/copy-transaction"
@@ -7,27 +8,29 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const t = await getTranslations("api")
+
   try {
     const userId = await getDefaultUserId()
     if (!userId) {
       return NextResponse.json(
-        { error: "Unauthorized or configuration not found" },
+        { error: t("errors.userNotFound") },
         { status: 401 }
       )
     }
 
     const { id } = await params
-    
+
     let body: Record<string, unknown>
     try {
       body = await request.json()
     } catch {
-      return NextResponse.json({ error: "JSON inválido" }, { status: 400 })
+      return NextResponse.json({ error: t("errors.invalidJson") }, { status: 400 })
     }
 
     if (!body.date) {
       return NextResponse.json(
-        { error: "Campo obrigatório: date" },
+        { error: t("errors.missingField", { field: "date" }) },
         { status: 400 }
       )
     }
@@ -36,9 +39,10 @@ export async function POST(
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("[Cópia de Transação]", error)
+    console.error("[Copy Transaction]", error)
+    const detail = error instanceof Error ? error.message : t("errors.internalError")
     return NextResponse.json(
-      { error: "Failed to copy transaction: " + (error instanceof Error ? error.message : "Unknown error") },
+      { error: `${t("transactions.copyFailed")}: ${detail}` },
       { status: 500 }
     )
   }

@@ -173,6 +173,81 @@
     "transactionsConsidered": "{count, plural, one {# lançamento considerado} other {# lançamentos considerados}}",
     "transactionsCount": "{count, plural, one {# lançamento} other {# lançamentos}}"
   },
+  "api": {
+    "admin": {
+      "invalidAction": "Ação administrativa inválida",
+      "userApproved": "Usuário aprovado com sucesso."
+    },
+    "auth": {
+      "allFieldsRequired": "Todos os campos são obrigatórios",
+      "emailAlreadyRegistered": "Esse email já foi registrado",
+      "emailPasswordRequired": "Email e senha são obrigatórios",
+      "googleAccountRequired": "Esta conta usa login pelo Google. Clique em 'Continuar com Google'.",
+      "invalidCredentials": "Email ou senha incorretos",
+      "loginSuccess": "Login realizado com sucesso",
+      "passwordTooShort": "Senha deve ter pelo menos 8 caracteres",
+      "pendingApprovalExisting": "Seu cadastro já está aguardando aprovação.",
+      "pendingApprovalLogin": "Seu cadastro ainda está aguardando aprovação.",
+      "signupReceived": "Cadastro recebido. Aguarde a aprovação de um administrador.",
+      "signupSuccess": "Conta criada com sucesso"
+    },
+    "calendar": {
+      "clearFailed": "Erro ao limpar eventos",
+      "syncFailed": "Erro ao sincronizar"
+    },
+    "errors": {
+      "internalError": "Erro interno do servidor",
+      "invalidDateRange": "Intervalo inválido: 'from' deve ser <= 'to'",
+      "invalidDates": "Datas inválidas",
+      "invalidJson": "JSON inválido",
+      "invalidPeriod": "Período inválido (esperado YYYYMM)",
+      "missingDateRange": "Parâmetros 'from' e 'to' são obrigatórios",
+      "missingField": "Campo obrigatório: {field}",
+      "notAuthenticated": "Não autenticado",
+      "recurrenceNotFound": "Recorrência não encontrada",
+      "transactionNotFound": "Transação não encontrada",
+      "userNotFound": "Usuário não encontrado"
+    },
+    "recurringTransactions": {
+      "launchFailed": "Erro ao lançar transação recorrente"
+    },
+    "setup": {
+      "adminCreationFailed": "Erro ao criar usuário admin: {message}",
+      "migrationFailed": "Erro ao migrar banco de dados.",
+      "missingFields": "Campos obrigatórios ausentes.",
+      "unknownError": "Erro desconhecido"
+    },
+    "transactions": {
+      "attachmentNotFound": "Anexo não encontrado",
+      "copyFailed": "Erro ao copiar transação",
+      "createFailed": "Erro ao criar transação",
+      "deleteMessageFailed": "Erro ao apagar mensagem",
+      "emptyMessage": "Mensagem não pode estar vazia",
+      "excludeFailed": "Erro ao excluir transação",
+      "fileTooLarge": "{fileName}: excede 3 MB",
+      "fileTypeNotAllowed": "{fileName}: tipo não permitido",
+      "invalidFormData": "FormData inválido",
+      "invalidType": "Tipo inválido",
+      "loadMessagesFailed": "Erro ao carregar mensagens",
+      "messageNotFound": "Mensagem não encontrada",
+      "messageTooLong": "Mensagem deve ter no máximo {max} caracteres",
+      "missingFields": "Campos obrigatórios: date, amount, type, accountId, groupCode, categoryCode, statusCode",
+      "noFilesUploaded": "Nenhum arquivo enviado",
+      "quickPayFailed": "Erro ao efetuar pagamento rápido",
+      "recurrentFailed": "Erro ao criar transação recorrente",
+      "saveMessageFailed": "Erro ao salvar mensagem",
+      "updateDateFailed": "Erro ao atualizar data da transação",
+      "updateFailed": "Erro ao atualizar transação",
+      "updatePeriodFailed": "Erro ao atualizar período da transação"
+    },
+    "user": {
+      "accountUpdateSuccess": "Conta atualizada com sucesso!",
+      "generalPreferencesSaveFailed": "Não foi possível salvar as configurações gerais.",
+      "invalidQuickPaySelection": "Selecione um banco e um status válidos para o Pagamento Rápido.",
+      "passwordMismatch": "As senhas não coincidem.",
+      "updateProfileFailed": "Erro ao atualizar perfil"
+    }
+  },
   "auth": {
     "cadastroPendente": {
       "backToLogin": "Voltar para o login",

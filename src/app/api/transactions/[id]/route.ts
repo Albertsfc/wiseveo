@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { updateTransaction } from "@/features/transactions/services/update-transaction"
@@ -7,10 +8,11 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
     return NextResponse.json(
-      { error: "Usuário não encontrado" },
+      { error: t("errors.userNotFound") },
       { status: 401 }
     )
   }
@@ -22,7 +24,7 @@ export async function PATCH(
     body = await request.json()
   } catch {
     return NextResponse.json(
-      { error: "JSON inválido" },
+      { error: t("errors.invalidJson") },
       { status: 400 }
     )
   }
@@ -40,16 +42,13 @@ export async function PATCH(
     !statusCode
   ) {
     return NextResponse.json(
-      {
-        error:
-          "Campos obrigatórios: date, amount, type, accountId, groupCode, categoryCode, statusCode",
-      },
+      { error: t("transactions.missingFields") },
       { status: 400 }
     )
   }
 
   if (!["INCOME", "EXPENSE", "TRANSFER"].includes(type as string)) {
-    return NextResponse.json({ error: "Tipo inválido" }, { status: 400 })
+    return NextResponse.json({ error: t("transactions.invalidType") }, { status: 400 })
   }
 
   try {
@@ -76,7 +75,7 @@ export async function PATCH(
 
     if (!transaction) {
       return NextResponse.json(
-        { error: "Transação não encontrada" },
+        { error: t("errors.transactionNotFound") },
         { status: 404 }
       )
     }
@@ -85,7 +84,7 @@ export async function PATCH(
   } catch (error) {
     console.error("Error updating transaction:", error)
     return NextResponse.json(
-      { error: "Erro ao atualizar transação" },
+      { error: t("transactions.updateFailed") },
       { status: 500 }
     )
   }

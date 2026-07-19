@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import {
   getUserMonetarySettings,
   updateUserMonetarySettings,
@@ -12,10 +13,11 @@ async function getResolvedUserId() {
 }
 
 export async function GET() {
+  const t = await getTranslations("api.errors")
   const userId = await getResolvedUserId()
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Usuário não encontrado" },
+      { success: false, message: t("userNotFound") },
       { status: 401 },
     )
   }
@@ -29,10 +31,11 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const t = await getTranslations("api.errors")
   const userId = await getResolvedUserId()
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Usuário não encontrado" },
+      { success: false, message: t("userNotFound") },
       { status: 401 },
     )
   }

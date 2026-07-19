@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import {
   getQuickPaymentOptions,
   getUserQuickPaymentSettings,
@@ -9,11 +10,12 @@ import { getSettingsUserId } from "@/features/settings/services/get-settings-use
 export const dynamic = "force-dynamic"
 
 export async function GET() {
+  const t = await getTranslations("api.errors")
   const userId = await getSettingsUserId()
 
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Usuário não encontrado" },
+      { success: false, message: t("userNotFound") },
       { status: 401 },
     )
   }
@@ -33,11 +35,12 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const t = await getTranslations("api")
   const userId = await getSettingsUserId()
 
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Usuário não encontrado" },
+      { success: false, message: t("errors.userNotFound") },
       { status: 401 },
     )
   }
@@ -47,7 +50,7 @@ export async function PUT(request: Request) {
     body = await request.json()
   } catch {
     return NextResponse.json(
-      { success: false, message: "JSON inválido" },
+      { success: false, message: t("errors.invalidJson") },
       { status: 400 },
     )
   }
@@ -59,7 +62,7 @@ export async function PUT(request: Request) {
     return NextResponse.json(
       {
         success: false,
-        message: "Selecione um banco e um status válidos para o Pagamento Rápido.",
+        message: t("user.invalidQuickPaySelection"),
       },
       { status: 400 },
     )
@@ -79,7 +82,7 @@ export async function PUT(request: Request) {
     const message =
       error instanceof Error
         ? error.message
-        : "Não foi possível salvar as configurações gerais."
+        : t("user.generalPreferencesSaveFailed")
 
     return NextResponse.json(
       { success: false, message },

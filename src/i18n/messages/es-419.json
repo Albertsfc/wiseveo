@@ -173,6 +173,81 @@
     "transactionsConsidered": "{count, plural, one {# movimiento considerado} other {# movimientos considerados}}",
     "transactionsCount": "{count, plural, one {# movimiento} other {# movimientos}}"
   },
+  "api": {
+    "admin": {
+      "invalidAction": "Acción administrativa inválida",
+      "userApproved": "Usuario aprobado con éxito."
+    },
+    "auth": {
+      "allFieldsRequired": "Todos los campos son obligatorios",
+      "emailAlreadyRegistered": "Ese correo ya está registrado",
+      "emailPasswordRequired": "El correo y la contraseña son obligatorios",
+      "googleAccountRequired": "Esta cuenta usa inicio de sesión con Google. Haz clic en 'Continuar con Google'.",
+      "invalidCredentials": "Correo o contraseña incorrectos",
+      "loginSuccess": "Inicio de sesión exitoso",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "pendingApprovalExisting": "Tu registro ya está esperando aprobación.",
+      "pendingApprovalLogin": "Tu registro todavía está esperando aprobación.",
+      "signupReceived": "Registro recibido. Espera la aprobación de un administrador.",
+      "signupSuccess": "Cuenta creada con éxito"
+    },
+    "calendar": {
+      "clearFailed": "Error al limpiar eventos",
+      "syncFailed": "Error al sincronizar"
+    },
+    "errors": {
+      "internalError": "Error interno del servidor",
+      "invalidDateRange": "Rango inválido: 'from' debe ser <= 'to'",
+      "invalidDates": "Fechas inválidas",
+      "invalidJson": "JSON inválido",
+      "invalidPeriod": "Período inválido (se esperaba YYYYMM)",
+      "missingDateRange": "Los parámetros 'from' y 'to' son obligatorios",
+      "missingField": "Campo obligatorio: {field}",
+      "notAuthenticated": "No autenticado",
+      "recurrenceNotFound": "Recurrencia no encontrada",
+      "transactionNotFound": "Transacción no encontrada",
+      "userNotFound": "Usuario no encontrado"
+    },
+    "recurringTransactions": {
+      "launchFailed": "Error al generar la transacción recurrente"
+    },
+    "setup": {
+      "adminCreationFailed": "Error al crear el usuario administrador: {message}",
+      "migrationFailed": "Error al migrar la base de datos.",
+      "missingFields": "Faltan campos obligatorios.",
+      "unknownError": "Error desconocido"
+    },
+    "transactions": {
+      "attachmentNotFound": "Adjunto no encontrado",
+      "copyFailed": "Error al copiar la transacción",
+      "createFailed": "Error al crear la transacción",
+      "deleteMessageFailed": "Error al eliminar el mensaje",
+      "emptyMessage": "El mensaje no puede estar vacío",
+      "excludeFailed": "Error al eliminar la transacción",
+      "fileTooLarge": "{fileName}: supera los 3 MB",
+      "fileTypeNotAllowed": "{fileName}: tipo de archivo no permitido",
+      "invalidFormData": "FormData inválido",
+      "invalidType": "Tipo inválido",
+      "loadMessagesFailed": "Error al cargar los mensajes",
+      "messageNotFound": "Mensaje no encontrado",
+      "messageTooLong": "El mensaje debe tener como máximo {max} caracteres",
+      "missingFields": "Campos obligatorios: date, amount, type, accountId, groupCode, categoryCode, statusCode",
+      "noFilesUploaded": "No se subió ningún archivo",
+      "quickPayFailed": "Error al procesar el pago rápido",
+      "recurrentFailed": "Error al crear la transacción recurrente",
+      "saveMessageFailed": "Error al guardar el mensaje",
+      "updateDateFailed": "Error al actualizar la fecha de la transacción",
+      "updateFailed": "Error al actualizar la transacción",
+      "updatePeriodFailed": "Error al actualizar el período de la transacción"
+    },
+    "user": {
+      "accountUpdateSuccess": "¡Cuenta actualizada con éxito!",
+      "generalPreferencesSaveFailed": "No se pudieron guardar las configuraciones generales.",
+      "invalidQuickPaySelection": "Selecciona un banco y un estado válidos para el Pago Rápido.",
+      "passwordMismatch": "Las contraseñas no coinciden.",
+      "updateProfileFailed": "Error al actualizar el perfil"
+    }
+  },
   "auth": {
     "cadastroPendente": {
       "backToLogin": "Volver al inicio de sesión",
