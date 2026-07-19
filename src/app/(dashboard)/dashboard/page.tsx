@@ -1,4 +1,5 @@
 import { endOfMonth, startOfMonth, subMonths } from "date-fns"
+import { getTranslations } from "next-intl/server"
 
 import { getAccountsWithBalance } from "@/features/accounts/services/get-accounts"
 import { ChartAreaInteractive } from "@/features/dashboard/components/chart-area-interactive"
@@ -17,10 +18,11 @@ export default async function Page() {
   const userId = await getDefaultUserId()
 
   if (!userId) {
+    const t = await getTranslations("common")
     return (
       <div className="flex h-96 items-center justify-center px-4 md:px-6">
         <p className="text-muted-foreground">
-          Nenhum usuário encontrado. Faça login para ver o dashboard.
+          {t("noUserFound")}
         </p>
       </div>
     )

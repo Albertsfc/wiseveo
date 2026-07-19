@@ -173,6 +173,64 @@
     "transactionsConsidered": "{count, plural, one {# transaction considered} other {# transactions considered}}",
     "transactionsCount": "{count, plural, one {# transaction} other {# transactions}}"
   },
+  "auth": {
+    "cadastroPendente": {
+      "backToLogin": "Back to login",
+      "description": "Your request has been received. Once an administrator approves your registration, you'll be able to log in again and access the system.",
+      "title": "Registration awaiting approval"
+    },
+    "email": "Email",
+    "errors": {
+      "genericAuth": "Authentication error. Please try again.",
+      "google": {
+        "denied": "Access to Google was denied.",
+        "failed": "Failed to connect with Google. Please try again.",
+        "invalidState": "Security error. Please try again.",
+        "noCode": "Error authenticating with Google. Please try again.",
+        "notConfigured": "Google authentication is not configured on this server."
+      },
+      "loginFailed": "Error logging in. Please try again.",
+      "signupFailed": "Error creating account. Please try again."
+    },
+    "google": "Continue with Google",
+    "googleSyncNote": "By connecting with Google, you will be able to sync your calendar (soon)",
+    "login": {
+      "button": "Log in",
+      "forgotPassword": "Forgot password?",
+      "loggingIn": "Logging in...",
+      "successMessage": "Login successful!",
+      "tab": "Login",
+      "validation": {
+        "passwordRequired": "Password is required"
+      }
+    },
+    "orContinueWith": "Or continue with",
+    "password": "Password",
+    "signup": {
+      "button": "Create account",
+      "confirmPassword": "Confirm password",
+      "creatingAccount": "Creating account...",
+      "fullName": "Full name",
+      "namePlaceholder": "Your name",
+      "successMessage": "Account created! Redirecting...",
+      "tab": "Create Account",
+      "validation": {
+        "nameTooShort": "Name must be at least 2 characters",
+        "passwordMismatch": "Passwords do not match",
+        "passwordTooShort": "Password must be at least 8 characters"
+      }
+    },
+    "title": "Access your account",
+    "validation": {
+      "emailInvalid": "Invalid email"
+    }
+  },
+  "banks": {
+    "comingSoon": {
+      "description": "We're preparing a complete Open Banking experience so you can manage your finances more intelligently.",
+      "title": "Coming soon"
+    }
+  },
   "budget": {
     "client": {
       "savingOrder": "Saving order...",
@@ -411,6 +469,49 @@
       "month": "Month"
     }
   },
+  "chat": {
+    "conversationList": {
+      "chatSettings": "Chat Settings",
+      "filterMessages": "Filter Messages",
+      "newChat": "New Chat"
+    },
+    "deleteConversation": "Delete conversation",
+    "header": {
+      "groupBadge": "Group",
+      "menu": {
+        "manageMembers": "Manage members",
+        "mute": "Mute conversation",
+        "searchMessages": "Search messages",
+        "unmute": "Unmute conversation"
+      },
+      "selectConversation": "Select a conversation to start chatting",
+      "tooltips": {
+        "info": "Conversation info",
+        "search": "Search in conversation",
+        "videoCall": "Video call",
+        "voiceCall": "Voice call"
+      }
+    },
+    "input": {
+      "addEmoji": "Add emoji",
+      "attachFile": "Attach file",
+      "document": "Document",
+      "moreOptions": "More options",
+      "photoOrVideo": "Photo or video",
+      "typing": "You are typing..."
+    },
+    "loading": "Loading chat...",
+    "message": {
+      "copy": "Copy",
+      "delete": "Delete",
+      "edited": "(edited)",
+      "reply": "Reply"
+    },
+    "messagePlaceholder": "Message {name}...",
+    "messagesTitle": "Messages",
+    "welcomeDescription": "Select a conversation to start messaging",
+    "welcomeTitle": "Welcome to Chat"
+  },
   "common": {
     "actions": "Actions",
     "add": "Add",
@@ -473,6 +574,7 @@
     "more": "More",
     "no": "No",
     "noResults": "No results found.",
+    "noUserFound": "No user found. Please log in to continue.",
     "openActions": "Open actions",
     "openAppearanceCustomizer": "Open appearance customizer",
     "pricingPlans": {
@@ -593,6 +695,11 @@
     "title": "Dashboard",
     "upcomingTransactions": "Upcoming Due Dates"
   },
+  "faqs": {
+    "categories": "Categories",
+    "learnMore": "Learn more",
+    "noResults": "No FAQs found matching your search criteria."
+  },
   "forecasting": {
     "client": {
       "fetchError": "Failed to load forecasts",
@@ -636,21 +743,40 @@
       "projectedAbbrev": "Proj"
     }
   },
-  "login": {
-    "confirmPassword": "Confirm password",
-    "createAccount": "Create account",
-    "creatingAccount": "Creating account...",
-    "email": "Email",
-    "forgotPassword": "Forgot password?",
-    "fullName": "Full name",
-    "google": "Continue with Google",
-    "googleSyncNote": "By connecting with Google, you will be able to sync your calendar (soon)",
-    "loggingIn": "Logging in...",
-    "login": "Login",
-    "orContinue": "Or continue with",
-    "password": "Password",
-    "signup": "Create Account",
-    "title": "Access your account"
+  "mail": {
+    "addLabel": "Add label",
+    "allMail": "All mail",
+    "archive": "Archive",
+    "forward": "Forward",
+    "inbox": "Inbox",
+    "laterToday": "Later today",
+    "markAsUnread": "Mark as unread",
+    "more": "More",
+    "moveToJunk": "Move to junk",
+    "moveToTrash": "Move to trash",
+    "muteThisThread": "Mute this thread",
+    "muteThread": "Mute thread",
+    "nextWeek": "Next week",
+    "noMessageSelected": "No message selected",
+    "reply": "Reply",
+    "replyAll": "Reply all",
+    "replyTo": "Reply-To:",
+    "send": "Send",
+    "snooze": "Snooze",
+    "snoozeUntil": "Snooze until",
+    "starThread": "Star thread",
+    "thisWeekend": "This weekend",
+    "tomorrow": "Tomorrow",
+    "unread": "Unread"
+  },
+  "metadata": {
+    "description": "Financial Acceleration"
+  },
+  "pricing": {
+    "faqDescription": "Get answers to the most common questions about our pricing and plans",
+    "faqTitle": "Frequently Asked Questions",
+    "featuresDescription": "Every plan comes with these essential features to help your team succeed",
+    "featuresTitle": "All Plans Include"
   },
   "recurring": {
     "actions": {
@@ -844,6 +970,14 @@
       "languageDesc": "Choose your preferred language for the interface. Changes will be applied immediately.",
       "languageTitle": "System Language",
       "title": "Appearance & Language"
+    },
+    "componentsShowcase": {
+      "chartsDescription": "Examples of data visualizations and interactive charts.",
+      "chartsTitle": "Charts",
+      "insightsDescription": "Metrics, chart, and performance analysis components.",
+      "insightsTitle": "Insights",
+      "tablesDescription": "Table components with support for sorting, filtering, and drag & drop.",
+      "tablesTitle": "Tables"
     },
     "general": {
       "cancel": "Cancel",
@@ -1172,6 +1306,219 @@
     "underMaintenance": "Under Maintenance",
     "users": "Users",
     "usersettings": "User Settings"
+  },
+  "tasks": {
+    "addTaskModal": {
+      "cancel": "Cancel",
+      "categoryField": "Category",
+      "createTask": "Create Task",
+      "description": "Create a new task to track work and progress. Fill in the details below.",
+      "descriptionField": "Description",
+      "priorityField": "Priority",
+      "statusField": "Status",
+      "title": "Add New Task",
+      "titleField": "Task Title *",
+      "trigger": "Add Task"
+    },
+    "filter": {
+      "clearFilters": "Clear filters",
+      "selectedCount": "{count} selected"
+    },
+    "page": {
+      "completed": "Completed",
+      "description": "View, filter, and manage all your project tasks in one place",
+      "inProgress": "In Progress",
+      "loading": "Loading tasks...",
+      "mobileDescription": "Please use a larger screen to view the full tasks interface.",
+      "mobileTitle": "Tasks Dashboard",
+      "pending": "Pending",
+      "title": "Task Management",
+      "totalTasks": "Total Tasks"
+    },
+    "pagination": {
+      "firstPageAria": "Go to first page",
+      "lastPageAria": "Go to last page",
+      "nextPageAria": "Go to next page",
+      "pageOfTotal": "Page {page} of {total}",
+      "previousPageAria": "Go to previous page",
+      "rowsPerPage": "Rows per page",
+      "selectedOfTotal": "{selected} of {total} row(s) selected."
+    },
+    "rowActions": {
+      "delete": "Delete",
+      "duplicate": "Duplicate",
+      "editTask": "Edit Task",
+      "markAsFavorite": "Mark as Favorite",
+      "openMenu": "Open menu",
+      "viewTask": "View Task"
+    },
+    "toolbar": {
+      "allCategories": "All Categories",
+      "allPriorities": "All Priorities",
+      "allStatus": "All Status",
+      "resetFilters": "Reset Filters"
+    },
+    "userNav": {
+      "billing": "Billing",
+      "logout": "Log out",
+      "newTeam": "New Team",
+      "profile": "Profile",
+      "settings": "Settings"
+    },
+    "viewOptions": {
+      "toggleColumns": "Toggle columns",
+      "view": "View"
+    }
+  },
+  "templatePages": {
+    "account": {
+      "cancel": "Cancel",
+      "changePasswordDescription": "Update your password to keep your account secure.",
+      "changePasswordTitle": "Change Password",
+      "confirmNewPassword": "Confirm New Password",
+      "currentPassword": "Current Password",
+      "dangerZoneDescription": "Irreversible and destructive actions.",
+      "dangerZoneTitle": "Danger Zone",
+      "deleteAccount": "Delete Account",
+      "deleteAccountDescription": "Permanently delete your account and all associated data.",
+      "emailAddress": "Email Address",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "newPassword": "New Password",
+      "personalInfoDescription": "Update your personal information that will be displayed on your profile.",
+      "personalInfoTitle": "Personal Information",
+      "saveChanges": "Save Changes",
+      "username": "Username"
+    },
+    "billing": {
+      "availablePlansDescription": "Choose a plan that works best for you.",
+      "availablePlansTitle": "Available Plans",
+      "currentPlanTitle": "Current Plan",
+      "currentlyOnPlan": "You are currently on the {plan}.",
+      "daysLabel": "Days",
+      "daysOfTotal": "{used} of {total} Days",
+      "daysRemaining": "{days} days remaining until your plan requires update",
+      "historyDescription": "View your past invoices and payments.",
+      "historyTitle": "Billing History",
+      "needsAttention": "We need your attention!",
+      "nextBilling": "Next billing: {date}"
+    },
+    "connections": {
+      "addNewApiKey": "Add New API Key",
+      "apiIntegrationsDescription": "Configure API connections and webhooks.",
+      "apiIntegrationsTitle": "API Integrations",
+      "apiKeysDescription": "Manage your API keys and access tokens.",
+      "apiKeysTitle": "API Keys",
+      "automateWithZapier": "Automate workflows with Zapier",
+      "calendarAndContacts": "Calendar and contacts",
+      "communication": "Communication",
+      "configureWebhooks": "Configure custom webhook endpoints",
+      "connected": "connected",
+      "connectedAccountsDescription": "Display content from your connected accounts on your site",
+      "connectedAccountsTitle": "Connected Accounts",
+      "copy": "Copy",
+      "databaseSync": "Database Sync",
+      "databaseSyncDescription": "Sync data with external databases",
+      "developmentApiKey": "Development API Key",
+      "manageGitRepos": "Manage your Git repositories",
+      "notConnected": "Not Connected",
+      "productionApiKey": "Production API Key",
+      "regenerate": "Regenerate",
+      "shareUpdatesFacebook": "Share updates on Facebook",
+      "shareUpdatesTwitter": "Share updates on Twitter",
+      "socialAccountsTitle": "Social Accounts",
+      "stayConnectedDribbble": "Stay connected at Dribbble",
+      "stayConnectedInstagram": "Stay connected at Instagram",
+      "webhooksTitle": "Webhooks"
+    },
+    "notifications": {
+      "always": "Always",
+      "appColumn": "APP",
+      "browserColumn": "BROWSER",
+      "cancel": "Cancel",
+      "channelsDescription": "Choose your preferred notification channels for different types of alerts.",
+      "channelsTitle": "Notification Channels",
+      "dailyDigest": "Daily digest",
+      "email": "Email",
+      "emailChannelDescription": "Receive notifications via email",
+      "emailFrequency": "Email Frequency",
+      "emailNotificationsDescription": "Choose what email notifications you want to receive.",
+      "emailNotificationsTitle": "Email Notifications",
+      "frequencyDescription": "Control how often you receive notifications.",
+      "frequencyTitle": "Notification Frequency",
+      "hourlyDigest": "Hourly digest",
+      "instant": "Instant",
+      "invoiceReminders": "Invoice reminders",
+      "marketingEmailsDescription": "Receive emails about our latest offers and promotions.",
+      "marketingEmailsTitle": "Marketing emails",
+      "mentionsDescription": "Get notified when someone mentions you.",
+      "mentionsTitle": "Mentions",
+      "never": "Never",
+      "newMessagesDescription": "Get notified when you receive new messages.",
+      "newMessagesTitle": "New messages",
+      "onlineOption": "Only when I'm online",
+      "orderUpdates": "Order updates",
+      "permissionDescription": "We need permission from your browser to show notifications.",
+      "preferencesTitle": "Notification Preferences",
+      "productUpdatesDescription": "Receive updates about new features and improvements.",
+      "productUpdatesTitle": "Product updates",
+      "promotionalOffers": "Promotional offers",
+      "pushChannelDescription": "Receive browser push notifications",
+      "pushNotificationsDescription": "Configure browser and mobile push notifications.",
+      "pushNotificationsTitle": "Push Notifications",
+      "quietHours": "Quiet Hours",
+      "requestPermission": "Request Permission",
+      "savePreferences": "Save Preferences",
+      "securityAlertsDescription": "Get notified when there are security events on your account.",
+      "securityAlertsTitle": "Security alerts",
+      "sms": "SMS",
+      "smsChannelDescription": "Receive notifications via SMS",
+      "systemMaintenance": "System maintenance",
+      "taskUpdatesDescription": "Get notified about task assignments and updates.",
+      "taskUpdatesTitle": "Task updates",
+      "timingQuestion": "When should we send you notifications?",
+      "to": "to",
+      "typeColumn": "TYPE",
+      "weeklyDigest": "Weekly digest"
+    },
+    "user": {
+      "allowedFormats": "Allowed JPG, GIF or PNG. Max size of 800K",
+      "bio": "Bio",
+      "cancel": "Cancel",
+      "company": "Company",
+      "description": "Update your personal information and preferences",
+      "email": "E-mail",
+      "firstName": "First Name",
+      "language": "Language",
+      "languages": {
+        "english": "English",
+        "french": "French",
+        "german": "German",
+        "italian": "Italian",
+        "portuguese": "Portuguese",
+        "spanish": "Spanish"
+      },
+      "lastName": "Last Name",
+      "location": "Location",
+      "phoneNumber": "Phone Number",
+      "resetButton": "Reset",
+      "role": "Role",
+      "saveChanges": "Save Changes",
+      "timezone": "Timezone",
+      "timezones": {
+        "aest": "AEST (Australian Eastern Standard Time)",
+        "cet": "CET (Central European Time)",
+        "cst": "CST (Central Standard Time)",
+        "est": "EST (Eastern Standard Time)",
+        "jst": "JST (Japan Standard Time)",
+        "mst": "MST (Mountain Standard Time)",
+        "pst": "PST (Pacific Standard Time)",
+        "utc": "UTC (Coordinated Universal Time)"
+      },
+      "title": "Profile Settings",
+      "uploadNewPhoto": "Upload new photo",
+      "website": "Website"
+    }
   },
   "themeCustomizer": {
     "advancedCustomization": "Advanced customization",
@@ -1553,6 +1900,47 @@
       "recurringError": "Failed to create recurring transaction",
       "recurringSuccess": "Recurring transaction created successfully",
       "syncError": "Failed to sync transactions for the selected period"
+    }
+  },
+  "users": {
+    "filters": {
+      "allPlans": "All Plans",
+      "allRoles": "All Roles",
+      "allStatus": "All Status",
+      "plan": "Plan",
+      "role": "Role",
+      "status": "Status"
+    },
+    "form": {
+      "addNewUser": "Add New User",
+      "billing": "Billing",
+      "description": "Create a new user account. Click save when you're done.",
+      "email": "Email",
+      "name": "Name",
+      "plan": "Plan",
+      "role": "Role",
+      "saveUser": "Save User",
+      "status": "Status"
+    },
+    "statCards": {
+      "fromPrevious": "from {previous}"
+    },
+    "table": {
+      "columnVisibility": "Column Visibility",
+      "columns": "Columns",
+      "deleteUser": "Delete User",
+      "editUser": "Edit user",
+      "export": "Export",
+      "moreActions": "More actions",
+      "next": "Next",
+      "pageOfTotal": "Page {page} of {total}",
+      "previous": "Previous",
+      "resetPassword": "Reset Password",
+      "selectedOfTotal": "{selected} of {total} row(s) selected.",
+      "sendEmail": "Send Email",
+      "show": "Show",
+      "viewDetails": "View Details",
+      "viewUser": "View user"
     }
   }
 }

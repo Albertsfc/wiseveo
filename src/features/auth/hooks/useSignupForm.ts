@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { SignupFormData } from "../types"
 import { submitSignup } from "../services/signup"
 
@@ -21,6 +22,7 @@ interface TouchedFields {
 
 export function useSignupForm() {
   const router = useRouter()
+  const t = useTranslations("auth")
   const [formData, setFormData] = useState<SignupFormData>({
     name: "",
     email: "",
@@ -40,13 +42,13 @@ export function useSignupForm() {
 
   function validate(data: SignupFormData, confirm: string): FormErrors {
     const errs: FormErrors = {}
-    if (data.name.length < 2) errs.name = "Nome deve ter pelo menos 2 caracteres"
+    if (data.name.length < 2) errs.name = t("signup.validation.nameTooShort")
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
-      errs.email = "Email inválido"
+      errs.email = t("validation.emailInvalid")
     if (data.password.length < 8)
-      errs.password = "Senha deve ter pelo menos 8 caracteres"
+      errs.password = t("signup.validation.passwordTooShort")
     if (data.password !== confirm)
-      errs.confirmPassword = "As senhas não coincidem"
+      errs.confirmPassword = t("signup.validation.passwordMismatch")
     return errs
   }
 
@@ -93,13 +95,13 @@ export function useSignupForm() {
     try {
       const result = await submitSignup(formData)
       if (result.success) {
-        setSuccessMessage(result.message || "Conta criada! Redirecionando...")
+        setSuccessMessage(result.message || t("signup.successMessage"))
         setTimeout(() => router.push(result.redirectTo ?? "/dashboard"), 1500)
       } else {
         setServerError(result.message)
       }
     } catch {
-      setServerError("Erro ao criar conta. Tente novamente.")
+      setServerError(t("errors.signupFailed"))
     } finally {
       setIsSubmitting(false)
     }

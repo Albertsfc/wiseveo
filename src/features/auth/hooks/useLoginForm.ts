@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { LoginFormData } from "../types"
 import { submitLogin } from "../services/login"
 
@@ -17,6 +18,7 @@ interface TouchedFields {
 
 export function useLoginForm() {
   const router = useRouter()
+  const t = useTranslations("auth")
   const [formData, setFormData] = useState<LoginFormData>({
     email: "",
     password: "",
@@ -33,9 +35,9 @@ export function useLoginForm() {
   function validate(data: LoginFormData): FormErrors {
     const errs: FormErrors = {}
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
-      errs.email = "Email inválido"
+      errs.email = t("validation.emailInvalid")
     if (data.password.length < 1)
-      errs.password = "Senha é obrigatória"
+      errs.password = t("login.validation.passwordRequired")
     return errs
   }
 
@@ -69,13 +71,13 @@ export function useLoginForm() {
     try {
       const result = await submitLogin(formData)
       if (result.success) {
-        setSuccessMessage(result.message || "Login realizado com sucesso!")
+        setSuccessMessage(result.message || t("login.successMessage"))
         setTimeout(() => router.push(result.redirectTo ?? "/dashboard"), 1500)
       } else {
         setServerError(result.message)
       }
     } catch {
-      setServerError("Erro ao fazer login. Tente novamente.")
+      setServerError(t("errors.loginFailed"))
     } finally {
       setIsSubmitting(false)
     }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Button } from "@/components/ui/button"
@@ -22,6 +23,7 @@ export function Chat({
   messages,
   users,
 }: ChatProps) {
+  const t = useTranslations("chat")
   const {
     selectedConversation,
     setSelectedConversation,
@@ -116,7 +118,7 @@ export function Chat({
         `}>
           {/* Sidebar Header with Close Button (Mobile Only) */}
           <div className="lg:hidden p-4 border-b flex items-center justify-between bg-background">
-            <h2 className="text-lg font-semibold">Messages</h2>
+            <h2 className="text-lg font-semibold">{t("messagesTitle")}</h2>
             <Button
               variant="ghost"
               size="sm"
@@ -172,15 +174,15 @@ export function Chat({
                 {/* Message Input */}
                 <MessageInput
                   onSendMessage={handleSendMessage}
-                  placeholder={`Message ${currentConversation?.name || ""}...`}
+                  placeholder={t("messagePlaceholder", { name: currentConversation?.name || "" })}
                 />
               </>
             ) : (
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
-                  <h3 className="text-lg font-semibold mb-2">Welcome to Chat</h3>
+                  <h3 className="text-lg font-semibold mb-2">{t("welcomeTitle")}</h3>
                   <p className="text-muted-foreground">
-                    Select a conversation to start messaging
+                    {t("welcomeDescription")}
                   </p>
                 </div>
               </div>

@@ -15,6 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import { useTranslations } from "next-intl"
 
 import {
   Table,
@@ -40,6 +41,7 @@ export function DataTable<TData, TValue>({
   data,
   onAddTask,
 }: DataTableProps<TData, TValue>) {
+  const t = useTranslations("common")
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -116,7 +118,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("noResults")}
                 </TableCell>
               </TableRow>
             )}

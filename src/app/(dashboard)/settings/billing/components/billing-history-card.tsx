@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
@@ -15,12 +16,14 @@ interface BillingHistoryCardProps {
 }
 
 export function BillingHistoryCard({ history }: BillingHistoryCardProps) {
+  const t = useTranslations("templatePages.billing")
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Billing History</CardTitle>
+        <CardTitle>{t("historyTitle")}</CardTitle>
         <CardDescription>
-          View your past invoices and payments.
+          {t("historyDescription")}
         </CardDescription>
       </CardHeader>
       <CardContent>

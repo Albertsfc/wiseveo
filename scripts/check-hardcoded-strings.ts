@@ -6,7 +6,13 @@ const SRC_DIR = path.join(process.cwd(), "src")
 const MESSAGES_FILE = path.join(process.cwd(), "src/i18n/messages/pt-BR.json")
 
 // Path fragments that are always skipped entirely (both checks).
-const IGNORE = ["src/i18n/messages", "src/generated", ".d.ts"]
+const IGNORE = [
+  "src/i18n/messages",
+  "src/generated",
+  ".d.ts",
+  // guia de estilo interno (dev-only), deliberadamente não localizado
+  "src/features/component-library",
+]
 
 // Prefix-matched paths where Check A (hardcoded UI strings) is skipped.
 // Check B (t() key existence) still runs — the allowlist never exempts it.

@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { getUserSettings } from "@/features/settings/services/user-settings-service"
 import {
   defaultQuickPaymentSettings,
@@ -30,10 +31,11 @@ export default async function ConfiguracoesPage({
     : "general"
 
   if (!userId) {
+    const t = await getTranslations("common")
     return (
       <div className="flex items-center justify-center h-96 px-4 md:px-6">
         <p className="text-muted-foreground">
-          Nenhum usuário encontrado. Faça login para acessar as configurações.
+          {t("noUserFound")}
         </p>
       </div>
     )

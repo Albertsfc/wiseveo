@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { z } from "zod"
 import { ArrowUp, BarChart3, CheckCircle2, Clock, ListTodo } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { columns } from "./components/columns"
@@ -16,6 +17,7 @@ async function getTasks() {
 }
 
 export default function TaskPage() {
+  const t = useTranslations("tasks.page")
   const [tasks, setTasks] = useState<z.infer<typeof taskSchema>[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -49,7 +51,7 @@ export default function TaskPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <div className="text-muted-foreground">Loading tasks...</div>
+        <div className="text-muted-foreground">{t("loading")}</div>
       </div>
     )
   }
@@ -61,9 +63,9 @@ export default function TaskPage() {
       <div className="md:hidden px-4 md:px-6">
         <div className="flex items-center justify-center h-96 border rounded-lg bg-muted/20">
           <div className="text-center p-8">
-            <h3 className="text-lg font-semibold mb-2">Tasks Dashboard</h3>
+            <h3 className="text-lg font-semibold mb-2">{t("mobileTitle")}</h3>
             <p className="text-muted-foreground">
-              Please use a larger screen to view the full tasks interface.
+              {t("mobileDescription")}
             </p>
           </div>
         </div>
@@ -77,7 +79,7 @@ export default function TaskPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm font-medium">Total Tasks</p>
+                  <p className="text-muted-foreground text-sm font-medium">{t("totalTasks")}</p>
                   <div className="mt-1 flex items-baseline gap-2">
                     <span className="text-2xl font-bold">{stats.total}</span>
                     <span className="flex items-center gap-0.5 text-sm text-green-500">
@@ -97,7 +99,7 @@ export default function TaskPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm font-medium">Completed</p>
+                  <p className="text-muted-foreground text-sm font-medium">{t("completed")}</p>
                   <div className="mt-1 flex items-baseline gap-2">
                     <span className="text-2xl font-bold">{stats.completed}</span>
                     <span className="flex items-center gap-0.5 text-sm text-green-500">
@@ -117,7 +119,7 @@ export default function TaskPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm font-medium">In Progress</p>
+                  <p className="text-muted-foreground text-sm font-medium">{t("inProgress")}</p>
                   <div className="mt-1 flex items-baseline gap-2">
                     <span className="text-2xl font-bold">{stats.inProgress}</span>
                     <span className="flex items-center gap-0.5 text-sm text-green-500">
@@ -137,7 +139,7 @@ export default function TaskPage() {
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-muted-foreground text-sm font-medium">Pending</p>
+                  <p className="text-muted-foreground text-sm font-medium">{t("pending")}</p>
                   <div className="mt-1 flex items-baseline gap-2">
                     <span className="text-2xl font-bold">{stats.pending}</span>
                     <span className="flex items-center gap-0.5 text-sm text-orange-500">
@@ -157,9 +159,9 @@ export default function TaskPage() {
         {/* Data Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Task Management</CardTitle>
+            <CardTitle>{t("title")}</CardTitle>
             <CardDescription>
-              View, filter, and manage all your project tasks in one place
+              {t("description")}
             </CardDescription>
           </CardHeader>
           <CardContent>

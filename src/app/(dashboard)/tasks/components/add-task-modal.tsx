@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Plus } from "lucide-react"
 import { z } from "zod"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -45,6 +46,7 @@ interface AddTaskModalProps {
 }
 
 export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
+  const t = useTranslations("tasks.addTaskModal")
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState<TaskFormData>({
     id: "",
@@ -127,22 +129,22 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
         {trigger || (
           <Button variant="default" size="sm" className="cursor-pointer">
             <Plus className="w-4 h-4" />
-            Add Task
+            {t("trigger")}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>Add New Task</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Create a new task to track work and progress. Fill in the details below.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Task Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Task Title *</Label>
+            <Label htmlFor="title">{t("titleField")}</Label>
             <Input
               id="title"
               placeholder="Enter task title..."
@@ -157,7 +159,7 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
 
           {/* Task Description */}
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t("descriptionField")}</Label>
             <Textarea
               id="description"
               placeholder="Provide additional details about the task..."
@@ -171,7 +173,7 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Task Status */}
             <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("statusField")}</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, status: value }))}
@@ -196,7 +198,7 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
 
             {/* Task Category */}
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">{t("categoryField")}</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
@@ -218,7 +220,7 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
           {/* Task Priority - Half Width on Desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
+              <Label htmlFor="priority">{t("priorityField")}</Label>
               <Select
                 value={formData.priority}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, priority: value }))}
@@ -242,11 +244,11 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
           {/* Action Buttons */}
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="outline" onClick={handleCancel} className="cursor-pointer">
-              Cancel
+              {t("cancel")}
             </Button>
             <Button type="submit" className="cursor-pointer">
               <Plus className="w-4 h-4 mr-2" />
-              Create Task
+              {t("createTask")}
             </Button>
           </div>
         </form>

@@ -1,0 +1,278 @@
+[
+  {
+    "id": 1,
+    "question": "¿Qué es WISEVEO?",
+    "answer": "WISEVEO es un panel financiero completo enfocado en aceleración y control, desarrollado con React, TypeScript y componentes shadcn/ui. Ofrece una solución robusta para la gestión de gastos y operaciones personales o empresariales.",
+    "category": "General"
+  },
+  {
+    "id": 2,
+    "question": "¿Cómo empiezo?",
+    "answer": "Puedes empezar creando una cuenta, eligiendo un plan que se ajuste a tus necesidades y siguiendo nuestra guía rápida de configuración para preparar tu panel.",
+    "category": "General"
+  },
+  {
+    "id": 3,
+    "question": "¿Ofrecen una prueba gratuita?",
+    "answer": "Sí, ofrecemos una prueba gratuita de 14 días para todos los usuarios nuevos. No se requiere tarjeta de crédito para iniciar la prueba, y puedes explorar todas las funciones durante este período.",
+    "category": "General"
+  },
+  {
+    "id": 4,
+    "question": "¿Qué navegadores son compatibles?",
+    "answer": "Somos compatibles con todos los navegadores modernos, incluidos Chrome, Firefox, Safari y Edge. Para la mejor experiencia, recomendamos usar la versión más reciente de tu navegador preferido.",
+    "category": "General"
+  },
+  {
+    "id": 5,
+    "question": "¿Cómo contacto al soporte?",
+    "answer": "Puedes contactar a nuestro equipo de soporte a través de la página de soporte, por correo electrónico a suporte@wiseveo.com.br, o mediante el chat en vivo disponible las 24 horas.",
+    "category": "General"
+  },
+  {
+    "id": 6,
+    "question": "¿Existe una aplicación móvil disponible?",
+    "answer": "Actualmente ofrecemos una aplicación web responsiva que funciona muy bien en dispositivos móviles. Una aplicación móvil dedicada está planeada para un lanzamiento futuro.",
+    "category": "General"
+  },
+  {
+    "id": 7,
+    "question": "¿Puedo personalizar el panel?",
+    "answer": "Sí, el panel es altamente personalizable. Puedes modificar temas, diseños, agregar componentes personalizados y configurar varias opciones para que coincidan con tu marca.",
+    "category": "General"
+  },
+  {
+    "id": 8,
+    "question": "¿Qué integraciones están disponibles?",
+    "answer": "Ofrecemos integraciones con servicios populares como Stripe, PayPal, Shopify, WooCommerce, Google Analytics y muchos más a través de nuestra API.",
+    "category": "General"
+  },
+  {
+    "id": 9,
+    "question": "¿Cómo restablezco mi contraseña?",
+    "answer": "Puedes restablecer tu contraseña haciendo clic en el enlace '¿Olvidó su contraseña?' en la página de inicio de sesión. Ingresa tu correo electrónico y te enviaremos instrucciones para restablecerla.",
+    "category": "Account"
+  },
+  {
+    "id": 10,
+    "question": "¿Cómo cambio mi dirección de correo electrónico?",
+    "answer": "Puedes cambiar tu dirección de correo electrónico en la configuración de tu cuenta, en la sección 'Configuración de Usuario'. Deberás verificar el nuevo correo antes de que el cambio surta efecto.",
+    "category": "Account"
+  },
+  {
+    "id": 11,
+    "question": "¿Puedo tener varios miembros del equipo?",
+    "answer": "Sí, dependiendo de tu plan, puedes invitar a miembros del equipo y asignarles diferentes roles y permisos para gestionar tu tienda de forma colaborativa.",
+    "category": "Account"
+  },
+  {
+    "id": 12,
+    "question": "¿Cómo elimino mi cuenta?",
+    "answer": "Para eliminar tu cuenta, ve a la configuración de tu cuenta y selecciona 'Eliminar Cuenta'. Ten en cuenta que esta acción es irreversible y todos los datos se eliminarán de forma permanente.",
+    "category": "Account"
+  },
+  {
+    "id": 13,
+    "question": "¿Puedo cambiar mi nombre de usuario?",
+    "answer": "Sí, puedes cambiar tu nombre de usuario en la configuración de la cuenta. Ten en cuenta que algunas funciones podrían referenciar temporalmente tu nombre de usuario anterior.",
+    "category": "Account"
+  },
+  {
+    "id": 14,
+    "question": "¿Cómo habilito la autenticación de dos factores?",
+    "answer": "Puedes habilitar la autenticación de dos factores en la configuración de seguridad de tu cuenta. Ofrecemos soporte para SMS y aplicaciones autenticadoras para mayor seguridad.",
+    "category": "Account"
+  },
+  {
+    "id": 15,
+    "question": "¿Qué métodos de pago aceptan?",
+    "answer": "Aceptamos las principales tarjetas de crédito (Visa, MasterCard, American Express), PayPal y transferencias bancarias para clientes empresariales. Todos los pagos se procesan de forma segura.",
+    "category": "Billing"
+  },
+  {
+    "id": 16,
+    "question": "¿Cómo puedo mejorar mi plan?",
+    "answer": "Puedes mejorar tu plan en cualquier momento desde la configuración de tu cuenta. Ve a 'Planes y Facturación' y selecciona el plan que mejor se adapte a tus necesidades. Los cambios surten efecto de inmediato.",
+    "category": "Billing"
+  },
+  {
+    "id": 17,
+    "question": "¿Puedo bajar de plan?",
+    "answer": "Sí, puedes bajar de plan en cualquier momento. El cambio tendrá efecto al inicio de tu próximo ciclo de facturación para asegurar que no pierdas el acceso a las funciones premium.",
+    "category": "Billing"
+  },
+  {
+    "id": 18,
+    "question": "¿Ofrecen reembolsos?",
+    "answer": "Ofrecemos una garantía de devolución de dinero de 30 días para todos los planes. Si no estás satisfecho, contacta a nuestro equipo de soporte para un reembolso completo dentro de los 30 días de la compra.",
+    "category": "Billing"
+  },
+  {
+    "id": 19,
+    "question": "¿Cómo funciona la facturación?",
+    "answer": "La facturación se procesa mensual o anualmente según el plan elegido. Recibirás una factura antes de cada ciclo de facturación, y el pago se cobra automáticamente al método seleccionado.",
+    "category": "Billing"
+  },
+  {
+    "id": 20,
+    "question": "¿Puedo cambiar mi ciclo de facturación?",
+    "answer": "Sí, puedes cambiar entre facturación mensual y anual en cualquier momento. La facturación anual ofrece ahorros significativos en comparación con la mensual.",
+    "category": "Billing"
+  },
+  {
+    "id": 21,
+    "question": "¿Qué pasa si el pago falla?",
+    "answer": "Si un pago falla, intentaremos cobrar tu tarjeta nuevamente después de 3 días. Recibirás notificaciones por correo electrónico, y tu cuenta permanecerá activa durante este período de gracia.",
+    "category": "Billing"
+  },
+  {
+    "id": 22,
+    "question": "¿Cómo veo mi historial de facturación?",
+    "answer": "Puedes ver tu historial completo de facturación en la sección 'Planes y Facturación' de la configuración de tu cuenta. Todas las facturas y recibos están disponibles para descargar.",
+    "category": "Billing"
+  },
+  {
+    "id": 23,
+    "question": "¿Puedo exportar mis datos?",
+    "answer": "Sí, puedes exportar tus datos en cualquier momento desde la configuración de tu cuenta. Ofrecemos exportaciones en varios formatos, incluidos CSV, JSON y PDF, según el tipo de dato.",
+    "category": "Technical"
+  },
+  {
+    "id": 24,
+    "question": "¿Qué APIs proporcionan?",
+    "answer": "Ofrecemos APIs REST completas para todas las funciones principales, incluida la gestión de productos, el procesamiento de pedidos, los datos de clientes y los análisis. La documentación completa está disponible.",
+    "category": "Technical"
+  },
+  {
+    "id": 25,
+    "question": "¿Cómo respaldo mis datos?",
+    "answer": "Respaldamos automáticamente todos tus datos a diario. También puedes crear respaldos manuales en cualquier momento desde la configuración, y restaurar desde cualquier punto de respaldo de los últimos 30 días.",
+    "category": "Technical"
+  },
+  {
+    "id": 26,
+    "question": "¿Existe un límite de llamadas a la API?",
+    "answer": "Sí, los límites de llamadas a la API varían según el plan. Los planes Básicos tienen 1000 llamadas/hora, los Profesionales 10 000 llamadas/hora, y los Enterprise tienen llamadas ilimitadas.",
+    "category": "Technical"
+  },
+  {
+    "id": 27,
+    "question": "¿Cómo configuro webhooks?",
+    "answer": "Los webhooks se pueden configurar en la sección 'Conexiones' de tu configuración. Puedes configurar webhooks para varios eventos, como nuevos pedidos, confirmaciones de pago y actualizaciones de inventario.",
+    "category": "Technical"
+  },
+  {
+    "id": 28,
+    "question": "¿Qué pasa con el mantenimiento del sistema?",
+    "answer": "Realizamos el mantenimiento durante horas de bajo tráfico (generalmente los domingos de 2 a 4 a. m. UTC). Se te notificará con al menos 48 horas de anticipación sobre cualquier mantenimiento programado.",
+    "category": "Technical"
+  },
+  {
+    "id": 29,
+    "question": "¿Cómo soluciono problemas de conexión?",
+    "answer": "Primero, verifica tu conexión a internet e intenta actualizar la página. Si los problemas persisten, consulta nuestra página de estado o contacta al soporte con mensajes de error específicos.",
+    "category": "Technical"
+  },
+  {
+    "id": 30,
+    "question": "¿Puedo usar dominios personalizados?",
+    "answer": "Sí, los planes Profesional y Enterprise admiten dominios personalizados. Puedes configurar tu dominio personalizado en la sección 'Conexiones' de la configuración de tu cuenta.",
+    "category": "Technical"
+  },
+  {
+    "id": 31,
+    "question": "¿Qué bases de datos son compatibles?",
+    "answer": "Somos compatibles con MySQL, PostgreSQL, MongoDB y otras bases de datos populares a través de nuestra función de Sincronización de Base de Datos, disponible en planes superiores.",
+    "category": "Technical"
+  },
+  {
+    "id": 32,
+    "question": "¿Cómo manejan mis datos personales?",
+    "answer": "Seguimos políticas estrictas de protección de datos y cumplimos con el RGPD, la CCPA y otras regulaciones de privacidad. Tus datos personales nunca se comparten con terceros sin tu consentimiento.",
+    "category": "Privacy"
+  },
+  {
+    "id": 33,
+    "question": "¿Puedo solicitar mis datos?",
+    "answer": "Sí, puedes solicitar una copia completa de tus datos personales en cualquier momento. La entregaremos en un formato legible por máquina dentro de los 30 días de tu solicitud.",
+    "category": "Privacy"
+  },
+  {
+    "id": 34,
+    "question": "¿Cuánto tiempo conservan los datos?",
+    "answer": "Conservamos tus datos mientras tu cuenta esté activa. Después de eliminar la cuenta, los datos personales se eliminan en un plazo de 30 días, aunque algunos análisis anonimizados pueden conservarse.",
+    "category": "Privacy"
+  },
+  {
+    "id": 35,
+    "question": "¿Usan cookies?",
+    "answer": "Sí, usamos cookies esenciales para la funcionalidad y cookies opcionales para análisis y personalización. Puedes administrar tus preferencias de cookies en la configuración de tu cuenta.",
+    "category": "Privacy"
+  },
+  {
+    "id": 36,
+    "question": "¿Mis datos están cifrados?",
+    "answer": "Sí, todos los datos se cifran tanto en tránsito (usando TLS 1.3) como en reposo (usando cifrado AES-256). Usamos prácticas de seguridad estándar de la industria para proteger tu información.",
+    "category": "Privacy"
+  },
+  {
+    "id": 37,
+    "question": "¿Qué tan seguros están mis datos?",
+    "answer": "Implementamos seguridad de nivel bancario con cifrado de extremo a extremo, auditorías de seguridad regulares y cumplimiento de los estándares SOC 2 Tipo II. La seguridad de tus datos es nuestra máxima prioridad.",
+    "category": "Security"
+  },
+  {
+    "id": 38,
+    "question": "¿Admiten SSO?",
+    "answer": "Sí, los planes Enterprise incluyen soporte de inicio de sesión único (SSO) con proveedores populares como Google, Microsoft Azure AD y Okta para un acceso de equipo sin complicaciones.",
+    "category": "Security"
+  },
+  {
+    "id": 39,
+    "question": "¿Qué hay de los requisitos de contraseña?",
+    "answer": "Requerimos contraseñas seguras con al menos 8 caracteres, incluidas mayúsculas, minúsculas, números y caracteres especiales. También recomendamos encarecidamente habilitar la autenticación de dos factores.",
+    "category": "Security"
+  },
+  {
+    "id": 40,
+    "question": "¿Cómo manejan los incidentes de seguridad?",
+    "answer": "Contamos con un plan integral de respuesta a incidentes. Ante cualquier problema de seguridad, investigamos de inmediato, contenemos el problema y notificamos a los usuarios afectados dentro de las 24 horas.",
+    "category": "Security"
+  },
+  {
+    "id": 41,
+    "question": "¿Qué canales de soporte están disponibles?",
+    "answer": "Ofrecemos soporte por correo electrónico, chat en vivo y soporte telefónico (para clientes Enterprise). Nuestra base de conocimientos y foros comunitarios también están disponibles las 24 horas.",
+    "category": "Support"
+  },
+  {
+    "id": 42,
+    "question": "¿Cuál es el horario de soporte?",
+    "answer": "El soporte por correo electrónico y chat está disponible las 24 horas. El soporte telefónico para clientes Enterprise está disponible de lunes a viernes, de 9 a. m. a 6 p. m. en tu zona horaria local.",
+    "category": "Support"
+  },
+  {
+    "id": 43,
+    "question": "¿Qué tan rápido recibiré una respuesta?",
+    "answer": "Los tiempos de respuesta varían según el plan: Básico (24 horas), Profesional (12 horas), Enterprise (2 horas). Los problemas críticos se priorizan y se responden de inmediato.",
+    "category": "Support"
+  },
+  {
+    "id": 44,
+    "question": "¿Ofrecen capacitación?",
+    "answer": "Sí, ofrecemos incorporación integral para todos los planes, tutoriales en video, documentación y sesiones de capacitación personalizadas para clientes Enterprise.",
+    "category": "Support"
+  },
+  {
+    "id": 45,
+    "question": "¿Pueden ayudar con implementaciones personalizadas?",
+    "answer": "Los clientes Enterprise tienen acceso a nuestro equipo de servicios profesionales para implementaciones personalizadas, integraciones y servicios de consultoría.",
+    "category": "Support"
+  },
+  {
+    "id": 46,
+    "question": "¿Existe un foro comunitario?",
+    "answer": "Sí, tenemos un foro comunitario activo donde los usuarios comparten consejos, hacen preguntas y reciben ayuda tanto de nuestro equipo como de otros miembros de la comunidad.",
+    "category": "Support"
+  }
+]

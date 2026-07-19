@@ -173,6 +173,64 @@
     "transactionsConsidered": "{count, plural, one {# lançamento considerado} other {# lançamentos considerados}}",
     "transactionsCount": "{count, plural, one {# lançamento} other {# lançamentos}}"
   },
+  "auth": {
+    "cadastroPendente": {
+      "backToLogin": "Voltar para o login",
+      "description": "Sua solicitação foi recebida. Assim que um administrador liberar seu cadastro, você poderá fazer login novamente e acessar o sistema.",
+      "title": "Cadastro aguardando aprovação"
+    },
+    "email": "Email",
+    "errors": {
+      "genericAuth": "Erro na autenticação. Tente novamente.",
+      "google": {
+        "denied": "Acesso ao Google foi negado.",
+        "failed": "Falha ao conectar com Google. Tente novamente.",
+        "invalidState": "Erro de segurança. Tente novamente.",
+        "noCode": "Erro na autenticação com Google. Tente novamente.",
+        "notConfigured": "Autenticação via Google não está configurada neste servidor."
+      },
+      "loginFailed": "Erro ao fazer login. Tente novamente.",
+      "signupFailed": "Erro ao criar conta. Tente novamente."
+    },
+    "google": "Continuar com Google",
+    "googleSyncNote": "Ao conectar com Google, será possível sincronizar sua agenda (em breve)",
+    "login": {
+      "button": "Entrar",
+      "forgotPassword": "Esqueceu a senha?",
+      "loggingIn": "Entrando...",
+      "successMessage": "Login realizado com sucesso!",
+      "tab": "Login",
+      "validation": {
+        "passwordRequired": "Senha é obrigatória"
+      }
+    },
+    "orContinueWith": "Ou continue com",
+    "password": "Senha",
+    "signup": {
+      "button": "Criar conta",
+      "confirmPassword": "Confirmar senha",
+      "creatingAccount": "Criando conta...",
+      "fullName": "Nome completo",
+      "namePlaceholder": "Seu nome",
+      "successMessage": "Conta criada! Redirecionando...",
+      "tab": "Criar Conta",
+      "validation": {
+        "nameTooShort": "Nome deve ter pelo menos 2 caracteres",
+        "passwordMismatch": "As senhas não coincidem",
+        "passwordTooShort": "Senha deve ter pelo menos 8 caracteres"
+      }
+    },
+    "title": "Acesse sua conta",
+    "validation": {
+      "emailInvalid": "Email inválido"
+    }
+  },
+  "banks": {
+    "comingSoon": {
+      "description": "Estamos preparando uma experiência completa de Open Banking para você gerenciar suas finanças com mais inteligência.",
+      "title": "Em breve"
+    }
+  },
   "budget": {
     "client": {
       "savingOrder": "Salvando ordem...",
@@ -411,6 +469,49 @@
       "month": "Mês"
     }
   },
+  "chat": {
+    "conversationList": {
+      "chatSettings": "Configurações do chat",
+      "filterMessages": "Filtrar mensagens",
+      "newChat": "Nova conversa"
+    },
+    "deleteConversation": "Excluir conversa",
+    "header": {
+      "groupBadge": "Grupo",
+      "menu": {
+        "manageMembers": "Gerenciar membros",
+        "mute": "Silenciar conversa",
+        "searchMessages": "Buscar mensagens",
+        "unmute": "Reativar notificações"
+      },
+      "selectConversation": "Selecione uma conversa para começar a conversar",
+      "tooltips": {
+        "info": "Informações da conversa",
+        "search": "Buscar na conversa",
+        "videoCall": "Chamada de vídeo",
+        "voiceCall": "Chamada de voz"
+      }
+    },
+    "input": {
+      "addEmoji": "Adicionar emoji",
+      "attachFile": "Anexar arquivo",
+      "document": "Documento",
+      "moreOptions": "Mais opções",
+      "photoOrVideo": "Foto ou vídeo",
+      "typing": "Você está digitando..."
+    },
+    "loading": "Carregando chat...",
+    "message": {
+      "copy": "Copiar",
+      "delete": "Excluir",
+      "edited": "(editada)",
+      "reply": "Responder"
+    },
+    "messagePlaceholder": "Mensagem para {name}...",
+    "messagesTitle": "Mensagens",
+    "welcomeDescription": "Selecione uma conversa para começar a enviar mensagens",
+    "welcomeTitle": "Bem-vindo ao Chat"
+  },
   "common": {
     "actions": "Ações",
     "add": "Adicionar",
@@ -473,6 +574,7 @@
     "more": "Mais",
     "no": "Não",
     "noResults": "Nenhum resultado encontrado.",
+    "noUserFound": "Nenhum usuário encontrado. Faça login para continuar.",
     "openActions": "Abrir ações",
     "openAppearanceCustomizer": "Abrir customizador de aparência",
     "pricingPlans": {
@@ -593,6 +695,11 @@
     "title": "Dashboard",
     "upcomingTransactions": "Próximos Vencimentos"
   },
+  "faqs": {
+    "categories": "Categorias",
+    "learnMore": "Saiba mais",
+    "noResults": "Nenhuma FAQ encontrada com os critérios de busca."
+  },
   "forecasting": {
     "client": {
       "fetchError": "Falha ao carregar projeções",
@@ -636,21 +743,40 @@
       "projectedAbbrev": "Proj"
     }
   },
-  "login": {
-    "confirmPassword": "Confirmar senha",
-    "createAccount": "Criar conta",
-    "creatingAccount": "Criando conta...",
-    "email": "Email",
-    "forgotPassword": "Esqueceu a senha?",
-    "fullName": "Nome completo",
-    "google": "Continuar com Google",
-    "googleSyncNote": "Ao conectar com Google, será possível sincronizar sua agenda (em breve)",
-    "loggingIn": "Entrando...",
-    "login": "Entrar",
-    "orContinue": "Ou continue com",
-    "password": "Senha",
-    "signup": "Criar Conta",
-    "title": "Acesse sua conta"
+  "mail": {
+    "addLabel": "Adicionar etiqueta",
+    "allMail": "Todos os e-mails",
+    "archive": "Arquivar",
+    "forward": "Encaminhar",
+    "inbox": "Caixa de Entrada",
+    "laterToday": "Mais tarde hoje",
+    "markAsUnread": "Marcar como não lida",
+    "more": "Mais",
+    "moveToJunk": "Mover para spam",
+    "moveToTrash": "Mover para lixeira",
+    "muteThisThread": "Silenciar esta conversa",
+    "muteThread": "Silenciar conversa",
+    "nextWeek": "Próxima semana",
+    "noMessageSelected": "Nenhuma mensagem selecionada",
+    "reply": "Responder",
+    "replyAll": "Responder a todos",
+    "replyTo": "Responder para:",
+    "send": "Enviar",
+    "snooze": "Adiar",
+    "snoozeUntil": "Adiar até",
+    "starThread": "Marcar conversa com estrela",
+    "thisWeekend": "Neste fim de semana",
+    "tomorrow": "Amanhã",
+    "unread": "Não lidas"
+  },
+  "metadata": {
+    "description": "Aceleração Financeira"
+  },
+  "pricing": {
+    "faqDescription": "Obtenha respostas para as perguntas mais comuns sobre nossos preços e planos",
+    "faqTitle": "Perguntas Frequentes",
+    "featuresDescription": "Todo plano vem com estes recursos essenciais para ajudar sua equipe a ter sucesso",
+    "featuresTitle": "Todos os Planos Incluem"
   },
   "recurring": {
     "actions": {
@@ -844,6 +970,14 @@
       "languageDesc": "Escolha o idioma preferido para a interface. A mudança será aplicada imediatamente.",
       "languageTitle": "Idioma do Sistema",
       "title": "Aparência & Idioma"
+    },
+    "componentsShowcase": {
+      "chartsDescription": "Exemplos de visualizações de dados e gráficos interativos.",
+      "chartsTitle": "Gráficos",
+      "insightsDescription": "Componentes de métricas, gráficos e análises de desempenho.",
+      "insightsTitle": "Insights",
+      "tablesDescription": "Componentes de tabela com suporte a ordenação, filtragem e drag & drop.",
+      "tablesTitle": "Tabelas"
     },
     "general": {
       "cancel": "Cancelar",
@@ -1172,6 +1306,219 @@
     "underMaintenance": "Em manutenção",
     "users": "Usuários",
     "usersettings": "Configurações do Usuário"
+  },
+  "tasks": {
+    "addTaskModal": {
+      "cancel": "Cancelar",
+      "categoryField": "Categoria",
+      "createTask": "Criar Tarefa",
+      "description": "Crie uma nova tarefa para acompanhar o trabalho e o progresso. Preencha os detalhes abaixo.",
+      "descriptionField": "Descrição",
+      "priorityField": "Prioridade",
+      "statusField": "Status",
+      "title": "Adicionar Nova Tarefa",
+      "titleField": "Título da Tarefa *",
+      "trigger": "Adicionar Tarefa"
+    },
+    "filter": {
+      "clearFilters": "Limpar filtros",
+      "selectedCount": "{count} selecionado(s)"
+    },
+    "page": {
+      "completed": "Concluídas",
+      "description": "Visualize, filtre e gerencie todas as suas tarefas de projeto em um só lugar",
+      "inProgress": "Em Andamento",
+      "loading": "Carregando tarefas...",
+      "mobileDescription": "Use uma tela maior para visualizar a interface completa de tarefas.",
+      "mobileTitle": "Painel de Tarefas",
+      "pending": "Pendentes",
+      "title": "Gerenciamento de Tarefas",
+      "totalTasks": "Total de Tarefas"
+    },
+    "pagination": {
+      "firstPageAria": "Ir para a primeira página",
+      "lastPageAria": "Ir para a última página",
+      "nextPageAria": "Ir para a próxima página",
+      "pageOfTotal": "Página {page} de {total}",
+      "previousPageAria": "Ir para a página anterior",
+      "rowsPerPage": "Linhas por página",
+      "selectedOfTotal": "{selected} de {total} linha(s) selecionada(s)."
+    },
+    "rowActions": {
+      "delete": "Excluir",
+      "duplicate": "Duplicar",
+      "editTask": "Editar Tarefa",
+      "markAsFavorite": "Marcar como Favorito",
+      "openMenu": "Abrir menu",
+      "viewTask": "Ver Tarefa"
+    },
+    "toolbar": {
+      "allCategories": "Todas as Categorias",
+      "allPriorities": "Todas as Prioridades",
+      "allStatus": "Todos os Status",
+      "resetFilters": "Redefinir Filtros"
+    },
+    "userNav": {
+      "billing": "Faturamento",
+      "logout": "Sair",
+      "newTeam": "Nova Equipe",
+      "profile": "Perfil",
+      "settings": "Configurações"
+    },
+    "viewOptions": {
+      "toggleColumns": "Alternar colunas",
+      "view": "Visualizar"
+    }
+  },
+  "templatePages": {
+    "account": {
+      "cancel": "Cancelar",
+      "changePasswordDescription": "Mantenha sua conta segura atualizando sua senha regularmente.",
+      "changePasswordTitle": "Alterar Senha",
+      "confirmNewPassword": "Confirmar Nova Senha",
+      "currentPassword": "Senha Atual",
+      "dangerZoneDescription": "Ações irreversíveis e destrutivas.",
+      "dangerZoneTitle": "Zona de Perigo",
+      "deleteAccount": "Excluir Conta",
+      "deleteAccountDescription": "Exclua permanentemente sua conta e todos os dados associados.",
+      "emailAddress": "Endereço de E-mail",
+      "firstName": "Nome",
+      "lastName": "Sobrenome",
+      "newPassword": "Nova Senha",
+      "personalInfoDescription": "Atualize suas informações pessoais que serão exibidas no seu perfil.",
+      "personalInfoTitle": "Informações Pessoais",
+      "saveChanges": "Salvar Alterações",
+      "username": "Nome de Usuário"
+    },
+    "billing": {
+      "availablePlansDescription": "Escolha um plano que funcione melhor para você.",
+      "availablePlansTitle": "Planos Disponíveis",
+      "currentPlanTitle": "Plano Atual",
+      "currentlyOnPlan": "Você está atualmente no {plan}.",
+      "daysLabel": "Dias",
+      "daysOfTotal": "{used} de {total} dias",
+      "daysRemaining": "{days} dias restantes até seu plano precisar de atualização",
+      "historyDescription": "Veja suas faturas e pagamentos anteriores.",
+      "historyTitle": "Histórico de Faturamento",
+      "needsAttention": "Precisamos da sua atenção!",
+      "nextBilling": "Próxima cobrança: {date}"
+    },
+    "connections": {
+      "addNewApiKey": "Adicionar Nova Chave de API",
+      "apiIntegrationsDescription": "Configure conexões de API e webhooks.",
+      "apiIntegrationsTitle": "Integrações de API",
+      "apiKeysDescription": "Gerencie suas chaves de API e tokens de acesso.",
+      "apiKeysTitle": "Chaves de API",
+      "automateWithZapier": "Automatize fluxos de trabalho com o Zapier",
+      "calendarAndContacts": "Calendário e contatos",
+      "communication": "Comunicação",
+      "configureWebhooks": "Configure endpoints de webhook personalizados",
+      "connected": "conectado",
+      "connectedAccountsDescription": "Exiba conteúdo das suas contas conectadas no seu site",
+      "connectedAccountsTitle": "Contas Conectadas",
+      "copy": "Copiar",
+      "databaseSync": "Sincronização de Banco de Dados",
+      "databaseSyncDescription": "Sincronize dados com bancos de dados externos",
+      "developmentApiKey": "Chave de API de Desenvolvimento",
+      "manageGitRepos": "Gerencie seus repositórios Git",
+      "notConnected": "Não Conectado",
+      "productionApiKey": "Chave de API de Produção",
+      "regenerate": "Regenerar",
+      "shareUpdatesFacebook": "Compartilhe atualizações no Facebook",
+      "shareUpdatesTwitter": "Compartilhe atualizações no Twitter",
+      "socialAccountsTitle": "Contas Sociais",
+      "stayConnectedDribbble": "Fique conectado no Dribbble",
+      "stayConnectedInstagram": "Fique conectado no Instagram",
+      "webhooksTitle": "Webhooks"
+    },
+    "notifications": {
+      "always": "Sempre",
+      "appColumn": "APP",
+      "browserColumn": "NAVEGADOR",
+      "cancel": "Cancelar",
+      "channelsDescription": "Escolha seus canais de notificação preferidos para diferentes tipos de alertas.",
+      "channelsTitle": "Canais de Notificação",
+      "dailyDigest": "Resumo diário",
+      "email": "E-mail",
+      "emailChannelDescription": "Receba notificações por e-mail",
+      "emailFrequency": "Frequência de E-mail",
+      "emailNotificationsDescription": "Escolha quais notificações por e-mail você deseja receber.",
+      "emailNotificationsTitle": "Notificações por E-mail",
+      "frequencyDescription": "Controle a frequência com que você recebe notificações.",
+      "frequencyTitle": "Frequência de Notificações",
+      "hourlyDigest": "Resumo por hora",
+      "instant": "Instantâneo",
+      "invoiceReminders": "Lembretes de fatura",
+      "marketingEmailsDescription": "Receba e-mails sobre nossas últimas ofertas e promoções.",
+      "marketingEmailsTitle": "E-mails de marketing",
+      "mentionsDescription": "Seja notificado quando alguém mencionar você.",
+      "mentionsTitle": "Menções",
+      "never": "Nunca",
+      "newMessagesDescription": "Seja notificado quando receber novas mensagens.",
+      "newMessagesTitle": "Novas mensagens",
+      "onlineOption": "Somente quando eu estiver online",
+      "orderUpdates": "Atualizações de pedidos",
+      "permissionDescription": "Precisamos da permissão do seu navegador para exibir notificações.",
+      "preferencesTitle": "Preferências de Notificação",
+      "productUpdatesDescription": "Receba atualizações sobre novos recursos e melhorias.",
+      "productUpdatesTitle": "Atualizações de produto",
+      "promotionalOffers": "Ofertas promocionais",
+      "pushChannelDescription": "Receba notificações push do navegador",
+      "pushNotificationsDescription": "Configure notificações push do navegador e celular.",
+      "pushNotificationsTitle": "Notificações Push",
+      "quietHours": "Horário Silencioso",
+      "requestPermission": "Solicitar Permissão",
+      "savePreferences": "Salvar Preferências",
+      "securityAlertsDescription": "Seja notificado quando houver eventos de segurança na sua conta.",
+      "securityAlertsTitle": "Alertas de segurança",
+      "sms": "SMS",
+      "smsChannelDescription": "Receba notificações por SMS",
+      "systemMaintenance": "Manutenção do sistema",
+      "taskUpdatesDescription": "Seja notificado sobre atribuições e atualizações de tarefas.",
+      "taskUpdatesTitle": "Atualizações de tarefas",
+      "timingQuestion": "Quando devemos enviar notificações para você?",
+      "to": "até",
+      "typeColumn": "TIPO",
+      "weeklyDigest": "Resumo semanal"
+    },
+    "user": {
+      "allowedFormats": "Permitido JPG, GIF ou PNG. Tamanho máximo de 800K",
+      "bio": "Biografia",
+      "cancel": "Cancelar",
+      "company": "Empresa",
+      "description": "Atualize suas informações pessoais e preferências",
+      "email": "E-mail",
+      "firstName": "Nome",
+      "language": "Idioma",
+      "languages": {
+        "english": "Inglês",
+        "french": "Francês",
+        "german": "Alemão",
+        "italian": "Italiano",
+        "portuguese": "Português",
+        "spanish": "Espanhol"
+      },
+      "lastName": "Sobrenome",
+      "location": "Localização",
+      "phoneNumber": "Número de Telefone",
+      "resetButton": "Redefinir",
+      "role": "Cargo",
+      "saveChanges": "Salvar Alterações",
+      "timezone": "Fuso Horário",
+      "timezones": {
+        "aest": "AEST (Horário Padrão do Leste da Austrália)",
+        "cet": "CET (Horário Central Europeu)",
+        "cst": "CST (Horário Padrão Central)",
+        "est": "EST (Horário Padrão do Leste)",
+        "jst": "JST (Horário Padrão do Japão)",
+        "mst": "MST (Horário Padrão da Montanha)",
+        "pst": "PST (Horário Padrão do Pacífico)",
+        "utc": "UTC (Tempo Universal Coordenado)"
+      },
+      "title": "Configurações de Perfil",
+      "uploadNewPhoto": "Enviar nova foto",
+      "website": "Website"
+    }
   },
   "themeCustomizer": {
     "advancedCustomization": "Customização avançada",
@@ -1553,6 +1900,47 @@
       "recurringError": "Erro ao criar transação recorrente",
       "recurringSuccess": "Transação recorrente criada com sucesso",
       "syncError": "Erro ao sincronizar transações com o período selecionado"
+    }
+  },
+  "users": {
+    "filters": {
+      "allPlans": "Todos os Planos",
+      "allRoles": "Todos os Perfis",
+      "allStatus": "Todos os Status",
+      "plan": "Plano",
+      "role": "Perfil",
+      "status": "Status"
+    },
+    "form": {
+      "addNewUser": "Adicionar Novo Usuário",
+      "billing": "Faturamento",
+      "description": "Crie uma nova conta de usuário. Clique em salvar quando terminar.",
+      "email": "Email",
+      "name": "Nome",
+      "plan": "Plano",
+      "role": "Perfil",
+      "saveUser": "Salvar Usuário",
+      "status": "Status"
+    },
+    "statCards": {
+      "fromPrevious": "de {previous}"
+    },
+    "table": {
+      "columnVisibility": "Visibilidade de Colunas",
+      "columns": "Colunas",
+      "deleteUser": "Excluir Usuário",
+      "editUser": "Editar usuário",
+      "export": "Exportar",
+      "moreActions": "Mais ações",
+      "next": "Próxima",
+      "pageOfTotal": "Página {page} de {total}",
+      "previous": "Anterior",
+      "resetPassword": "Redefinir Senha",
+      "selectedOfTotal": "{selected} de {total} linha(s) selecionada(s).",
+      "sendEmail": "Enviar E-mail",
+      "show": "Mostrar",
+      "viewDetails": "Ver Detalhes",
+      "viewUser": "Ver usuário"
     }
   }
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
@@ -27,6 +28,7 @@ interface FAQListProps {
 }
 
 export function FAQList({ faqs, categories }: FAQListProps) {
+  const t = useTranslations("faqs")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -44,7 +46,7 @@ export function FAQList({ faqs, categories }: FAQListProps) {
       {/* Categories Sidebar */}
       <Card className="lg:col-span-2 xl:col-span-1">
         <CardHeader>
-          <CardTitle className="text-lg">Categories</CardTitle>
+          <CardTitle className="text-lg">{t("categories")}</CardTitle>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input 
@@ -95,7 +97,7 @@ export function FAQList({ faqs, categories }: FAQListProps) {
             <ScrollArea className="h-[570px] pr-4">
               {filteredFaqs.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  <p>No FAQs found matching your search criteria.</p>
+                  <p>{t("noResults")}</p>
                 </div>
               ) : (
                 <Accordion type='single' className='space-y-4' defaultValue="item-1">

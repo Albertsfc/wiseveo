@@ -1,4 +1,5 @@
 import { startOfMonth, endOfMonth } from "date-fns"
+import { getTranslations } from "next-intl/server"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { getCalendarStatement } from "@/features/calendar/services/get-calendar-statement"
 import { CalendarPageClient } from "@/features/calendar/components/calendar-page-client"
@@ -9,10 +10,11 @@ export default async function CalendarPage() {
   const userId = await getDefaultUserId()
 
   if (!userId) {
+    const t = await getTranslations("common")
     return (
       <div className="flex items-center justify-center h-96 px-4 md:px-6">
         <p className="text-muted-foreground">
-          Nenhum usuário encontrado. Faça login para ver o calendário.
+          {t("noUserFound")}
         </p>
       </div>
     )

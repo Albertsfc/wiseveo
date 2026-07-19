@@ -2,6 +2,7 @@
 
 import type { Table } from "@tanstack/react-table"
 import { RefreshCcw } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,6 +28,7 @@ export function DataTableToolbar<TData>({
   table,
   onAddTask,
 }: DataTableToolbarProps<TData>) {
+  const t = useTranslations("tasks.toolbar")
   const isFiltered = table.getState().columnFilters.length > 0
 
   const handleStatusChange = (value: string) => {
@@ -74,7 +76,7 @@ export function DataTableToolbar<TData>({
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="cursor-pointer">All Status</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">{t("allStatus")}</SelectItem>
               {statuses.map((status) => (
                 <SelectItem
                   key={status.value}
@@ -101,7 +103,7 @@ export function DataTableToolbar<TData>({
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="cursor-pointer">All Categories</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">{t("allCategories")}</SelectItem>
               {categories.map((category) => (
                 <SelectItem
                   key={category.value}
@@ -123,7 +125,7 @@ export function DataTableToolbar<TData>({
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="cursor-pointer">All Priorities</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">{t("allPriorities")}</SelectItem>
               {priorities.map((priority) => (
                 <SelectItem
                   key={priority.value}
@@ -156,7 +158,7 @@ export function DataTableToolbar<TData>({
             disabled={!isFiltered}
           >
             <RefreshCcw className="h-4 w-4" />
-            <span className="hidden lg:block">Reset Filters</span>
+            <span className="hidden lg:block">{t("resetFilters")}</span>
           </Button>
         </div>
         <div className="flex items-center space-x-2">

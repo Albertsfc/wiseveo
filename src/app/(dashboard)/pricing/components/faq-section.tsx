@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
@@ -12,12 +13,14 @@ interface FAQSectionProps {
 }
 
 export function FAQSection({ faqs }: FAQSectionProps) {
+  const t = useTranslations("pricing")
+
   return (
     <Card className="mt-6 sm:mt-8 lg:mt-12">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Frequently Asked Questions</CardTitle>
+        <CardTitle className="text-2xl">{t("faqTitle")}</CardTitle>
         <CardDescription>
-          Get answers to the most common questions about our pricing and plans
+          {t("faqDescription")}
         </CardDescription>
       </CardHeader>
       <CardContent className="mt-6 sm:mt-8">

@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 import {Users, CreditCard, UserCheck, Clock5, TrendingUp, TrendingDown, ArrowUpRight} from "lucide-react"
+import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import { formatPercentValue } from "@/lib/monetary"
 import { cn } from '@/lib/utils'
@@ -37,6 +38,8 @@ const performanceMetrics = [
 ]
 
 export function StatCards() {
+  const t = useTranslations("users.statCards")
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {performanceMetrics.map((metric, index) => (
@@ -70,7 +73,7 @@ export function StatCards() {
               <p className='text-muted-foreground text-sm font-medium'>{metric.title}</p>
               <div className='text-2xl font-bold'>{metric.current}</div>
               <div className='text-muted-foreground flex items-center gap-2 text-sm'>
-                <span>from {metric.previous}</span>
+                <span>{t("fromPrevious", { previous: metric.previous })}</span>
                 <ArrowUpRight className='size-3' />
               </div>
             </div>

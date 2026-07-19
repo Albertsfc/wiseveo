@@ -1,4 +1,5 @@
 import { Wallet } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { getBudgetData } from "@/features/budget/services/get-budget-data"
 import { BudgetClient } from "@/features/budget/components/budget-client"
@@ -8,10 +9,11 @@ export default async function BudgetPage() {
   const userId = await getDefaultUserId()
 
   if (!userId) {
+    const t = await getTranslations("common")
     return (
       <div className="flex items-center justify-center h-96 px-4 md:px-6">
         <p className="text-muted-foreground">
-          Nenhum usuário encontrado. Faça login para ver o orçamento.
+          {t("noUserFound")}
         </p>
       </div>
     )

@@ -1,12 +1,35 @@
+import { getLocale } from "next-intl/server"
+
+import { resolveAppLocale } from "@/i18n/config"
 import { PricingPlans } from "@/components/pricing-plans"
 import { FeaturesGrid } from "./components/features-grid"
 import { FAQSection } from "./components/faq-section"
 
 // Import data
-import featuresData from "./data/features.json"
-import faqsData from "./data/faqs.json"
+import featuresPtBR from "./data/features.pt-BR.json"
+import featuresEnUS from "./data/features.en-US.json"
+import featuresEs419 from "./data/features.es-419.json"
+import faqsPtBR from "./data/faqs.pt-BR.json"
+import faqsEnUS from "./data/faqs.en-US.json"
+import faqsEs419 from "./data/faqs.es-419.json"
 
-export default function PricingPage() {
+const featuresByLocale = {
+  "pt-BR": featuresPtBR,
+  "en-US": featuresEnUS,
+  "es-419": featuresEs419,
+}
+
+const faqsByLocale = {
+  "pt-BR": faqsPtBR,
+  "en-US": faqsEnUS,
+  "es-419": faqsEs419,
+}
+
+export default async function PricingPage() {
+  const locale = resolveAppLocale(await getLocale())
+  const featuresData = featuresByLocale[locale]
+  const faqsData = faqsByLocale[locale]
+
   return (
     <div className="px-4 lg:px-6">
       {/* Pricing Cards */}

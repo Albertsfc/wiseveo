@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { format, isToday, isYesterday } from "date-fns"
 import { CheckCheck, MoreHorizontal, Reply, Copy, Trash2 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -24,6 +25,7 @@ interface MessageListProps {
 }
 
 export function MessageList({ messages, users, currentUserId = "current-user" }: MessageListProps) {
+  const t = useTranslations("chat")
   const scrollAreaRef = useRef<HTMLDivElement>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const previousMessageCountRef = useRef(0)
@@ -234,7 +236,7 @@ export function MessageList({ messages, users, currentUserId = "current-user" }:
                           )}>
                             <span>{formatMessageTime(message.timestamp)}</span>
                             {message.isEdited && (
-                              <span className="italic">(edited)</span>
+                              <span className="italic">{t("message.edited")}</span>
                             )}
                             {isOwnMessage && (
                               <div className="flex">
@@ -260,18 +262,18 @@ export function MessageList({ messages, users, currentUserId = "current-user" }:
                             <DropdownMenuContent align="end">
                               <DropdownMenuItem className="cursor-pointer">
                                 <Reply className="h-4 w-4 mr-2" />
-                                Reply
+                                {t("message.reply")}
                               </DropdownMenuItem>
                               <DropdownMenuItem className="cursor-pointer">
                                 <Copy className="h-4 w-4 mr-2" />
-                                Copy
+                                {t("message.copy")}
                               </DropdownMenuItem>
                               {isOwnMessage && (
                                 <>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem className="cursor-pointer text-destructive">
                                     <Trash2 className="h-4 w-4 mr-2" />
-                                    Delete
+                                    {t("message.delete")}
                                   </DropdownMenuItem>
                                 </>
                               )}

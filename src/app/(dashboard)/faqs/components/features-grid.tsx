@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from '@/components/ui/button'
@@ -22,6 +23,8 @@ const iconMap = {
 }
 
 export function FeaturesGrid({ features }: FeaturesGridProps) {
+  const t = useTranslations("faqs")
+
   return (
     <div className='grid gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 mt-8'>
       {features.map(feature => {
@@ -41,7 +44,7 @@ export function FeaturesGrid({ features }: FeaturesGridProps) {
                   size='sm'
                   className='text-muted-foreground hover:text-foreground h-auto cursor-pointer !p-0 text-sm'
                 >
-                  Learn more
+                  {t("learnMore")}
                   <ArrowRight className='ms-1.5 size-4' />
                 </Button>
               </CardContent>

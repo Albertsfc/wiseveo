@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { PricingPlans } from "@/components/pricing-plans"
 import { CurrentPlanCard } from "./components/current-plan-card"
@@ -10,6 +11,7 @@ import currentPlanData from "./data/current-plan.json"
 import billingHistoryData from "./data/billing-history.json"
 
 export default function BillingSettings() {
+  const t = useTranslations("templatePages.billing")
   const handlePlanSelect = (planId: string) => {
     console.log('Plan selected:', planId)
     // Handle plan selection logic here
@@ -26,9 +28,9 @@ export default function BillingSettings() {
         <div className="grid gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Available Plans</CardTitle>
+              <CardTitle>{t("availablePlansTitle")}</CardTitle>
               <CardDescription>
-                Choose a plan that works best for you.
+                {t("availablePlansDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>

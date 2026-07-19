@@ -31,6 +31,7 @@ import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useTranslations } from "next-intl"
 
 const userFormSchema = z.object({
   name: z.string().min(2, {
@@ -59,7 +60,17 @@ interface UserFormDialogProps {
   onAddUser: (user: UserFormValues) => void
 }
 
+// i18n-ignore: valores de enum idênticos aos dados brutos em data.json (dado, não é UI)
+const ROLE_OPTIONS = ["Admin", "Author", "Editor", "Maintainer", "Subscriber"] as const
+// i18n-ignore: valores de enum idênticos aos dados brutos em data.json (dado, não é UI)
+const PLAN_OPTIONS = ["Basic", "Professional", "Enterprise"] as const
+// i18n-ignore: valores de enum idênticos aos dados brutos em data.json (dado, não é UI)
+const BILLING_OPTIONS = ["Auto Debit", "UPI", "Paypal"] as const
+// i18n-ignore: valores de enum idênticos aos dados brutos em data.json (dado, não é UI)
+const STATUS_OPTIONS = ["Active", "Pending", "Error", "Inactive"] as const
+
 export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
+  const t = useTranslations("users.form")
   const [open, setOpen] = useState(false)
 
   const form = useForm<UserFormValues>({
@@ -85,14 +96,14 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
       <DialogTrigger asChild>
         <Button className="cursor-pointer">
           <Plus className="mr-2 h-4 w-4" />
-          Add New User
+          {t("addNewUser")}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Add New User</DialogTitle>
+          <DialogTitle>{t("addNewUser")}</DialogTitle>
           <DialogDescription>
-            Create a new user account. Click save when you&apos;re done.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -102,7 +113,7 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t("name")}</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter full name" {...field} />
                   </FormControl>
@@ -115,7 +126,7 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t("email")}</FormLabel>
                   <FormControl>
                     <Input placeholder="Enter email address" {...field} />
                   </FormControl>
@@ -129,7 +140,7 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                 name="role"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Role</FormLabel>
+                    <FormLabel>{t("role")}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="cursor-pointer w-full">
@@ -137,11 +148,9 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Admin">Admin</SelectItem>
-                        <SelectItem value="Author">Author</SelectItem>
-                        <SelectItem value="Editor">Editor</SelectItem>
-                        <SelectItem value="Maintainer">Maintainer</SelectItem>
-                        <SelectItem value="Subscriber">Subscriber</SelectItem>
+                        {ROLE_OPTIONS.map((role) => (
+                          <SelectItem key={role} value={role}>{role}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -153,7 +162,7 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                 name="plan"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Plan</FormLabel>
+                    <FormLabel>{t("plan")}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="cursor-pointer w-full">
@@ -161,9 +170,9 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Basic">Basic</SelectItem>
-                        <SelectItem value="Professional">Professional</SelectItem>
-                        <SelectItem value="Enterprise">Enterprise</SelectItem>
+                        {PLAN_OPTIONS.map((plan) => (
+                          <SelectItem key={plan} value={plan}>{plan}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -177,7 +186,7 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                 name="billing"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Billing</FormLabel>
+                    <FormLabel>{t("billing")}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="cursor-pointer w-full">
@@ -185,9 +194,9 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Auto Debit">Auto Debit</SelectItem>
-                        <SelectItem value="UPI">UPI</SelectItem>
-                        <SelectItem value="Paypal">Paypal</SelectItem>
+                        {BILLING_OPTIONS.map((billing) => (
+                          <SelectItem key={billing} value={billing}>{billing}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -199,7 +208,7 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                 name="status"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Status</FormLabel>
+                    <FormLabel>{t("status")}</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="cursor-pointer w-full">
@@ -207,10 +216,9 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Active">Active</SelectItem>
-                        <SelectItem value="Pending">Pending</SelectItem>
-                        <SelectItem value="Error">Error</SelectItem>
-                        <SelectItem value="Inactive">Inactive</SelectItem>
+                        {STATUS_OPTIONS.map((status) => (
+                          <SelectItem key={status} value={status}>{status}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -220,7 +228,7 @@ export function UserFormDialog({ onAddUser }: UserFormDialogProps) {
             </div>
             <DialogFooter>
               <Button type="submit" className="cursor-pointer">
-                Save User
+                {t("saveUser")}
               </Button>
             </DialogFooter>
           </form>

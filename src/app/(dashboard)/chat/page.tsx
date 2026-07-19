@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useTranslations } from "next-intl"
 
 import { Chat } from "./components/chat"
 import { type Conversation, type Message, type User } from "./use-chat"
@@ -11,6 +12,7 @@ import messagesData from "./data/messages.json"
 import usersData from "./data/users.json"
 
 export default function ChatPage() {
+  const t = useTranslations("chat")
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
   const [users, setUsers] = useState<User[]>([])
@@ -36,7 +38,7 @@ export default function ChatPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <div className="text-muted-foreground">Loading chat...</div>
+        <div className="text-muted-foreground">{t("loading")}</div>
       </div>
     )
   }

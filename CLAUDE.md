@@ -28,6 +28,8 @@ O sistema é trilíngue: **pt-BR, en-US, es-419 (Español LatAm)**. Toda feature
 8. `scripts/i18n-allowlist.json` é uma catraca: só encolhe. **Proibido adicionar caminhos.**
 9. String que é dado e não UI (ex.: lista de palavras-chave de detecção) pode ser isenta com
    `// i18n-ignore` na própria linha ou na linha acima — use com parcimônia e justifique no commit.
+   Exceção permanente (não é catraca, é `IGNORE` fixo no scanner): `src/features/component-library`
+   é o guia de estilo interno (dev-only) e deliberadamente não é localizado.
 10. Metadados de locale centralizados em `src/i18n/config.ts` (`LOCALES`, `LOCALE_META`,
     `resolveAppLocale`). O espanhol é `es-419` (espanhol latino-americano, rótulo "Español (LatAm)").
     O seletor de idioma do usuário fica em Configurações → Aparência (`LocaleSwitcher`).

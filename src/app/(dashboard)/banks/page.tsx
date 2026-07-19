@@ -1,15 +1,18 @@
 import { Landmark } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { getAccountsWithBalance } from "@/features/accounts/services/get-accounts"
 import { AccountsClient } from "@/features/accounts/components/accounts-client"
 
 export default async function BanksPage() {
   const userId = await getDefaultUserId()
+  const t = await getTranslations("banks")
 
   if (!userId) {
+    const tCommon = await getTranslations("common")
     return (
       <div className="flex items-center justify-center h-96 px-4 lg:px-6">
-        <p className="text-muted-foreground">Usuário não encontrado.</p>
+        <p className="text-muted-foreground">{tCommon("noUserFound")}</p>
       </div>
     )
   }
@@ -31,9 +34,9 @@ export default async function BanksPage() {
             <Landmark className="size-8 text-muted-foreground/50" />
           </div>
           <div className="max-w-md space-y-2">
-            <h2 className="text-2xl font-semibold">Em breve</h2>
+            <h2 className="text-2xl font-semibold">{t("comingSoon.title")}</h2>
             <p className="text-muted-foreground">
-              Estamos preparando uma experiência completa de Open Banking para você gerenciar suas finanças com mais inteligência.
+              {t("comingSoon.description")}
             </p>
           </div>
         </div>

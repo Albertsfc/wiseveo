@@ -1,9 +1,4 @@
 [
   "src/app/api",
-  "src/app/(dashboard)",
-  "src/app/cadastro-pendente",
-  "src/app/layout.tsx",
-  "src/features/auth",
-  "src/features/component-library",
   "src/features/telegram"
 ]

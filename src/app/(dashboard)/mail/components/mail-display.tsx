@@ -15,6 +15,8 @@ import {
   Trash2,
 } from "lucide-react";
 
+import { useTranslations } from "next-intl";
+
 import { DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -33,56 +35,57 @@ interface MailDisplayProps {
 }
 
 export function MailDisplay({ mail }: MailDisplayProps) {
+  const t = useTranslations("mail");
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   return (
     <div className="flex h-full flex-col">
       <div className="flex items-center p-2">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" disabled={!mail} title="Archive" className="cursor-pointer disabled:cursor-not-allowed">
+          <Button variant="ghost" size="icon" disabled={!mail} title={t("archive")} className="cursor-pointer disabled:cursor-not-allowed">
             <Archive className="size-4" />
-            <span className="sr-only">Archive</span>
+            <span className="sr-only">{t("archive")}</span>
           </Button>
-          <Button variant="ghost" size="icon" disabled={!mail} title="Move to junk" className="cursor-pointer disabled:cursor-not-allowed">
+          <Button variant="ghost" size="icon" disabled={!mail} title={t("moveToJunk")} className="cursor-pointer disabled:cursor-not-allowed">
             <ArchiveX className="size-4" />
-            <span className="sr-only">Move to junk</span>
+            <span className="sr-only">{t("moveToJunk")}</span>
           </Button>
-          <Button variant="ghost" size="icon" disabled={!mail} title="Move to trash" className="cursor-pointer disabled:cursor-not-allowed">
+          <Button variant="ghost" size="icon" disabled={!mail} title={t("moveToTrash")} className="cursor-pointer disabled:cursor-not-allowed">
             <Trash2 className="size-4" />
-            <span className="sr-only">Move to trash</span>
+            <span className="sr-only">{t("moveToTrash")}</span>
           </Button>
           <Separator orientation="vertical" className="mx-1 h-6" />
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" disabled={!mail} title="Snooze" className="cursor-pointer disabled:cursor-not-allowed">
+              <Button variant="ghost" size="icon" disabled={!mail} title={t("snooze")} className="cursor-pointer disabled:cursor-not-allowed">
                 <Clock className="size-4" />
-                <span className="sr-only">Snooze</span>
+                <span className="sr-only">{t("snooze")}</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent className="flex w-auto p-0">
               <div className="flex flex-col gap-2 border-r px-2 py-4">
-                <div className="px-4 text-sm font-medium">Snooze until</div>
+                <div className="px-4 text-sm font-medium">{t("snoozeUntil")}</div>
                 <div className="grid min-w-[250px] gap-1">
                   <Button variant="ghost" className="justify-start font-normal cursor-pointer">
-                    Later today{" "}
+                    {t("laterToday")}{" "}
                     <span className="text-muted-foreground ml-auto">
                       {format(addHours(selectedDate, 4), "E, h:mm b")}
                     </span>
                   </Button>
                   <Button variant="ghost" className="justify-start font-normal cursor-pointer">
-                    Tomorrow
+                    {t("tomorrow")}
                     <span className="text-muted-foreground ml-auto">
                       {format(addDays(selectedDate, 1), "E, h:mm b")}
                     </span>
                   </Button>
                   <Button variant="ghost" className="justify-start font-normal cursor-pointer">
-                    This weekend
+                    {t("thisWeekend")}
                     <span className="text-muted-foreground ml-auto">
                       {format(nextSaturday(selectedDate), "E, h:mm b")}
                     </span>
                   </Button>
                   <Button variant="ghost" className="justify-start font-normal cursor-pointer">
-                    Next week
+                    {t("nextWeek")}
                     <span className="text-muted-foreground ml-auto">
                       {format(addDays(selectedDate, 7), "E, h:mm b")}
                     </span>
@@ -107,17 +110,17 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           </Popover>
         </div>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" size="icon" disabled={!mail} title="Reply" className="cursor-pointer disabled:cursor-not-allowed">
+          <Button variant="ghost" size="icon" disabled={!mail} title={t("reply")} className="cursor-pointer disabled:cursor-not-allowed">
             <Reply className="size-4" />
-            <span className="sr-only">Reply</span>
+            <span className="sr-only">{t("reply")}</span>
           </Button>
-          <Button variant="ghost" size="icon" disabled={!mail} title="Reply all" className="cursor-pointer disabled:cursor-not-allowed">
+          <Button variant="ghost" size="icon" disabled={!mail} title={t("replyAll")} className="cursor-pointer disabled:cursor-not-allowed">
             <ReplyAll className="size-4" />
-            <span className="sr-only">Reply all</span>
+            <span className="sr-only">{t("replyAll")}</span>
           </Button>
-          <Button variant="ghost" size="icon" disabled={!mail} title="Forward" className="cursor-pointer disabled:cursor-not-allowed">
+          <Button variant="ghost" size="icon" disabled={!mail} title={t("forward")} className="cursor-pointer disabled:cursor-not-allowed">
             <Forward className="size-4" />
-            <span className="sr-only">Forward</span>
+            <span className="sr-only">{t("forward")}</span>
           </Button>
         </div>
         <Separator orientation="vertical" className="mx-2 h-6" />
@@ -125,14 +128,14 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" disabled={!mail} className="cursor-pointer disabled:cursor-not-allowed">
               <MoreVertical className="size-4" />
-              <span className="sr-only">More</span>
+              <span className="sr-only">{t("more")}</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem className="cursor-pointer">Mark as unread</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">Star thread</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">Add label</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">Mute thread</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">{t("markAsUnread")}</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">{t("starThread")}</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">{t("addLabel")}</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">{t("muteThread")}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -154,7 +157,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                 <div className="font-semibold">{mail.name}</div>
                 <div className="line-clamp-1 text-xs">{mail.subject}</div>
                 <div className="line-clamp-1 text-xs">
-                  <span className="font-medium">Reply-To:</span> {mail.email}
+                  <span className="font-medium">{t("replyTo")}</span> {mail.email}
                 </div>
               </div>
             </div>
@@ -173,10 +176,10 @@ export function MailDisplay({ mail }: MailDisplayProps) {
                 <Textarea className="p-4 cursor-text" placeholder={`Reply ${mail.name}...`} />
                 <div className="flex items-center">
                   <Label htmlFor="mute" className="flex items-center gap-2 text-xs font-normal cursor-pointer">
-                    <Switch id="mute" aria-label="Mute thread" /> Mute this thread
+                    <Switch id="mute" aria-label={t("muteThread")} /> {t("muteThisThread")}
                   </Label>
                   <Button onClick={(e) => e.preventDefault()} size="sm" className="ml-auto cursor-pointer">
-                    Send
+                    {t("send")}
                   </Button>
                 </div>
               </div>
@@ -184,7 +187,7 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           </div>
         </div>
       ) : (
-        <div className="text-muted-foreground p-8 text-center">No message selected</div>
+        <div className="text-muted-foreground p-8 text-center">{t("noMessageSelected")}</div>
       )}
     </div>
   );
