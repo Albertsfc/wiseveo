@@ -85,6 +85,86 @@
       "title": "Users"
     }
   },
+  "analysis": {
+    "client": {
+      "fetchError": "Failed to load the period income statement",
+      "loadError": "Unable to load the period analysis."
+    },
+    "fallback": {
+      "expenseGroup": "Miscellaneous expenses",
+      "incomeGroup": "Miscellaneous income",
+      "transferCategory": "Transfer",
+      "transferGroup": "Transfers"
+    },
+    "groupsCount": "{count, plural, one {# group} other {# groups}}",
+    "notAvailable": "N/A",
+    "overview": {
+      "appliedPeriod": "Applied period",
+      "daysElapsed": "{count, plural, one {# elapsed day} other {# elapsed days}}",
+      "description": "Executive context of the selected income statement",
+      "footerNote1": "The final balance takes into account income, expenses, and transfers for the period.",
+      "footerNote2": "The margin still reflects the operating result (`income - expenses`) to preserve the income statement reading.",
+      "highlightTopExpenseGroup": "Largest expense group",
+      "highlightTopIncomeGroup": "Largest income group",
+      "highlightTopTransferInGroup": "Largest transfer inflow",
+      "highlightTopTransferOutGroup": "Largest transfer outflow",
+      "loading": "Loading period context...",
+      "metrics": {
+        "averageDailyBalance": "Balance / day",
+        "finalBalance": "Final balance",
+        "operationalMargin": "Operating margin",
+        "operationalResult": "Operating result",
+        "transfersIn": "Transfer inflows",
+        "transfersOut": "Transfer outflows"
+      },
+      "noData": "No data for the period.",
+      "title": "Period Overview"
+    },
+    "resultLabel": {
+      "balanced": "Balanced",
+      "negative": "Negative",
+      "positive": "Positive"
+    },
+    "statement": {
+      "badge": "P&L + transf.",
+      "consolidatedSum": "consolidated sum for the period",
+      "description": "Income, expenses, and transfers consolidated for the selected range",
+      "emptySection": "No transactions found in this section for the selected period.",
+      "expenseTitle": "Expenses",
+      "finalBalanceDescription": "(=) operating result plus transfer inflows and outflows",
+      "finalBalanceTitle": "Final Balance",
+      "incomeTitle": "Income",
+      "loading": "Loading the period income statement...",
+      "operationalResultDescription": "(=) income minus expenses for the period",
+      "operationalResultTitle": "Operating Result",
+      "title": "Income Statement for the Period",
+      "totalExpense": "Total expenses",
+      "totalIncome": "Total income",
+      "transferDescription": "Inflows and outflows mapped by related groups and categories",
+      "transferInTitle": "Inflows",
+      "transferInTotal": "Total transfer inflows",
+      "transferNetDescription": "(=) transfer inflows minus outflows",
+      "transferNetTitle": "Net transfer balance",
+      "transferOutTitle": "Outflows",
+      "transferOutTotal": "Total transfer outflows",
+      "transferTitle": "Transfer"
+    },
+    "summary": {
+      "expense": "Expenses",
+      "expenseFooter": "Operating outflows for the period",
+      "finalBalance": "Final Balance",
+      "finalBalanceFooter": "Income, expenses, and transfers for the range",
+      "income": "Income",
+      "incomeFooter": "Total inflows considered in the income statement",
+      "margin": "Margin",
+      "marginFooter": "Operating result divided by income",
+      "statusFooter": "Filter applied by the header period",
+      "transactionsAbbrev": "{count, plural, one {# txn.} other {# txns.}}",
+      "updating": "Updating income statement..."
+    },
+    "transactionsConsidered": "{count, plural, one {# transaction considered} other {# transactions considered}}",
+    "transactionsCount": "{count, plural, one {# transaction} other {# transactions}}"
+  },
   "budget": {
     "client": {
       "savingOrder": "Saving order...",
@@ -422,6 +502,49 @@
     "subtitle": "Overview of your financial health",
     "title": "Dashboard",
     "upcomingTransactions": "Upcoming Due Dates"
+  },
+  "forecasting": {
+    "client": {
+      "fetchError": "Failed to load forecasts",
+      "loadError": "Unable to load the forecasts."
+    },
+    "fallback": {
+      "category": "General",
+      "expenseGroup": "Miscellaneous outflows",
+      "incomeGroup": "Miscellaneous inflows"
+    },
+    "sections": {
+      "expense": "Outflows",
+      "income": "Inflows"
+    },
+    "settings": {
+      "baseMonthLabel": "Actual Base Month",
+      "modeLabel": "Basis",
+      "modeOptions": {
+        "accrual": "Accrual",
+        "cash": "Cash"
+      },
+      "modePlaceholder": "Select...",
+      "modelLabel": "Predictive Engine",
+      "modelOptions": {
+        "exponentialSmoothing": "Exponential Smoothing",
+        "movingAverage": "Moving Average (3 Months)",
+        "straightLine": "Straight Line (Trend)"
+      },
+      "modelPlaceholder": "Mathematical Model",
+      "showAhLabel": "Horizontal Analysis (HA)",
+      "showAvLabel": "Vertical Analysis (VA)"
+    },
+    "table": {
+      "accountColumn": "Account",
+      "accumulatedBalance": "ACCUMULATED BALANCE",
+      "actual": "Actual",
+      "ahAbbrev": "HA",
+      "avAbbrev": "VA",
+      "netBalance": "FINAL BALANCE",
+      "projected": "Projected",
+      "projectedAbbrev": "Proj"
+    }
   },
   "login": {
     "confirmPassword": "Confirm password",

@@ -2,21 +2,22 @@
 
 import * as React from "react"
 import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import { useLocale, useTranslations } from "next-intl"
 
 import { useDateRange } from "@/contexts/date-range-context"
+import { formatAppDate } from "@/i18n/format"
 import { AnalysisOverviewCard } from "./analysis-overview-card"
 import { AnalysisStatementCard } from "./analysis-statement-card"
 import { AnalysisSummaryCards } from "./analysis-summary-cards"
 import type { DreData } from "../types"
 
-function formatPeriodLabel(from: Date, to: Date): string {
-  return `${format(from, "dd/MM/yyyy", { locale: ptBR })} - ${format(to, "dd/MM/yyyy", {
-    locale: ptBR,
-  })}`
+function formatPeriodLabel(from: Date, to: Date, locale: string): string {
+  return `${formatAppDate(from, "dd/MM/yyyy", locale)} - ${formatAppDate(to, "dd/MM/yyyy", locale)}`
 }
 
 export function AnalysisClient() {
+  const t = useTranslations("analysis")
+  const locale = useLocale()
   const { dateRange } = useDateRange()
   const [data, setData] = React.useState<DreData | null>(null)
   const [loading, setLoading] = React.useState(false)
@@ -40,7 +41,7 @@ export function AnalysisClient() {
         })
 
         if (!res.ok) {
-          throw new Error("Falha ao carregar a DRE do período")
+          throw new Error(t("client.fetchError"))
         }
 
         const payload = (await res.json()) as DreData
@@ -51,7 +52,7 @@ export function AnalysisClient() {
         console.error("Failed to fetch DRE data:", fetchError)
         if (!isCancelled) {
           setData(null)
-          setError("Não foi possível carregar a análise do período.")
+          setError(t("client.loadError"))
         }
       } finally {
         if (!isCancelled) {
@@ -65,11 +66,11 @@ export function AnalysisClient() {
     return () => {
       isCancelled = true
     }
-  }, [dateRange.from, dateRange.to])
+  }, [dateRange.from, dateRange.to, t])
 
   const periodLabel = React.useMemo(
-    () => formatPeriodLabel(dateRange.from, dateRange.to),
-    [dateRange.from, dateRange.to],
+    () => formatPeriodLabel(dateRange.from, dateRange.to, locale),
+    [dateRange.from, dateRange.to, locale],
   )
 
   return (

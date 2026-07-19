@@ -85,6 +85,86 @@
       "title": "Usuarios"
     }
   },
+  "analysis": {
+    "client": {
+      "fetchError": "Error al cargar el Estado de Resultados del período",
+      "loadError": "No fue posible cargar el análisis del período."
+    },
+    "fallback": {
+      "expenseGroup": "Gastos diversos",
+      "incomeGroup": "Ingresos diversos",
+      "transferCategory": "Transferencia",
+      "transferGroup": "Transferencias"
+    },
+    "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
+    "notAvailable": "N/D",
+    "overview": {
+      "appliedPeriod": "Período aplicado",
+      "daysElapsed": "{count, plural, one {# día transcurrido} other {# días transcurridos}}",
+      "description": "Contexto ejecutivo del Estado de Resultados seleccionado",
+      "footerNote1": "El saldo final considera los ingresos, gastos y transferencias del período.",
+      "footerNote2": "El margen sigue reflejando el resultado operacional (`ingresos - gastos`) para preservar la lectura del Estado de Resultados.",
+      "highlightTopExpenseGroup": "Mayor grupo de gastos",
+      "highlightTopIncomeGroup": "Mayor grupo de ingresos",
+      "highlightTopTransferInGroup": "Mayor entrada por transferencia",
+      "highlightTopTransferOutGroup": "Mayor salida por transferencia",
+      "loading": "Cargando contexto del período...",
+      "metrics": {
+        "averageDailyBalance": "Saldo / día",
+        "finalBalance": "Saldo final",
+        "operationalMargin": "Margen operacional",
+        "operationalResult": "Resultado operacional",
+        "transfersIn": "Entradas transf.",
+        "transfersOut": "Salidas transf."
+      },
+      "noData": "Sin datos en el período.",
+      "title": "Lectura del Período"
+    },
+    "resultLabel": {
+      "balanced": "Equilibrio",
+      "negative": "Negativo",
+      "positive": "Positivo"
+    },
+    "statement": {
+      "badge": "ER + transf.",
+      "consolidatedSum": "suma consolidada del período",
+      "description": "Ingresos, gastos y transferencias consolidados según el intervalo seleccionado",
+      "emptySection": "No se encontraron movimientos en esta sección para el período seleccionado.",
+      "expenseTitle": "Gastos",
+      "finalBalanceDescription": "(=) resultado operacional con entradas y salidas de transferencias",
+      "finalBalanceTitle": "Saldo Final",
+      "incomeTitle": "Ingresos",
+      "loading": "Cargando el Estado de Resultados del período...",
+      "operationalResultDescription": "(=) ingresos menos gastos del ejercicio",
+      "operationalResultTitle": "Resultado Operacional",
+      "title": "Estado de Resultados del Período",
+      "totalExpense": "Total de gastos",
+      "totalIncome": "Total de ingresos",
+      "transferDescription": "Entradas y salidas mapeadas por los grupos y categorías relacionados",
+      "transferInTitle": "Entradas",
+      "transferInTotal": "Total de entradas por transferencia",
+      "transferNetDescription": "(=) entradas menos salidas de transferencias",
+      "transferNetTitle": "Saldo neto de transferencias",
+      "transferOutTitle": "Salidas",
+      "transferOutTotal": "Total de salidas por transferencia",
+      "transferTitle": "Transferencia"
+    },
+    "summary": {
+      "expense": "Gastos",
+      "expenseFooter": "Salidas operacionales del período",
+      "finalBalance": "Saldo Final",
+      "finalBalanceFooter": "Ingresos, gastos y transferencias del intervalo",
+      "income": "Ingresos",
+      "incomeFooter": "Total de entradas consideradas en el Estado de Resultados",
+      "margin": "Margen",
+      "marginFooter": "Resultado operacional dividido por los ingresos",
+      "statusFooter": "Filtro aplicado por el período del encabezado",
+      "transactionsAbbrev": "{count, plural, one {# mov.} other {# mov.}}",
+      "updating": "Actualizando Estado de Resultados..."
+    },
+    "transactionsConsidered": "{count, plural, one {# movimiento considerado} other {# movimientos considerados}}",
+    "transactionsCount": "{count, plural, one {# movimiento} other {# movimientos}}"
+  },
   "budget": {
     "client": {
       "savingOrder": "Guardando orden...",
@@ -422,6 +502,49 @@
     "subtitle": "Visión general de tu salud financiera",
     "title": "Dashboard",
     "upcomingTransactions": "Próximos Vencimientos"
+  },
+  "forecasting": {
+    "client": {
+      "fetchError": "Error al cargar las proyecciones",
+      "loadError": "No fue posible cargar las proyecciones."
+    },
+    "fallback": {
+      "category": "General",
+      "expenseGroup": "Salidas diversas",
+      "incomeGroup": "Entradas diversas"
+    },
+    "sections": {
+      "expense": "Salidas",
+      "income": "Entradas"
+    },
+    "settings": {
+      "baseMonthLabel": "Mes Base Real",
+      "modeLabel": "Régimen",
+      "modeOptions": {
+        "accrual": "Devengado",
+        "cash": "Efectivo"
+      },
+      "modePlaceholder": "Seleccione...",
+      "modelLabel": "Motor Predictivo",
+      "modelOptions": {
+        "exponentialSmoothing": "Suavización Exponencial",
+        "movingAverage": "Promedio Móvil (3 Meses)",
+        "straightLine": "Línea Recta (Tendencia)"
+      },
+      "modelPlaceholder": "Modelo Matemático",
+      "showAhLabel": "Análisis Horizontal (AH)",
+      "showAvLabel": "Análisis Vertical (AV)"
+    },
+    "table": {
+      "accountColumn": "Cuenta",
+      "accumulatedBalance": "SALDO ACUMULADO",
+      "actual": "Real",
+      "ahAbbrev": "AH",
+      "avAbbrev": "AV",
+      "netBalance": "SALDO FINAL",
+      "projected": "Proyectado",
+      "projectedAbbrev": "Proy"
+    }
   },
   "login": {
     "confirmPassword": "Confirmar contraseña",

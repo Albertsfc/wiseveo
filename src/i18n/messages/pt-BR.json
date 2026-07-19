@@ -85,6 +85,86 @@
       "title": "Usuários"
     }
   },
+  "analysis": {
+    "client": {
+      "fetchError": "Falha ao carregar a DRE do período",
+      "loadError": "Não foi possível carregar a análise do período."
+    },
+    "fallback": {
+      "expenseGroup": "Despesas diversas",
+      "incomeGroup": "Receitas diversas",
+      "transferCategory": "Transferência",
+      "transferGroup": "Transferências"
+    },
+    "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
+    "notAvailable": "n/d",
+    "overview": {
+      "appliedPeriod": "Período aplicado",
+      "daysElapsed": "{count, plural, one {# dia corrido} other {# dias corridos}}",
+      "description": "Contexto executivo da DRE selecionada",
+      "footerNote1": "O saldo final considera receitas, despesas e transferências do período.",
+      "footerNote2": "A margem continua refletindo o resultado operacional (`receitas - despesas`) para preservar a leitura da DRE.",
+      "highlightTopExpenseGroup": "Maior grupo de despesa",
+      "highlightTopIncomeGroup": "Maior grupo de receita",
+      "highlightTopTransferInGroup": "Maior entrada de transferência",
+      "highlightTopTransferOutGroup": "Maior saída de transferência",
+      "loading": "Carregando contexto do período...",
+      "metrics": {
+        "averageDailyBalance": "Saldo / dia",
+        "finalBalance": "Saldo final",
+        "operationalMargin": "Margem operacional",
+        "operationalResult": "Resultado operacional",
+        "transfersIn": "Entradas transf.",
+        "transfersOut": "Saídas transf."
+      },
+      "noData": "Sem dados no período.",
+      "title": "Leitura do Período"
+    },
+    "resultLabel": {
+      "balanced": "Equilíbrio",
+      "negative": "Negativo",
+      "positive": "Positivo"
+    },
+    "statement": {
+      "badge": "DRE + transf.",
+      "consolidatedSum": "somatório consolidado do período",
+      "description": "Receitas, despesas e transferências consolidadas conforme o intervalo selecionado",
+      "emptySection": "Nenhum lançamento encontrado nesta seção para o período selecionado.",
+      "expenseTitle": "Despesas",
+      "finalBalanceDescription": "(=) resultado operacional com entradas e saídas de transferências",
+      "finalBalanceTitle": "Saldo Final",
+      "incomeTitle": "Receitas",
+      "loading": "Carregando a DRE do período...",
+      "operationalResultDescription": "(=) receitas menos despesas do exercício",
+      "operationalResultTitle": "Resultado Operacional",
+      "title": "DRE do Período",
+      "totalExpense": "Total de despesas",
+      "totalIncome": "Total de receitas",
+      "transferDescription": "Entradas e saídas mapeadas pelos grupos e categorias relacionados",
+      "transferInTitle": "Entradas",
+      "transferInTotal": "Total de entradas por transferência",
+      "transferNetDescription": "(=) entradas menos saídas de transferências",
+      "transferNetTitle": "Saldo líquido de transferências",
+      "transferOutTitle": "Saídas",
+      "transferOutTotal": "Total de saídas por transferência",
+      "transferTitle": "Transferência"
+    },
+    "summary": {
+      "expense": "Despesas",
+      "expenseFooter": "Saídas operacionais do período",
+      "finalBalance": "Saldo Final",
+      "finalBalanceFooter": "Receitas, despesas e transferências do intervalo",
+      "income": "Receitas",
+      "incomeFooter": "Total de entradas consideradas na DRE",
+      "margin": "Margem",
+      "marginFooter": "Resultado operacional dividido pelas receitas",
+      "statusFooter": "Filtro aplicado pelo período da header",
+      "transactionsAbbrev": "{count, plural, one {# lanç.} other {# lanç.}}",
+      "updating": "Atualizando DRE..."
+    },
+    "transactionsConsidered": "{count, plural, one {# lançamento considerado} other {# lançamentos considerados}}",
+    "transactionsCount": "{count, plural, one {# lançamento} other {# lançamentos}}"
+  },
   "budget": {
     "client": {
       "savingOrder": "Salvando ordem...",
@@ -422,6 +502,49 @@
     "subtitle": "Visão geral da sua saúde financeira",
     "title": "Dashboard",
     "upcomingTransactions": "Próximos Vencimentos"
+  },
+  "forecasting": {
+    "client": {
+      "fetchError": "Falha ao carregar projeções",
+      "loadError": "Não foi possível carregar as projeções."
+    },
+    "fallback": {
+      "category": "Geral",
+      "expenseGroup": "Saídas diversas",
+      "incomeGroup": "Entradas diversas"
+    },
+    "sections": {
+      "expense": "Saídas",
+      "income": "Entradas"
+    },
+    "settings": {
+      "baseMonthLabel": "Mês Base Real",
+      "modeLabel": "Regime",
+      "modeOptions": {
+        "accrual": "Competência",
+        "cash": "Caixa"
+      },
+      "modePlaceholder": "Selecione...",
+      "modelLabel": "Motor Preditivo",
+      "modelOptions": {
+        "exponentialSmoothing": "Suavização Exponencial",
+        "movingAverage": "Média Móvel (3 Meses)",
+        "straightLine": "Linha Reta (Tendência)"
+      },
+      "modelPlaceholder": "Modelo Matemático",
+      "showAhLabel": "Análise Horizontal (AH)",
+      "showAvLabel": "Análise Vertical (AV)"
+    },
+    "table": {
+      "accountColumn": "Conta",
+      "accumulatedBalance": "SALDO ACUMULADO",
+      "actual": "Real",
+      "ahAbbrev": "AH",
+      "avAbbrev": "AV",
+      "netBalance": "SALDO FINAL",
+      "projected": "Projetado",
+      "projectedAbbrev": "Proj"
+    }
   },
   "login": {
     "confirmPassword": "Confirmar senha",

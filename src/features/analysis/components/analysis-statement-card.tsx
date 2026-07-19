@@ -6,6 +6,7 @@ import {
   ArrowUpCircle,
   ReceiptText,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -41,6 +42,7 @@ function StatementSection({
   tone,
   totalLabel,
 }: StatementSectionProps) {
+  const t = useTranslations("analysis")
   const monetary = useMonetaryFormattingSafe()
   const isIncome = tone === "income"
   const isExpense = tone === "expense"
@@ -73,7 +75,7 @@ function StatementSection({
           </h3>
         </div>
         <span className="text-xs text-muted-foreground">
-          {items.length} grupos
+          {t("groupsCount", { count: items.length })}
         </span>
       </div>
 
@@ -87,7 +89,7 @@ function StatementSection({
               <div className="min-w-0 space-y-1">
                 <p className="truncate text-sm font-medium">{item.groupName}</p>
                 <p className="text-xs text-muted-foreground">
-                  {item.transactionCount} lançamentos ·{" "}
+                  {t("transactionsCount", { count: item.transactionCount })} ·{" "}
                   {formatPercentValue(item.percentage, 1)}
                 </p>
               </div>
@@ -106,15 +108,15 @@ function StatementSection({
         </div>
       ) : (
         <div className="rounded-lg border border-dashed bg-background/40 px-4 py-5 text-sm text-muted-foreground">
-          Nenhum lançamento encontrado nesta seção para o período selecionado.
+          {t("statement.emptySection")}
         </div>
       )}
 
       <div className="flex items-center justify-between gap-3 rounded-lg border bg-background px-4 py-3">
         <div>
-          <p className="text-sm font-semibold">{totalLabel ?? (isIncome ? "Total de receitas" : "Total de despesas")}</p>
+          <p className="text-sm font-semibold">{totalLabel ?? (isIncome ? t("statement.totalIncome") : t("statement.totalExpense"))}</p>
           <p className="text-xs text-muted-foreground">
-            {isIncome || isTransferIn ? "(+)" : "(-)"} somatório consolidado do período
+            {isIncome || isTransferIn ? "(+)" : "(-)"} {t("statement.consolidatedSum")}
           </p>
         </div>
         <p
@@ -131,6 +133,7 @@ function StatementSection({
 }
 
 function TransferSection({ data }: { data: DreData | null }) {
+  const t = useTranslations("analysis")
   const monetary = useMonetaryFormattingSafe()
   const transferNet = (data?.summary.transferIn ?? 0) - (data?.summary.transferOut ?? 0)
 
@@ -140,37 +143,37 @@ function TransferSection({ data }: { data: DreData | null }) {
         <ArrowRightLeft className="size-4 text-primary" />
         <div>
           <h3 className="text-sm font-semibold uppercase tracking-wide">
-            Transferência
+            {t("statement.transferTitle")}
           </h3>
           <p className="text-xs text-muted-foreground">
-            Entradas e saídas mapeadas pelos grupos e categorias relacionados
+            {t("statement.transferDescription")}
           </p>
         </div>
       </div>
 
       <StatementSection
-        title="Entradas"
+        title={t("statement.transferInTitle")}
         items={data?.transferInGroups ?? []}
         total={data?.summary.transferIn ?? 0}
         tone="transferIn"
-        totalLabel="Total de entradas por transferência"
+        totalLabel={t("statement.transferInTotal")}
       />
 
       <StatementSection
-        title="Saídas"
+        title={t("statement.transferOutTitle")}
         items={data?.transferOutGroups ?? []}
         total={data?.summary.transferOut ?? 0}
         tone="transferOut"
-        totalLabel="Total de saídas por transferência"
+        totalLabel={t("statement.transferOutTotal")}
       />
 
       <div className="flex items-center justify-between gap-4 rounded-xl border bg-background px-4 py-4">
         <div className="space-y-1">
           <p className="text-sm font-semibold uppercase tracking-wide">
-            Saldo líquido de transferências
+            {t("statement.transferNetTitle")}
           </p>
           <p className="text-xs text-muted-foreground">
-            (=) entradas menos saídas de transferências
+            {t("statement.transferNetDescription")}
           </p>
         </div>
         <p
@@ -190,6 +193,7 @@ export function AnalysisStatementCard({
   data,
   loading,
 }: AnalysisStatementCardProps) {
+  const t = useTranslations("analysis")
   const monetary = useMonetaryFormattingSafe()
   const net = data?.summary.net ?? 0
   const operationalNet = data?.summary.operationalNet ?? 0
@@ -197,33 +201,33 @@ export function AnalysisStatementCard({
   return (
     <Card className="@container/card h-full bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card">
       <CardHeader>
-        <CardTitle>DRE do Período</CardTitle>
+        <CardTitle>{t("statement.title")}</CardTitle>
         <CardDescription>
-          Receitas, despesas e transferências consolidadas conforme o intervalo selecionado
+          {t("statement.description")}
         </CardDescription>
         <CardAction>
           <Badge variant="outline" className="gap-1">
             <ReceiptText className="size-3.5" />
-            DRE + transf.
+            {t("statement.badge")}
           </Badge>
         </CardAction>
       </CardHeader>
       <CardContent className="space-y-6">
         {loading ? (
           <div className="rounded-lg border border-dashed bg-background/40 px-4 py-10 text-center text-sm text-muted-foreground">
-            Carregando a DRE do período...
+            {t("statement.loading")}
           </div>
         ) : (
           <>
             <StatementSection
-              title="Receitas"
+              title={t("statement.incomeTitle")}
               items={data?.incomeGroups ?? []}
               total={data?.summary.income ?? 0}
               tone="income"
             />
 
             <StatementSection
-              title="Despesas"
+              title={t("statement.expenseTitle")}
               items={data?.expenseGroups ?? []}
               total={data?.summary.expense ?? 0}
               tone="expense"
@@ -232,10 +236,10 @@ export function AnalysisStatementCard({
             <div className="flex items-center justify-between gap-4 rounded-xl border bg-background px-4 py-4">
               <div className="space-y-1">
                 <p className="text-sm font-semibold uppercase tracking-wide">
-                  Resultado Operacional
+                  {t("statement.operationalResultTitle")}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  (=) receitas menos despesas do exercício
+                  {t("statement.operationalResultDescription")}
                 </p>
               </div>
               <p
@@ -253,10 +257,10 @@ export function AnalysisStatementCard({
             <div className="flex items-center justify-between gap-4 rounded-xl border bg-background px-4 py-4">
               <div className="space-y-1">
                 <p className="text-sm font-semibold uppercase tracking-wide">
-                  Saldo Final
+                  {t("statement.finalBalanceTitle")}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  (=) resultado operacional com entradas e saídas de transferências
+                  {t("statement.finalBalanceDescription")}
                 </p>
               </div>
               <p

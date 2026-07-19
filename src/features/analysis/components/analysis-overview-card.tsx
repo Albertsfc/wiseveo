@@ -8,6 +8,7 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -54,6 +55,7 @@ interface HighlightRowProps {
 }
 
 function HighlightRow({ label, item, tone }: HighlightRowProps) {
+  const t = useTranslations("analysis")
   const monetary = useMonetaryFormattingSafe()
   const isIncome = tone === "income"
   const isExpense = tone === "expense"
@@ -103,23 +105,23 @@ function HighlightRow({ label, item, tone }: HighlightRowProps) {
             {value}
           </p>
           <p className="text-xs text-muted-foreground">
-            {item.transactionCount} lançamentos ·{" "}
+            {t("transactionsCount", { count: item.transactionCount })} ·{" "}
             {formatPercentValue(item.percentage, 1)}
           </p>
         </div>
       ) : (
         <p className="mt-2 text-sm text-muted-foreground">
-          Sem dados no período.
+          {t("overview.noData")}
         </p>
       )}
     </div>
   )
 }
 
-function resolveResultLabel(net: number) {
-  if (net > 0) return "Positivo"
-  if (net < 0) return "Negativo"
-  return "Equilíbrio"
+function resolveResultLabelKey(net: number): "positive" | "negative" | "balanced" {
+  if (net > 0) return "positive"
+  if (net < 0) return "negative"
+  return "balanced"
 }
 
 export function AnalysisOverviewCard({
@@ -127,16 +129,17 @@ export function AnalysisOverviewCard({
   loading,
   periodLabel,
 }: AnalysisOverviewCardProps) {
+  const t = useTranslations("analysis")
   const monetary = useMonetaryFormattingSafe()
   const summary = data?.summary
-  const resultLabel = resolveResultLabel(summary?.net ?? 0)
+  const resultLabel = t(`resultLabel.${resolveResultLabelKey(summary?.net ?? 0)}`)
 
   return (
     <Card className="@container/card h-full bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card">
       <CardHeader>
-        <CardTitle>Leitura do Período</CardTitle>
+        <CardTitle>{t("overview.title")}</CardTitle>
         <CardDescription>
-          Contexto executivo da DRE selecionada
+          {t("overview.description")}
         </CardDescription>
         <CardAction>
           <Badge variant="outline" className="gap-1">
@@ -148,7 +151,7 @@ export function AnalysisOverviewCard({
       <CardContent className="space-y-4">
         {loading ? (
           <div className="rounded-lg border border-dashed bg-background/40 px-4 py-10 text-center text-sm text-muted-foreground">
-            Carregando contexto do período...
+            {t("overview.loading")}
           </div>
         ) : (
           <>
@@ -156,19 +159,19 @@ export function AnalysisOverviewCard({
               <div className="flex items-center gap-2 text-muted-foreground">
                 <CalendarRange className="size-4" />
                 <p className="text-xs font-medium uppercase tracking-wide">
-                  Período aplicado
+                  {t("overview.appliedPeriod")}
                 </p>
               </div>
               <p className="mt-2 text-sm font-semibold">{periodLabel}</p>
               <p className="mt-1 text-xs text-muted-foreground">
-                {data?.periodDays ?? 0} dias corridos ·{" "}
-                {summary?.transactionCount ?? 0} lançamentos considerados
+                {t("overview.daysElapsed", { count: data?.periodDays ?? 0 })} ·{" "}
+                {t("transactionsConsidered", { count: summary?.transactionCount ?? 0 })}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <MetricBox
-                label="Resultado operacional"
+                label={t("overview.metrics.operationalResult")}
                 value={monetary.formatMonetaryValue(summary?.operationalNet ?? 0)}
                 valueClassName={
                   (summary?.operationalNet ?? 0) < 0
@@ -177,7 +180,7 @@ export function AnalysisOverviewCard({
                 }
               />
               <MetricBox
-                label="Saldo final"
+                label={t("overview.metrics.finalBalance")}
                 value={monetary.formatMonetaryValue(summary?.net ?? 0)}
                 valueClassName={
                   (summary?.net ?? 0) < 0
@@ -186,10 +189,10 @@ export function AnalysisOverviewCard({
                 }
               />
               <MetricBox
-                label="Margem operacional"
+                label={t("overview.metrics.operationalMargin")}
                 value={
                   summary?.marginPercentage == null
-                    ? "n/d"
+                    ? t("notAvailable")
                     : formatPercentValue(summary.marginPercentage, 1)
                 }
                 valueClassName={
@@ -200,7 +203,7 @@ export function AnalysisOverviewCard({
                 }
               />
               <MetricBox
-                label="Saldo / dia"
+                label={t("overview.metrics.averageDailyBalance")}
                 value={monetary.formatMonetaryValue(summary?.averageDailyNet ?? 0)}
                 valueClassName={
                   (summary?.averageDailyNet ?? 0) < 0
@@ -209,12 +212,12 @@ export function AnalysisOverviewCard({
                 }
               />
               <MetricBox
-                label="Entradas transf."
+                label={t("overview.metrics.transfersIn")}
                 value={monetary.formatMonetaryValue(summary?.transferIn ?? 0)}
                 valueClassName="text-primary"
               />
               <MetricBox
-                label="Saídas transf."
+                label={t("overview.metrics.transfersOut")}
                 value={monetary.formatAbsoluteMonetaryValue(summary?.transferOut ?? 0)}
                 valueClassName="text-primary"
               />
@@ -222,22 +225,22 @@ export function AnalysisOverviewCard({
 
             <div className="space-y-3">
               <HighlightRow
-                label="Maior grupo de receita"
+                label={t("overview.highlightTopIncomeGroup")}
                 item={data?.topIncomeGroup ?? null}
                 tone="income"
               />
               <HighlightRow
-                label="Maior grupo de despesa"
+                label={t("overview.highlightTopExpenseGroup")}
                 item={data?.topExpenseGroup ?? null}
                 tone="expense"
               />
               <HighlightRow
-                label="Maior entrada de transferência"
+                label={t("overview.highlightTopTransferInGroup")}
                 item={data?.topTransferInGroup ?? null}
                 tone="transferIn"
               />
               <HighlightRow
-                label="Maior saída de transferência"
+                label={t("overview.highlightTopTransferOutGroup")}
                 item={data?.topTransferOutGroup ?? null}
                 tone="transferOut"
               />
@@ -247,11 +250,10 @@ export function AnalysisOverviewCard({
       </CardContent>
       <CardFooter className="border-t flex-col items-start gap-1.5 text-xs text-muted-foreground">
         <p>
-          O saldo final considera receitas, despesas e transferências do período.
+          {t("overview.footerNote1")}
         </p>
         <p>
-          A margem continua refletindo o resultado operacional
-          (`receitas - despesas`) para preservar a leitura da DRE.
+          {t("overview.footerNote2")}
         </p>
       </CardFooter>
     </Card>

@@ -6,6 +6,7 @@ import {
   BadgePercent,
   Wallet,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -27,68 +28,70 @@ interface AnalysisSummaryCardsProps {
   loading: boolean
 }
 
-function resolveResultLabel(net: number) {
-  if (net > 0) return "Positivo"
-  if (net < 0) return "Negativo"
-  return "Equilíbrio"
+function resolveResultLabelKey(net: number): "positive" | "negative" | "balanced" {
+  if (net > 0) return "positive"
+  if (net < 0) return "negative"
+  return "balanced"
 }
 
 export function AnalysisSummaryCards({
   data,
   loading,
 }: AnalysisSummaryCardsProps) {
+  const t = useTranslations("analysis")
+  const tCommon = useTranslations("common")
   const monetary = useMonetaryFormattingSafe()
   const summary = data?.summary
-  const resultLabel = resolveResultLabel(summary?.net ?? 0)
+  const resultLabel = t(`resultLabel.${resolveResultLabelKey(summary?.net ?? 0)}`)
 
   const cards = [
     {
-      label: "Receitas",
+      label: t("summary.income"),
       icon: ArrowUpCircle,
       value: loading
         ? "..."
         : monetary.formatMonetaryValue(summary?.income ?? 0),
       actionLabel: loading
-        ? "Carregando"
-        : `${summary?.incomeGroupCount ?? 0} grupos`,
-      footerText: "Total de entradas consideradas na DRE",
+        ? tCommon("loading")
+        : t("groupsCount", { count: summary?.incomeGroupCount ?? 0 }),
+      footerText: t("summary.incomeFooter"),
       valueClassName: "text-chart-2",
     },
     {
-      label: "Despesas",
+      label: t("summary.expense"),
       icon: ArrowDownCircle,
       value: loading
         ? "..."
         : monetary.formatAbsoluteMonetaryValue(summary?.expense ?? 0),
       actionLabel: loading
-        ? "Carregando"
-        : `${summary?.expenseGroupCount ?? 0} grupos`,
-      footerText: "Saídas operacionais do período",
+        ? tCommon("loading")
+        : t("groupsCount", { count: summary?.expenseGroupCount ?? 0 }),
+      footerText: t("summary.expenseFooter"),
       valueClassName: "text-destructive",
     },
     {
-      label: "Saldo Final",
+      label: t("summary.finalBalance"),
       icon: Wallet,
       value: loading
         ? "..."
         : monetary.formatMonetaryValue(summary?.net ?? 0),
-      actionLabel: loading ? "Carregando" : resultLabel,
-      footerText: "Receitas, despesas e transferências do intervalo",
+      actionLabel: loading ? tCommon("loading") : resultLabel,
+      footerText: t("summary.finalBalanceFooter"),
       valueClassName:
         (summary?.net ?? 0) < 0 ? "text-destructive" : "text-chart-2",
     },
     {
-      label: "Margem",
+      label: t("summary.margin"),
       icon: BadgePercent,
       value: loading
         ? "..."
         : summary?.marginPercentage == null
-          ? "n/d"
+          ? t("notAvailable")
           : formatPercentValue(summary.marginPercentage, 1),
       actionLabel: loading
-        ? "Carregando"
-        : `${summary?.transactionCount ?? 0} lanç.`,
-      footerText: "Resultado operacional dividido pelas receitas",
+        ? tCommon("loading")
+        : t("summary.transactionsAbbrev", { count: summary?.transactionCount ?? 0 }),
+      footerText: t("summary.marginFooter"),
       valueClassName:
         summary?.marginPercentage != null && summary.marginPercentage < 0
           ? "text-destructive"
@@ -123,7 +126,7 @@ export function AnalysisSummaryCards({
             <CardFooter className="flex-col items-start gap-1.5 text-sm">
               <div className="line-clamp-2 font-medium">{card.footerText}</div>
               <div className="text-muted-foreground">
-                {loading ? "Atualizando DRE..." : "Filtro aplicado pelo período da header"}
+                {loading ? t("summary.updating") : t("summary.statusFooter")}
               </div>
             </CardFooter>
           </Card>
