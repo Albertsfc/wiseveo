@@ -253,7 +253,7 @@
       "summary": {
         "containment": "{value} contención",
         "margin": "+{value}% margen",
-        "months": "{count} meses"
+        "months": "{count, plural, one {# mes} other {# meses}}"
       },
       "variables": {
         "amount": "Valor",

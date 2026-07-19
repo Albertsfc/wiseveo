@@ -201,7 +201,7 @@
       "save": "Salvar Mecanismo",
       "title": "Mecanismo Matemático",
       "variables": {
-        "containment": "Imput de contenção % da UI (ex: 5%).",
+        "containment": "Input de contenção % da UI (ex: 5%).",
         "incomeAvg": "Média total de receitas no período.",
         "lastIncome": "Receita do último mês.",
         "lastMonth": "Valor fechado do mês anterior.",
@@ -253,7 +253,7 @@
       "summary": {
         "containment": "{value} contenção",
         "margin": "+{value}% margem",
-        "months": "{count} meses"
+        "months": "{count, plural, one {# mês} other {# meses}}"
       },
       "variables": {
         "amount": "Valor",

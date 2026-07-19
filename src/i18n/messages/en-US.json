@@ -253,7 +253,7 @@
       "summary": {
         "containment": "{value} containment",
         "margin": "+{value}% margin",
-        "months": "{count} months"
+        "months": "{count, plural, one {# month} other {# months}}"
       },
       "variables": {
         "amount": "Amount",
