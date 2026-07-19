@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Calendar } from "@/components/ui/calendar"
 import {
   Card,
@@ -28,6 +29,7 @@ export function FinancialCalendarSidebar({
   days,
   googleSlot,
 }: FinancialCalendarSidebarProps) {
+  const t = useTranslations("calendar")
   const monetary = useMonetaryFormattingSafe()
   const totalIncome = days.reduce((s, d) => s + d.income, 0)
   const totalExpense = days.reduce((s, d) => s + d.expense, 0)
@@ -48,24 +50,24 @@ export function FinancialCalendarSidebar({
       {/* Month summary */}
       <Card className="bg-gradient-to-t from-primary/5 to-card shadow-xs dark:bg-card">
         <CardHeader className="pb-2">
-          <CardDescription>Resumo do Período</CardDescription>
-          <CardTitle className="text-base">Visão Geral</CardTitle>
+          <CardDescription>{t("sidebar.description")}</CardDescription>
+          <CardTitle className="text-base">{t("sidebar.title")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Entradas</span>
+            <span className="text-muted-foreground">{t("summary.income")}</span>
             <span className="font-mono text-chart-2">
               {monetary.formatMonetaryValue(totalIncome)}
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">Saídas</span>
+            <span className="text-muted-foreground">{t("summary.expense")}</span>
             <span className="font-mono text-destructive">
               {monetary.formatMonetaryValue(totalExpense)}
             </span>
           </div>
           <div className="flex justify-between text-sm border-t pt-2">
-            <span className="font-medium">Líquido</span>
+            <span className="font-medium">{t("summary.net")}</span>
             <span
               className={cn(
                 "font-mono font-semibold",
@@ -77,7 +79,7 @@ export function FinancialCalendarSidebar({
           </div>
           {lastDay && (
             <div className="flex justify-between text-sm border-t pt-2">
-              <span className="text-muted-foreground">Saldo Final</span>
+              <span className="text-muted-foreground">{t("balance.closing")}</span>
               <span
                 className={cn(
                   "font-mono font-semibold",

@@ -3,9 +3,7 @@
   "src/app/(dashboard)",
   "src/app/cadastro-pendente",
   "src/app/layout.tsx",
-  "src/features/accounts",
   "src/features/auth",
-  "src/features/calendar",
   "src/features/component-library",
   "src/features/telegram"
 ]

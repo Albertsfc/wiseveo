@@ -1,17 +1,10 @@
+import { getTranslations } from "next-intl/server"
 import { getValidAccessToken } from "@/lib/google-auth"
 import { prisma } from "@/lib/prisma"
 import { safeBalance, startOfUTCDay, endOfUTCDay } from "@/lib/financial"
-
-const STATUS_MAP: Record<string, string> = {
-  PAGO: "Pago",
-  ABERTO: "Agendado",
-  PENDENTE: "Pendente",
-  VENCIDO: "Vencido",
-  PAID: "Pago",
-  SCHEDULED: "Agendado",
-  PENDING: "Pendente",
-  OVERDUE: "Vencido",
-}
+import { createMonetaryFormatter } from "@/lib/monetary"
+import { getUserMonetarySettings } from "@/features/settings/services/user-settings-service"
+import { CALENDAR_SYNC_PHASE, CALENDAR_CLEAR_PHASE } from "../types"
 
 // Google Calendar colorId: 10 = green, 11 = red, 9 = blue
 const TYPE_COLOR_ID: Record<string, string> = {
@@ -20,17 +13,12 @@ const TYPE_COLOR_ID: Record<string, string> = {
   TRANSFER: "9",
 }
 
-const WISEVEO_TAG = "Sincronizado via WISEVEO"
-
-const numFmt = new Intl.NumberFormat("pt-BR", {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
-
-function formatAmount(value: number): string {
-  if (value < 0) return `(${numFmt.format(Math.abs(value))})`
-  return numFmt.format(value)
-}
+// Stable, locale-independent marker (the brand name is never translated) used
+// to identify events created by WISEVEO regardless of the locale active when
+// they were synced. Do NOT swap this for the translated tag text (see
+// calendar.google.syncedTag) — that would break detection for events created
+// under a different UI locale (the approveUser comparison-hazard class).
+const WISEVEO_MARKER = "WISEVEO"
 
 function utcDateKey(d: Date): string {
   return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`
@@ -52,14 +40,9 @@ interface GoogleEvent {
   colorId: string
 }
 
-function isWiseveoEvent(item: { description?: string; summary?: string }): boolean {
+function isWiseveoEvent(item: { description?: string }): boolean {
   const desc = item.description ?? ""
-  const summary = item.summary ?? ""
-  return (
-    desc.includes(WISEVEO_TAG) ||
-    summary.includes("Saldo Inicial") ||
-    summary.includes("Saldo Final")
-  )
+  return desc.includes(WISEVEO_MARKER)
 }
 
 /**
@@ -112,7 +95,7 @@ async function deleteWiseveoEvents(
 
   let deleted = 0
   const total = eventIds.length
-  onProgress?.(0, total, "Removendo eventos antigos")
+  onProgress?.(0, total, CALENDAR_SYNC_PHASE.removingOld)
 
   // 2) Delete with progress updates
   for (let idx = 0; idx < eventIds.length; idx++) {
@@ -128,7 +111,7 @@ async function deleteWiseveoEvents(
       deleted++
     }
 
-    onProgress?.(idx + 1, total, "Removendo eventos antigos")
+    onProgress?.(idx + 1, total, CALENDAR_SYNC_PHASE.removingOld)
 
     if ((idx + 1) % 10 === 0) {
       await new Promise((r) => setTimeout(r, 200))
@@ -148,10 +131,31 @@ export async function syncGoogleCalendar(
   to: string,
   onProgress?: ProgressCallback,
 ): Promise<SyncResult> {
-  const accessToken = await getValidAccessToken(userId)
+  const t = await getTranslations("calendar")
+
+  const [accessToken, monetarySettings] = await Promise.all([
+    getValidAccessToken(userId),
+    getUserMonetarySettings(userId),
+  ])
+
   if (!accessToken) {
-    throw new Error("Google Calendar não conectado")
+    throw new Error(t("google.notConnected"))
   }
+
+  const monetary = createMonetaryFormatter(monetarySettings)
+
+  const statusLabels: Record<string, string> = {
+    PAGO: t("statusLabels.paid"),
+    ABERTO: t("statusLabels.scheduled"),
+    PENDENTE: t("statusLabels.pending"),
+    VENCIDO: t("statusLabels.overdue"),
+    PAID: t("statusLabels.paid"),
+    SCHEDULED: t("statusLabels.scheduled"),
+    PENDING: t("statusLabels.pending"),
+    OVERDUE: t("statusLabels.overdue"),
+  }
+
+  const syncedTag = t("google.syncedTag")
 
   // 1. Delete existing WISEVEO events in the range
   const deleted = await deleteWiseveoEvents(accessToken, from, to, onProgress)
@@ -224,10 +228,10 @@ export async function syncGoogleCalendar(
       const totalEvents = dayTxs.length + 2 // +2 for Saldo Inicial/Final
       const pad = String(totalEvents).length // dynamic padding
 
-      // Saldo Inicial (blue)
+      // Opening balance (blue)
       events.push({
-        summary: `${String(1).padStart(pad, "0")} - Saldo Inicial ${formatAmount(runningBalance)}`,
-        description: WISEVEO_TAG,
+        summary: `${String(1).padStart(pad, "0")} - ${t("balance.opening")} ${monetary.formatNumberValue(runningBalance)}`,
+        description: syncedTag,
         start: { date: dateStr },
         end: { date: endDateStr },
         colorId: "9",
@@ -237,18 +241,18 @@ export async function syncGoogleCalendar(
       let txIdx = 2
       for (const tx of dayTxs) {
         const desc =
-          tx.note || tx.description || tx.category?.name || "Transação"
-        const summary = `${String(txIdx).padStart(pad, "0")} - ${desc} ${formatAmount(tx.amount)}`
+          tx.note || tx.description || tx.category?.name || t("google.transactionFallback")
+        const summary = `${String(txIdx).padStart(pad, "0")} - ${desc} ${monetary.formatNumberValue(tx.amount)}`
 
         const statusRaw = tx.statusLookup?.name ?? "PENDING"
-        const statusLabel = STATUS_MAP[statusRaw.toUpperCase()] ?? statusRaw
+        const statusLabel = statusLabels[statusRaw.toUpperCase()] ?? statusRaw
 
         const description = [
-          `Categoria: ${tx.category?.name ?? "—"}`,
-          `Conta: ${tx.account?.name ?? "—"}`,
-          `Status: ${statusLabel}`,
-          tx.payee ? `Beneficiário: ${tx.payee.name}` : null,
-          `\n${WISEVEO_TAG}`,
+          `${t("google.categoryLabel")} ${tx.category?.name ?? "—"}`,
+          `${t("google.accountLabel")} ${tx.account?.name ?? "—"}`,
+          `${t("google.statusLabel")} ${statusLabel}`,
+          tx.payee ? `${t("google.payeeLabel")} ${tx.payee.name}` : null,
+          `\n${syncedTag}`,
         ]
           .filter(Boolean)
           .join("\n")
@@ -265,10 +269,10 @@ export async function syncGoogleCalendar(
         txIdx++
       }
 
-      // Saldo Final (blue)
+      // Closing balance (blue)
       events.push({
-        summary: `${String(txIdx).padStart(pad, "0")} - Saldo Final ${formatAmount(runningBalance)}`,
-        description: WISEVEO_TAG,
+        summary: `${String(txIdx).padStart(pad, "0")} - ${t("balance.closing")} ${monetary.formatNumberValue(runningBalance)}`,
+        description: syncedTag,
         start: { date: dateStr },
         end: { date: endDateStr },
         colorId: "9",
@@ -283,7 +287,7 @@ export async function syncGoogleCalendar(
   // 6. Push events to Google Calendar
   let synced = 0
   let errors = 0
-  onProgress?.(0, events.length, "Sincronizando eventos")
+  onProgress?.(0, events.length, CALENDAR_SYNC_PHASE.syncingEvents)
 
   for (const event of events) {
     try {
@@ -301,12 +305,12 @@ export async function syncGoogleCalendar(
 
       if (res.ok) {
         synced++
-        onProgress?.(synced + errors, events.length, "Sincronizando eventos")
+        onProgress?.(synced + errors, events.length, CALENDAR_SYNC_PHASE.syncingEvents)
       } else {
         const errText = await res.text()
         console.error("[Google Calendar sync] Failed:", errText)
         errors++
-        onProgress?.(synced + errors, events.length, "Sincronizando eventos")
+        onProgress?.(synced + errors, events.length, CALENDAR_SYNC_PHASE.syncingEvents)
 
         if (res.status === 403 || res.status === 401) {
           console.error(
@@ -318,7 +322,7 @@ export async function syncGoogleCalendar(
     } catch (err) {
       console.error("[Google Calendar sync] Error:", err)
       errors++
-      onProgress?.(synced + errors, events.length, "Sincronizando eventos")
+      onProgress?.(synced + errors, events.length, CALENDAR_SYNC_PHASE.syncingEvents)
     }
 
     // Small delay to respect rate limits
@@ -337,9 +341,10 @@ export async function clearGoogleCalendarEvents(
   userId: string,
   onProgress?: ProgressCallback,
 ): Promise<{ deleted: number }> {
+  const t = await getTranslations("calendar")
   const accessToken = await getValidAccessToken(userId)
   if (!accessToken) {
-    throw new Error("Google Calendar não conectado")
+    throw new Error(t("google.notConnected"))
   }
 
   const eventIds: string[] = []
@@ -380,7 +385,7 @@ export async function clearGoogleCalendarEvents(
 
   let deleted = 0
   const total = eventIds.length
-  onProgress?.(0, total, "Limpando eventos")
+  onProgress?.(0, total, CALENDAR_CLEAR_PHASE.clearingEvents)
 
   // 2) Delete and report progress
   for (let idx = 0; idx < eventIds.length; idx++) {
@@ -396,7 +401,7 @@ export async function clearGoogleCalendarEvents(
       deleted++
     }
 
-    onProgress?.(idx + 1, total, "Limpando eventos")
+    onProgress?.(idx + 1, total, CALENDAR_CLEAR_PHASE.clearingEvents)
 
     if ((idx + 1) % 10 === 0) {
       await new Promise((r) => setTimeout(r, 200))

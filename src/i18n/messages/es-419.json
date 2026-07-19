@@ -85,6 +85,14 @@
       "title": "Usuarios"
     }
   },
+  "accounts": {
+    "addAccount": "Agregar Cuenta",
+    "card": {
+      "currentBalance": "Saldo Actual",
+      "initialLabel": "Inicial:",
+      "optionsAriaLabel": "Opciones de la cuenta"
+    }
+  },
   "analysis": {
     "client": {
       "fetchError": "Error al cargar el Estado de Resultados del período",
@@ -319,6 +327,88 @@
       "warning": "Alerta",
       "warningFooter": "entre el 50% y el 80%",
       "warningTitle": "Zona de alerta"
+    }
+  },
+  "calendar": {
+    "balance": {
+      "closing": "Saldo Final",
+      "opening": "Saldo Inicial"
+    },
+    "connect": {
+      "button": "Conectar Google Calendar"
+    },
+    "dayDetail": {
+      "description": "Extracto del día",
+      "noMovement": "Sin movimientos en este día"
+    },
+    "google": {
+      "accountLabel": "Cuenta:",
+      "categoryLabel": "Categoría:",
+      "notConnected": "Google Calendar no conectado",
+      "payeeLabel": "Beneficiario:",
+      "statusLabel": "Estado:",
+      "syncedTag": "Sincronizado a través de WISEVEO",
+      "transactionFallback": "Movimiento"
+    },
+    "googleClear": {
+      "button": "Limpiar Google Calendar",
+      "clearing": "Limpiando...",
+      "confirmAction": "Limpiar todo",
+      "confirmDescription": "Esto eliminará todos los eventos creados por WISEVEO de tu Google Calendar. Los eventos creados manualmente no se verán afectados.",
+      "errors": {
+        "clearFailed": "Error al limpiar los eventos",
+        "generic": "Error al limpiar Google Calendar",
+        "noFinalResponse": "La limpieza terminó sin una respuesta final",
+        "noStream": "La respuesta de limpieza no tiene stream"
+      },
+      "phaseClearing": "Limpiando",
+      "preparing": "Preparando",
+      "toasts": {
+        "noEvents": "No se encontraron eventos de WISEVEO en Google Calendar",
+        "removed": "{count, plural, one {# evento eliminado} other {# eventos eliminados}} de Google Calendar"
+      }
+    },
+    "googleSync": {
+      "button": "Sincronizar con Google Calendar",
+      "errors": {
+        "generic": "Error al sincronizar con Google Calendar",
+        "noFinalResponse": "La sincronización terminó sin una respuesta final",
+        "noStream": "La respuesta de sincronización no tiene stream",
+        "syncFailed": "Error en la sincronización"
+      },
+      "phaseRemoving": "Eliminando antiguos",
+      "phaseSyncing": "Sincronizando",
+      "preparing": "Preparando",
+      "syncing": "Sincronizando...",
+      "toasts": {
+        "failed": "Error al sincronizar: {count, plural, one {# error} other {# errores}}. Verifica si la API de Google Calendar está habilitada.",
+        "partial": "{synced, plural, one {# evento sincronizado} other {# eventos sincronizados}}, {errors, plural, one {# error} other {# errores}}",
+        "replacedSuffix": "{count, plural, one {# antiguo reemplazado} other {# antiguos reemplazados}}",
+        "success": "{count, plural, one {# evento sincronizado} other {# eventos sincronizados}}"
+      }
+    },
+    "list": {
+      "noTransactions": "Ningún movimiento en el período seleccionado",
+      "transactionsCount": "{count, plural, one {# movimiento} other {# movimientos}}"
+    },
+    "sidebar": {
+      "description": "Resumen del Período",
+      "title": "Visión General"
+    },
+    "statusLabels": {
+      "overdue": "Vencido",
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "scheduled": "Programado"
+    },
+    "summary": {
+      "expense": "Salidas",
+      "income": "Entradas",
+      "net": "Neto"
+    },
+    "viewMode": {
+      "list": "Lista",
+      "month": "Mes"
     }
   },
   "common": {

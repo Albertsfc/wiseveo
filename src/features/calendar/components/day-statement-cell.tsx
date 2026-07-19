@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
 import { cn } from "@/lib/utils"
 import type { CalendarDayStatement } from "../types"
@@ -29,6 +30,7 @@ export function DayStatementCell({
   isSelected,
   onClick,
 }: DayStatementCellProps) {
+  const t = useTranslations("calendar")
   const monetary = useMonetaryFormattingSafe()
   const hasTx = day && day.transactions.length > 0
   const overflow = hasTx ? day.transactions.length - MAX_VISIBLE : 0
@@ -67,7 +69,7 @@ export function DayStatementCell({
         <div className="space-y-px">
           {/* Opening balance */}
           <div className="flex justify-between font-mono text-[10px] font-semibold">
-            <span className="truncate">Saldo Inicial</span>
+            <span className="truncate">{t("balance.opening")}</span>
             <span
               className={cn(
                 day.openingBalance < 0 && "text-destructive",
@@ -97,7 +99,7 @@ export function DayStatementCell({
 
           {/* Closing balance */}
           <div className="flex justify-between font-mono text-[10px] font-semibold">
-            <span className="truncate">Saldo Final</span>
+            <span className="truncate">{t("balance.closing")}</span>
             <span
               className={cn(
                 day.closingBalance < 0 && "text-destructive",

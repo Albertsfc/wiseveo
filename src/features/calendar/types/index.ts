@@ -24,3 +24,21 @@ export interface CalendarStatementResponse {
   days: CalendarDayStatement[]
   openingBalance: number
 }
+
+/**
+ * Stable, locale-independent phase tokens emitted by
+ * services/sync-google-calendar.ts through the onProgress callback and
+ * matched via substring on the client (google-sync-button.tsx /
+ * google-clear-button.tsx) to pick a translated, compacted label. These are
+ * a wire protocol, never rendered directly — they must NOT be translated
+ * with the request locale, or the client's phase detection breaks for
+ * non-Portuguese locales.
+ */
+export const CALENDAR_SYNC_PHASE = {
+  removingOld: "removing-old-events",
+  syncingEvents: "syncing-events",
+} as const
+
+export const CALENDAR_CLEAR_PHASE = {
+  clearingEvents: "clearing-events",
+} as const

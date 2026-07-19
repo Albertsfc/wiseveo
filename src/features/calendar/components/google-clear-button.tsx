@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { ProgressWithLabel } from "@/components/ui/progress-with-label"
 import {
@@ -16,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Trash2, Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { CALENDAR_CLEAR_PHASE } from "../types"
 
 interface ClearResult {
   deleted: number
@@ -31,10 +33,9 @@ interface StreamPayload {
   result?: ClearResult
 }
 
-function compactClearPhase(phase?: string): string {
-  if (!phase) return "Limpando"
-  if (phase.includes("Limpando")) return "Limpando"
-  return phase
+async function parseErrorPayload(res: Response, fallback: string): Promise<string> {
+  const data = await res.json().catch(() => ({}))
+  return data.error || fallback
 }
 
 function parseSsePayload(block: string): StreamPayload | null {
@@ -58,61 +59,69 @@ function parseSsePayload(block: string): StreamPayload | null {
   return parsed as StreamPayload
 }
 
-async function readClearStream(
-  res: Response,
-  onMessage: (payload: StreamPayload) => void,
-): Promise<ClearResult> {
-  if (!res.body) {
-    throw new Error("Resposta de limpeza sem stream")
-  }
-
-  const reader = res.body.getReader()
-  const decoder = new TextDecoder()
-  let buffer = ""
-
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
-
-    buffer += decoder.decode(value, { stream: true })
-
-    let separatorIndex = buffer.indexOf("\n\n")
-    while (separatorIndex !== -1) {
-      const chunk = buffer.slice(0, separatorIndex).trim()
-      buffer = buffer.slice(separatorIndex + 2)
-
-      const payload = parseSsePayload(chunk)
-      if (!payload) {
-        separatorIndex = buffer.indexOf("\n\n")
-        continue
-      }
-
-      onMessage(payload)
-
-      if (payload.type === "error") {
-        throw new Error(payload.message || "Erro ao limpar eventos")
-      }
-
-      if (payload.type === "done" && payload.result) {
-        return payload.result
-      }
-
-      separatorIndex = buffer.indexOf("\n\n")
-    }
-  }
-
-  throw new Error("Limpeza encerrada sem resposta final")
-}
-
 export function GoogleClearButton() {
+  const t = useTranslations("calendar.googleClear")
+  const tCommon = useTranslations("common")
   const [isClearing, setIsClearing] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [progressLabel, setProgressLabel] = useState("Preparando")
+  const [progressLabel, setProgressLabel] = useState(t("preparing"))
+
+  function compactClearPhase(phase?: string): string {
+    if (!phase) return t("phaseClearing")
+    if (phase.includes(CALENDAR_CLEAR_PHASE.clearingEvents)) return t("phaseClearing")
+    return phase
+  }
+
+  async function readClearStream(
+    res: Response,
+    onMessage: (payload: StreamPayload) => void,
+  ): Promise<ClearResult> {
+    if (!res.body) {
+      throw new Error(t("errors.noStream"))
+    }
+
+    const reader = res.body.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ""
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+
+      let separatorIndex = buffer.indexOf("\n\n")
+      while (separatorIndex !== -1) {
+        const chunk = buffer.slice(0, separatorIndex).trim()
+        buffer = buffer.slice(separatorIndex + 2)
+
+        const payload = parseSsePayload(chunk)
+        if (!payload) {
+          separatorIndex = buffer.indexOf("\n\n")
+          continue
+        }
+
+        onMessage(payload)
+
+        if (payload.type === "error") {
+          throw new Error(payload.message || t("errors.clearFailed"))
+        }
+
+        if (payload.type === "done" && payload.result) {
+          return payload.result
+        }
+
+        separatorIndex = buffer.indexOf("\n\n")
+      }
+    }
+
+    throw new Error(t("errors.noFinalResponse"))
+  }
 
   async function handleClear() {
     setIsClearing(true)
     setProgress(0)
-    setProgressLabel("Preparando")
+    setProgressLabel(t("preparing"))
 
     try {
       const res = await fetch("/api/calendar/clear-google", {
@@ -120,8 +129,7 @@ export function GoogleClearButton() {
       })
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || "Falha ao limpar eventos")
+        throw new Error(await parseErrorPayload(res, t("errors.clearFailed")))
       }
 
       let data: ClearResult
@@ -131,7 +139,7 @@ export function GoogleClearButton() {
         data = await readClearStream(res, (payload) => {
           if (payload.type === "status") {
             setProgress(typeof payload.percent === "number" ? payload.percent : 0)
-            setProgressLabel("Preparando")
+            setProgressLabel(t("preparing"))
             return
           }
 
@@ -148,22 +156,16 @@ export function GoogleClearButton() {
       }
 
       if (data.deleted === 0) {
-        toast.info("Nenhum evento WISEVEO encontrado no Google Calendar")
+        toast.info(t("toasts.noEvents"))
       } else {
-        toast.success(
-          `${data.deleted} evento(s) removido(s) do Google Calendar`,
-        )
+        toast.success(t("toasts.removed", { count: data.deleted }))
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error
-          ? err.message
-          : "Erro ao limpar Google Calendar",
-      )
+      toast.error(err instanceof Error ? err.message : t("errors.generic"))
     } finally {
       setIsClearing(false)
       setProgress(0)
-      setProgressLabel("Preparando")
+      setProgressLabel(t("preparing"))
     }
   }
 
@@ -181,26 +183,25 @@ export function GoogleClearButton() {
             ) : (
               <Trash2 className="h-4 w-4 mr-2" />
             )}
-            {isClearing ? "Limpando..." : "Limpar Google Calendar"}
+            {isClearing ? t("clearing") : t("button")}
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Limpar Google Calendar</AlertDialogTitle>
+            <AlertDialogTitle>{t("button")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Isso removerá todos os eventos criados pelo WISEVEO do seu Google
-              Calendar. Eventos criados manualmente não serão afetados.
+              {t("confirmDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="cursor-pointer">
-              Cancelar
+              {tCommon("cancel")}
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleClear}
               className="cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Limpar tudo
+              {t("confirmAction")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

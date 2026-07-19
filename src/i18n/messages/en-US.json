@@ -85,6 +85,14 @@
       "title": "Users"
     }
   },
+  "accounts": {
+    "addAccount": "Add Account",
+    "card": {
+      "currentBalance": "Current Balance",
+      "initialLabel": "Initial:",
+      "optionsAriaLabel": "Account options"
+    }
+  },
   "analysis": {
     "client": {
       "fetchError": "Failed to load the period income statement",
@@ -319,6 +327,88 @@
       "warning": "Warning",
       "warningFooter": "between 50% and 80%",
       "warningTitle": "Warning zone"
+    }
+  },
+  "calendar": {
+    "balance": {
+      "closing": "Closing Balance",
+      "opening": "Opening Balance"
+    },
+    "connect": {
+      "button": "Connect Google Calendar"
+    },
+    "dayDetail": {
+      "description": "Day statement",
+      "noMovement": "No activity on this day"
+    },
+    "google": {
+      "accountLabel": "Account:",
+      "categoryLabel": "Category:",
+      "notConnected": "Google Calendar not connected",
+      "payeeLabel": "Payee:",
+      "statusLabel": "Status:",
+      "syncedTag": "Synced via WISEVEO",
+      "transactionFallback": "Transaction"
+    },
+    "googleClear": {
+      "button": "Clear Google Calendar",
+      "clearing": "Clearing...",
+      "confirmAction": "Clear all",
+      "confirmDescription": "This will remove every event created by WISEVEO from your Google Calendar. Manually created events won't be affected.",
+      "errors": {
+        "clearFailed": "Failed to clear events",
+        "generic": "Error clearing Google Calendar",
+        "noFinalResponse": "Clearing ended without a final response",
+        "noStream": "Clear response has no stream"
+      },
+      "phaseClearing": "Clearing",
+      "preparing": "Preparing",
+      "toasts": {
+        "noEvents": "No WISEVEO events found in Google Calendar",
+        "removed": "{count, plural, one {# event removed} other {# events removed}} from Google Calendar"
+      }
+    },
+    "googleSync": {
+      "button": "Sync with Google Calendar",
+      "errors": {
+        "generic": "Error syncing with Google Calendar",
+        "noFinalResponse": "Sync ended without a final response",
+        "noStream": "Sync response has no stream",
+        "syncFailed": "Sync failed"
+      },
+      "phaseRemoving": "Removing old events",
+      "phaseSyncing": "Syncing",
+      "preparing": "Preparing",
+      "syncing": "Syncing...",
+      "toasts": {
+        "failed": "Failed to sync: {count, plural, one {# error} other {# errors}}. Check whether the Google Calendar API is enabled.",
+        "partial": "{synced, plural, one {# event synced} other {# events synced}}, {errors, plural, one {# error} other {# errors}}",
+        "replacedSuffix": "{count, plural, one {# old event replaced} other {# old events replaced}}",
+        "success": "{count, plural, one {# event synced} other {# events synced}}"
+      }
+    },
+    "list": {
+      "noTransactions": "No transactions in the selected period",
+      "transactionsCount": "{count, plural, one {# transaction} other {# transactions}}"
+    },
+    "sidebar": {
+      "description": "Period Summary",
+      "title": "Overview"
+    },
+    "statusLabels": {
+      "overdue": "Overdue",
+      "paid": "Paid",
+      "pending": "Pending",
+      "scheduled": "Scheduled"
+    },
+    "summary": {
+      "expense": "Expenses",
+      "income": "Income",
+      "net": "Net"
+    },
+    "viewMode": {
+      "list": "List",
+      "month": "Month"
     }
   },
   "common": {
