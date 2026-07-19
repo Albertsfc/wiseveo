@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react"
+import { useTranslations } from "next-intl"
 import { Save, Loader2, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -26,12 +27,27 @@ interface CreateCustomFormulaDialogProps {
   editPreset?: CustomFormulaDefinition
 }
 
+// Tokens de sintaxe da expressão (dados, não UI); as descrições são traduzidas.
+const EXPRESSION_TOKENS = [
+  { token: "[MEDIA]", key: "mean" },
+  { token: "[MAX]", key: "max" },
+  { token: "[MIN]", key: "min" },
+  { token: "[DESVIO_P]", key: "stdDev" },
+  { token: "[ULTIMO]", key: "lastMonth" },
+  { token: "[M_RECEITAS]", key: "incomeAvg" },
+  { token: "[U_RECEITA]", key: "lastIncome" },
+  { token: "[CONTENCAO]", key: "containment" },
+  { token: "[MARGEM]", key: "margin" },
+] as const
+
 export function CreateCustomFormulaDialog({
   open,
   onOpenChange,
   formulaConfig,
   editPreset,
 }: CreateCustomFormulaDialogProps) {
+  const t = useTranslations("budget.customFormulaDialog")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [name, setName] = useState(editPreset?.name || "")
@@ -73,9 +89,9 @@ export function CreateCustomFormulaDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Mecanismo Matemático</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Crie uma fórmula financeira inteligente para seus limites. Utilizando variáveis dinâmicas do histórico real.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -83,37 +99,31 @@ export function CreateCustomFormulaDialog({
           {/* Custom name */}
           <div className="flex flex-col gap-1.5">
             <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              Nome do Mecanismo *
+              {t("nameLabel")} *
             </Label>
             <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ex: Teto Inflacionário"
+              placeholder={t("namePlaceholder")}
             />
           </div>
 
           {/* Expression */}
           <div className="flex flex-col gap-1.5">
             <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              Expressão Matemática *
+              {t("expressionLabel")} *
             </Label>
             <Textarea
               value={expression}
               onChange={(e) => setExpression(e.target.value)}
-              placeholder="Ex: ([MEDIA] + [DESVIO_P]) * 1.1"
+              placeholder={t("expressionPlaceholder")}
               className="font-mono"
             />
             <div className="mt-2 text-xs text-muted-foreground bg-muted/50 p-2 rounded flex flex-col gap-1 h-32 overflow-y-auto">
-              <span className="font-semibold text-foreground mb-1">Biblioteca de Variáveis (Case-Insensitive):</span>
-              <p><code>[MEDIA]</code>: Média dos gastos nos últimos meses.</p>
-              <p><code>[MAX]</code>: Gasto máximo histórico.</p>
-              <p><code>[MIN]</code>: Gasto mínimo histórico.</p>
-              <p><code>[DESVIO_P]</code>: Desvio padrão do gasto.</p>
-              <p><code>[ULTIMO]</code>: Valor fechado do mês anterior.</p>
-              <p><code>[M_RECEITAS]</code>: Média total de receitas no período.</p>
-              <p><code>[U_RECEITA]</code>: Receita do último mês.</p>
-              <p><code>[CONTENCAO]</code>: Imput de contenção % da UI (ex: 5%).</p>
-              <p><code>[MARGEM]</code>: Margem customizável.</p>
+              <span className="font-semibold text-foreground mb-1">{t("variables.title")}</span>
+              {EXPRESSION_TOKENS.map((v) => (
+                <p key={v.key}><code>{v.token}</code>: {t(`variables.${v.key}`)}</p>
+              ))}
             </div>
           </div>
         </div>
@@ -124,7 +134,7 @@ export function CreateCustomFormulaDialog({
             onClick={() => onOpenChange(false)}
             disabled={isPending}
           >
-            Cancelar
+            {tCommon("cancel")}
           </Button>
           <Button
             onClick={handleSave}
@@ -135,7 +145,7 @@ export function CreateCustomFormulaDialog({
             ) : (
               <Save className="h-4 w-4 mr-1" />
             )}
-            Salvar Mecanismo
+            {t("save")}
           </Button>
         </DialogFooter>
       </DialogContent>

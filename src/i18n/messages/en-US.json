@@ -85,6 +85,162 @@
       "title": "Users"
     }
   },
+  "budget": {
+    "client": {
+      "savingOrder": "Saving order...",
+      "updatingBudget": "Updating budget..."
+    },
+    "configFormulaDialog": {
+      "description": "Configure a custom budget rule for <strong>{name}</strong>.",
+      "restoreGlobal": "Restore Global Default",
+      "title": "Card Formula"
+    },
+    "createDialog": {
+      "aggregatedTab": "Aggregated",
+      "amountLabel": "Monthly Cap (Optional)",
+      "amountPlaceholder": "0.00 (Used when the formula is Fixed Target)",
+      "categoryLabel": "Category (Optional)",
+      "categoryNone": "None (Group Budget)",
+      "componentsLabel": "Select the Components",
+      "customFallbackName": "Custom Budget",
+      "editDescription": "Change this card's limit settings",
+      "editTitle": "Edit Budget",
+      "groupLabel": "Group",
+      "groupPlaceholder": "Choose a Group...",
+      "newDescription": "Link it to a specific group or category",
+      "nicknameLabel": "Card Nickname (Optional)",
+      "nicknamePlaceholder": "E.g.: Vacation Trip",
+      "simpleTab": "Simple"
+    },
+    "customFormulaDialog": {
+      "description": "Create a smart financial formula for your limits, using dynamic variables from your real history.",
+      "expressionLabel": "Math Expression",
+      "expressionPlaceholder": "E.g.: ([MEDIA] + [DESVIO_P]) * 1.1",
+      "nameLabel": "Mechanism Name",
+      "namePlaceholder": "E.g.: Inflation Cap",
+      "save": "Save Mechanism",
+      "title": "Math Mechanism",
+      "variables": {
+        "containment": "Containment % input from the UI (e.g. 5%).",
+        "incomeAvg": "Average total income in the period.",
+        "lastIncome": "Last month's income.",
+        "lastMonth": "Closed amount of the previous month.",
+        "margin": "Customizable margin.",
+        "max": "Highest historical spending.",
+        "mean": "Average spending over recent months.",
+        "min": "Lowest historical spending.",
+        "stdDev": "Standard deviation of spending.",
+        "title": "Variable Library (Case-Insensitive):"
+      }
+    },
+    "formulaCommon": {
+      "approach": "Approach",
+      "customMechanisms": "Custom Mechanisms",
+      "customParams": {
+        "containment": "Containment (%)",
+        "margin": "Extra Margin (%)",
+        "months": "Months (History)"
+      }
+    },
+    "formulaManager": {
+      "applied": "Applied",
+      "applyAll": "Apply to all",
+      "applying": "Applying...",
+      "deleteMechanism": "Delete Mechanism",
+      "editMechanism": "Edit Mechanism",
+      "expression": "Expression:",
+      "globalConfig": "Global Configuration",
+      "newMechanism": "New Mechanism",
+      "noHistory": "No spending history yet. Data will be incorporated into the calculation as activity comes in.",
+      "title": "Formulas"
+    },
+    "formulas": {
+      "descriptions": {
+        "fixed_target": "Fixed amount set manually",
+        "historical_max": "Historical maximum with a safety margin",
+        "income_pct": "Percentage of the period's average income",
+        "moving_avg": "Weighted average favoring recent months",
+        "simple_avg": "Average spending over the last N months"
+      },
+      "names": {
+        "fixed_target": "Fixed Target",
+        "historical_max": "Historical Limit",
+        "income_pct": "% of Income",
+        "moving_avg": "Moving Average",
+        "simple_avg": "Simple Average",
+        "unknown": "Unknown formula"
+      },
+      "summary": {
+        "containment": "{value} containment",
+        "margin": "+{value}% margin",
+        "months": "{count} months"
+      },
+      "variables": {
+        "amount": "Amount",
+        "containment": "Containment",
+        "margin": "Margin",
+        "months": "Months",
+        "monthsIncome": "Income months",
+        "percentage": "Percentage"
+      }
+    },
+    "itemCard": {
+      "budgeted": "Budgeted",
+      "category": "Category",
+      "configureFormula": "Configure Formula",
+      "customBadge": "Custom",
+      "customSuffix": "(custom)",
+      "dragToReorder": "Drag to reorder",
+      "editCard": "Edit Card",
+      "group": "Group",
+      "mayExceed": "May exceed",
+      "multiple": "Multiple",
+      "noData": "No data",
+      "paid": "Paid",
+      "scheduled": "Scheduled",
+      "used": "used"
+    },
+    "newBudget": "New Budget",
+    "newCard": {
+      "subtitle": "Add a category to the board"
+    },
+    "overview": {
+      "count": "{count, plural, one {# budget} other {# budgets}}",
+      "periodSummary": "Period Summary",
+      "spent": "spent",
+      "title": "Overview",
+      "used": "{value} used"
+    },
+    "status": {
+      "exceeded": "Exceeded",
+      "remaining": "Remaining"
+    },
+    "summary": {
+      "aboveBudget": "Over budget",
+      "budgetedTotal": "Total Budgeted",
+      "itemCount": "{count, plural, one {# item} other {# items}}",
+      "limitExceededLower": "limit exceeded",
+      "limitForMonth": "Limit set for the month",
+      "marginAvailable": "Available margin",
+      "marginAvailableLower": "available margin",
+      "paidScheduled": "Paid: {paid} · Scheduled: {scheduled}",
+      "periodExpenses": "Expenses for the period",
+      "spentTotal": "Total Spent",
+      "sumOfBudgets": "sum of all budgets",
+      "usage": "Usage"
+    },
+    "zones": {
+      "danger": "Danger",
+      "dangerFooter": "above 80%",
+      "dangerTitle": "Danger zone",
+      "safe": "Safe",
+      "safeFooter": "below 50%",
+      "safeTitle": "Safe zone",
+      "warning": "Warning",
+      "warningFooter": "between 50% and 80%",
+      "warningTitle": "Warning zone"
+    }
+  },
   "common": {
     "actions": "Actions",
     "add": "Add",

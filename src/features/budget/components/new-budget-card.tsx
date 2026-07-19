@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Plus } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { CreateBudgetDialog } from "./create-budget-dialog"
@@ -11,6 +12,7 @@ interface NewBudgetCardProps {
 }
 
 export function NewBudgetCard({ groups }: NewBudgetCardProps) {
+  const t = useTranslations("budget")
   const [open, setOpen] = useState(false)
 
   return (
@@ -25,10 +27,10 @@ export function NewBudgetCard({ groups }: NewBudgetCardProps) {
           </div>
           <div className="text-center">
             <p className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
-              Novo Orçamento
+              {t("newBudget")}
             </p>
             <p className="text-xs text-muted-foreground/70 mt-0.5">
-              Adicione uma categoria ao painel
+              {t("newCard.subtitle")}
             </p>
           </div>
         </div>

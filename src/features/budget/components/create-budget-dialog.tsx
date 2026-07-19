@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition, useMemo } from "react"
+import { useTranslations } from "next-intl"
 import { Save, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,27 +29,28 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
+// Chaves de dados: nomes de grupos vindos do banco (pt), usados só para casar emoji.
 const GROUP_EMOJI_MAP: Record<string, string> = {
   receitas: "💰",
-  "habitação": "🏠",
+  "habitação": "🏠", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   habitacao: "🏠",
-  "alimentação": "🍔",
+  "alimentação": "🍔", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   alimentacao: "🍔",
-  "saúde": "🏥",
+  "saúde": "🏥", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   saude: "🏥",
-  "educação": "🎓",
+  "educação": "🎓", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   educacao: "🎓",
   transporte: "🚗",
-  "vestuário": "👕",
+  "vestuário": "👕", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   vestuario: "👕",
-  "serviços": "🛠️",
+  "serviços": "🛠️", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   servicos: "🛠️",
   lazer: "🎭",
   turismo: "✈️",
   pet: "🐾",
   impostos: "🏛️",
   "outras despesas": "📦",
-  "caixa e captação": "💳",
+  "caixa e captação": "💳", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   "caixa e captacao": "💳",
   financeira: "📊",
 }
@@ -66,6 +68,9 @@ export function CreateBudgetDialog({
   groups,
   editItem,
 }: CreateBudgetDialogProps) {
+  const t = useTranslations("budget.createDialog")
+  const tBudget = useTranslations("budget")
+  const tCommon = useTranslations("common")
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   
@@ -126,7 +131,7 @@ export function CreateBudgetDialog({
       if (isAggregated) {
         await saveCustomBudgetCard({
           id: editItem?.id.startsWith("custom_") ? editItem.id : `custom_${Date.now()}`,
-          name: customName.trim() || "Orçamento Personalizado",
+          name: customName.trim() || t("customFallbackName"),
           groupIds: selectedMultiGroups,
           categoryIds: selectedMultiCats,
           amount: numAmount
@@ -163,9 +168,9 @@ export function CreateBudgetDialog({
               {selectedCategoryId ? "📌" : groupEmoji}
             </div>
             <div>
-              <DialogTitle>{editItem ? "Editar Orçamento" : "Novo Orçamento"}</DialogTitle>
+              <DialogTitle>{editItem ? t("editTitle") : tBudget("newBudget")}</DialogTitle>
               <DialogDescription>
-                {editItem ? "Altere as configurações do limite deste cartão" : "Vincule a um grupo ou categoria específica"}
+                {editItem ? t("editDescription") : t("newDescription")}
               </DialogDescription>
             </div>
           </div>
@@ -174,18 +179,18 @@ export function CreateBudgetDialog({
         <div className="flex flex-col gap-4 py-2">
           <Tabs defaultValue={defaultTab} className="w-full">
             <TabsList className="w-full flex">
-              <TabsTrigger value="simples" className="flex-1">Simples</TabsTrigger>
-              <TabsTrigger value="agregado" className="flex-1">Agregado</TabsTrigger>
+              <TabsTrigger value="simples" className="flex-1">{t("simpleTab")}</TabsTrigger>
+              <TabsTrigger value="agregado" className="flex-1">{t("aggregatedTab")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="simples" className="flex flex-col gap-4 mt-4">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                  Grupo *
+                  {t("groupLabel")} *
                 </Label>
                 <Select value={selectedGroupId} onValueChange={handleGroupChange}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Escolha um Grupo..." />
+                    <SelectValue placeholder={t("groupPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
                     {groups.map((g) => (
@@ -204,7 +209,7 @@ export function CreateBudgetDialog({
 
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                  Categoria (Opcional)
+                  {t("categoryLabel")}
                 </Label>
                 <Select
                   value={selectedCategoryId}
@@ -212,11 +217,11 @@ export function CreateBudgetDialog({
                   disabled={!selectedGroup}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Nenhuma (Orçamento do Grupo)" />
+                    <SelectValue placeholder={t("categoryNone")} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">
-                      Nenhuma (Orçamento do Grupo)
+                      {t("categoryNone")}
                     </SelectItem>
                     {selectedGroup?.categories.map((c) => (
                       <SelectItem key={c.id} value={c.id}>
@@ -231,7 +236,7 @@ export function CreateBudgetDialog({
             <TabsContent value="agregado" className="flex flex-col gap-4 mt-4">
               <div className="flex flex-col gap-1.5">
                 <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                  Selecione os Componentes *
+                  {t("componentsLabel")} *
                 </Label>
                 <ScrollArea className="h-[200px] rounded-md border p-4">
                   <div className="flex flex-col gap-4">
@@ -280,26 +285,26 @@ export function CreateBudgetDialog({
           {/* Custom name */}
           <div className="flex flex-col gap-1.5">
             <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              Apelido do Cartão (Opcional)
+              {t("nicknameLabel")}
             </Label>
             <Input
               value={customName}
               onChange={(e) => setCustomName(e.target.value)}
-              placeholder="Ex: Viagem Férias"
+              placeholder={t("nicknamePlaceholder")}
             />
           </div>
 
           {/* Amount */}
           <div className="flex flex-col gap-1.5">
             <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              Teto Mensal (Opcional)
+              {t("amountLabel")}
             </Label>
             <div className="relative">
               <Input
                 type="number"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                placeholder="0,00 (Usado caso a fórmula seja Alvo Fixo)"
+                placeholder={t("amountPlaceholder")}
                 className="tabular-nums font-mono font-normal text-sm"
                 min={0}
                 step={50}
@@ -314,7 +319,7 @@ export function CreateBudgetDialog({
             onClick={() => onOpenChange(false)}
             disabled={isPending}
           >
-            Cancelar
+            {tCommon("cancel")}
           </Button>
           <Button
             onClick={handleSave}
@@ -325,7 +330,7 @@ export function CreateBudgetDialog({
             ) : (
               <Save className="h-4 w-4 mr-1" />
             )}
-            Confirmar
+            {tCommon("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

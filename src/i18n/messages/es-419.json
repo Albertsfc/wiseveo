@@ -85,6 +85,162 @@
       "title": "Usuarios"
     }
   },
+  "budget": {
+    "client": {
+      "savingOrder": "Guardando orden...",
+      "updatingBudget": "Actualizando presupuesto..."
+    },
+    "configFormulaDialog": {
+      "description": "Configurar una regla de presupuesto personalizada para <strong>{name}</strong>.",
+      "restoreGlobal": "Restaurar Predeterminado Global",
+      "title": "Fórmula de la Tarjeta"
+    },
+    "createDialog": {
+      "aggregatedTab": "Agregado",
+      "amountLabel": "Tope Mensual (Opcional)",
+      "amountPlaceholder": "0.00 (Se usa cuando la fórmula es Meta Fija)",
+      "categoryLabel": "Categoría (Opcional)",
+      "categoryNone": "Ninguna (Presupuesto del Grupo)",
+      "componentsLabel": "Selecciona los Componentes",
+      "customFallbackName": "Presupuesto Personalizado",
+      "editDescription": "Modifica la configuración del límite de esta tarjeta",
+      "editTitle": "Editar Presupuesto",
+      "groupLabel": "Grupo",
+      "groupPlaceholder": "Elige un Grupo...",
+      "newDescription": "Vincúlalo a un grupo o categoría específica",
+      "nicknameLabel": "Apodo de la Tarjeta (Opcional)",
+      "nicknamePlaceholder": "Ej.: Viaje de Vacaciones",
+      "simpleTab": "Simple"
+    },
+    "customFormulaDialog": {
+      "description": "Crea una fórmula financiera inteligente para tus límites, usando variables dinámicas del historial real.",
+      "expressionLabel": "Expresión Matemática",
+      "expressionPlaceholder": "Ej.: ([MEDIA] + [DESVIO_P]) * 1.1",
+      "nameLabel": "Nombre del Mecanismo",
+      "namePlaceholder": "Ej.: Tope Inflacionario",
+      "save": "Guardar Mecanismo",
+      "title": "Mecanismo Matemático",
+      "variables": {
+        "containment": "Entrada de contención % de la UI (ej.: 5%).",
+        "incomeAvg": "Promedio total de ingresos en el período.",
+        "lastIncome": "Ingreso del último mes.",
+        "lastMonth": "Valor cerrado del mes anterior.",
+        "margin": "Margen personalizable.",
+        "max": "Gasto máximo histórico.",
+        "mean": "Promedio de gastos de los últimos meses.",
+        "min": "Gasto mínimo histórico.",
+        "stdDev": "Desviación estándar del gasto.",
+        "title": "Biblioteca de Variables (no distingue mayúsculas):"
+      }
+    },
+    "formulaCommon": {
+      "approach": "Enfoque",
+      "customMechanisms": "Mecanismos Personalizados",
+      "customParams": {
+        "containment": "Contención (%)",
+        "margin": "Margen Extra (%)",
+        "months": "Meses (Historial)"
+      }
+    },
+    "formulaManager": {
+      "applied": "Aplicado",
+      "applyAll": "Aplicar a todos",
+      "applying": "Aplicando...",
+      "deleteMechanism": "Eliminar Mecanismo",
+      "editMechanism": "Editar Mecanismo",
+      "expression": "Expresión:",
+      "globalConfig": "Configuración Global",
+      "newMechanism": "Nuevo Mecanismo",
+      "noHistory": "Sin historial de gastos. Los datos se incorporarán al cálculo a medida que haya movimientos.",
+      "title": "Fórmulas"
+    },
+    "formulas": {
+      "descriptions": {
+        "fixed_target": "Valor fijo definido manualmente",
+        "historical_max": "Máximo histórico con margen de seguridad",
+        "income_pct": "Porcentaje del ingreso promedio del período",
+        "moving_avg": "Promedio ponderado con más peso en los meses recientes",
+        "simple_avg": "Promedio de gastos de los últimos N meses"
+      },
+      "names": {
+        "fixed_target": "Meta Fija",
+        "historical_max": "Límite Histórico",
+        "income_pct": "% del Ingreso",
+        "moving_avg": "Promedio Móvil",
+        "simple_avg": "Promedio Simple",
+        "unknown": "Fórmula desconocida"
+      },
+      "summary": {
+        "containment": "{value} contención",
+        "margin": "+{value}% margen",
+        "months": "{count} meses"
+      },
+      "variables": {
+        "amount": "Valor",
+        "containment": "Contención",
+        "margin": "Margen",
+        "months": "Meses",
+        "monthsIncome": "Meses de ingreso",
+        "percentage": "Porcentaje"
+      }
+    },
+    "itemCard": {
+      "budgeted": "Presupuestado",
+      "category": "Categoría",
+      "configureFormula": "Configurar Fórmula",
+      "customBadge": "Personalizada",
+      "customSuffix": "(personalizada)",
+      "dragToReorder": "Arrastra para reordenar",
+      "editCard": "Editar Tarjeta",
+      "group": "Grupo",
+      "mayExceed": "Puede excederse",
+      "multiple": "Múltiples",
+      "noData": "Sin datos",
+      "paid": "Pagado",
+      "scheduled": "Programado",
+      "used": "utilizado"
+    },
+    "newBudget": "Nuevo Presupuesto",
+    "newCard": {
+      "subtitle": "Agrega una categoría al panel"
+    },
+    "overview": {
+      "count": "{count, plural, one {# presupuesto} other {# presupuestos}}",
+      "periodSummary": "Resumen del Período",
+      "spent": "gastado",
+      "title": "Visión General",
+      "used": "{value} utilizado"
+    },
+    "status": {
+      "exceeded": "Excedido",
+      "remaining": "Restante"
+    },
+    "summary": {
+      "aboveBudget": "Por encima del presupuesto",
+      "budgetedTotal": "Total Presupuestado",
+      "itemCount": "{count, plural, one {# ítem} other {# ítems}}",
+      "limitExceededLower": "límite excedido",
+      "limitForMonth": "Límite definido para el mes",
+      "marginAvailable": "Margen disponible",
+      "marginAvailableLower": "margen disponible",
+      "paidScheduled": "Pagado: {paid} · Programado: {scheduled}",
+      "periodExpenses": "Gastos del período",
+      "spentTotal": "Gasto Total",
+      "sumOfBudgets": "suma de todos los presupuestos",
+      "usage": "Utilización"
+    },
+    "zones": {
+      "danger": "Peligro",
+      "dangerFooter": "por encima del 80%",
+      "dangerTitle": "Zona de peligro",
+      "safe": "Seguro",
+      "safeFooter": "por debajo del 50%",
+      "safeTitle": "Zona segura",
+      "warning": "Alerta",
+      "warningFooter": "entre el 50% y el 80%",
+      "warningTitle": "Zona de alerta"
+    }
+  },
   "common": {
     "actions": "Acciones",
     "add": "Añadir",

@@ -85,6 +85,162 @@
       "title": "Usuários"
     }
   },
+  "budget": {
+    "client": {
+      "savingOrder": "Salvando ordem...",
+      "updatingBudget": "Atualizando orçamento..."
+    },
+    "configFormulaDialog": {
+      "description": "Configurar regra de orçamento customizada para <strong>{name}</strong>.",
+      "restoreGlobal": "Restaurar Padrão Global",
+      "title": "Fórmula do Cartão"
+    },
+    "createDialog": {
+      "aggregatedTab": "Agregado",
+      "amountLabel": "Teto Mensal (Opcional)",
+      "amountPlaceholder": "0,00 (Usado caso a fórmula seja Alvo Fixo)",
+      "categoryLabel": "Categoria (Opcional)",
+      "categoryNone": "Nenhuma (Orçamento do Grupo)",
+      "componentsLabel": "Selecione os Componentes",
+      "customFallbackName": "Orçamento Personalizado",
+      "editDescription": "Altere as configurações do limite deste cartão",
+      "editTitle": "Editar Orçamento",
+      "groupLabel": "Grupo",
+      "groupPlaceholder": "Escolha um Grupo...",
+      "newDescription": "Vincule a um grupo ou categoria específica",
+      "nicknameLabel": "Apelido do Cartão (Opcional)",
+      "nicknamePlaceholder": "Ex: Viagem Férias",
+      "simpleTab": "Simples"
+    },
+    "customFormulaDialog": {
+      "description": "Crie uma fórmula financeira inteligente para seus limites. Utilizando variáveis dinâmicas do histórico real.",
+      "expressionLabel": "Expressão Matemática",
+      "expressionPlaceholder": "Ex: ([MEDIA] + [DESVIO_P]) * 1.1",
+      "nameLabel": "Nome do Mecanismo",
+      "namePlaceholder": "Ex: Teto Inflacionário",
+      "save": "Salvar Mecanismo",
+      "title": "Mecanismo Matemático",
+      "variables": {
+        "containment": "Imput de contenção % da UI (ex: 5%).",
+        "incomeAvg": "Média total de receitas no período.",
+        "lastIncome": "Receita do último mês.",
+        "lastMonth": "Valor fechado do mês anterior.",
+        "margin": "Margem customizável.",
+        "max": "Gasto máximo histórico.",
+        "mean": "Média dos gastos nos últimos meses.",
+        "min": "Gasto mínimo histórico.",
+        "stdDev": "Desvio padrão do gasto.",
+        "title": "Biblioteca de Variáveis (Case-Insensitive):"
+      }
+    },
+    "formulaCommon": {
+      "approach": "Abordagem",
+      "customMechanisms": "Mecanismos Customizados",
+      "customParams": {
+        "containment": "Contenção (%)",
+        "margin": "Margem Extra (%)",
+        "months": "Meses (Histórico)"
+      }
+    },
+    "formulaManager": {
+      "applied": "Aplicado",
+      "applyAll": "Aplicar a todos",
+      "applying": "Aplicando...",
+      "deleteMechanism": "Excluir Mecanismo",
+      "editMechanism": "Editar Mecanismo",
+      "expression": "Expressão:",
+      "globalConfig": "Configuração Global",
+      "newMechanism": "Novo Mecanismo",
+      "noHistory": "Sem histórico de gastos. Os dados serão incorporados ao cálculo à medida que houver movimentação.",
+      "title": "Fórmulas"
+    },
+    "formulas": {
+      "descriptions": {
+        "fixed_target": "Valor fixo definido manualmente",
+        "historical_max": "Máximo histórico com margem de segurança",
+        "income_pct": "Percentual da receita média do período",
+        "moving_avg": "Média ponderada com mais peso nos meses recentes",
+        "simple_avg": "Média dos gastos dos últimos N meses"
+      },
+      "names": {
+        "fixed_target": "Meta Fixa",
+        "historical_max": "Limite Histórico",
+        "income_pct": "% da Receita",
+        "moving_avg": "Média Móvel",
+        "simple_avg": "Média Simples",
+        "unknown": "Fórmula desconhecida"
+      },
+      "summary": {
+        "containment": "{value} contenção",
+        "margin": "+{value}% margem",
+        "months": "{count} meses"
+      },
+      "variables": {
+        "amount": "Valor",
+        "containment": "Contenção",
+        "margin": "Margem",
+        "months": "Meses",
+        "monthsIncome": "Meses de receita",
+        "percentage": "Percentual"
+      }
+    },
+    "itemCard": {
+      "budgeted": "Orçado",
+      "category": "Categoria",
+      "configureFormula": "Configurar Fórmula",
+      "customBadge": "Personalizada",
+      "customSuffix": "(personalizada)",
+      "dragToReorder": "Arraste para reordenar",
+      "editCard": "Editar Cartão",
+      "group": "Grupo",
+      "mayExceed": "Pode estourar",
+      "multiple": "Múltiplos",
+      "noData": "Sem dados",
+      "paid": "Pago",
+      "scheduled": "Agendado",
+      "used": "utilizado"
+    },
+    "newBudget": "Novo Orçamento",
+    "newCard": {
+      "subtitle": "Adicione uma categoria ao painel"
+    },
+    "overview": {
+      "count": "{count, plural, one {# orçamento} other {# orçamentos}}",
+      "periodSummary": "Resumo do Período",
+      "spent": "gasto",
+      "title": "Visão Geral",
+      "used": "{value} utilizado"
+    },
+    "status": {
+      "exceeded": "Excedido",
+      "remaining": "Restante"
+    },
+    "summary": {
+      "aboveBudget": "Acima do orçamento",
+      "budgetedTotal": "Orçado Total",
+      "itemCount": "{count, plural, one {# item} other {# itens}}",
+      "limitExceededLower": "limite excedido",
+      "limitForMonth": "Limite definido para o mês",
+      "marginAvailable": "Margem disponível",
+      "marginAvailableLower": "margem disponível",
+      "paidScheduled": "Pago: {paid} · Agendado: {scheduled}",
+      "periodExpenses": "Despesas do período",
+      "spentTotal": "Gasto Total",
+      "sumOfBudgets": "soma de todos os orçamentos",
+      "usage": "Utilização"
+    },
+    "zones": {
+      "danger": "Perigo",
+      "dangerFooter": "acima de 80%",
+      "dangerTitle": "Zona perigo",
+      "safe": "Seguro",
+      "safeFooter": "abaixo de 50%",
+      "safeTitle": "Zona seguro",
+      "warning": "Alerta",
+      "warningFooter": "entre 50% e 80%",
+      "warningTitle": "Zona alerta"
+    }
+  },
   "common": {
     "actions": "Ações",
     "add": "Adicionar",

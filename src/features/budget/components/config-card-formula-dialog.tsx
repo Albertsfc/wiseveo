@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { Check, Loader2, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,6 +23,8 @@ import {
 } from "@/components/ui/select"
 import {
   FORMULA_DEFINITIONS,
+  FORMULA_DESCRIPTION_KEYS,
+  FORMULA_NAME_KEYS,
   getFormulaDefinition,
   type FormulaVariable,
 } from "../services/formula-engine"
@@ -44,6 +47,9 @@ export function ConfigCardFormulaDialog({
   cardName,
   formulaConfig,
 }: ConfigCardFormulaDialogProps) {
+  const t = useTranslations("budget")
+  const tCommon = useTranslations("common")
+  const tFormulas = useTranslations("budget.formulas")
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   
@@ -112,16 +118,19 @@ export function ConfigCardFormulaDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Fórmula do Cartão</DialogTitle>
+          <DialogTitle>{t("configFormulaDialog.title")}</DialogTitle>
           <DialogDescription>
-            Configurar regra de orçamento customizada para <strong>{cardName}</strong>.
+            {t.rich("configFormulaDialog.description", {
+              name: cardName,
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-4 py-2">
           {/* Formula Selector */}
           <div className="flex flex-col gap-1.5">
-            <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Abordagem</Label>
+            <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("formulaCommon.approach")}</Label>
             <div className="flex gap-2 w-full">
               <Select value={selectedId} onValueChange={handleFormulaChange}>
                 <SelectTrigger className="w-full">
@@ -132,13 +141,13 @@ export function ConfigCardFormulaDialog({
                     <SelectItem key={f.id} value={f.id}>
                       <span className="flex items-center gap-2">
                         <span>{f.icon}</span>
-                        <span>{f.name}</span>
+                        <span>{tFormulas(FORMULA_NAME_KEYS[f.id])}</span>
                       </span>
                     </SelectItem>
                   ))}
                   {formulaConfig.customPresets && formulaConfig.customPresets.length > 0 && (
                     <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase">
-                      Mecanismos Customizados
+                      {t("formulaCommon.customMechanisms")}
                     </div>
                   )}
                   {formulaConfig.customPresets?.map((p) => (
@@ -154,7 +163,7 @@ export function ConfigCardFormulaDialog({
             </div>
             {definition && (
               <p className="text-xs text-muted-foreground">
-                {definition.description}
+                {tFormulas(FORMULA_DESCRIPTION_KEYS[definition.id])}
               </p>
             )}
           </div>
@@ -165,7 +174,7 @@ export function ConfigCardFormulaDialog({
               {definition.variables.map((v: FormulaVariable) => (
                 <div key={v.key} className="flex flex-col gap-1.5">
                   <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                    {v.label}
+                    {tFormulas(`variables.${v.labelKey}`)}
                     {v.type === "percent" && " (%)"}
                   </Label>
                   <Input
@@ -190,15 +199,15 @@ export function ConfigCardFormulaDialog({
           {isCustomDef && (
             <div className="grid grid-cols-2 gap-3 mt-2">
               <div className="flex flex-col gap-1.5">
-                <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Meses (Histórico)</Label>
+                <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("formulaCommon.customParams.months")}</Label>
                 <Input type="number" min={1} max={24} value={params.months ?? 3} onChange={(e) => handleParamChange("months", parseFloat(e.target.value)||0)} className="tabular-nums font-mono text-sm h-9" />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Contenção (%)</Label>
+                <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("formulaCommon.customParams.containment")}</Label>
                 <Input type="number" min={0} value={params.containment ?? 0} onChange={(e) => handleParamChange("containment", parseFloat(e.target.value)||0)} className="tabular-nums font-mono text-sm h-9" />
               </div>
               <div className="flex flex-col gap-1.5 col-span-2">
-                <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Margem Extra (%)</Label>
+                <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("formulaCommon.customParams.margin")}</Label>
                 <Input type="number" min={0} value={params.margin ?? 0} onChange={(e) => handleParamChange("margin", parseFloat(e.target.value)||0)} className="tabular-nums font-mono text-sm h-9" />
               </div>
             </div>
@@ -214,7 +223,7 @@ export function ConfigCardFormulaDialog({
                className="text-muted-foreground"
              >
                {isPending ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <RefreshCw className="h-4 w-4 mr-1" />}
-               Restaurar Padrão Global
+               {t("configFormulaDialog.restoreGlobal")}
              </Button>
           ) : <div />}
           <Button
@@ -226,7 +235,7 @@ export function ConfigCardFormulaDialog({
             ) : (
               <Check className="h-4 w-4 mr-1" />
             )}
-            Confirmar
+            {tCommon("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

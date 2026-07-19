@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Shield, AlertTriangle, Flame, GripVertical, FlaskConical, Clock } from "lucide-react"
 import {
   Card,
@@ -41,7 +42,7 @@ function getZoneInfo(pct: number) {
       bgColor: "bg-chart-2/15",
       borderColor: "border-chart-2/30",
       icon: <Shield className="h-3 w-3" />,
-      label: "Seguro",
+      labelKey: "safe" as const,
     }
   if (pct <= 80)
     return {
@@ -49,14 +50,14 @@ function getZoneInfo(pct: number) {
       bgColor: "bg-chart-4/15",
       borderColor: "border-chart-4/30",
       icon: <AlertTriangle className="h-3 w-3" />,
-      label: "Alerta",
+      labelKey: "warning" as const,
     }
   return {
     color: "text-destructive",
     bgColor: "bg-destructive/15",
     borderColor: "border-destructive/30",
     icon: <Flame className="h-3 w-3" />,
-    label: "Perigo",
+    labelKey: "danger" as const,
   }
 }
 
@@ -77,6 +78,9 @@ export function BudgetItemCard({
   formulaConfig,
   onEdit
 }: BudgetItemCardProps) {
+  const t = useTranslations("budget")
+  const tCommon = useTranslations("common")
+  const tFormulas = useTranslations("budget.formulas")
   const monetary = useMonetaryFormattingSafe()
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
@@ -90,8 +94,14 @@ export function BudgetItemCard({
     item.paidAmount + item.scheduledAmount > item.limit && item.paidAmount <= item.limit
 
   const formulaDesc = item.formulaId
-    ? getFormulaDescription(item.formulaId, {})
+    ? getFormulaDescription(tFormulas, item.formulaId, {})
     : undefined
+
+  // Cartões agregados guardam a sentinela "Múltiplos" em originalName; a UI
+  // resolve o rótulo traduzido pelo prefixo estável do id.
+  const originalLabel = item.id.startsWith("custom_")
+    ? t("itemCard.multiple")
+    : item.originalName
 
   const handleDelete = () => {
     // Determine if custom card by ID prefix.
@@ -114,28 +124,28 @@ export function BudgetItemCard({
               {onEdit && (
                 <DropdownMenuItem onClick={() => onEdit(item)}>
                   <Edit2 className="w-4 h-4 mr-2" />
-                  Editar Cartão
+                  {t("itemCard.editCard")}
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem onClick={() => setIsFormulaConfigOpen(true)}>
                 <Settings className="w-4 h-4 mr-2" />
-                Configurar Fórmula
+                {t("itemCard.configureFormula")}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onClick={handleDelete}
                 className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
                 disabled={isPending}
               >
                 <Trash2 className="w-4 h-4 mr-2" />
-                Excluir
+                {tCommon("delete")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <div 
+          <div
             {...dragHandleProps}
-            title="Arraste para reordenar"
+            title={t("itemCard.dragToReorder")}
             className="p-1 text-muted-foreground/30 hover:text-primary transition-colors cursor-grab active:cursor-grabbing"
           >
             <GripVertical className="h-4 w-4" />
@@ -143,9 +153,9 @@ export function BudgetItemCard({
         </div>
         <CardDescription className="flex items-center gap-2">
           <span className="text-base">{item.icon}</span>
-          {item.isGroup ? "Grupo" : "Categoria"}
+          {item.isGroup ? t("itemCard.group") : t("itemCard.category")}
           {item.name !== item.originalName && (
-            <span className="text-xs opacity-60">({item.originalName})</span>
+            <span className="text-xs opacity-60">({originalLabel})</span>
           )}
           {/* Formula indicator */}
           {item.formulaId && (
@@ -159,7 +169,7 @@ export function BudgetItemCard({
                 <TooltipContent>
                   <p className="text-xs">
                     {formulaDesc}
-                    {item.isCustomFormula && " (personalizada)"}
+                    {item.isCustomFormula && ` ${t("itemCard.customSuffix")}`}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -172,12 +182,12 @@ export function BudgetItemCard({
         <div className="flex flex-wrap items-center gap-1.5 mt-1">
           {!item.hasHistory && (
             <Badge variant="outline" className="bg-chart-4/10 text-chart-4 border-chart-4/30 text-[10px]">
-              Sem dados
+              {t("itemCard.noData")}
             </Badge>
           )}
           {item.isCustomFormula && (
             <Badge variant="outline" className="bg-chart-1/10 text-chart-1 border-chart-1/30 text-[10px]">
-              Personalizada
+              {t("itemCard.customBadge")}
             </Badge>
           )}
           <Badge
@@ -185,12 +195,12 @@ export function BudgetItemCard({
             className={`${zone.bgColor} ${zone.color} ${zone.borderColor}`}
           >
             {zone.icon}
-            <span className="ml-1">{zone.label}</span>
+            <span className="ml-1">{t(`zones.${zone.labelKey}`)}</span>
           </Badge>
           {wouldExceed && (
             <Badge variant="outline" className="bg-chart-4/10 text-chart-4 border-chart-4/30 text-[10px]">
               <AlertTriangle className="h-2.5 w-2.5" />
-              <span className="ml-1">Pode estourar</span>
+              <span className="ml-1">{t("itemCard.mayExceed")}</span>
             </Badge>
           )}
         </div>
@@ -202,20 +212,20 @@ export function BudgetItemCard({
             <span className={`text-2xl font-bold tabular-nums ${zone.color}`}>
               {formatPercentValue(pct, 0)}
             </span>
-            <span className="text-xs text-muted-foreground">utilizado</span>
+            <span className="text-xs text-muted-foreground">{t("itemCard.used")}</span>
           </div>
           <SplitProgressBar paidPct={paidPct} totalPct={pct} delay={index * 60} />
 
           {/* Values — 3 colunas: Orçado | Pago | Agendado */}
           <div className="grid grid-cols-3 gap-1 pt-1">
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] text-muted-foreground">Orçado</span>
+              <span className="text-[10px] text-muted-foreground">{t("itemCard.budgeted")}</span>
               <span className="text-xs font-medium tabular-nums font-mono">
                 {monetary.formatMonetaryValue(item.limit)}
               </span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] text-muted-foreground">Pago</span>
+              <span className="text-[10px] text-muted-foreground">{t("itemCard.paid")}</span>
               <span className="text-xs font-medium tabular-nums font-mono">
                 {monetary.formatMonetaryValue(item.paidAmount)}
               </span>
@@ -223,7 +233,7 @@ export function BudgetItemCard({
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
                 <Clock className="h-2.5 w-2.5" />
-                Agendado
+                {t("itemCard.scheduled")}
               </span>
               <span className={`text-xs font-medium tabular-nums font-mono ${item.scheduledAmount === 0 ? "text-muted-foreground/40" : ""}`}>
                 {monetary.formatMonetaryValue(item.scheduledAmount)}
@@ -234,7 +244,7 @@ export function BudgetItemCard({
       </CardContent>
       <CardFooter className="flex items-center justify-between border-t pt-3">
         <span className="text-xs text-muted-foreground">
-          {remaining >= 0 ? "Restante" : "Excedido"}
+          {remaining >= 0 ? t("status.remaining") : t("status.exceeded")}
         </span>
         <span className={`text-sm font-semibold tabular-nums font-mono ${zone.color}`}>
           {monetary.formatMonetaryValue(remaining)}

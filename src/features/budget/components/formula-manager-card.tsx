@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react"
+import { useTranslations } from "next-intl"
 import { FlaskConical, Check, Edit2, Trash2 } from "lucide-react"
 import {
   Card,
@@ -23,6 +24,8 @@ import {
 } from "@/components/ui/select"
 import {
   FORMULA_DEFINITIONS,
+  FORMULA_DESCRIPTION_KEYS,
+  FORMULA_NAME_KEYS,
   getFormulaDefinition,
   type FormulaVariable,
 } from "../services/formula-engine"
@@ -44,6 +47,8 @@ export function FormulaManagerCard({
   formulaConfig,
   hasAnyHistory,
 }: FormulaManagerCardProps) {
+  const t = useTranslations("budget")
+  const tFormulas = useTranslations("budget.formulas")
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
   const [selectedId, setSelectedId] = useState<FormulaId>(
@@ -122,15 +127,19 @@ export function FormulaManagerCard({
       <CardHeader>
         <CardDescription className="flex items-center gap-2">
           <FlaskConical className="h-4 w-4" />
-          Configuração Global
+          {t("formulaManager.globalConfig")}
         </CardDescription>
         <CardTitle className="text-lg font-semibold @[250px]/card:text-xl">
-          Fórmulas
+          {t("formulaManager.title")}
         </CardTitle>
         <CardAction>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-              {isCustomDef ? "⚡ " + isCustomDef.name : definition?.icon + " " + definition?.name}
+              {isCustomDef
+                ? "⚡ " + isCustomDef.name
+                : definition
+                  ? definition.icon + " " + tFormulas(FORMULA_NAME_KEYS[definition.id])
+                  : ""}
             </Badge>
           </div>
         </CardAction>
@@ -139,7 +148,7 @@ export function FormulaManagerCard({
         <div className="flex flex-col gap-4">
           {/* Formula Selector */}
           <div className="flex flex-col gap-1.5">
-            <Label className="text-xs text-muted-foreground">Abordagem</Label>
+            <Label className="text-xs text-muted-foreground">{t("formulaCommon.approach")}</Label>
             <div className="flex gap-2 w-full">
               <Select value={selectedId} onValueChange={handleFormulaChange}>
                 <SelectTrigger className="w-full">
@@ -150,13 +159,13 @@ export function FormulaManagerCard({
                     <SelectItem key={f.id} value={f.id}>
                       <span className="flex items-center gap-2">
                         <span>{f.icon}</span>
-                        <span>{f.name}</span>
+                        <span>{tFormulas(FORMULA_NAME_KEYS[f.id])}</span>
                       </span>
                     </SelectItem>
                   ))}
                   {formulaConfig.customPresets && formulaConfig.customPresets.length > 0 && (
                     <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground uppercase">
-                      Mecanismos Customizados
+                      {t("formulaCommon.customMechanisms")}
                     </div>
                   )}
                   {formulaConfig.customPresets?.map((p) => (
@@ -172,20 +181,20 @@ export function FormulaManagerCard({
               <div className="flex gap-1">
                 {isCustomDef && (
                   <>
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
+                    <Button
+                      variant="outline"
+                      size="icon"
                       onClick={() => openCreator(isCustomDef)}
-                      title="Editar Mecanismo"
+                      title={t("formulaManager.editMechanism")}
                       disabled={isPending}
                     >
                       <Edit2 className="w-4 h-4 text-muted-foreground" />
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="icon" 
+                    <Button
+                      variant="outline"
+                      size="icon"
                       onClick={handleDeleteCustomPreset}
-                      title="Excluir Mecanismo"
+                      title={t("formulaManager.deleteMechanism")}
                       disabled={isPending}
                       className="text-destructive hover:text-destructive"
                     >
@@ -193,11 +202,11 @@ export function FormulaManagerCard({
                     </Button>
                   </>
                 )}
-                <Button 
-                  variant="outline" 
-                  size="icon" 
+                <Button
+                  variant="outline"
+                  size="icon"
                   onClick={() => openCreator()}
-                  title="Novo Mecanismo"
+                  title={t("formulaManager.newMechanism")}
                 >
                   <span className="text-xl leading-none -mt-1">+</span>
                 </Button>
@@ -205,12 +214,12 @@ export function FormulaManagerCard({
             </div>
             {definition && (
               <p className="text-xs text-muted-foreground">
-                {definition.description}
+                {tFormulas(FORMULA_DESCRIPTION_KEYS[definition.id])}
               </p>
             )}
             {isCustomDef && (
               <p className="text-xs text-muted-foreground font-mono bg-muted/50 p-1 rounded">
-                Expressão: {isCustomDef.expression}
+                {t("formulaManager.expression")} {isCustomDef.expression}
               </p>
             )}
           </div>
@@ -221,7 +230,7 @@ export function FormulaManagerCard({
               {definition.variables.map((v: FormulaVariable) => (
                 <div key={v.key} className="flex flex-col gap-1.5">
                   <Label className="text-xs text-muted-foreground">
-                    {v.label}
+                    {tFormulas(`variables.${v.labelKey}`)}
                     {v.type === "percent" && " (%)"}
                   </Label>
                   <Input
@@ -246,15 +255,15 @@ export function FormulaManagerCard({
           {isCustomDef && (
             <div className="grid grid-cols-2 gap-3 mt-2">
               <div className="flex flex-col gap-1.5">
-                <Label className="text-xs text-muted-foreground">Meses (Histórico)</Label>
+                <Label className="text-xs text-muted-foreground">{t("formulaCommon.customParams.months")}</Label>
                 <Input type="number" min={1} max={24} value={params.months ?? 3} onChange={(e) => handleParamChange("months", parseFloat(e.target.value)||0)} className="tabular-nums font-mono text-sm h-9" />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label className="text-xs text-muted-foreground">Contenção (%)</Label>
+                <Label className="text-xs text-muted-foreground">{t("formulaCommon.customParams.containment")}</Label>
                 <Input type="number" min={0} value={params.containment ?? 0} onChange={(e) => handleParamChange("containment", parseFloat(e.target.value)||0)} className="tabular-nums font-mono text-sm h-9" />
               </div>
               <div className="flex flex-col gap-1.5 col-span-2">
-                <Label className="text-xs text-muted-foreground">Margem Extra (%)</Label>
+                <Label className="text-xs text-muted-foreground">{t("formulaCommon.customParams.margin")}</Label>
                 <Input type="number" min={0} value={params.margin ?? 0} onChange={(e) => handleParamChange("margin", parseFloat(e.target.value)||0)} className="tabular-nums font-mono text-sm h-9" />
               </div>
             </div>
@@ -264,8 +273,7 @@ export function FormulaManagerCard({
           {!hasAnyHistory && (
             <div className="rounded-md border border-chart-4/30 bg-chart-4/10 px-3 py-2">
               <p className="text-xs text-chart-4">
-                Sem histórico de gastos. Os dados serão incorporados ao cálculo
-                à medida que houver movimentação.
+                {t("formulaManager.noHistory")}
               </p>
             </div>
           )}
@@ -278,14 +286,14 @@ export function FormulaManagerCard({
             size="sm"
           >
             {isPending ? (
-              <span className="animate-pulse">Aplicando...</span>
+              <span className="animate-pulse">{t("formulaManager.applying")}</span>
             ) : saved ? (
               <>
                 <Check className="h-4 w-4 mr-1" />
-                Aplicado
+                {t("formulaManager.applied")}
               </>
             ) : (
-              "Aplicar a todos"
+              t("formulaManager.applyAll")
             )}
           </Button>
         </div>

@@ -6,7 +6,6 @@
   "src/features/accounts",
   "src/features/analysis",
   "src/features/auth",
-  "src/features/budget",
   "src/features/calendar",
   "src/features/component-library",
   "src/features/forecasting",
