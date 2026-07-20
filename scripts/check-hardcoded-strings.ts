@@ -12,6 +12,16 @@ const IGNORE = [
   ".d.ts",
   // guia de estilo interno (dev-only), deliberadamente não localizado
   "src/features/component-library",
+  // dataset de terceiros (tweakcn.com): nomes de presets de tema e font-stacks
+  // CSS ("Inter, sans-serif") são dados vendorizados, não copy de produto.
+  "src/utils/tweakcn-theme-presets.ts",
+  // dados mock do bloco "mail" (shadcn admin kit): remetentes/assuntos/corpos
+  // de e-mail fictícios usados só para popular a demo — não é copy de UI.
+  "src/app/(dashboard)/mail/data.tsx",
+  // componente órfão (zero imports em todo o src): mega menu de marketing de
+  // um marketplace de templates de UI, sem relação com o produto WISEVEO —
+  // sobra do starter kit, nunca renderizado.
+  "src/components/landing/mega-menu.tsx",
 ]
 
 // Prefix-matched paths where Check A (hardcoded UI strings) is skipped.
@@ -23,6 +33,153 @@ const ALLOWLIST: string[] = JSON.parse(
 const ACCENTED_RE = /[áéíóúâêôãõàçÁÉÍÓÚÂÊÔÃÕÀÇñÑ¿¡]/
 const LETTER_RE = /\p{L}/u
 const IGNORE_MARKER = "i18n-ignore"
+
+// --- Check A (ASCII heuristic) ------------------------------------------
+// Accented text is unambiguous (pt-BR/es-419 leaking into code). Plain English
+// UI text has no such tell, so we detect it structurally: capitalized-first-word
+// multi-word "sentences" (placeholders, zod messages, aria-labels, toasts) or
+// any multi-word phrase trailing off in "...".
+const SENTENCE_RE = /^[A-Z¿¡][a-zA-Z,'’]*(\s+[a-zA-Z][a-zA-Z,'’.]*){1,}/
+const ELLIPSIS_TAIL_RE = /[a-zA-Z]{2,}\s+[a-zA-Z].*\.\.\.\s*$/
+// All-lowercase, alnum + Tailwind/utility punctuation → almost certainly a
+// className/utility string, never real UI copy (which always has an
+// uppercase word or proper punctuation).
+const CSS_UTILITY_RE = /^[a-z0-9\s\-:\[\]\/.%()]+$/
+
+// JSX attributes whose string values are never user-facing copy. aria-* is
+// intentionally NOT here — aria-label/aria-description etc. are real UI text.
+const NON_UI_JSX_ATTRS = new Set([
+  "className",
+  "id",
+  "key",
+  "variant",
+  "size",
+  "side",
+  "align",
+  "mode",
+  "type",
+  "name",
+  "href",
+  "src",
+  "rel",
+  "target",
+  "style",
+  "width",
+  "height",
+  "viewBox",
+  "fill",
+  "stroke",
+  "strokeWidth",
+  "strokeLinecap",
+  "strokeLinejoin",
+  "xmlns",
+  "rows",
+  "cols",
+  "colSpan",
+  "rowSpan",
+  "htmlFor",
+  "method",
+  "action",
+  "encType",
+  "accept",
+  "autoComplete",
+  "inputMode",
+  "pattern",
+  "role",
+  "as",
+  "orientation",
+  "placement",
+  "position",
+  "min",
+  "max",
+  "step",
+  "sizes",
+  "loading",
+  "decoding",
+  "fetchPriority",
+])
+
+function isCandidateUIText(text: string): boolean {
+  if (!/\s/.test(text)) return false // pure identifier/path — no spaces
+  if (CSS_UTILITY_RE.test(text)) return false // looks like a className/utility list
+  return SENTENCE_RE.test(text) || ELLIPSIS_TAIL_RE.test(text)
+}
+
+function calleeName(call: ts.CallExpression): string | undefined {
+  if (ts.isIdentifier(call.expression)) return call.expression.text
+  if (ts.isPropertyAccessExpression(call.expression)) return call.expression.name.text
+  return undefined
+}
+
+// Walks up through "transparent" glue nodes (ternaries, &&/||, parens, arrays,
+// template pieces, {..} JSX expression containers) to find the nearest
+// meaningful parent, then checks whether that parent context makes this
+// literal non-UI: a JSX attribute we don't localize, an object property KEY,
+// an import/require specifier, or an argument to console.*/cn(...)/clsx(...).
+function isExcludedUIContext(node: ts.Node): boolean {
+  let current: ts.Node = node
+  let depth = 0
+  while (depth < 10) {
+    const p: ts.Node | undefined = current.parent
+    if (!p) return false
+
+    if (ts.isJsxAttribute(p) && p.initializer === current) {
+      const attrName = p.name.getText()
+      return NON_UI_JSX_ATTRS.has(attrName) || attrName.startsWith("data-")
+    }
+
+    if ((ts.isPropertyAssignment(p) || ts.isPropertySignature(p)) && p.name === current) {
+      return true
+    }
+
+    if (
+      (ts.isImportDeclaration(p) || ts.isExportDeclaration(p)) &&
+      p.moduleSpecifier === current
+    ) {
+      return true
+    }
+
+    if (ts.isCallExpression(p) && p.arguments[0] === current) {
+      if (ts.isIdentifier(p.expression) && p.expression.text === "require") return true
+      if (p.expression.kind === ts.SyntaxKind.ImportKeyword) return true
+    }
+
+    if (ts.isCallExpression(p) && p.arguments.includes(current as ts.Expression)) {
+      const name = calleeName(p)
+      if (name === "cn" || name === "clsx" || name === "classNames") return true
+      // date-fns `format`/`formatAppDate`/`createDateFormatter`-style calls take a
+      // pattern-token string ("MMM d", "EEEE, MMMM d") as an argument — that's a
+      // formatting instruction, not UI copy, even though it can look like a
+      // multi-word "sentence" to the heuristic above.
+      if (name && /^format/i.test(name)) return true
+      if (
+        ts.isPropertyAccessExpression(p.expression) &&
+        ts.isIdentifier(p.expression.expression) &&
+        p.expression.expression.text === "console"
+      ) {
+        return true
+      }
+      return false // argument of some other, unrelated call — not excluded
+    }
+
+    if (
+      ts.isConditionalExpression(p) ||
+      ts.isBinaryExpression(p) ||
+      ts.isParenthesizedExpression(p) ||
+      ts.isArrayLiteralExpression(p) ||
+      ts.isTemplateExpression(p) ||
+      ts.isTemplateSpan(p) ||
+      ts.isJsxExpression(p)
+    ) {
+      current = p
+      depth++
+      continue
+    }
+
+    return false
+  }
+  return false
+}
 
 interface Violation {
   file: string
@@ -182,11 +339,20 @@ function scanFile(
       } else if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
         if (ACCENTED_RE.test(node.text)) {
           report(node, (line) => `❌ ${relPath}:${line} → "${truncate(node.text)}"`)
+        } else if (isCandidateUIText(node.text) && !isExcludedUIContext(node)) {
+          report(node, (line) => `❌ ${relPath}:${line} → (ASCII) "${truncate(node.text)}"`)
         }
       } else if (ts.isTemplateExpression(node)) {
-        const full = node.getText(sourceFile)
-        if (ACCENTED_RE.test(full)) {
-          report(node, (line) => `❌ ${relPath}:${line} → "${truncate(full)}"`)
+        // Reconstruct the literal text pieces only (head + each span's literal),
+        // skipping ${...} substitutions, so a sentence like `Last seen ${x}`
+        // is evaluated as "Last seen" rather than failing to match because the
+        // raw source text starts with a backtick or a "${".
+        const full = [node.head.text, ...node.templateSpans.map((s) => s.literal.text)].join(" ")
+        const raw = node.getText(sourceFile)
+        if (ACCENTED_RE.test(raw)) {
+          report(node, (line) => `❌ ${relPath}:${line} → "${truncate(raw)}"`)
+        } else if (isCandidateUIText(full) && !isExcludedUIContext(node)) {
+          report(node, (line) => `❌ ${relPath}:${line} → (ASCII) "${truncate(raw)}"`)
         }
       }
     }
