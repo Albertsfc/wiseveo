@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
-import { DEFAULT_LOCALE } from "@/i18n/config"
+import { DEFAULT_LOCALE, type AppLocale } from "@/i18n/config"
 import { createMonetaryFormatter } from "@/lib/monetary"
 import {
   getUserLocale,
@@ -20,6 +20,21 @@ import { generateAnalystResponse } from "./analyst-response.service"
 import { buildStaticResponse } from "./static-response.service"
 import { buildTelegramUserContext } from "./user-context.service"
 import type { TelegramChatId, TelegramToolContext, TelegramWebhookUpdate } from "../types/telegram.types"
+
+// Resolve o locale persistido do usuário para mensagens de erro fora do fluxo
+// normal (o caminho feliz resolve via ctx). Nunca lança: qualquer falha aqui
+// cai no locale padrão.
+async function resolveTelegramLocale(chatId: TelegramChatId): Promise<AppLocale> {
+  try {
+    const connection = await prisma.telegramConnection.findUnique({
+      where: { telegramChatId: BigInt(chatId) },
+      select: { userId: true },
+    })
+    return connection ? await getUserLocale(connection.userId) : DEFAULT_LOCALE
+  } catch {
+    return DEFAULT_LOCALE
+  }
+}
 
 function getStartToken(text: string) {
   const match = /^\/start\s+(.+)$/i.exec(text.trim())
@@ -196,10 +211,10 @@ export async function handleTelegramUpdate(update: TelegramWebhookUpdate) {
     await handleFinancialQuestion(chatId, text)
   } catch (error) {
     console.error("Telegram message processing error", error)
-    // Best-effort fallback: at this point we may not have a resolved user
-    // locale (the error could have happened before the connection lookup),
-    // so DEFAULT_LOCALE is the safest fallback here.
-    const t = await getTranslations({ locale: DEFAULT_LOCALE, namespace: "telegram" })
+    const t = await getTranslations({
+      locale: await resolveTelegramLocale(chatId),
+      namespace: "telegram",
+    })
     await sendTelegramMessage(chatId, t("bot.genericError"))
   }
 }

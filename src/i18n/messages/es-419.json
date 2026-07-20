@@ -1569,8 +1569,8 @@
       "evening": "Buenas noches",
       "helpPrompt": "¿En qué puedo ayudarte?",
       "morning": "Buenos días",
-      "withName": "{salutation}, {name}! {prompt}",
-      "withoutName": "{salutation}! {prompt}"
+      "withName": "¡{salutation}, {name}! {prompt}",
+      "withoutName": "¡{salutation}! {prompt}"
     },
     "staticResponses": {
       "identity": "Estás conectado como {name} ({email}).",
