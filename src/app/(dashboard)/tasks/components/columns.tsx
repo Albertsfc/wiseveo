@@ -49,7 +49,7 @@ export function getColumns(t: TasksTranslator): ColumnDef<Task>[] {
   {
     accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+      <DataTableColumnHeader column={column} title={t("columns.task")} />
     ),
     cell: ({ row }) => (
       <div className="w-[90px] font-medium">{row.getValue("id")}</div>
@@ -59,7 +59,7 @@ export function getColumns(t: TasksTranslator): ColumnDef<Task>[] {
   {
     accessorKey: "title",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title={t("columns.title")} />
     ),
     cell: ({ row }) => {
       return (
@@ -74,7 +74,7 @@ export function getColumns(t: TasksTranslator): ColumnDef<Task>[] {
   {
     accessorKey: "category",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Category" />
+      <DataTableColumnHeader column={column} title={t("columns.category")} />
     ),
     cell: ({ row }) => {
       const category = categories.find(
@@ -100,7 +100,7 @@ export function getColumns(t: TasksTranslator): ColumnDef<Task>[] {
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title={t("columns.status")} />
     ),
     cell: ({ row }) => {
       const status = statuses.find(
@@ -127,7 +127,7 @@ export function getColumns(t: TasksTranslator): ColumnDef<Task>[] {
   {
     accessorKey: "priority",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Priority" />
+      <DataTableColumnHeader column={column} title={t("columns.priority")} />
     ),
     cell: ({ row }) => {
       const priority = priorities.find(

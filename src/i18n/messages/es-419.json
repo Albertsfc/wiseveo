@@ -1,4 +1,94 @@
 {
+  "Routes": {
+    "analysis": {
+      "description": "Informes y métricas de rendimiento",
+      "title": "Análisis"
+    },
+    "banks": {
+      "description": "Sincroniza y gestiona tus cuentas",
+      "title": "Bancos"
+    },
+    "budget": {
+      "description": "Planificación y metas financieras",
+      "title": "Presupuesto"
+    },
+    "calendar": {
+      "description": "Visualiza tus vencimientos y cobros",
+      "title": "Calendario"
+    },
+    "chat": {
+      "description": "Comunícate con el equipo",
+      "title": "Chat"
+    },
+    "configuracoes": {
+      "description": "Gestiona tus preferencias",
+      "title": "Configuraciones"
+    },
+    "dashboard": {
+      "description": "Resumen de tus finanzas",
+      "title": "Dashboard"
+    },
+    "default": {
+      "description": "Aceleración Financiera",
+      "title": "WISEVEO"
+    },
+    "faqs": {
+      "description": "Preguntas frecuentes",
+      "title": "FAQs"
+    },
+    "forecasting": {
+      "description": "Proyecciones financieras y tendencias",
+      "title": "Pronóstico"
+    },
+    "insights": {
+      "description": "Análisis detallados y tendencias",
+      "title": "Insights"
+    },
+    "mail": {
+      "description": "Bandeja de entrada",
+      "title": "Correo"
+    },
+    "pricing": {
+      "description": "Opciones de suscripción",
+      "title": "Planes"
+    },
+    "recurring": {
+      "description": "Control de suscripciones y facturas fijas",
+      "title": "Recurrentes"
+    },
+    "settings_billing": {
+      "description": "Gestiona tus pagos",
+      "title": "Facturación"
+    },
+    "settings_components": {
+      "description": "Guía de estilo del sistema",
+      "title": "Componentes"
+    },
+    "settings_connections": {
+      "description": "Integraciones con otras apps",
+      "title": "Conexiones"
+    },
+    "settings_notifications": {
+      "description": "Configura tus alertas",
+      "title": "Notificaciones"
+    },
+    "setup": {
+      "description": "Configura tu entorno WISEVEO",
+      "title": "WISEVEO — Configuración"
+    },
+    "tasks": {
+      "description": "Gestiona tus tareas",
+      "title": "Tareas"
+    },
+    "transactions": {
+      "description": "Gestiona tus ingresos y gastos",
+      "title": "Transacciones"
+    },
+    "users": {
+      "description": "Gestiona los miembros del equipo",
+      "title": "Usuarios"
+    }
+  },
   "accounts": {
     "addAccount": "Agregar Cuenta",
     "card": {
@@ -634,8 +724,6 @@
     "yes": "Sí"
   },
   "dashboard": {
-    "balance": "Saldo General",
-    "cashflow": "Flujo de Caja",
     "ChartArea": {
       "currentBalance": "Saldo actual en el período:",
       "description": "Sigue entradas, salidas y la evolución del saldo en el intervalo seleccionado",
@@ -643,7 +731,6 @@
       "loadError": "No se pudo cargar el gráfico.",
       "title": "Flujo de Caja del Período"
     },
-    "dailyMovement": "Movimiento Diario",
     "DailyMovement": {
       "accumulated": "ACUMULADO",
       "balance": "SALDO",
@@ -659,8 +746,6 @@
       "noMovement": "Sin movimiento en el período",
       "title": "Movimiento Diario"
     },
-    "expenses": "Gastos",
-    "expensesByGroup": "Gastos por Grupo",
     "ExpensesChart": {
       "description": "Distribución de gastos en el período seleccionado",
       "loading": "Cargando...",
@@ -671,8 +756,6 @@
       "total": "Total:",
       "totalExpenses": "Total de gastos:"
     },
-    "income": "Ingresos",
-    "latestTransactions": "Últimos Movimientos",
     "LatestTransactions": {
       "description": "Sigue los pagos recientes",
       "loadError": "Error al cargar los datos",
@@ -680,7 +763,6 @@
       "noTransactions": "Sin pagos en el período",
       "title": "Últimos Pagos"
     },
-    "savings": "Ahorros",
     "SectionCards": {
       "balance": "Saldo",
       "balanceFooter": "Saldo consolidado",
@@ -692,16 +774,24 @@
       "savingsFooter": "Ahorro del mes",
       "vsPreviousMonth": "vs mes anterior"
     },
-    "subtitle": "Visión general de tu salud financiera",
-    "title": "Dashboard",
-    "upcomingTransactions": "Próximos Vencimientos",
     "UpcomingTransactions": {
       "description": "Sigue las próximas entradas y salidas",
       "loadError": "Error al cargar los datos",
       "loading": "Cargando...",
       "noTransactions": "Sin vencimientos en el período",
       "title": "Próximos Vencimientos"
-    }
+    },
+    "balance": "Saldo General",
+    "cashflow": "Flujo de Caja",
+    "dailyMovement": "Movimiento Diario",
+    "expenses": "Gastos",
+    "expensesByGroup": "Gastos por Grupo",
+    "income": "Ingresos",
+    "latestTransactions": "Últimos Movimientos",
+    "savings": "Ahorros",
+    "subtitle": "Visión general de tu salud financiera",
+    "title": "Dashboard",
+    "upcomingTransactions": "Próximos Vencimientos"
   },
   "faqs": {
     "allCategoryLabel": "Todas",
@@ -739,6 +829,11 @@
     "settings": {
       "baseMonthLabel": "Mes Base Real",
       "modeLabel": "Régimen",
+      "modeOptions": {
+        "accrual": "Devengado",
+        "cash": "Efectivo"
+      },
+      "modePlaceholder": "Seleccione...",
       "modelLabel": "Motor Predictivo",
       "modelOptions": {
         "exponentialSmoothing": "Suavización Exponencial",
@@ -746,11 +841,6 @@
         "straightLine": "Línea Recta (Tendencia)"
       },
       "modelPlaceholder": "Modelo Matemático",
-      "modeOptions": {
-        "accrual": "Devengado",
-        "cash": "Efectivo"
-      },
-      "modePlaceholder": "Seleccione...",
       "showAhLabel": "Análisis Horizontal (AH)",
       "showAvLabel": "Análisis Vertical (AV)"
     },
@@ -821,9 +911,9 @@
       "editDateTooltip": "Editar fecha de los seleccionados",
       "launch": "Lanzar",
       "launchDescription": "¿Confirmar el lanzamiento de {count, plural, one {# recurrencia} other {# recurrencias}}?",
-      "launching": "Lanzando...",
       "launchTitle": "Lanzar Movimientos",
       "launchTooltip": "Lanzar seleccionados",
+      "launching": "Lanzando...",
       "saveDate": "Guardar fecha",
       "saving": "Guardando...",
       "selectedCount": "{count, plural, one {# seleccionado} other {# seleccionados}}"
@@ -894,8 +984,8 @@
       "allTypes": "Todos los tipos",
       "apply": "Aplicar",
       "clear": "Limpiar",
-      "filtersButton": "Filtros",
       "filterSheetTitle": "Filtrar Recurrencias",
+      "filtersButton": "Filtros",
       "searchPlaceholderDesktop": "Búsqueda inteligente...",
       "searchPlaceholderMobile": "Buscar...",
       "typeFieldLabel": "Tipo"
@@ -921,96 +1011,6 @@
       "launchError": "Error al lanzar el movimiento recurrente",
       "launchSuccess": "Movimiento lanzado con éxito",
       "requiredFields": "Complete todos los campos obligatorios"
-    }
-  },
-  "Routes": {
-    "analysis": {
-      "description": "Informes y métricas de rendimiento",
-      "title": "Análisis"
-    },
-    "banks": {
-      "description": "Sincroniza y gestiona tus cuentas",
-      "title": "Bancos"
-    },
-    "budget": {
-      "description": "Planificación y metas financieras",
-      "title": "Presupuesto"
-    },
-    "calendar": {
-      "description": "Visualiza tus vencimientos y cobros",
-      "title": "Calendario"
-    },
-    "chat": {
-      "description": "Comunícate con el equipo",
-      "title": "Chat"
-    },
-    "configuracoes": {
-      "description": "Gestiona tus preferencias",
-      "title": "Configuraciones"
-    },
-    "dashboard": {
-      "description": "Resumen de tus finanzas",
-      "title": "Dashboard"
-    },
-    "default": {
-      "description": "Aceleración Financiera",
-      "title": "WISEVEO"
-    },
-    "faqs": {
-      "description": "Preguntas frecuentes",
-      "title": "FAQs"
-    },
-    "forecasting": {
-      "description": "Proyecciones financieras y tendencias",
-      "title": "Pronóstico"
-    },
-    "insights": {
-      "description": "Análisis detallados y tendencias",
-      "title": "Insights"
-    },
-    "mail": {
-      "description": "Bandeja de entrada",
-      "title": "Correo"
-    },
-    "pricing": {
-      "description": "Opciones de suscripción",
-      "title": "Planes"
-    },
-    "recurring": {
-      "description": "Control de suscripciones y facturas fijas",
-      "title": "Recurrentes"
-    },
-    "settings_billing": {
-      "description": "Gestiona tus pagos",
-      "title": "Facturación"
-    },
-    "settings_components": {
-      "description": "Guía de estilo del sistema",
-      "title": "Componentes"
-    },
-    "settings_connections": {
-      "description": "Integraciones con otras apps",
-      "title": "Conexiones"
-    },
-    "settings_notifications": {
-      "description": "Configura tus alertas",
-      "title": "Notificaciones"
-    },
-    "setup": {
-      "description": "Configura tu entorno WISEVEO",
-      "title": "WISEVEO — Configuración"
-    },
-    "tasks": {
-      "description": "Gestiona tus tareas",
-      "title": "Tareas"
-    },
-    "transactions": {
-      "description": "Gestiona tus ingresos y gastos",
-      "title": "Transacciones"
-    },
-    "users": {
-      "description": "Gestiona los miembros del equipo",
-      "title": "Usuarios"
     }
   },
   "settings": {
@@ -1057,9 +1057,9 @@
     "adminUsers": {
       "active": "Activo",
       "approve": "Aprobar",
-      "approved": "Aprobado",
       "approveError": "No se pudo aprobar al usuario.",
       "approveSuccess": "Usuario aprobado con éxito.",
+      "approved": "Aprobado",
       "approving": "Aprobando...",
       "colAction": "Acción",
       "colDate": "Registro",
@@ -1133,9 +1133,9 @@
       "globalPrefs": "Preferencias Globales",
       "globalPrefsDesc": "Estas opciones afectan tarjetas, tablas, gráficos y resúmenes financieros.",
       "minus": "Con signo menos",
+      "negValue": "Valor negativo",
       "negativeFormat": "Valores Negativos",
       "negativeFormatDesc": "Elija cómo se mostrarán las salidas, pérdidas y otros valores negativos.",
-      "negValue": "Valor negativo",
       "number": "Solo número",
       "parentheses": "Entre paréntesis",
       "posValue": "Valor positivo",
@@ -1441,8 +1441,13 @@
       "trigger": "Agregar Tarea"
     },
     "columns": {
+      "category": "Categoría",
+      "priority": "Prioridad",
       "selectAllAria": "Seleccionar todo",
-      "selectRowAria": "Seleccionar fila"
+      "selectRowAria": "Seleccionar fila",
+      "status": "Estado",
+      "task": "Tarea",
+      "title": "Título"
     },
     "filter": {
       "clearFilters": "Limpiar filtros",
@@ -1622,8 +1627,8 @@
     "billing": {
       "availablePlansDescription": "Elige el plan que mejor se adapte a ti.",
       "availablePlansTitle": "Planes Disponibles",
-      "currentlyOnPlan": "Actualmente estás en el {plan}.",
       "currentPlanTitle": "Plan Actual",
+      "currentlyOnPlan": "Actualmente estás en el {plan}.",
       "daysLabel": "Días",
       "daysOfTotal": "{used} de {total} días",
       "daysRemaining": "{days} días restantes hasta que tu plan requiera actualización",
@@ -1854,9 +1859,9 @@
       "clear": "Limpiar",
       "copy": "Copiar",
       "copyDescription": "Defina la fecha de los nuevos registros para {count, plural, one {# movimiento seleccionado} other {# movimientos seleccionados}}.",
-      "copying": "Copiando...",
       "copyTitle": "Copiar Movimientos en lote",
       "copyTooltip": "Copiar Movimientos",
+      "copying": "Copiando...",
       "creating": "Creando...",
       "dateLabel": "Fecha",
       "delete": "Eliminar",
@@ -1948,8 +1953,8 @@
         "someFilesFailed": "Algunos archivos fallaron: {errors}",
         "title": "Adjuntos",
         "uploadError": "Error al enviar los adjuntos",
-        "uploading": "Enviando...",
-        "uploadSuccess": "¡{count, plural, one {# adjunto enviado} other {# adjuntos enviados}} con éxito!"
+        "uploadSuccess": "¡{count, plural, one {# adjunto enviado} other {# adjuntos enviados}} con éxito!",
+        "uploading": "Enviando..."
       },
       "deleteConfirm": {
         "confirmText": "¿Está seguro de que desea eliminar este movimiento?",
@@ -1967,10 +1972,10 @@
       "messages": {
         "deleteAction": "Eliminar mensaje",
         "deleteConfirmText": "Este mensaje se eliminará permanentemente.",
-        "deleted": "Eliminar",
-        "deletedSuccess": "Mensaje eliminado",
         "deleteError": "Error al eliminar el mensaje",
         "deleteTitle": "Eliminar Mensaje",
+        "deleted": "Eliminar",
+        "deletedSuccess": "Mensaje eliminado",
         "deleting": "Eliminando...",
         "emptyMessageError": "Escriba un mensaje antes de enviar",
         "loadError": "Error al cargar los mensajes",
@@ -2049,8 +2054,8 @@
       "apply": "Aplicar",
       "clear": "Limpiar",
       "clearFiltersButton": "Limpiar filtros",
-      "filtersButton": "Filtros",
       "filterSheetTitle": "Filtrar Movimientos",
+      "filtersButton": "Filtros",
       "searchPlaceholderDesktop": "Búsqueda inteligente...",
       "searchPlaceholderMobile": "Buscar...",
       "statusFieldLabel": "Estado",
@@ -2116,8 +2121,8 @@
       }
     },
     "toasts": {
-      "attachmentsOpened": "Administrador de adjuntos abierto",
       "attachmentsOpenError": "Error al abrir los adjuntos del movimiento",
+      "attachmentsOpened": "Administrador de adjuntos abierto",
       "batchCopyError": "Error al copiar los movimientos seleccionados",
       "batchCopyPartial": "{succeeded} exitoso(s) y {failed} con error",
       "batchCopySuccess": "{count, plural, one {# movimiento copiado} other {# movimientos copiados}}",
@@ -2136,12 +2141,12 @@
       "batchQuickPayError": "Error al aplicar el pago rápido a los movimientos seleccionados",
       "batchQuickPayPartial": "{succeeded} procesado(s) y {failed} con error",
       "batchQuickPaySuccess": "{count, plural, one {# movimiento actualizado} other {# movimientos actualizados}} con pago rápido",
-      "copyOpened": "Copia de movimiento abierta",
       "copyOpenError": "Error al abrir la copia del movimiento",
+      "copyOpened": "Copia de movimiento abierta",
       "deleteError": "Error al eliminar el movimiento",
       "deleteSuccess": "Movimiento eliminado con éxito",
-      "editOpened": "Edición de movimiento abierta",
       "editOpenError": "Error al abrir la edición del movimiento",
+      "editOpened": "Edición de movimiento abierta",
       "quickPayError": "Error al efectuar el pago rápido",
       "quickPaySuccess": "Pago rápido efectuado con éxito",
       "recurringError": "Error al crear el movimiento recurrente",
@@ -2189,8 +2194,8 @@
       "totalUsers": "Total de Usuarios"
     },
     "table": {
-      "columns": "Columnas",
       "columnVisibility": "Visibilidad de Columnas",
+      "columns": "Columnas",
       "deleteUser": "Eliminar Usuario",
       "editUser": "Editar usuario",
       "export": "Exportar",
@@ -2201,8 +2206,8 @@
       "resetPassword": "Restablecer Contraseña",
       "searchPlaceholder": "Buscar usuarios...",
       "selectAllAria": "Seleccionar todo",
-      "selectedOfTotal": "{selected} de {total} fila(s) seleccionada(s).",
       "selectRowAria": "Seleccionar fila",
+      "selectedOfTotal": "{selected} de {total} fila(s) seleccionada(s).",
       "sendEmail": "Enviar Correo",
       "show": "Mostrar",
       "viewDetails": "Ver Detalles",

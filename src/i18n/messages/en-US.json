@@ -1,4 +1,94 @@
 {
+  "Routes": {
+    "analysis": {
+      "description": "Performance reports and metrics",
+      "title": "Analysis"
+    },
+    "banks": {
+      "description": "Sync and manage your accounts",
+      "title": "Banks"
+    },
+    "budget": {
+      "description": "Financial planning and goals",
+      "title": "Budget"
+    },
+    "calendar": {
+      "description": "View your due dates and receipts",
+      "title": "Calendar"
+    },
+    "chat": {
+      "description": "Communicate with the team",
+      "title": "Chat"
+    },
+    "configuracoes": {
+      "description": "Manage your preferences",
+      "title": "Settings"
+    },
+    "dashboard": {
+      "description": "Overview of your finances",
+      "title": "Dashboard"
+    },
+    "default": {
+      "description": "Financial Acceleration",
+      "title": "WISEVEO"
+    },
+    "faqs": {
+      "description": "Frequently asked questions",
+      "title": "FAQs"
+    },
+    "forecasting": {
+      "description": "Financial projections and trends",
+      "title": "Forecasting"
+    },
+    "insights": {
+      "description": "Detailed analysis and trends",
+      "title": "Insights"
+    },
+    "mail": {
+      "description": "Inbox",
+      "title": "Mail"
+    },
+    "pricing": {
+      "description": "Subscription plans",
+      "title": "Pricing"
+    },
+    "recurring": {
+      "description": "Manage subscriptions and fixed bills",
+      "title": "Recurring"
+    },
+    "settings_billing": {
+      "description": "Manage your payments",
+      "title": "Billing"
+    },
+    "settings_components": {
+      "description": "System style guide",
+      "title": "Components"
+    },
+    "settings_connections": {
+      "description": "Integrations with other apps",
+      "title": "Connections"
+    },
+    "settings_notifications": {
+      "description": "Configure your alerts",
+      "title": "Notifications"
+    },
+    "setup": {
+      "description": "Configure your WISEVEO environment",
+      "title": "WISEVEO — Setup"
+    },
+    "tasks": {
+      "description": "Manage your tasks",
+      "title": "Tasks"
+    },
+    "transactions": {
+      "description": "Manage your income and expenses",
+      "title": "Transactions"
+    },
+    "users": {
+      "description": "Manage team members",
+      "title": "Users"
+    }
+  },
   "accounts": {
     "addAccount": "Add Account",
     "card": {
@@ -634,8 +724,6 @@
     "yes": "Yes"
   },
   "dashboard": {
-    "balance": "Total Balance",
-    "cashflow": "Cash Flow",
     "ChartArea": {
       "currentBalance": "Current balance in period:",
       "description": "Track income, expenses and balance evolution in the selected interval",
@@ -643,7 +731,6 @@
       "loadError": "Could not load the chart.",
       "title": "Period Cash Flow"
     },
-    "dailyMovement": "Daily Movement",
     "DailyMovement": {
       "accumulated": "ACCUMULATED",
       "balance": "BALANCE",
@@ -659,8 +746,6 @@
       "noMovement": "No movement in period",
       "title": "Daily Movement"
     },
-    "expenses": "Expenses",
-    "expensesByGroup": "Expenses by Group",
     "ExpensesChart": {
       "description": "Expense distribution in the selected period",
       "loading": "Loading...",
@@ -671,8 +756,6 @@
       "total": "Total:",
       "totalExpenses": "Total expenses:"
     },
-    "income": "Income",
-    "latestTransactions": "Latest Transactions",
     "LatestTransactions": {
       "description": "Track recent payments",
       "loadError": "Failed to load data",
@@ -680,7 +763,6 @@
       "noTransactions": "No payments in period",
       "title": "Latest Payments"
     },
-    "savings": "Savings",
     "SectionCards": {
       "balance": "Balance",
       "balanceFooter": "Consolidated balance",
@@ -692,16 +774,24 @@
       "savingsFooter": "Monthly savings",
       "vsPreviousMonth": "vs previous month"
     },
-    "subtitle": "Overview of your financial health",
-    "title": "Dashboard",
-    "upcomingTransactions": "Upcoming Due Dates",
     "UpcomingTransactions": {
       "description": "Track upcoming income and expenses",
       "loadError": "Failed to load data",
       "loading": "Loading...",
       "noTransactions": "No due dates in period",
       "title": "Upcoming Due Dates"
-    }
+    },
+    "balance": "Total Balance",
+    "cashflow": "Cash Flow",
+    "dailyMovement": "Daily Movement",
+    "expenses": "Expenses",
+    "expensesByGroup": "Expenses by Group",
+    "income": "Income",
+    "latestTransactions": "Latest Transactions",
+    "savings": "Savings",
+    "subtitle": "Overview of your financial health",
+    "title": "Dashboard",
+    "upcomingTransactions": "Upcoming Due Dates"
   },
   "faqs": {
     "allCategoryLabel": "All",
@@ -739,6 +829,11 @@
     "settings": {
       "baseMonthLabel": "Actual Base Month",
       "modeLabel": "Basis",
+      "modeOptions": {
+        "accrual": "Accrual",
+        "cash": "Cash"
+      },
+      "modePlaceholder": "Select...",
       "modelLabel": "Predictive Engine",
       "modelOptions": {
         "exponentialSmoothing": "Exponential Smoothing",
@@ -746,11 +841,6 @@
         "straightLine": "Straight Line (Trend)"
       },
       "modelPlaceholder": "Mathematical Model",
-      "modeOptions": {
-        "accrual": "Accrual",
-        "cash": "Cash"
-      },
-      "modePlaceholder": "Select...",
       "showAhLabel": "Horizontal Analysis (HA)",
       "showAvLabel": "Vertical Analysis (VA)"
     },
@@ -821,9 +911,9 @@
       "editDateTooltip": "Edit date of selected items",
       "launch": "Launch",
       "launchDescription": "Confirm launching {count, plural, one {# recurrence} other {# recurrences}}?",
-      "launching": "Launching...",
       "launchTitle": "Launch Transactions",
       "launchTooltip": "Launch selected",
+      "launching": "Launching...",
       "saveDate": "Save date",
       "saving": "Saving...",
       "selectedCount": "{count, plural, one {# selected} other {# selected}}"
@@ -894,8 +984,8 @@
       "allTypes": "All types",
       "apply": "Apply",
       "clear": "Clear",
-      "filtersButton": "Filters",
       "filterSheetTitle": "Filter Recurrences",
+      "filtersButton": "Filters",
       "searchPlaceholderDesktop": "Smart search...",
       "searchPlaceholderMobile": "Search...",
       "typeFieldLabel": "Type"
@@ -921,96 +1011,6 @@
       "launchError": "Failed to launch recurring transaction",
       "launchSuccess": "Transaction launched successfully",
       "requiredFields": "Fill in all required fields"
-    }
-  },
-  "Routes": {
-    "analysis": {
-      "description": "Performance reports and metrics",
-      "title": "Analysis"
-    },
-    "banks": {
-      "description": "Sync and manage your accounts",
-      "title": "Banks"
-    },
-    "budget": {
-      "description": "Financial planning and goals",
-      "title": "Budget"
-    },
-    "calendar": {
-      "description": "View your due dates and receipts",
-      "title": "Calendar"
-    },
-    "chat": {
-      "description": "Communicate with the team",
-      "title": "Chat"
-    },
-    "configuracoes": {
-      "description": "Manage your preferences",
-      "title": "Settings"
-    },
-    "dashboard": {
-      "description": "Overview of your finances",
-      "title": "Dashboard"
-    },
-    "default": {
-      "description": "Financial Acceleration",
-      "title": "WISEVEO"
-    },
-    "faqs": {
-      "description": "Frequently asked questions",
-      "title": "FAQs"
-    },
-    "forecasting": {
-      "description": "Financial projections and trends",
-      "title": "Forecasting"
-    },
-    "insights": {
-      "description": "Detailed analysis and trends",
-      "title": "Insights"
-    },
-    "mail": {
-      "description": "Inbox",
-      "title": "Mail"
-    },
-    "pricing": {
-      "description": "Subscription plans",
-      "title": "Pricing"
-    },
-    "recurring": {
-      "description": "Manage subscriptions and fixed bills",
-      "title": "Recurring"
-    },
-    "settings_billing": {
-      "description": "Manage your payments",
-      "title": "Billing"
-    },
-    "settings_components": {
-      "description": "System style guide",
-      "title": "Components"
-    },
-    "settings_connections": {
-      "description": "Integrations with other apps",
-      "title": "Connections"
-    },
-    "settings_notifications": {
-      "description": "Configure your alerts",
-      "title": "Notifications"
-    },
-    "setup": {
-      "description": "Configure your WISEVEO environment",
-      "title": "WISEVEO — Setup"
-    },
-    "tasks": {
-      "description": "Manage your tasks",
-      "title": "Tasks"
-    },
-    "transactions": {
-      "description": "Manage your income and expenses",
-      "title": "Transactions"
-    },
-    "users": {
-      "description": "Manage team members",
-      "title": "Users"
     }
   },
   "settings": {
@@ -1057,9 +1057,9 @@
     "adminUsers": {
       "active": "Active",
       "approve": "Approve",
-      "approved": "Approved",
       "approveError": "Could not approve the user.",
       "approveSuccess": "User approved successfully.",
+      "approved": "Approved",
       "approving": "Approving...",
       "colAction": "Action",
       "colDate": "Registered",
@@ -1133,9 +1133,9 @@
       "globalPrefs": "Global Preferences",
       "globalPrefsDesc": "These options affect cards, tables, charts, and financial summaries.",
       "minus": "With a minus sign",
+      "negValue": "Negative value",
       "negativeFormat": "Negative Values",
       "negativeFormatDesc": "Choose how outflows, losses, and other negative values will be shown.",
-      "negValue": "Negative value",
       "number": "Number only",
       "parentheses": "In parentheses",
       "posValue": "Positive value",
@@ -1441,8 +1441,13 @@
       "trigger": "Add Task"
     },
     "columns": {
+      "category": "Category",
+      "priority": "Priority",
       "selectAllAria": "Select all",
-      "selectRowAria": "Select row"
+      "selectRowAria": "Select row",
+      "status": "Status",
+      "task": "Task",
+      "title": "Title"
     },
     "filter": {
       "clearFilters": "Clear filters",
@@ -1622,8 +1627,8 @@
     "billing": {
       "availablePlansDescription": "Choose a plan that works best for you.",
       "availablePlansTitle": "Available Plans",
-      "currentlyOnPlan": "You are currently on the {plan}.",
       "currentPlanTitle": "Current Plan",
+      "currentlyOnPlan": "You are currently on the {plan}.",
       "daysLabel": "Days",
       "daysOfTotal": "{used} of {total} Days",
       "daysRemaining": "{days} days remaining until your plan requires update",
@@ -1854,9 +1859,9 @@
       "clear": "Clear",
       "copy": "Copy",
       "copyDescription": "Set the date for the new records for {count, plural, one {# selected transaction} other {# selected transactions}}.",
-      "copying": "Copying...",
       "copyTitle": "Batch Copy Transactions",
       "copyTooltip": "Copy Transactions",
+      "copying": "Copying...",
       "creating": "Creating...",
       "dateLabel": "Date",
       "delete": "Delete",
@@ -1948,8 +1953,8 @@
         "someFilesFailed": "Some files failed: {errors}",
         "title": "Attachments",
         "uploadError": "Failed to upload attachments",
-        "uploading": "Uploading...",
-        "uploadSuccess": "{count, plural, one {# attachment uploaded} other {# attachments uploaded}} successfully!"
+        "uploadSuccess": "{count, plural, one {# attachment uploaded} other {# attachments uploaded}} successfully!",
+        "uploading": "Uploading..."
       },
       "deleteConfirm": {
         "confirmText": "Are you sure you want to delete this transaction?",
@@ -1967,10 +1972,10 @@
       "messages": {
         "deleteAction": "Delete message",
         "deleteConfirmText": "This message will be permanently removed.",
-        "deleted": "Delete",
-        "deletedSuccess": "Message deleted",
         "deleteError": "Failed to delete message",
         "deleteTitle": "Delete Message",
+        "deleted": "Delete",
+        "deletedSuccess": "Message deleted",
         "deleting": "Deleting...",
         "emptyMessageError": "Type a message before sending",
         "loadError": "Failed to load messages",
@@ -2049,8 +2054,8 @@
       "apply": "Apply",
       "clear": "Clear",
       "clearFiltersButton": "Clear filters",
-      "filtersButton": "Filters",
       "filterSheetTitle": "Filter Transactions",
+      "filtersButton": "Filters",
       "searchPlaceholderDesktop": "Smart search...",
       "searchPlaceholderMobile": "Search...",
       "statusFieldLabel": "Status",
@@ -2116,8 +2121,8 @@
       }
     },
     "toasts": {
-      "attachmentsOpened": "Attachment manager opened",
       "attachmentsOpenError": "Failed to open transaction attachments",
+      "attachmentsOpened": "Attachment manager opened",
       "batchCopyError": "Failed to copy the selected transactions",
       "batchCopyPartial": "{succeeded} succeeded and {failed} failed",
       "batchCopySuccess": "{count, plural, one {# transaction copied} other {# transactions copied}}",
@@ -2136,12 +2141,12 @@
       "batchQuickPayError": "Failed to apply quick pay to the selected transactions",
       "batchQuickPayPartial": "{succeeded} processed and {failed} failed",
       "batchQuickPaySuccess": "{count, plural, one {# transaction updated} other {# transactions updated}} with quick pay",
-      "copyOpened": "Transaction copy opened",
       "copyOpenError": "Failed to open transaction copy",
+      "copyOpened": "Transaction copy opened",
       "deleteError": "Failed to delete transaction",
       "deleteSuccess": "Transaction deleted successfully",
-      "editOpened": "Transaction edit opened",
       "editOpenError": "Failed to open transaction edit",
+      "editOpened": "Transaction edit opened",
       "quickPayError": "Failed to process quick pay",
       "quickPaySuccess": "Quick pay processed successfully",
       "recurringError": "Failed to create recurring transaction",
@@ -2189,8 +2194,8 @@
       "totalUsers": "Total Users"
     },
     "table": {
-      "columns": "Columns",
       "columnVisibility": "Column Visibility",
+      "columns": "Columns",
       "deleteUser": "Delete User",
       "editUser": "Edit user",
       "export": "Export",
@@ -2201,8 +2206,8 @@
       "resetPassword": "Reset Password",
       "searchPlaceholder": "Search users...",
       "selectAllAria": "Select all",
-      "selectedOfTotal": "{selected} of {total} row(s) selected.",
       "selectRowAria": "Select row",
+      "selectedOfTotal": "{selected} of {total} row(s) selected.",
       "sendEmail": "Send Email",
       "show": "Show",
       "viewDetails": "View Details",
