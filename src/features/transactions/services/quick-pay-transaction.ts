@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { getUserQuickPaymentSettings } from "@/features/settings/services/user-settings-service"
 import { prisma } from "@/lib/prisma"
 
@@ -10,6 +11,7 @@ export async function quickPayTransaction(
   id: string,
   userId: string
 ): Promise<QuickPayResult> {
+  const t = await getTranslations("transactions.services.quickPay")
   const quickPayment = await getUserQuickPaymentSettings(userId)
 
   if (
@@ -18,8 +20,7 @@ export async function quickPayTransaction(
   ) {
     return {
       success: false,
-      error:
-        "Configure os padrões de Pagamento Rápido em Configurações > Geral antes de usar esta função.",
+      error: t("missingDefaults"),
     }
   }
 
@@ -48,12 +49,11 @@ export async function quickPayTransaction(
   if (!account || !status) {
     return {
       success: false,
-      error:
-        "Os padrões de Pagamento Rápido salvos não são mais válidos. Atualize Configurações > Geral antes de continuar.",
+      error: t("invalidDefaults"),
     }
   }
 
-  if (!tx) return { success: false, error: "Transação não encontrada" }
+  if (!tx) return { success: false, error: t("transactionNotFound") }
 
   await prisma.transaction.update({
     where: { id },

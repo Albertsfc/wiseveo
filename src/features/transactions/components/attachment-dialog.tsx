@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { Paperclip, Upload, FileText, ImageIcon, Eye, Download, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 import {
   Dialog,
@@ -64,6 +65,9 @@ export function AttachmentDialog({
   onClose,
 }: AttachmentDialogProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.dialogs.attachments")
+  const tDialogs = useTranslations("transactions.dialogs")
+  const tCommon = useTranslations("common")
   const [attachments, setAttachments] = useState<Attachment[]>([])
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -83,11 +87,11 @@ export function AttachmentDialog({
         setAttachments(data.attachments ?? [])
       }
     } catch {
-      toast.error("Erro ao carregar anexos")
+      toast.error(t("loadError"))
     } finally {
       setLoading(false)
     }
-  }, [transaction])
+  }, [transaction, t])
 
   useEffect(() => {
     if (transaction) {
@@ -103,11 +107,11 @@ export function AttachmentDialog({
     const validFiles: File[] = []
     for (const file of Array.from(files)) {
       if (!ALLOWED_MIME.includes(file.type)) {
-        toast.error(`${file.name}: tipo não permitido`)
+        toast.error(t("fileTypeNotAllowed", { fileName: file.name }))
         continue
       }
       if (file.size > MAX_FILE_SIZE) {
-        toast.error(`${file.name}: excede 3 MB`)
+        toast.error(t("fileTooLarge", { fileName: file.name }))
         continue
       }
       validFiles.push(file)
@@ -128,18 +132,16 @@ export function AttachmentDialog({
       if (res.ok) {
         const data = await res.json()
         if (data.errors?.length) {
-          toast.warning(`Alguns arquivos falharam: ${data.errors.join(", ")}`)
+          toast.warning(t("someFilesFailed", { errors: data.errors.join(", ") }))
         } else {
-          toast.success(
-            `${validFiles.length} anexo(s) enviado(s) com sucesso!`
-          )
+          toast.success(t("uploadSuccess", { count: validFiles.length }))
         }
         fetchAttachments()
       } else {
-        toast.error("Erro ao enviar anexos")
+        toast.error(t("uploadError"))
       }
     } catch {
-      toast.error("Erro ao enviar anexos")
+      toast.error(t("uploadError"))
     } finally {
       setUploading(false)
       if (fileInputRef.current) fileInputRef.current.value = ""
@@ -150,7 +152,7 @@ export function AttachmentDialog({
     if (!transaction) return
 
     if (!isPreviewableMime(attachment.mimeType)) {
-      toast.error("Visualização indisponível para este tipo de arquivo. Use baixar.")
+      toast.error(t("previewUnavailable"))
       return
     }
 
@@ -168,9 +170,9 @@ export function AttachmentDialog({
       document.body.appendChild(link)
       link.click()
       link.remove()
-      toast.success("Download iniciado")
+      toast.success(t("downloadStarted"))
     } catch {
-      toast.error("Erro ao iniciar download do anexo")
+      toast.error(t("downloadError"))
     }
   }
 
@@ -189,14 +191,14 @@ export function AttachmentDialog({
       )
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
-        toast.error(data.error || "Erro ao excluir anexo")
+        toast.error(data.error || t("deleteError"))
         return
       }
-      toast.success("Anexo excluído com sucesso")
+      toast.success(t("deleteSuccess"))
       setAttachments((prev) => prev.filter((item) => item.id !== attachmentToDelete.id))
       setAttachmentToDelete(null)
     } catch {
-      toast.error("Erro ao excluir anexo")
+      toast.error(t("deleteError"))
     } finally {
       setDeleting(false)
     }
@@ -208,20 +210,20 @@ export function AttachmentDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Paperclip className="h-4 w-4" />
-            Anexos
+            {t("title")}
           </DialogTitle>
           <DialogDescription>
-            {transaction?.note || "Transação"} —{" "}
+            {transaction?.note || tDialogs("transactionFallback")} —{" "}
             {transaction ? monetary.formatMonetaryValue(transaction.amount) : ""}
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-3">
           {loading ? (
-            <p className="text-sm text-muted-foreground">Carregando...</p>
+            <p className="text-sm text-muted-foreground">{tCommon("loading")}</p>
           ) : attachments.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              Nenhum anexo encontrado.
+              {t("noAttachments")}
             </p>
           ) : (
             <ul className="space-y-2">
@@ -246,10 +248,10 @@ export function AttachmentDialog({
                       size="icon"
                       className="h-7 w-7 shrink-0"
                       onClick={() => handleOpenAttachment(att)}
-                      title={isPreviewableMime(att.mimeType) ? "Visualizar anexo" : "Abrir anexo"}
+                      title={isPreviewableMime(att.mimeType) ? t("previewAction") : t("openAction")}
                     >
                       <Eye className="h-4 w-4" />
-                      <span className="sr-only">Visualizar anexo</span>
+                      <span className="sr-only">{t("previewAction")}</span>
                     </Button>
                     <Button
                       type="button"
@@ -257,10 +259,10 @@ export function AttachmentDialog({
                       size="icon"
                       className="h-7 w-7 shrink-0"
                       onClick={() => handleDownloadAttachment(att)}
-                      title="Baixar anexo"
+                      title={t("downloadAction")}
                     >
                       <Download className="h-4 w-4" />
-                      <span className="sr-only">Baixar anexo</span>
+                      <span className="sr-only">{t("downloadAction")}</span>
                     </Button>
                     <Button
                       type="button"
@@ -269,10 +271,10 @@ export function AttachmentDialog({
                       className="h-7 w-7 shrink-0 text-destructive hover:text-destructive"
                       disabled={deleting}
                       onClick={() => setAttachmentToDelete(att)}
-                      title="Excluir anexo"
+                      title={t("deleteAction")}
                     >
                       <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Excluir anexo</span>
+                      <span className="sr-only">{t("deleteAction")}</span>
                     </Button>
                   </div>
                 </li>
@@ -312,10 +314,10 @@ export function AttachmentDialog({
             >
               <Upload className="mx-auto h-5 w-5 text-muted-foreground" />
               <p className="mt-2 text-sm font-medium">
-                Arraste e solte arquivos aqui
+                {t("dropHintTitle")}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                ou clique para selecionar (imagens e PDF, ate 3 MB)
+                {t("dropHintSubtitle")}
               </p>
             </div>
             <input
@@ -336,7 +338,7 @@ export function AttachmentDialog({
               onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="mr-2 h-4 w-4" />
-              {uploading ? "Enviando..." : "Adicionar Anexo"}
+              {uploading ? t("uploading") : t("addButton")}
             </Button>
           </div>
         </div>
@@ -349,7 +351,7 @@ export function AttachmentDialog({
         <DialogContent className="inset-0 left-0 top-0 h-[100dvh] w-[100dvw] max-h-none max-w-none translate-x-0 translate-y-0 gap-0 rounded-none border-0 p-0 sm:max-w-none">
           <DialogHeader className="shrink-0 border-b px-4 py-3">
             <DialogTitle className="truncate">
-              {previewAttachment?.fileName ?? "Visualizar anexo"}
+              {previewAttachment?.fileName ?? t("previewFallbackTitle")}
             </DialogTitle>
             <DialogDescription className="text-xs">
               {previewAttachment
@@ -376,7 +378,7 @@ export function AttachmentDialog({
                 />
               ) : (
                 <div className="flex h-full items-center justify-center rounded-md border bg-background p-4 text-center text-sm text-muted-foreground">
-                  Tipo de arquivo sem preview embutido. Use o download para abrir localmente.
+                  {t("noPreviewAvailable")}
                 </div>
               )
             ) : null}
@@ -384,7 +386,7 @@ export function AttachmentDialog({
 
           <DialogFooter className="shrink-0 border-t px-4 py-3 sm:justify-between">
             <div className="text-xs text-muted-foreground">
-              Preview do anexo
+              {t("previewLabel")}
             </div>
             <Button
               type="button"
@@ -392,7 +394,7 @@ export function AttachmentDialog({
               onClick={() => previewAttachment && handleDownloadAttachment(previewAttachment)}
             >
               <Download className="mr-2 h-4 w-4" />
-              Baixar Anexo
+              {t("downloadButton")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -404,9 +406,9 @@ export function AttachmentDialog({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir Anexo</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir este anexo?
+              {t("deleteConfirmText")}
               {attachmentToDelete && (
                 <span className="mt-2 block text-foreground">
                   {attachmentToDelete.fileName}
@@ -415,13 +417,13 @@ export function AttachmentDialog({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleting}>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               disabled={deleting}
               onClick={() => void handleConfirmDeleteAttachment()}
             >
-              {deleting ? "Excluindo..." : "Excluir"}
+              {deleting ? t("deleting") : tCommon("delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

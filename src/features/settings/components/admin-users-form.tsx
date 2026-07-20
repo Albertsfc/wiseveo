@@ -21,7 +21,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { AdminUserSummary } from "../services/admin-users-service"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { createDateFormatter } from "@/i18n/format"
 
 interface AdminUsersFormProps {
   initialUsers: AdminUserSummary[]
@@ -53,11 +54,12 @@ function roleBadge(role: AdminUserSummary["role"]) {
     )
   }
 
+  // i18n-ignore: role enum code rendered as-is, consistent with the raw {role} badge above
   return <Badge variant="outline">USER</Badge>
 }
 
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat("pt-BR", {
+function formatDate(value: string, locale: string) {
+  return createDateFormatter(locale, {
     dateStyle: "short",
     timeStyle: "short",
   }).format(new Date(value))
@@ -65,6 +67,7 @@ function formatDate(value: string) {
 
 export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
   const t = useTranslations("settings.adminUsers")
+  const locale = useLocale()
   const [users, setUsers] = React.useState(initialUsers)
   const [approvingId, setApprovingId] = React.useState<string | null>(null)
   const pendingCount = users.filter((user) => user.status === "PENDING").length
@@ -144,7 +147,7 @@ export function AdminUsersForm({ initialUsers }: AdminUsersFormProps) {
                       <TableCell>{statusBadge(user.status, t)}</TableCell>
                       <TableCell>{roleBadge(user.role)}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {formatDate(user.createdAt)}
+                        {formatDate(user.createdAt, locale)}
                       </TableCell>
                       <TableCell className="text-right">
                         {user.status === "PENDING" ? (

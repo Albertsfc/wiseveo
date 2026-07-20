@@ -1,7 +1,9 @@
 "use client"
 
+import { useLocale, useTranslations } from "next-intl"
 import { Checkbox } from "@/components/ui/checkbox"
 import { cn } from "@/lib/utils"
+import { createDateFormatter } from "@/i18n/format"
 import type { SerializedTransaction } from "../types"
 import { TransactionActions } from "./transaction-actions"
 import { StatusDot } from "../../shared/components/status-dot"
@@ -34,11 +36,13 @@ export function TransactionCardMobile({
   onAttachments,
   onNotes,
 }: TransactionCardMobileProps) {
+  const t = useTranslations("transactions.card")
+  const locale = useLocale()
   const amountColor = transaction.amount < 0 ? "text-destructive" : "text-chart-2"
-  
+
   // Format date as dd/MM
   const dateStr = transaction.date
-  const formattedDate = new Intl.DateTimeFormat("pt-BR", {
+  const formattedDate = createDateFormatter(locale, {
     day: "2-digit",
     month: "2-digit",
     timeZone: "UTC",
@@ -95,7 +99,7 @@ export function TransactionCardMobile({
           {/* Row 3: Group > Category */}
           <div className="mt-1 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">
             <span>{transaction.category.group.name}</span>
-            <span className="opacity-50">&gt;</span>
+            <span className="opacity-50">{">"}</span>
             <span className="text-muted-foreground/70 font-medium normal-case tracking-normal text-[11px]">{transaction.category.name}</span>
           </div>
 
@@ -103,13 +107,13 @@ export function TransactionCardMobile({
           <div className="mt-1 flex items-center gap-3 text-[11px] text-muted-foreground/60 font-medium">
             {transaction.period && (
               <div className="flex items-center gap-1">
-                <span className="uppercase font-bold text-[10px] opacity-70">Período:</span>
+                <span className="uppercase font-bold text-[10px] opacity-70">{t("periodLabel")}</span>
                 <span>{transaction.period}</span>
               </div>
             )}
             {transaction.reference && (
               <div className="flex items-center gap-1">
-                <span className="uppercase font-bold text-[10px] opacity-70">REF:</span>
+                <span className="uppercase font-bold text-[10px] opacity-70">{t("refLabel")}</span>
                 <span className="truncate max-w-[120px]">{transaction.reference}</span>
               </div>
             )}

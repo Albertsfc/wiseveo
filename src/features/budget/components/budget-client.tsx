@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useTransition, useEffect, useRef } from "react"
+import { useTranslations } from "next-intl"
 import {
   DndContext,
   closestCenter,
@@ -37,6 +38,7 @@ interface BudgetClientProps {
 }
 
 export function BudgetClient({ data: initialData }: BudgetClientProps) {
+  const t = useTranslations("budget")
   const { dateRange } = useDateRange()
   const [data, setData] = useState<BudgetPageData>(initialData)
   const [items, setItems] = useState(data.items)
@@ -63,7 +65,7 @@ export function BudgetClient({ data: initialData }: BudgetClientProps) {
           to: dateRange.to.toISOString(),
         })
         const res = await fetch(`/api/budget?${params}`, { cache: "no-store" })
-        if (!res.ok) throw new Error("Erro ao buscar dados do orçamento")
+        if (!res.ok) throw new Error("Failed to fetch budget data") // i18n-ignore: mensagem interna de Error, só logada (console.error), nunca exibida ao usuário
         const newData = await res.json()
         
         if (requestId !== latestRequestRef.current) return
@@ -154,12 +156,12 @@ export function BudgetClient({ data: initialData }: BudgetClientProps) {
       <div className={`px-4 lg:px-6 transition-opacity duration-200 ${loading ? "opacity-50" : ""}`}>
         {isPending && (
           <p className="text-xs text-muted-foreground animate-pulse mb-2">
-            Salvando ordem...
+            {t("client.savingOrder")}
           </p>
         )}
         {loading && (
           <p className="text-xs text-muted-foreground animate-pulse mb-2">
-            Atualizando orçamento...
+            {t("client.updatingBudget")}
           </p>
         )}
         <DndContext

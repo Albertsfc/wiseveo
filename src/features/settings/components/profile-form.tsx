@@ -164,6 +164,7 @@ export function ProfileForm() {
               ) : (
                 <Avatar className="h-20 w-20 rounded-lg">
                   <AvatarImage src={profileImage || undefined} />
+                  {/* i18n-ignore: avatar fallback initials, not language-dependent */}
                   <AvatarFallback>AF</AvatarFallback>
                 </Avatar>
               )}
@@ -364,10 +365,10 @@ export function ProfileForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="brt">BRT (Brasília Time)</SelectItem>
-                        <SelectItem value="utc">UTC (Coordinated Universal Time)</SelectItem>
-                        <SelectItem value="pst">PST (Pacific Standard Time)</SelectItem>
-                        <SelectItem value="est">EST (Eastern Standard Time)</SelectItem>
+                        <SelectItem value="brt">{t("tzBrt")}</SelectItem>
+                        <SelectItem value="utc">{t("tzUtc")}</SelectItem>
+                        <SelectItem value="pst">{t("tzPst")}</SelectItem>
+                        <SelectItem value="est">{t("tzEst")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

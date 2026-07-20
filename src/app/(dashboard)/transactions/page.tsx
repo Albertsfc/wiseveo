@@ -1,4 +1,5 @@
 import { startOfMonth, endOfMonth } from "date-fns"
+import { getTranslations } from "next-intl/server"
 
 import { getTransactions } from "@/features/transactions/services/get-transactions"
 import { getFormOptions } from "@/features/transactions/services/get-form-options"
@@ -11,10 +12,11 @@ export default async function TransactionsPage() {
   const userId = await getDefaultUserId()
 
   if (!userId) {
+    const t = await getTranslations("common")
     return (
       <div className="flex items-center justify-center h-96 px-4 md:px-6">
         <p className="text-muted-foreground">
-          Nenhum usuário encontrado. Faça login para ver suas transações.
+          {t("noUserFound")}
         </p>
       </div>
     )

@@ -17,6 +17,7 @@ import { useLoginForm } from "../hooks/useLoginForm"
 import { useSignupForm } from "../hooks/useSignupForm"
 import { useState } from "react"
 import { useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { LocaleSwitcher } from "@/components/locale-switcher"
 
 function GoogleIcon() {
@@ -43,6 +44,7 @@ function GoogleIcon() {
 }
 
 function LoginTabContent({ showGoogle }: { showGoogle: boolean }) {
+  const t = useTranslations("auth")
   const {
     formData,
     errors,
@@ -70,7 +72,7 @@ function LoginTabContent({ showGoogle }: { showGoogle: boolean }) {
       <form onSubmit={handleSubmit}>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="login-email">Email</FieldLabel>
+            <FieldLabel htmlFor="login-email">{t("email")}</FieldLabel>
             <Input
               id="login-email"
               type="email"
@@ -88,12 +90,12 @@ function LoginTabContent({ showGoogle }: { showGoogle: boolean }) {
           </Field>
           <Field>
             <div className="flex items-center">
-              <FieldLabel htmlFor="login-password">Senha</FieldLabel>
+              <FieldLabel htmlFor="login-password">{t("password")}</FieldLabel>
               <a
                 href="#"
                 className="ml-auto text-sm underline-offset-4 hover:underline"
               >
-                Esqueceu a senha?
+                {t("login.forgotPassword")}
               </a>
             </div>
             <Input
@@ -112,12 +114,12 @@ function LoginTabContent({ showGoogle }: { showGoogle: boolean }) {
           </Field>
           <Field>
             <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Entrando..." : "Entrar"}
+              {isSubmitting ? t("login.loggingIn") : t("login.button")}
             </Button>
           </Field>
           {showGoogle && (
             <>
-              <FieldSeparator>Ou continue com</FieldSeparator>
+              <FieldSeparator>{t("orContinueWith")}</FieldSeparator>
               <Field>
                 <Button
                   variant="outline"
@@ -128,7 +130,7 @@ function LoginTabContent({ showGoogle }: { showGoogle: boolean }) {
                   }}
                 >
                   <GoogleIcon />
-                  Continuar com Google
+                  {t("google")}
                 </Button>
               </Field>
             </>
@@ -140,6 +142,7 @@ function LoginTabContent({ showGoogle }: { showGoogle: boolean }) {
 }
 
 function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
+  const t = useTranslations("auth")
   const {
     formData,
     confirmPassword,
@@ -169,11 +172,11 @@ function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
       <form onSubmit={handleSubmit}>
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="signup-name">Nome completo</FieldLabel>
+            <FieldLabel htmlFor="signup-name">{t("signup.fullName")}</FieldLabel>
             <Input
               id="signup-name"
               type="text"
-              placeholder="Seu nome"
+              placeholder={t("signup.namePlaceholder")}
               required
               value={formData.name}
               onChange={(e) => handleChange("name", e.target.value)}
@@ -186,7 +189,7 @@ function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
             )}
           </Field>
           <Field>
-            <FieldLabel htmlFor="signup-email">Email</FieldLabel>
+            <FieldLabel htmlFor="signup-email">{t("email")}</FieldLabel>
             <Input
               id="signup-email"
               type="email"
@@ -203,7 +206,7 @@ function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
             )}
           </Field>
           <Field>
-            <FieldLabel htmlFor="signup-password">Senha</FieldLabel>
+            <FieldLabel htmlFor="signup-password">{t("password")}</FieldLabel>
             <Input
               id="signup-password"
               type="password"
@@ -219,7 +222,7 @@ function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
             )}
           </Field>
           <Field>
-            <FieldLabel htmlFor="signup-confirm">Confirmar senha</FieldLabel>
+            <FieldLabel htmlFor="signup-confirm">{t("signup.confirmPassword")}</FieldLabel>
             <Input
               id="signup-confirm"
               type="password"
@@ -236,12 +239,12 @@ function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
           </Field>
           <Field>
             <Button type="submit" className="w-full" disabled={isSubmitting}>
-              {isSubmitting ? "Criando conta..." : "Criar conta"}
+              {isSubmitting ? t("signup.creatingAccount") : t("signup.button")}
             </Button>
           </Field>
           {showGoogle && (
             <>
-              <FieldSeparator>Ou continue com</FieldSeparator>
+              <FieldSeparator>{t("orContinueWith")}</FieldSeparator>
               <Field>
                 <Button
                   variant="outline"
@@ -252,7 +255,7 @@ function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
                   }}
                 >
                   <GoogleIcon />
-                  Continuar com Google
+                  {t("google")}
                 </Button>
               </Field>
             </>
@@ -264,19 +267,21 @@ function SignupTabContent({ showGoogle }: { showGoogle: boolean }) {
 }
 
 function GoogleErrorMessage({ error }: { error: string | null }) {
+  const t = useTranslations("auth")
+
   if (!error) return null
 
   const messages: Record<string, string> = {
-    google_denied: "Acesso ao Google foi negado.",
-    invalid_state: "Erro de segurança. Tente novamente.",
-    no_code: "Erro na autenticação com Google. Tente novamente.",
-    google_failed: "Falha ao conectar com Google. Tente novamente.",
-    google_not_configured: "Autenticação via Google não está configurada neste servidor.",
+    google_denied: t("errors.google.denied"),
+    invalid_state: t("errors.google.invalidState"),
+    no_code: t("errors.google.noCode"),
+    google_failed: t("errors.google.failed"),
+    google_not_configured: t("errors.google.notConfigured"),
   }
 
   return (
     <div className="rounded-md bg-red-50 p-3 text-center text-sm text-red-700 dark:bg-red-900/20 dark:text-red-400">
-      {messages[error] || "Erro na autenticação. Tente novamente."}
+      {messages[error] || t("errors.genericAuth")}
     </div>
   )
 }
@@ -290,6 +295,7 @@ export function AuthPage({
   showGoogle = false,
   ...props
 }: AuthPageProps) {
+  const t = useTranslations("auth")
   const [activeTab, setActiveTab] = useState("login")
   const searchParams = useSearchParams()
   const googleError = searchParams.get("error")
@@ -309,6 +315,7 @@ export function AuthPage({
             <div className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <Logo size={20} className="text-current" />
             </div>
+            {/* i18n-ignore: nome da marca, idêntico em todos os idiomas */}
             <span className="text-xl font-semibold">WISEVEO</span>
           </div>
           <LocaleSwitcher />
@@ -320,8 +327,8 @@ export function AuthPage({
           <CardContent className="pt-6">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="signup">Criar Conta</TabsTrigger>
+                <TabsTrigger value="login">{t("login.tab")}</TabsTrigger>
+                <TabsTrigger value="signup">{t("signup.tab")}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="login">
@@ -337,7 +344,7 @@ export function AuthPage({
 
         {showGoogle && (
           <p className="mt-4 text-center text-xs text-muted-foreground">
-            Ao conectar com Google, será possível sincronizar sua agenda (em breve)
+            {t("googleSyncNote")}
           </p>
         )}
       </div>

@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 import {Users, CreditCard, UserCheck, Clock5, TrendingUp, TrendingDown, ArrowUpRight} from "lucide-react"
+import { useTranslations } from "next-intl"
 import { Badge } from "@/components/ui/badge"
 import { formatPercentValue } from "@/lib/monetary"
 import { cn } from '@/lib/utils'
@@ -7,36 +8,38 @@ import { cn } from '@/lib/utils'
 
 const performanceMetrics = [
   {
-    title: 'Total Users',
+    titleKey: 'totalUsers',
     current: '2.4M',
     previous: '1.8M',
     growth: 33.3,
     icon: Users,
   },
   {
-    title: 'Paid Users',
+    titleKey: 'paidUsers',
     current: '12.5K',
     previous: '9.2K',
     growth: 35.9,
     icon: CreditCard,
   },
   {
-    title: 'Active Users',
+    titleKey: 'activeUsers',
     current: '8.9k',
     previous: '6.7k',
     growth: 32.8,
     icon: UserCheck,
   },
   {
-    title: 'Pending Users',
+    titleKey: 'pendingUsers',
     current: '17%',
     previous: '24%',
     growth: -8.0,
     icon: Clock5,
   },
-]
+] as const
 
 export function StatCards() {
+  const t = useTranslations("users.statCards")
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {performanceMetrics.map((metric, index) => (
@@ -67,10 +70,10 @@ export function StatCards() {
             </div>
 
             <div className='space-y-2'>
-              <p className='text-muted-foreground text-sm font-medium'>{metric.title}</p>
+              <p className='text-muted-foreground text-sm font-medium'>{t(metric.titleKey)}</p>
               <div className='text-2xl font-bold'>{metric.current}</div>
               <div className='text-muted-foreground flex items-center gap-2 text-sm'>
-                <span>from {metric.previous}</span>
+                <span>{t("fromPrevious", { previous: metric.previous })}</span>
                 <ArrowUpRight className='size-3' />
               </div>
             </div>

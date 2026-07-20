@@ -1,10 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { ProgressWithLabel } from "@/components/ui/progress-with-label"
 import { CalendarSync, Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { CALENDAR_SYNC_PHASE } from "../types"
 
 interface GoogleSyncButtonProps {
   from: string // "YYYY-MM-DD"
@@ -27,11 +29,9 @@ interface StreamPayload {
   result?: SyncResult
 }
 
-function compactSyncPhase(phase?: string): string {
-  if (!phase) return "Sincronizando"
-  if (phase.includes("Removendo")) return "Removendo antigos"
-  if (phase.includes("Sincronizando")) return "Sincronizando"
-  return phase
+async function parseErrorPayload(res: Response, fallback: string): Promise<string> {
+  const data = await res.json().catch(() => ({}))
+  return data.error || fallback
 }
 
 function parseSsePayload(block: string): StreamPayload | null {
@@ -55,61 +55,69 @@ function parseSsePayload(block: string): StreamPayload | null {
   return parsed as StreamPayload
 }
 
-async function readSyncStream(
-  res: Response,
-  onMessage: (payload: StreamPayload) => void,
-): Promise<SyncResult> {
-  if (!res.body) {
-    throw new Error("Resposta de sincronização sem stream")
-  }
-
-  const reader = res.body.getReader()
-  const decoder = new TextDecoder()
-  let buffer = ""
-
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
-
-    buffer += decoder.decode(value, { stream: true })
-
-    let separatorIndex = buffer.indexOf("\n\n")
-    while (separatorIndex !== -1) {
-      const chunk = buffer.slice(0, separatorIndex).trim()
-      buffer = buffer.slice(separatorIndex + 2)
-
-      const payload = parseSsePayload(chunk)
-      if (!payload) {
-        separatorIndex = buffer.indexOf("\n\n")
-        continue
-      }
-
-      onMessage(payload)
-
-      if (payload.type === "error") {
-        throw new Error(payload.message || "Erro ao sincronizar")
-      }
-
-      if (payload.type === "done" && payload.result) {
-        return payload.result
-      }
-
-      separatorIndex = buffer.indexOf("\n\n")
-    }
-  }
-
-  throw new Error("Sincronização encerrada sem resposta final")
-}
-
 export function GoogleSyncButton({ from, to }: GoogleSyncButtonProps) {
+  const t = useTranslations("calendar.googleSync")
   const [isSyncing, setIsSyncing] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [progressLabel, setProgressLabel] = useState("Preparando")
+  const [progressLabel, setProgressLabel] = useState(t("preparing"))
+
+  function compactSyncPhase(phase?: string): string {
+    if (!phase) return t("phaseSyncing")
+    if (phase.includes(CALENDAR_SYNC_PHASE.removingOld)) return t("phaseRemoving")
+    if (phase.includes(CALENDAR_SYNC_PHASE.syncingEvents)) return t("phaseSyncing")
+    return phase
+  }
+
+  async function readSyncStream(
+    res: Response,
+    onMessage: (payload: StreamPayload) => void,
+  ): Promise<SyncResult> {
+    if (!res.body) {
+      throw new Error(t("errors.noStream"))
+    }
+
+    const reader = res.body.getReader()
+    const decoder = new TextDecoder()
+    let buffer = ""
+
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      buffer += decoder.decode(value, { stream: true })
+
+      let separatorIndex = buffer.indexOf("\n\n")
+      while (separatorIndex !== -1) {
+        const chunk = buffer.slice(0, separatorIndex).trim()
+        buffer = buffer.slice(separatorIndex + 2)
+
+        const payload = parseSsePayload(chunk)
+        if (!payload) {
+          separatorIndex = buffer.indexOf("\n\n")
+          continue
+        }
+
+        onMessage(payload)
+
+        if (payload.type === "error") {
+          throw new Error(payload.message || t("errors.syncFailed"))
+        }
+
+        if (payload.type === "done" && payload.result) {
+          return payload.result
+        }
+
+        separatorIndex = buffer.indexOf("\n\n")
+      }
+    }
+
+    throw new Error(t("errors.noFinalResponse"))
+  }
 
   async function handleSync() {
     setIsSyncing(true)
     setProgress(0)
-    setProgressLabel("Preparando")
+    setProgressLabel(t("preparing"))
 
     try {
       const res = await fetch("/api/calendar/sync-google", {
@@ -119,8 +127,7 @@ export function GoogleSyncButton({ from, to }: GoogleSyncButtonProps) {
       })
 
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || "Falha na sincronização")
+        throw new Error(await parseErrorPayload(res, t("errors.syncFailed")))
       }
 
       let data: SyncResult
@@ -130,7 +137,7 @@ export function GoogleSyncButton({ from, to }: GoogleSyncButtonProps) {
         data = await readSyncStream(res, (payload) => {
           if (payload.type === "status") {
             setProgress(typeof payload.percent === "number" ? payload.percent : 0)
-            setProgressLabel("Preparando")
+            setProgressLabel(t("preparing"))
             return
           }
 
@@ -147,31 +154,23 @@ export function GoogleSyncButton({ from, to }: GoogleSyncButtonProps) {
       }
 
       const deletedMsg =
-        data.deleted > 0 ? ` (${data.deleted} antigo(s) substituído(s))` : ""
+        data.deleted > 0 ? ` (${t("toasts.replacedSuffix", { count: data.deleted })})` : ""
 
       if (data.errors > 0 && data.synced === 0) {
-        toast.error(
-          `Falha ao sincronizar: ${data.errors} erro(s). Verifique se a Google Calendar API está habilitada.`,
-        )
+        toast.error(t("toasts.failed", { count: data.errors }))
       } else if (data.errors > 0) {
         toast.warning(
-          `${data.synced} evento(s) sincronizado(s), ${data.errors} erro(s)${deletedMsg}`,
+          `${t("toasts.partial", { synced: data.synced, errors: data.errors })}${deletedMsg}`,
         )
       } else {
-        toast.success(
-          `${data.synced} evento(s) sincronizado(s)${deletedMsg}`,
-        )
+        toast.success(`${t("toasts.success", { count: data.synced })}${deletedMsg}`)
       }
     } catch (err) {
-      toast.error(
-        err instanceof Error
-          ? err.message
-          : "Erro ao sincronizar com Google Calendar",
-      )
+      toast.error(err instanceof Error ? err.message : t("errors.generic"))
     } finally {
       setIsSyncing(false)
       setProgress(0)
-      setProgressLabel("Preparando")
+      setProgressLabel(t("preparing"))
     }
   }
 
@@ -188,7 +187,7 @@ export function GoogleSyncButton({ from, to }: GoogleSyncButtonProps) {
         ) : (
           <CalendarSync className="h-4 w-4 mr-2" />
         )}
-        {isSyncing ? "Sincronizando..." : "Sincronizar com Google Calendar"}
+        {isSyncing ? t("syncing") : t("button")}
       </Button>
 
       {isSyncing && (

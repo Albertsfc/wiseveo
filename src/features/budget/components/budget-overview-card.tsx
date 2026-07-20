@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Shield, AlertTriangle, Flame } from "lucide-react"
 import {
   Card,
@@ -22,7 +23,7 @@ function getZoneInfo(pct: number) {
       bgColor: "bg-chart-2/15",
       borderColor: "border-chart-2/30",
       icon: <Shield className="h-3.5 w-3.5" />,
-      label: "Seguro",
+      labelKey: "safe" as const,
     }
   if (pct <= 80)
     return {
@@ -30,14 +31,14 @@ function getZoneInfo(pct: number) {
       bgColor: "bg-chart-4/15",
       borderColor: "border-chart-4/30",
       icon: <AlertTriangle className="h-3.5 w-3.5" />,
-      label: "Alerta",
+      labelKey: "warning" as const,
     }
   return {
     color: "text-destructive",
     bgColor: "bg-destructive/15",
     borderColor: "border-destructive/30",
     icon: <Flame className="h-3.5 w-3.5" />,
-    label: "Perigo",
+    labelKey: "danger" as const,
   }
 }
 
@@ -46,15 +47,16 @@ interface BudgetOverviewCardProps {
 }
 
 export function BudgetOverviewCard({ data }: BudgetOverviewCardProps) {
+  const t = useTranslations("budget")
   const { overallPct, items } = data
   const zone = getZoneInfo(overallPct)
 
   return (
     <Card className="@container/card h-full" style={{ background: "linear-gradient(to top, color-mix(in oklch, var(--primary) 5%, transparent), var(--card))" }}>
       <CardHeader>
-        <CardDescription>Resumo do Período</CardDescription>
+        <CardDescription>{t("overview.periodSummary")}</CardDescription>
         <CardTitle className="text-2xl font-semibold tabular-nums">
-          Visão Geral
+          {t("overview.title")}
         </CardTitle>
         <CardAction>
           <Badge
@@ -62,7 +64,7 @@ export function BudgetOverviewCard({ data }: BudgetOverviewCardProps) {
             className={`${zone.bgColor} ${zone.color} ${zone.borderColor}`}
           >
             {zone.icon}
-            <span className="ml-1">{zone.label}</span>
+            <span className="ml-1">{t(`zones.${zone.labelKey}`)}</span>
           </Badge>
         </CardAction>
       </CardHeader>
@@ -77,10 +79,10 @@ export function BudgetOverviewCard({ data }: BudgetOverviewCardProps) {
               <GradientProgressBar pct={overallPct} />
               <div className="flex justify-between">
                 <span className={`text-sm font-semibold tabular-nums ${zone.color}`}>
-                  {formatPercentValue(overallPct)} utilizado
+                  {t("overview.used", { value: formatPercentValue(overallPct) })}
                 </span>
                 <span className="text-xs text-muted-foreground font-medium">
-                  {items.length} {items.length === 1 ? "orçamento" : "orçamentos"}
+                  {t("overview.count", { count: items.length })}
                 </span>
               </div>
             </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useTranslations } from "next-intl"
 import { formatPercentValue } from "@/lib/monetary"
 
 const G_GREEN = "#22c55e"
@@ -13,6 +14,7 @@ interface GradientDoughnutProps {
 }
 
 export function GradientDoughnut({ pct, size = 160 }: GradientDoughnutProps) {
+  const t = useTranslations("budget")
   const [fillDeg, setFillDeg] = useState(0)
 
   useEffect(() => {
@@ -127,7 +129,7 @@ export function GradientDoughnut({ pct, size = 160 }: GradientDoughnutProps) {
             letterSpacing: "0.06em",
           }}
         >
-          gasto
+          {t("overview.spent")}
         </span>
       </div>
     </div>

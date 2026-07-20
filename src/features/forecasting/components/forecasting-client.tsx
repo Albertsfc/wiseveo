@@ -2,12 +2,14 @@
 
 import * as React from "react"
 import { useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { ForecastingSettings } from "./forecasting-settings"
 import { ForecastingDataTable } from "./data-table"
 import type { ForecastingData } from "../types"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export function ForecastingClient() {
+  const t = useTranslations("forecasting")
   const searchParams = useSearchParams()
   const baseDate = searchParams.get("baseDate") || (() => {
     const d = new Date()
@@ -37,11 +39,12 @@ export function ForecastingClient() {
           model,
         })
         const res = await fetch(`/api/forecasting?${params.toString()}`)
-        if (!res.ok) throw new Error("Falha ao carregar projeções")
+        if (!res.ok) throw new Error(t("client.fetchError"))
         const payload = await res.json()
         if (!isCancelled) setData(payload)
       } catch (err) {
-        if (!isCancelled) setError("Não foi possível carregar as projeções.")
+        console.error("Failed to fetch forecasting data:", err)
+        if (!isCancelled) setError(t("client.loadError"))
       } finally {
         if (!isCancelled) setLoading(false)
       }
@@ -50,7 +53,7 @@ export function ForecastingClient() {
     fetchData()
 
     return () => { isCancelled = true }
-  }, [baseDate, mode, model])
+  }, [baseDate, mode, model, t])
 
   return (
     <div className="flex flex-col gap-6">

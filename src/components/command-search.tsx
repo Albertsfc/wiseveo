@@ -209,7 +209,7 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="overflow-hidden p-0 shadow-2xl border border-zinc-200 dark:border-zinc-800 max-w-[640px]">
-        <DialogTitle className="sr-only">Command Search</DialogTitle>
+        <DialogTitle className="sr-only">{tCommon("commandSearchTitle")}</DialogTitle>
         <Command
           ref={commandRef}
           className="transition-transform duration-100 ease-out"
@@ -218,17 +218,17 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
           <CommandList>
             <CommandEmpty>{tCommon("noResults")}</CommandEmpty>
             {Object.entries(groupedItems).map(([groupId, items]) => (
-              <CommandGroup key={groupId} heading={tSidebar(groupId)}>
+              <CommandGroup key={groupId} heading={tSidebar(groupId as never)}>
                 {items.map((item) => {
                   const Icon = item.icon
                   return (
                     <CommandItem
                       key={item.url}
-                      value={tSidebar(item.id)}
+                      value={tSidebar(item.id as never)}
                       onSelect={() => handleSelect(item.url)}
                     >
                       {Icon && <Icon className="mr-2 h-4 w-4" />}
-                      {tSidebar(item.id)}
+                      {tSidebar(item.id as never)}
                     </CommandItem>
                   )
                 })}
@@ -252,6 +252,7 @@ export function SearchTrigger({ onClick }: { onClick: () => void }) {
       <span className="hidden lg:inline-flex">{tCommon("search")}</span>
       <span className="inline-flex lg:hidden">{tCommon("search")}</span>
       <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-4 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+        {/* i18n-ignore: physical keyboard key symbol (Cmd+K), identical across locales */}
         <span className="text-xs">⌘</span>K
       </kbd>
     </button>

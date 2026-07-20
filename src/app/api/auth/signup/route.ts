@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
 import { Prisma } from "@/generated/prisma_new/client"
 import { createSessionToken, COOKIE_NAME } from "@/lib/auth"
@@ -11,6 +12,8 @@ import {
 } from "@/lib/user-approval"
 
 export async function POST(request: Request) {
+  const t = await getTranslations("api.auth")
+
   try {
     const { name, email, password } = await request.json()
     const normalizedName = typeof name === "string" ? name.trim() : ""
@@ -18,14 +21,14 @@ export async function POST(request: Request) {
 
     if (!normalizedName || !normalizedEmail || !password) {
       return NextResponse.json(
-        { success: false, message: "Todos os campos são obrigatórios" },
+        { success: false, message: t("allFieldsRequired") },
         { status: 400 }
       )
     }
 
     if (password.length < 8) {
       return NextResponse.json(
-        { success: false, message: "Senha deve ter pelo menos 8 caracteres" },
+        { success: false, message: t("passwordTooShort") },
         { status: 400 }
       )
     }
@@ -40,7 +43,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             success: true,
-            message: "Seu cadastro já está aguardando aprovação.",
+            message: t("pendingApprovalExisting"),
             redirectTo: PENDING_APPROVAL_PATH,
           },
           { status: 200 }
@@ -48,7 +51,7 @@ export async function POST(request: Request) {
       }
 
       return NextResponse.json(
-        { success: false, message: "Esse email já foi registrado" },
+        { success: false, message: t("emailAlreadyRegistered") },
         { status: 409 }
       )
     }
@@ -76,7 +79,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: true,
-          message: "Cadastro recebido. Aguarde a aprovação de um administrador.",
+          message: t("signupReceived"),
           redirectTo: PENDING_APPROVAL_PATH,
         },
         { status: 201 }
@@ -86,7 +89,7 @@ export async function POST(request: Request) {
     const token = await createSessionToken(newUser.id)
 
     const response = NextResponse.json(
-      { success: true, message: "Conta criada com sucesso" },
+      { success: true, message: t("signupSuccess") },
       { status: 201 }
     )
 
@@ -103,16 +106,17 @@ export async function POST(request: Request) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       if (error.code === "P2002") {
         return NextResponse.json(
-          { success: false, message: "Esse email já foi registrado" },
+          { success: false, message: t("emailAlreadyRegistered") },
           { status: 409 }
         )
       }
     }
 
-    console.error("[POST /api/auth/signup] erro:", error)
+    console.error("[POST /api/auth/signup] error:", error)
 
+    const tErrors = await getTranslations("api.errors")
     return NextResponse.json(
-      { success: false, message: "Erro interno do servidor" },
+      { success: false, message: tErrors("internalError") },
       { status: 500 }
     )
   }

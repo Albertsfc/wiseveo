@@ -1,6 +1,7 @@
 "use client"
 
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -13,12 +14,14 @@ interface ImportModalProps {
 }
 
 export function ImportModal({ open, onOpenChange, onImport }: ImportModalProps) {
+  const t = useTranslations("themeCustomizer.importModal")
+  const tCommon = useTranslations("common")
   const [importText, setImportText] = React.useState("")
 
   const processImport = () => {
     try {
       if (!importText.trim()) {
-        console.error("Nenhum conteúdo CSS foi informado")
+        console.error(t("noCssContent"))
         return
       }
 
@@ -58,7 +61,7 @@ export function ImportModal({ open, onOpenChange, onImport }: ImportModalProps) 
       onOpenChange(false)
       setImportText("")
     } catch (error) {
-      console.error("Erro ao importar tema:", error)
+      console.error(t("importErrorLog"), error)
     }
   }
 
@@ -66,9 +69,9 @@ export function ImportModal({ open, onOpenChange, onImport }: ImportModalProps) 
     <Dialog open={open} onOpenChange={onOpenChange} modal={true}>
       <DialogContent className="max-w-4xl w-[90vw]">
         <DialogHeader>
-          <DialogTitle>Importar CSS Personalizado</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Cole abaixo o CSS do seu tema. Inclua as seções <code>:root</code> (modo claro) e <code>.dark</code> (modo escuro) com variáveis como <code>--primary</code>, <code>--background</code> e outras. O sistema alternará automaticamente entre claro e escuro.
+            {t.rich("description", { code: (chunks) => <code>{chunks}</code> })}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -94,10 +97,10 @@ export function ImportModal({ open, onOpenChange, onImport }: ImportModalProps) 
           </div>
           <div className="flex gap-2 justify-end">
             <Button variant="outline" onClick={() => onOpenChange(false)} className="cursor-pointer">
-              Cancelar
+              {tCommon("cancel")}
             </Button>
             <Button onClick={processImport} disabled={!importText.trim()} className="cursor-pointer">
-              Importar Tema
+              {t("importTheme")}
             </Button>
           </div>
         </div>

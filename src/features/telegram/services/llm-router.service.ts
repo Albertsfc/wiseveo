@@ -1,20 +1,29 @@
 import { generateText, stepCountIs } from "ai";
 import type { ToolSet } from "ai";
+import { DEFAULT_LOCALE, LOCALE_META, type AppLocale } from "@/i18n/config";
+import { formatAppDate } from "@/i18n/format";
 import type { CardData } from "../types/telegram.types";
 import type { HistoryMessage } from "./conversation-history.service";
 import { getLlmModels } from "./llm-models";
 
+// NOTE: processUserQuery below is not currently wired into any active bot
+// path — message-handler.service.ts drives the real flow via
+// classifyQuery + dispatchQuery + formatCard/generateAnalystResponse instead.
+// Kept for potential future use (single-pass LLM tool-calling loop); the
+// i18n-ignored fallback strings are internal parse-failure constants never
+// reached by a real Telegram user today.
+
 function parseCardData(text: string): CardData {
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
-    return { type: "error", headline: "Erro", insight: "Nao consegui estruturar a resposta." };
+    return { type: "error", headline: "Erro", insight: "Nao consegui estruturar a resposta." }; // i18n-ignore
   }
 
   const parsed = JSON.parse(jsonMatch[0]) as Partial<CardData>;
   const type = parsed.type ?? "summary";
 
   if (!["summary", "list", "category", "comparison", "single-value", "error"].includes(type)) {
-    return { type: "error", headline: "Erro", insight: "Tipo de card invalido retornado pelo modelo." };
+    return { type: "error", headline: "Erro", insight: "Tipo de card invalido retornado pelo modelo." }; // i18n-ignore
   }
 
   return {
@@ -35,13 +44,20 @@ function parseCardData(text: string): CardData {
   };
 }
 
-export async function processUserQuery(query: string, tools: ToolSet, history: HistoryMessage[] = []): Promise<CardData> {
+export async function processUserQuery(
+  query: string,
+  tools: ToolSet,
+  history: HistoryMessage[] = [],
+  locale: AppLocale = DEFAULT_LOCALE,
+): Promise<CardData> {
   const models = getLlmModels();
 
   const today = new Date()
   const todayStr = today.toISOString().slice(0, 10)
-  const currentMonthLabel = today.toLocaleString("pt-BR", { month: "long", year: "numeric" })
+  const currentMonthLabel = formatAppDate(today, "MMMM yyyy", locale)
 
+  // LLM system-prompt instructions (content, not UI copy); output language is
+  // enforced via the "Responda SEMPRE em" directive at the end. i18n-ignore
   const systemPrompt = `Você é o assistente financeiro do WISEVEO.
 Hoje é ${todayStr}. Mês atual: ${currentMonthLabel}.
 
@@ -76,7 +92,9 @@ REGRAS DE CONTEXTO:
 
 MENSAGENS NÃO-FINANCEIRAS:
 12. Para saudações, agradecimentos ou mensagens sem conteúdo financeiro, retorne SEMPRE este JSON (sem chamar tools):
-{"type":"single-value","headline":"WISEVEO Bot","insight":"Olá! Pode me perguntar sobre suas finanças. Exemplo: 'Quanto gastei em supermercado em janeiro?' ou 'Qual meu resumo de abril?'"}`
+{"type":"single-value","headline":"WISEVEO Bot","insight":"Olá! Pode me perguntar sobre suas finanças. Exemplo: 'Quanto gastei em supermercado em janeiro?' ou 'Qual meu resumo de abril?'"}
+
+Responda SEMPRE em ${LOCALE_META[locale].label} (idioma do usuário) — inclusive headline, eyebrow, trend, insight e labels dos items.`
 
   const messages = [
     ...history,
@@ -101,5 +119,5 @@ MENSAGENS NÃO-FINANCEIRAS:
     }
   }
   
-  throw lastError || new Error("All models failed");
+  throw lastError || new Error("All models failed"); // i18n-ignore: internal diagnostic error, never sent to the Telegram user
 }

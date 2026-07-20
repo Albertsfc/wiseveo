@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Plus } from "lucide-react"
 import { z } from "zod"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -27,17 +28,14 @@ import {
 import { priorities, statuses, categories } from "../data/data"
 import type { Task } from "../data/schema"
 
-// Extended task schema for the form
-const taskFormSchema = z.object({
-  id: z.string(),
-  title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
-  status: z.string(),
-  category: z.string(),
-  priority: z.string(),
-})
-
-type TaskFormData = z.infer<typeof taskFormSchema>
+type TaskFormData = {
+  id: string
+  title: string
+  description?: string
+  status: string
+  category: string
+  priority: string
+}
 
 interface AddTaskModalProps {
   onAddTask?: (task: Task) => void
@@ -45,6 +43,19 @@ interface AddTaskModalProps {
 }
 
 export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
+  const t = useTranslations("tasks.addTaskModal")
+  const tOptions = useTranslations("tasks.options")
+
+  // Extended task schema for the form — defined inside the component so zod
+  // messages can be localized via t().
+  const taskFormSchema = z.object({
+    id: z.string(),
+    title: z.string().min(1, t("titleRequired")),
+    description: z.string().optional(),
+    status: z.string(),
+    category: z.string(),
+    priority: z.string(),
+  })
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState<TaskFormData>({
     id: "",
@@ -127,25 +138,25 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
         {trigger || (
           <Button variant="default" size="sm" className="cursor-pointer">
             <Plus className="w-4 h-4" />
-            Add Task
+            {t("trigger")}
           </Button>
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>Add New Task</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Create a new task to track work and progress. Fill in the details below.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Task Title */}
           <div className="space-y-2">
-            <Label htmlFor="title">Task Title *</Label>
+            <Label htmlFor="title">{t("titleField")}</Label>
             <Input
               id="title"
-              placeholder="Enter task title..."
+              placeholder={t("titlePlaceholder")}
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
               className={errors.title ? "border-red-500" : ""}
@@ -157,10 +168,10 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
 
           {/* Task Description */}
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">{t("descriptionField")}</Label>
             <Textarea
               id="description"
-              placeholder="Provide additional details about the task..."
+              placeholder={t("descriptionPlaceholder")}
               value={formData.description}
               onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
               rows={3}
@@ -171,13 +182,13 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Task Status */}
             <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
+              <Label htmlFor="status">{t("statusField")}</Label>
               <Select
                 value={formData.status}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, status: value }))}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select status" />
+                  <SelectValue placeholder={t("statusPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {statuses.map((status) => (
@@ -186,7 +197,7 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
                         {status.icon && (
                           <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                         )}
-                        {status.label}
+                        {tOptions(`statuses.${status.labelKey}` as never)}
                       </div>
                     </SelectItem>
                   ))}
@@ -196,18 +207,18 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
 
             {/* Task Category */}
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">{t("categoryField")}</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder={t("categoryPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
                     <SelectItem key={category.value} value={category.value}>
-                      {category.label}
+                      {tOptions(`categories.${category.labelKey}` as never)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -218,19 +229,19 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
           {/* Task Priority - Half Width on Desktop */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
+              <Label htmlFor="priority">{t("priorityField")}</Label>
               <Select
                 value={formData.priority}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, priority: value }))}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select priority" />
+                  <SelectValue placeholder={t("priorityPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {priorities.map((priority) => (
                     <SelectItem key={priority.value} value={priority.value}>
                       <div className="flex items-center">
-                        {priority.label}
+                        {tOptions(`priorities.${priority.labelKey}` as never)}
                       </div>
                     </SelectItem>
                   ))}
@@ -242,11 +253,11 @@ export function AddTaskModal({ onAddTask, trigger }: AddTaskModalProps) {
           {/* Action Buttons */}
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="outline" onClick={handleCancel} className="cursor-pointer">
-              Cancel
+              {t("cancel")}
             </Button>
             <Button type="submit" className="cursor-pointer">
               <Plus className="w-4 h-4 mr-2" />
-              Create Task
+              {t("createTask")}
             </Button>
           </div>
         </form>

@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { getAccountsWithBalance } from "@/features/accounts/services/get-accounts"
 import { getDailyStatement } from "@/features/shared/services/get-daily-statement"
@@ -62,13 +63,14 @@ function startOfUtcDay(date: Date): Date {
 }
 
 export async function GET(request: NextRequest) {
+  const t = await getTranslations("api.errors")
   const { searchParams } = request.nextUrl
   const fromParam = searchParams.get("from")
   const toParam = searchParams.get("to")
 
   if (!fromParam || !toParam) {
     return NextResponse.json(
-      { error: "Parâmetros 'from' e 'to' são obrigatórios" },
+      { error: t("missingDateRange") },
       { status: 400 },
     )
   }
@@ -77,12 +79,12 @@ export async function GET(request: NextRequest) {
   const to = parseDateBoundary(toParam, true)
 
   if (!from || !to || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) {
-    return NextResponse.json({ error: "Datas inválidas" }, { status: 400 })
+    return NextResponse.json({ error: t("invalidDates") }, { status: 400 })
   }
 
   if (from > to) {
     return NextResponse.json(
-      { error: "Intervalo inválido: 'from' deve ser <= 'to'" },
+      { error: t("invalidDateRange") },
       { status: 400 },
     )
   }
@@ -90,7 +92,7 @@ export async function GET(request: NextRequest) {
   const userId = await getDefaultUserId()
 
   if (!userId) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+    return NextResponse.json({ error: t("userNotFound") }, { status: 401 })
   }
 
   const [statement, openingBalances] = await Promise.all([

@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import {
@@ -16,19 +17,30 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
-const accountFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  currentPassword: z.string().optional(),
-  newPassword: z.string().optional(),
-  confirmPassword: z.string().optional(),
-})
-
-type AccountFormValues = z.infer<typeof accountFormSchema>
+type AccountFormValues = {
+  firstName: string
+  lastName: string
+  email: string
+  username: string
+  currentPassword?: string
+  newPassword?: string
+  confirmPassword?: string
+}
 
 export default function AccountSettings() {
+  const t = useTranslations("templatePages.account")
+
+  // Defined inside the component so zod messages can be localized via t().
+  const accountFormSchema = z.object({
+    firstName: z.string().min(1, t("firstNameRequired")),
+    lastName: z.string().min(1, t("lastNameRequired")),
+    email: z.string().email(t("emailInvalid")),
+    username: z.string().min(3, t("usernameMinLength")),
+    currentPassword: z.string().optional(),
+    newPassword: z.string().optional(),
+    confirmPassword: z.string().optional(),
+  })
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
@@ -54,9 +66,9 @@ export default function AccountSettings() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Personal Information</CardTitle>
+                <CardTitle>{t("personalInfoTitle")}</CardTitle>
                 <CardDescription>
-                  Update your personal information that will be displayed on your profile.
+                  {t("personalInfoDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -66,9 +78,9 @@ export default function AccountSettings() {
                     name="firstName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>First Name</FormLabel>
+                        <FormLabel>{t("firstName")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your first name" {...field} />
+                          <Input placeholder={t("firstNamePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -79,9 +91,9 @@ export default function AccountSettings() {
                     name="lastName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Last Name</FormLabel>
+                        <FormLabel>{t("lastName")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your last name" {...field} />
+                          <Input placeholder={t("lastNamePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -93,9 +105,9 @@ export default function AccountSettings() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email Address</FormLabel>
+                      <FormLabel>{t("emailAddress")}</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="Enter your email" {...field} />
+                        <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -106,9 +118,9 @@ export default function AccountSettings() {
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>{t("username")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your username" {...field} />
+                        <Input placeholder={t("usernamePlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -119,9 +131,9 @@ export default function AccountSettings() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Change Password</CardTitle>
+                <CardTitle>{t("changePasswordTitle")}</CardTitle>
                 <CardDescription>
-                  Update your password to keep your account secure.
+                  {t("changePasswordDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -130,9 +142,9 @@ export default function AccountSettings() {
                   name="currentPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Current Password</FormLabel>
+                      <FormLabel>{t("currentPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Enter current password" {...field} />
+                        <Input type="password" placeholder={t("currentPasswordPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -143,9 +155,9 @@ export default function AccountSettings() {
                   name="newPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>New Password</FormLabel>
+                      <FormLabel>{t("newPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Enter new password" {...field} />
+                        <Input type="password" placeholder={t("newPasswordPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -156,9 +168,9 @@ export default function AccountSettings() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm New Password</FormLabel>
+                      <FormLabel>{t("confirmNewPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Confirm new password" {...field} />
+                        <Input type="password" placeholder={t("confirmPasswordPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -169,30 +181,30 @@ export default function AccountSettings() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Danger Zone</CardTitle>
+                <CardTitle>{t("dangerZoneTitle")}</CardTitle>
                 <CardDescription>
-                  Irreversible and destructive actions.
+                  {t("dangerZoneDescription")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Separator />
                 <div className="flex flex-wrap gap-2 items-center justify-between">
                   <div>
-                    <h4 className="font-semibold">Delete Account</h4>
+                    <h4 className="font-semibold">{t("deleteAccount")}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Permanently delete your account and all associated data.
+                      {t("deleteAccountDescription")}
                     </p>
                   </div>
                   <Button variant="destructive" type="button" className="cursor-pointer">
-                    Delete Account
+                    {t("deleteAccount")}
                   </Button>
                 </div>
               </CardContent>
             </Card>
 
             <div className="flex space-x-2">
-              <Button type="submit" className="cursor-pointer">Save Changes</Button>
-              <Button variant="outline" type="reset" className="cursor-pointer">Cancel</Button>
+              <Button type="submit" className="cursor-pointer">{t("saveChanges")}</Button>
+              <Button variant="outline" type="reset" className="cursor-pointer">{t("cancel")}</Button>
             </div>
           </form>
         </Form>

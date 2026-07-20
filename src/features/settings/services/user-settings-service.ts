@@ -1,4 +1,6 @@
+import { getTranslations } from "next-intl/server"
 import { Prisma } from "@/generated/prisma_new/client"
+import { isAppLocale, resolveAppLocale, type AppLocale } from "@/i18n/config"
 import { prisma } from "@/lib/prisma"
 import {
   resolveMonetarySettings,
@@ -157,18 +159,19 @@ export async function updateUserAccount(userId: string, data: AccountSettings) {
 
   // Lógica de troca de senha se fornecida
   if (data.currentPassword && data.newPassword) {
+    const t = await getTranslations("settings.account.errors")
     const user = await prisma.user.findUnique({
       where: { id: userId },
       select: { passwordHash: true },
     })
 
     if (!user || !user.passwordHash) {
-      throw new Error("Usuário não possui senha definida localmente.")
+      throw new Error(t("noLocalPassword"))
     }
 
     const isMatch = await bcrypt.compare(data.currentPassword, user.passwordHash)
     if (!isMatch) {
-      throw new Error("A senha atual está incorreta.")
+      throw new Error(t("currentPasswordIncorrect"))
     }
 
     updateData.passwordHash = await bcrypt.hash(data.newPassword, 10)
@@ -188,6 +191,36 @@ export async function getUserMonetarySettings(userId: string) {
 export async function getUserQuickPaymentSettings(userId: string) {
   const prefs = await getUserPreferences(userId)
   return resolveQuickPaymentSettings(prefs.quickPayment)
+}
+
+/**
+ * Locale de UI persistido do usuário (User.preferencesJson.locale).
+ * Fonte de verdade para canais sem cookie (Telegram, jobs); cai no
+ * DEFAULT_LOCALE quando ausente ou inválido.
+ */
+export async function getUserLocale(userId: string): Promise<AppLocale> {
+  const prefs = await getUserPreferences(userId)
+  return resolveAppLocale(prefs.locale)
+}
+
+/**
+ * Persiste o locale de UI do usuário em User.preferencesJson.locale.
+ * Valores fora de LOCALES são ignorados silenciosamente (no-op).
+ */
+export async function setUserLocale(userId: string, locale: string): Promise<void> {
+  if (!isAppLocale(locale)) return
+
+  const currentPreferences = await getUserPreferences(userId)
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      preferencesJson: toInputJsonValue({
+        ...currentPreferences,
+        locale,
+      }),
+    },
+  })
 }
 
 export async function getQuickPaymentOptions(
@@ -237,12 +270,13 @@ export async function updateUserQuickPaymentSettings(
   settings: QuickPaymentSettings,
 ) {
   const nextQuickPayment = resolveQuickPaymentSettings(settings)
+  const t = await getTranslations("settings.general.errors")
 
   if (
     nextQuickPayment.defaultAccountId === null ||
     nextQuickPayment.defaultStatusCode === null
   ) {
-    throw new Error("Selecione um banco e um status para o Pagamento Rápido.")
+    throw new Error(t("quickPaymentSelectionRequired"))
   }
 
   const [account, status, currentPreferences] = await Promise.all([
@@ -265,11 +299,11 @@ export async function updateUserQuickPaymentSettings(
   ])
 
   if (!account) {
-    throw new Error("O banco selecionado para o Pagamento Rápido não está disponível.")
+    throw new Error(t("quickPaymentAccountUnavailable"))
   }
 
   if (!status) {
-    throw new Error("O status selecionado para o Pagamento Rápido não está disponível.")
+    throw new Error(t("quickPaymentStatusUnavailable"))
   }
 
   await prisma.user.update({

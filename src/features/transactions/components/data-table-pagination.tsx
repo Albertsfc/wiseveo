@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import type { Table } from "@tanstack/react-table"
+import { useTranslations } from "next-intl"
 import {
   ChevronLeft,
   ChevronRight,
@@ -28,6 +29,7 @@ export function DataTablePagination<TData>({
   table,
 }: DataTablePaginationProps<TData>) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.pagination")
 
   const selectedRows = table.getFilteredSelectedRowModel().rows
   const filteredRows = table.getFilteredRowModel().rows
@@ -59,20 +61,20 @@ export function DataTablePagination<TData>({
     <div className="flex items-center justify-between px-4">
       <div className="text-muted-foreground hidden flex-1 text-sm lg:flex flex-col gap-0">
         <div>
-          {selectedRows.length} de {filteredRows.length} linha(s) selecionada(s).
+          {t("selectedOfTotal", { selected: selectedRows.length, total: filteredRows.length })}
         </div>
         {hasAmount && (
           <>
-            <div>Entradas: {monetary.formatNumberValue(incomes)}</div>
-            <div>Saídas: {monetary.formatNumberValue(expenses)}</div>
-            <div>Total: {monetary.formatNumberValue(total)}</div>
+            <div>{t("inflows", { amount: monetary.formatNumberValue(incomes) })}</div>
+            <div>{t("outflows", { amount: monetary.formatNumberValue(expenses) })}</div>
+            <div>{t("total", { amount: monetary.formatNumberValue(total) })}</div>
           </>
         )}
       </div>
       <div className="flex w-full items-center gap-8 lg:w-fit">
         <div className="hidden items-center gap-2 lg:flex">
           <Label htmlFor="rows-per-page" className="text-sm font-medium">
-            Linhas por página
+            {t("rowsPerPage")}
           </Label>
           <Select
             value={`${table.getState().pagination.pageSize}`}
@@ -97,8 +99,10 @@ export function DataTablePagination<TData>({
           </Select>
         </div>
         <div className="flex w-fit items-center justify-center text-sm font-medium">
-          Página {table.getState().pagination.pageIndex + 1} de{" "}
-          {table.getPageCount()}
+          {t("pageOfTotal", {
+            page: table.getState().pagination.pageIndex + 1,
+            total: table.getPageCount(),
+          })}
         </div>
         <div className="ml-auto flex items-center gap-2 lg:ml-0">
           <Button
@@ -107,7 +111,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">Primeira página</span>
+            <span className="sr-only">{t("firstPageAria")}</span>
             <ChevronsLeft />
           </Button>
           <Button
@@ -117,7 +121,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            <span className="sr-only">Página anterior</span>
+            <span className="sr-only">{t("previousPageAria")}</span>
             <ChevronLeft />
           </Button>
           <Button
@@ -127,7 +131,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">Próxima página</span>
+            <span className="sr-only">{t("nextPageAria")}</span>
             <ChevronRight />
           </Button>
           <Button
@@ -137,7 +141,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
           >
-            <span className="sr-only">Última página</span>
+            <span className="sr-only">{t("lastPageAria")}</span>
             <ChevronsRight />
           </Button>
         </div>

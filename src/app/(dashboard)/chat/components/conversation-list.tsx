@@ -12,6 +12,7 @@ import {
   UserPlus,
   Filter
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -56,6 +57,7 @@ export function ConversationList({
   selectedConversation,
   onSelectConversation
 }: ConversationListProps) {
+  const t = useTranslations("chat")
   const { searchQuery, setSearchQuery } = useChat()
 
   const filteredConversations = conversations.filter((conversation) =>
@@ -83,7 +85,7 @@ export function ConversationList({
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header - Hidden on mobile (handled by parent) */}
       <div className="hidden lg:flex items-center justify-between h-16 px-4 border-b flex-shrink-0">
-        <h2 className="text-lg font-semibold">Messages</h2>
+        <h2 className="text-lg font-semibold">{t("messagesTitle")}</h2>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -97,16 +99,16 @@ export function ConversationList({
           <DropdownMenuContent align="end">
             <DropdownMenuItem className="cursor-pointer">
               <UserPlus className="h-4 w-4 mr-2" />
-              New Chat
+              {t("conversationList.newChat")}
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer">
               <Filter className="h-4 w-4 mr-2" />
-              Filter Messages
+              {t("conversationList.filterMessages")}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer">
               <Settings className="h-4 w-4 mr-2" />
-              Chat Settings
+              {t("conversationList.chatSettings")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -118,7 +120,7 @@ export function ConversationList({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search conversations..."
+            placeholder={t("conversationList.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 cursor-text"

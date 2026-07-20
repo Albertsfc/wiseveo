@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { periodFromDate, isValidPeriod } from "@/lib/financial"
@@ -7,7 +8,8 @@ export async function GET() {
     const userId = await getDefaultUserId()
 
     if (!userId) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+        const t = await getTranslations("api.errors")
+        return NextResponse.json({ error: t("userNotFound") }, { status: 401 })
     }
 
     const recurring = await prisma.recurringTransaction.findMany({
@@ -27,7 +29,8 @@ export async function POST(req: Request) {
     const userId = await getDefaultUserId()
 
     if (!userId) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+        const t = await getTranslations("api.errors")
+        return NextResponse.json({ error: t("userNotFound") }, { status: 401 })
     }
 
     const body = await req.json()

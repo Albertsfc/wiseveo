@@ -1,7 +1,8 @@
+import { getLocale, getTranslations } from "next-intl/server"
+
 import { prisma } from "@/lib/prisma"
 import { periodFromDate, safeBalance } from "@/lib/financial"
-import { startOfMonth, endOfMonth, addMonths, subMonths, format, startOfYear, endOfYear, isBefore } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import { formatAppDate } from "@/i18n/format"
 import { projectSeries, type ForecastingModel } from "./forecasting-engine"
 import type {
   ForecastingData,
@@ -32,6 +33,9 @@ export async function getForecastingData(
   mode: "CAIXA" | "COMPETENCIA",
   model: ForecastingModel
 ): Promise<ForecastingData> {
+  const t = await getTranslations("forecasting")
+  const locale = await getLocale()
+
   // --- Referências temporais ---
   const today = new Date()
   const todayY = today.getUTCFullYear()
@@ -65,15 +69,16 @@ export async function getForecastingData(
 
   // --- Colunas visíveis: do mês-base até Dezembro do ano do mês-base ---
   const columns: ForecastingColumn[] = []
-  const monthsPT = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"]
-  
+
   curY = baseY
   curM = baseM
   while (curM <= 11) {
     const mk = `${curY}-${String(curM + 1).padStart(2, "0")}`
+    // Dia 15 ao meio-dia UTC: evita virada de mês por fuso horário local do servidor.
+    const columnDate = new Date(Date.UTC(curY, curM, 15, 12, 0, 0))
     columns.push({
       monthKey: mk,
-      label: `${monthsPT[curM]}-${String(curY).slice(-2)}`.toUpperCase(),
+      label: formatAppDate(columnDate, "MMM-yy", locale).toUpperCase(),
       isProjected: mk >= currentMonthKey
     })
     curM++
@@ -168,9 +173,9 @@ export async function getForecastingData(
     // Saídas (Expenses) usam Math.abs para somar positivamente no grupo de despesas
     const amount = isIncome ? amountRaw : Math.abs(amountRaw)
     
-    const defaultGroupName = isIncome ? "Entradas diversas" : "Saídas diversas"
+    const defaultGroupName = isIncome ? t("fallback.incomeGroup") : t("fallback.expenseGroup")
     const gName = normalizeName(tx.group?.name, defaultGroupName)
-    const cName = normalizeName(tx.category?.name, "Geral")
+    const cName = normalizeName(tx.category?.name, t("fallback.category"))
     
     getBucket(targetMap, groupCode, gName, categoryCode, cName).history[keyIndex] += amount
   }
@@ -192,7 +197,9 @@ export async function getForecastingData(
       }
 
       const group = groupDict.get(bucket.groupCode)!
-      const isTransfer = group.name === "Caixa e Captação"
+      // Sentinela de dados: nome real do grupo no plano de contas (não é UI), usado
+      // só para identificar o grupo de caixa/captação e desabilitar o clamp em 0.
+      const isTransfer = group.name === "Caixa e Captação" // i18n-ignore
 
       // Base para projeção: histórico até o mês corrente (inclusive)
       const historyForProjection = currentMonthIndex !== -1
@@ -291,9 +298,9 @@ export async function getForecastingData(
     return { name, groups, cells: sectionCells }
   }
 
-  const income = buildSection("Entradas", incomeMap)
+  const income = buildSection(t("sections.income"), incomeMap)
   const incomeTotals = income.cells.map(c => c.amount)
-  const expense = buildSection("Saídas", expenseMap, incomeTotals)
+  const expense = buildSection(t("sections.expense"), expenseMap, incomeTotals)
 
   // --- SALDO FINAL ---
   const netResultCells: ForecastingCell[] = Array(columns.length).fill(null).map((_, i) => {
@@ -343,7 +350,7 @@ export async function getForecastingData(
   ])
 
   const initialSum = accounts.reduce((sum, acc) => sum + safeBalance(acc.balance), 0)
-  let initialBalance = initialSum + Number(txBeforeAgg._sum.amount ?? 0)
+  const initialBalance = initialSum + Number(txBeforeAgg._sum.amount ?? 0)
 
   let runningTotal = initialBalance
   const accumulatedCells: ForecastingCell[] = netResultCells.map((cell) => {

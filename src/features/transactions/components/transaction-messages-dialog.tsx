@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { MessageSquare, SendHorizontal, Trash2 } from "lucide-react"
 import { toast } from "sonner"
+import { useLocale, useTranslations } from "next-intl"
 
 import {
   Dialog,
@@ -24,6 +25,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import { createDateFormatter } from "@/i18n/format"
 import type { SerializedTransaction } from "../types"
 
 interface TransactionMessage {
@@ -44,9 +46,9 @@ interface TransactionMessagesDialogProps {
 
 const MAX_MESSAGE_LENGTH = 2000
 
-function formatMessageDate(value: string) {
+function formatMessageDate(value: string, locale: string) {
   const date = new Date(value)
-  return new Intl.DateTimeFormat("pt-BR", {
+  return createDateFormatter(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -61,6 +63,10 @@ export function TransactionMessagesDialog({
   onMessageCountChange,
 }: TransactionMessagesDialogProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.dialogs.messages")
+  const tDialogs = useTranslations("transactions.dialogs")
+  const tCommon = useTranslations("common")
+  const locale = useLocale()
   const transactionId = transaction?.id ?? null
   const [messages, setMessages] = useState<TransactionMessage[]>([])
   const [loading, setLoading] = useState(false)
@@ -78,7 +84,7 @@ export function TransactionMessagesDialog({
         cache: "no-store",
       })
       if (!res.ok) {
-        toast.error("Erro ao carregar mensagens")
+        toast.error(t("loadError"))
         return
       }
 
@@ -86,11 +92,11 @@ export function TransactionMessagesDialog({
       const nextMessages = (data.messages ?? []) as TransactionMessage[]
       setMessages(nextMessages)
     } catch {
-      toast.error("Erro ao carregar mensagens")
+      toast.error(t("loadError"))
     } finally {
       setLoading(false)
     }
-  }, [transactionId])
+  }, [transactionId, t])
 
   useEffect(() => {
     if (!transactionId) {
@@ -112,7 +118,7 @@ export function TransactionMessagesDialog({
 
     const content = draft.trim()
     if (!content) {
-      toast.error("Digite uma mensagem antes de enviar")
+      toast.error(t("emptyMessageError"))
       return
     }
 
@@ -126,20 +132,20 @@ export function TransactionMessagesDialog({
       const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
-        toast.error(data.error || "Erro ao enviar mensagem")
+        toast.error(data.error || t("sendError"))
         return
       }
 
       const message = data.message as TransactionMessage
       setMessages((prev) => [...prev, message])
       setDraft("")
-      toast.success("Mensagem enviada")
+      toast.success(t("sentSuccess"))
     } catch {
-      toast.error("Erro ao enviar mensagem")
+      toast.error(t("sendError"))
     } finally {
       setSending(false)
     }
-  }, [draft, transactionId])
+  }, [draft, transactionId, t])
 
   const handleConfirmDeleteMessage = useCallback(async () => {
     if (!transactionId || !messageToDelete) return
@@ -153,19 +159,19 @@ export function TransactionMessagesDialog({
       const data = await res.json().catch(() => ({}))
 
       if (!res.ok) {
-        toast.error(data.error || "Erro ao apagar mensagem")
+        toast.error(data.error || t("deleteError"))
         return
       }
 
       setMessages((prev) => prev.filter((item) => item.id !== messageToDelete.id))
       setMessageToDelete(null)
-      toast.success("Mensagem apagada")
+      toast.success(t("deletedSuccess"))
     } catch {
-      toast.error("Erro ao apagar mensagem")
+      toast.error(t("deleteError"))
     } finally {
       setDeleting(false)
     }
-  }, [messageToDelete, transactionId])
+  }, [messageToDelete, transactionId, t])
 
   const remainingChars = MAX_MESSAGE_LENGTH - draft.length
 
@@ -175,10 +181,10 @@ export function TransactionMessagesDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" />
-            Observações/Mensagens
+            {t("title")}
           </DialogTitle>
           <DialogDescription>
-            {transaction?.note || "Transação"} —{" "}
+            {transaction?.note || tDialogs("transactionFallback")} —{" "}
             {transaction ? monetary.formatMonetaryValue(transaction.amount) : ""}
           </DialogDescription>
         </DialogHeader>
@@ -186,22 +192,20 @@ export function TransactionMessagesDialog({
         <div className="space-y-3">
           {!loading && messages.length > 0 && (
             <div className="rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-sm">
-              Você tem {messages.length} mensagem
-              {messages.length !== 1 ? "ens" : ""} anterior
-              {messages.length !== 1 ? "es" : ""} para leitura.
+              {t("unreadNotice", { count: messages.length })}
             </div>
           )}
 
           {loading ? (
-            <p className="text-sm text-muted-foreground">Carregando mensagens...</p>
+            <p className="text-sm text-muted-foreground">{t("loadingMessages")}</p>
           ) : messages.length === 0 ? (
             <p className="text-sm text-muted-foreground">
-              Nenhuma mensagem registrada.
+              {t("noMessages")}
             </p>
           ) : (
             <div className="space-y-2">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Mensagens anteriores
+                {t("previousMessages")}
               </p>
               <ul className="max-h-64 space-y-2 overflow-y-auto rounded-md border p-2">
               {messages.map((message) => (
@@ -210,7 +214,7 @@ export function TransactionMessagesDialog({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
                     <span className="truncate font-medium">{message.user.name}</span>
-                    <span className="shrink-0">{formatMessageDate(message.createdAt)}</span>
+                    <span className="shrink-0">{formatMessageDate(message.createdAt, locale)}</span>
                       </div>
                       <p className="mt-1 whitespace-pre-wrap text-sm">{message.content}</p>
                     </div>
@@ -219,11 +223,11 @@ export function TransactionMessagesDialog({
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7 shrink-0 text-destructive hover:text-destructive"
-                      title="Apagar mensagem"
+                      title={t("deleteAction")}
                       onClick={() => setMessageToDelete(message)}
                     >
                       <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Apagar mensagem</span>
+                      <span className="sr-only">{t("deleteAction")}</span>
                     </Button>
                   </div>
                 </li>
@@ -234,7 +238,7 @@ export function TransactionMessagesDialog({
 
           <div className="rounded-md border p-2">
             <Textarea
-              placeholder="Digite sua mensagem..."
+              placeholder={t("placeholder")}
               value={draft}
               maxLength={MAX_MESSAGE_LENGTH}
               onChange={(event) => setDraft(event.target.value)}
@@ -242,8 +246,7 @@ export function TransactionMessagesDialog({
             />
             <div className="mt-2 flex items-center justify-between gap-2">
               <span className="text-xs text-muted-foreground">
-                {remainingChars} caractere{remainingChars !== 1 ? "s" : ""} restante
-                {remainingChars !== 1 ? "s" : ""}
+                {t("remainingChars", { count: remainingChars })}
               </span>
               <Button
                 type="button"
@@ -252,7 +255,7 @@ export function TransactionMessagesDialog({
                 onClick={() => void handleSendMessage()}
               >
                 <SendHorizontal className="mr-2 h-4 w-4" />
-                {sending ? "Enviando..." : "Enviar"}
+                {sending ? t("sending") : t("send")}
               </Button>
             </div>
           </div>
@@ -265,9 +268,9 @@ export function TransactionMessagesDialog({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Apagar Mensagem</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta mensagem será removida permanentemente.
+              {t("deleteConfirmText")}
               {messageToDelete && (
                 <span className="mt-2 block whitespace-pre-wrap text-foreground">
                   {messageToDelete.content}
@@ -276,13 +279,13 @@ export function TransactionMessagesDialog({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleting}>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               disabled={deleting}
               onClick={() => void handleConfirmDeleteMessage()}
             >
-              {deleting ? "Apagando..." : "Apagar"}
+              {deleting ? t("deleting") : t("deleted")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

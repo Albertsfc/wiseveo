@@ -1,474 +1,2217 @@
 {
   "Routes": {
-    "dashboard": { "title": "Dashboard", "description": "Visão geral das suas finanças" },
-    "insights": { "title": "Insights", "description": "Análises detalhadas e tendências" },
-    "transactions": { "title": "Transações", "description": "Gerencie suas receitas e despesas" },
-    "recurring": { "title": "Recorrentes", "description": "Controle de assinaturas e contas fixas" },
-    "budget": { "title": "Orçamento", "description": "Planejamento e metas financeiras" },
-    "analysis": { "title": "Análise", "description": "Relatórios e métricas de desempenho" },
-    "forecasting": { "title": "Forecasting", "description": "Projeções financeiras e tendências" },
-    "banks": { "title": "Bancos", "description": "Sincronize e gerencie suas contas" },
-    "calendar": { "title": "Calendário", "description": "Visualize seus vencimentos e recebimentos" },
-    "configuracoes": { "title": "Configurações", "description": "Gerencie suas preferências" },
-    "mail": { "title": "Mail", "description": "Caixa de entrada" },
-    "tasks": { "title": "Tasks", "description": "Gerencie suas tarefas" },
-    "chat": { "title": "Chat", "description": "Comunique-se com a equipe" },
-    "users": { "title": "Usuários", "description": "Gerencie os membros da equipe" },
-    "faqs": { "title": "FAQs", "description": "Perguntas frequentes" },
-    "pricing": { "title": "Planos", "description": "Opções de assinatura" },
-    "settings_billing": { "title": "Faturamento", "description": "Gerencie seus pagamentos" },
-    "settings_notifications": { "title": "Notificações", "description": "Configure seus alertas" },
-    "settings_connections": { "title": "Conexões", "description": "Integrações com outros apps" },
-    "settings_components": { "title": "Componentes", "description": "Guia de estilo do sistema" },
-    "default": { "title": "WISEVEO", "description": "Aceleração Financeira" }
+    "analysis": {
+      "description": "Relatórios e métricas de desempenho",
+      "title": "Análise"
+    },
+    "banks": {
+      "description": "Sincronize e gerencie suas contas",
+      "title": "Bancos"
+    },
+    "budget": {
+      "description": "Planejamento e metas financeiras",
+      "title": "Orçamento"
+    },
+    "calendar": {
+      "description": "Visualize seus vencimentos e recebimentos",
+      "title": "Calendário"
+    },
+    "chat": {
+      "description": "Comunique-se com a equipe",
+      "title": "Chat"
+    },
+    "configuracoes": {
+      "description": "Gerencie suas preferências",
+      "title": "Configurações"
+    },
+    "dashboard": {
+      "description": "Visão geral das suas finanças",
+      "title": "Dashboard"
+    },
+    "default": {
+      "description": "Aceleração Financeira",
+      "title": "WISEVEO"
+    },
+    "faqs": {
+      "description": "Perguntas frequentes",
+      "title": "FAQs"
+    },
+    "forecasting": {
+      "description": "Projeções financeiras e tendências",
+      "title": "Forecasting"
+    },
+    "insights": {
+      "description": "Análises detalhadas e tendências",
+      "title": "Insights"
+    },
+    "mail": {
+      "description": "Caixa de entrada",
+      "title": "Mail"
+    },
+    "pricing": {
+      "description": "Opções de assinatura",
+      "title": "Planos"
+    },
+    "recurring": {
+      "description": "Controle de assinaturas e contas fixas",
+      "title": "Recorrentes"
+    },
+    "settings_billing": {
+      "description": "Gerencie seus pagamentos",
+      "title": "Faturamento"
+    },
+    "settings_components": {
+      "description": "Guia de estilo do sistema",
+      "title": "Componentes"
+    },
+    "settings_connections": {
+      "description": "Integrações com outros apps",
+      "title": "Conexões"
+    },
+    "settings_notifications": {
+      "description": "Configure seus alertas",
+      "title": "Notificações"
+    },
+    "setup": {
+      "description": "Configure seu ambiente WISEVEO",
+      "title": "WISEVEO — Configuração"
+    },
+    "tasks": {
+      "description": "Gerencie suas tarefas",
+      "title": "Tasks"
+    },
+    "transactions": {
+      "description": "Gerencie suas receitas e despesas",
+      "title": "Transações"
+    },
+    "users": {
+      "description": "Gerencie os membros da equipe",
+      "title": "Usuários"
+    }
+  },
+  "accounts": {
+    "addAccount": "Adicionar Conta",
+    "card": {
+      "currentBalance": "Saldo Atual",
+      "initialLabel": "Inicial:",
+      "optionsAriaLabel": "Opções da conta"
+    }
+  },
+  "analysis": {
+    "client": {
+      "fetchError": "Falha ao carregar a DRE do período",
+      "loadError": "Não foi possível carregar a análise do período."
+    },
+    "fallback": {
+      "expenseGroup": "Despesas diversas",
+      "incomeGroup": "Receitas diversas",
+      "transferCategory": "Transferência",
+      "transferGroup": "Transferências"
+    },
+    "groupsCount": "{count, plural, one {# grupo} other {# grupos}}",
+    "notAvailable": "n/d",
+    "overview": {
+      "appliedPeriod": "Período aplicado",
+      "daysElapsed": "{count, plural, one {# dia corrido} other {# dias corridos}}",
+      "description": "Contexto executivo da DRE selecionada",
+      "footerNote1": "O saldo final considera receitas, despesas e transferências do período.",
+      "footerNote2": "A margem continua refletindo o resultado operacional (`receitas - despesas`) para preservar a leitura da DRE.",
+      "highlightTopExpenseGroup": "Maior grupo de despesa",
+      "highlightTopIncomeGroup": "Maior grupo de receita",
+      "highlightTopTransferInGroup": "Maior entrada de transferência",
+      "highlightTopTransferOutGroup": "Maior saída de transferência",
+      "loading": "Carregando contexto do período...",
+      "metrics": {
+        "averageDailyBalance": "Saldo / dia",
+        "finalBalance": "Saldo final",
+        "operationalMargin": "Margem operacional",
+        "operationalResult": "Resultado operacional",
+        "transfersIn": "Entradas transf.",
+        "transfersOut": "Saídas transf."
+      },
+      "noData": "Sem dados no período.",
+      "title": "Leitura do Período"
+    },
+    "resultLabel": {
+      "balanced": "Equilíbrio",
+      "negative": "Negativo",
+      "positive": "Positivo"
+    },
+    "statement": {
+      "badge": "DRE + transf.",
+      "consolidatedSum": "somatório consolidado do período",
+      "description": "Receitas, despesas e transferências consolidadas conforme o intervalo selecionado",
+      "emptySection": "Nenhum lançamento encontrado nesta seção para o período selecionado.",
+      "expenseTitle": "Despesas",
+      "finalBalanceDescription": "(=) resultado operacional com entradas e saídas de transferências",
+      "finalBalanceTitle": "Saldo Final",
+      "incomeTitle": "Receitas",
+      "loading": "Carregando a DRE do período...",
+      "operationalResultDescription": "(=) receitas menos despesas do exercício",
+      "operationalResultTitle": "Resultado Operacional",
+      "title": "DRE do Período",
+      "totalExpense": "Total de despesas",
+      "totalIncome": "Total de receitas",
+      "transferDescription": "Entradas e saídas mapeadas pelos grupos e categorias relacionados",
+      "transferInTitle": "Entradas",
+      "transferInTotal": "Total de entradas por transferência",
+      "transferNetDescription": "(=) entradas menos saídas de transferências",
+      "transferNetTitle": "Saldo líquido de transferências",
+      "transferOutTitle": "Saídas",
+      "transferOutTotal": "Total de saídas por transferência",
+      "transferTitle": "Transferência"
+    },
+    "summary": {
+      "expense": "Despesas",
+      "expenseFooter": "Saídas operacionais do período",
+      "finalBalance": "Saldo Final",
+      "finalBalanceFooter": "Receitas, despesas e transferências do intervalo",
+      "income": "Receitas",
+      "incomeFooter": "Total de entradas consideradas na DRE",
+      "margin": "Margem",
+      "marginFooter": "Resultado operacional dividido pelas receitas",
+      "statusFooter": "Filtro aplicado pelo período da header",
+      "transactionsAbbrev": "{count, plural, one {# lanç.} other {# lanç.}}",
+      "updating": "Atualizando DRE..."
+    },
+    "transactionsConsidered": "{count, plural, one {# lançamento considerado} other {# lançamentos considerados}}",
+    "transactionsCount": "{count, plural, one {# lançamento} other {# lançamentos}}"
+  },
+  "api": {
+    "admin": {
+      "invalidAction": "Ação administrativa inválida",
+      "userApproved": "Usuário aprovado com sucesso."
+    },
+    "auth": {
+      "allFieldsRequired": "Todos os campos são obrigatórios",
+      "emailAlreadyRegistered": "Esse email já foi registrado",
+      "emailPasswordRequired": "Email e senha são obrigatórios",
+      "googleAccountRequired": "Esta conta usa login pelo Google. Clique em 'Continuar com Google'.",
+      "invalidCredentials": "Email ou senha incorretos",
+      "loginSuccess": "Login realizado com sucesso",
+      "logoutSuccess": "Logout realizado com sucesso",
+      "passwordTooShort": "Senha deve ter pelo menos 8 caracteres",
+      "pendingApprovalExisting": "Seu cadastro já está aguardando aprovação.",
+      "pendingApprovalLogin": "Seu cadastro ainda está aguardando aprovação.",
+      "signupReceived": "Cadastro recebido. Aguarde a aprovação de um administrador.",
+      "signupSuccess": "Conta criada com sucesso"
+    },
+    "calendar": {
+      "clearFailed": "Erro ao limpar eventos",
+      "syncFailed": "Erro ao sincronizar"
+    },
+    "errors": {
+      "internalError": "Erro interno do servidor",
+      "invalidDateFormat": "Formato de data inválido",
+      "invalidDateRange": "Intervalo inválido: 'from' deve ser <= 'to'",
+      "invalidDates": "Datas inválidas",
+      "invalidJson": "JSON inválido",
+      "invalidPeriod": "Período inválido (esperado YYYYMM)",
+      "invalidQueryParams": "Parâmetros de consulta inválidos",
+      "missingDateRange": "Parâmetros 'from' e 'to' são obrigatórios",
+      "missingField": "Campo obrigatório: {field}",
+      "notAuthenticated": "Não autenticado",
+      "recurrenceNotFound": "Recorrência não encontrada",
+      "transactionNotFound": "Transação não encontrada",
+      "userNotFound": "Usuário não encontrado"
+    },
+    "recurringTransactions": {
+      "launchFailed": "Erro ao lançar transação recorrente"
+    },
+    "setup": {
+      "adminCreationFailed": "Erro ao criar usuário admin: {message}",
+      "connectionFailed": "Falha ao conectar: {message}",
+      "connectionStringRequired": "String de conexão é obrigatória.",
+      "migrationFailed": "Erro ao migrar banco de dados.",
+      "missingFields": "Campos obrigatórios ausentes.",
+      "unknownError": "Erro desconhecido"
+    },
+    "telegram": {
+      "notConfigured": "Integração com o Bot do Telegram não configurada"
+    },
+    "transactions": {
+      "attachmentNotFound": "Anexo não encontrado",
+      "copyFailed": "Erro ao copiar transação",
+      "createFailed": "Erro ao criar transação",
+      "deleteMessageFailed": "Erro ao apagar mensagem",
+      "emptyMessage": "Mensagem não pode estar vazia",
+      "excludeFailed": "Erro ao excluir transação",
+      "fileTooLarge": "{fileName}: excede 3 MB",
+      "fileTypeNotAllowed": "{fileName}: tipo não permitido",
+      "invalidFormData": "FormData inválido",
+      "invalidType": "Tipo inválido",
+      "loadMessagesFailed": "Erro ao carregar mensagens",
+      "messageNotFound": "Mensagem não encontrada",
+      "messageTooLong": "Mensagem deve ter no máximo {max} caracteres",
+      "missingFields": "Campos obrigatórios: date, amount, type, accountId, groupCode, categoryCode, statusCode",
+      "noFilesUploaded": "Nenhum arquivo enviado",
+      "quickPayFailed": "Erro ao efetuar pagamento rápido",
+      "recurrentFailed": "Erro ao criar transação recorrente",
+      "saveMessageFailed": "Erro ao salvar mensagem",
+      "updateDateFailed": "Erro ao atualizar data da transação",
+      "updateFailed": "Erro ao atualizar transação",
+      "updatePeriodFailed": "Erro ao atualizar período da transação"
+    },
+    "user": {
+      "accountUpdateSuccess": "Conta atualizada com sucesso!",
+      "generalPreferencesSaveFailed": "Não foi possível salvar as configurações gerais.",
+      "invalidQuickPaySelection": "Selecione um banco e um status válidos para o Pagamento Rápido.",
+      "passwordMismatch": "As senhas não coincidem.",
+      "updateProfileFailed": "Erro ao atualizar perfil"
+    }
+  },
+  "auth": {
+    "cadastroPendente": {
+      "backToLogin": "Voltar para o login",
+      "description": "Sua solicitação foi recebida. Assim que um administrador liberar seu cadastro, você poderá fazer login novamente e acessar o sistema.",
+      "title": "Cadastro aguardando aprovação"
+    },
+    "email": "Email",
+    "errors": {
+      "genericAuth": "Erro na autenticação. Tente novamente.",
+      "google": {
+        "denied": "Acesso ao Google foi negado.",
+        "failed": "Falha ao conectar com Google. Tente novamente.",
+        "invalidState": "Erro de segurança. Tente novamente.",
+        "noCode": "Erro na autenticação com Google. Tente novamente.",
+        "notConfigured": "Autenticação via Google não está configurada neste servidor."
+      },
+      "loginFailed": "Erro ao fazer login. Tente novamente.",
+      "signupFailed": "Erro ao criar conta. Tente novamente."
+    },
+    "google": "Continuar com Google",
+    "googleSyncNote": "Ao conectar com Google, será possível sincronizar sua agenda (em breve)",
+    "login": {
+      "button": "Entrar",
+      "forgotPassword": "Esqueceu a senha?",
+      "loggingIn": "Entrando...",
+      "successMessage": "Login realizado com sucesso!",
+      "tab": "Login",
+      "validation": {
+        "passwordRequired": "Senha é obrigatória"
+      }
+    },
+    "orContinueWith": "Ou continue com",
+    "password": "Senha",
+    "signup": {
+      "button": "Criar conta",
+      "confirmPassword": "Confirmar senha",
+      "creatingAccount": "Criando conta...",
+      "fullName": "Nome completo",
+      "namePlaceholder": "Seu nome",
+      "successMessage": "Conta criada! Redirecionando...",
+      "tab": "Criar Conta",
+      "validation": {
+        "nameTooShort": "Nome deve ter pelo menos 2 caracteres",
+        "passwordMismatch": "As senhas não coincidem",
+        "passwordTooShort": "Senha deve ter pelo menos 8 caracteres"
+      }
+    },
+    "title": "Acesse sua conta",
+    "validation": {
+      "emailInvalid": "Email inválido"
+    }
+  },
+  "banks": {
+    "comingSoon": {
+      "description": "Estamos preparando uma experiência completa de Open Banking para você gerenciar suas finanças com mais inteligência.",
+      "title": "Em breve"
+    }
+  },
+  "budget": {
+    "client": {
+      "savingOrder": "Salvando ordem...",
+      "updatingBudget": "Atualizando orçamento..."
+    },
+    "configFormulaDialog": {
+      "description": "Configurar regra de orçamento customizada para <strong>{name}</strong>.",
+      "restoreGlobal": "Restaurar Padrão Global",
+      "title": "Fórmula do Cartão"
+    },
+    "createDialog": {
+      "aggregatedTab": "Agregado",
+      "amountLabel": "Teto Mensal (Opcional)",
+      "amountPlaceholder": "0,00 (Usado caso a fórmula seja Alvo Fixo)",
+      "categoryLabel": "Categoria (Opcional)",
+      "categoryNone": "Nenhuma (Orçamento do Grupo)",
+      "componentsLabel": "Selecione os Componentes",
+      "customFallbackName": "Orçamento Personalizado",
+      "editDescription": "Altere as configurações do limite deste cartão",
+      "editTitle": "Editar Orçamento",
+      "groupLabel": "Grupo",
+      "groupPlaceholder": "Escolha um Grupo...",
+      "newDescription": "Vincule a um grupo ou categoria específica",
+      "nicknameLabel": "Apelido do Cartão (Opcional)",
+      "nicknamePlaceholder": "Ex: Viagem Férias",
+      "simpleTab": "Simples"
+    },
+    "customFormulaDialog": {
+      "description": "Crie uma fórmula financeira inteligente para seus limites. Utilizando variáveis dinâmicas do histórico real.",
+      "expressionLabel": "Expressão Matemática",
+      "expressionPlaceholder": "Ex: ([MEDIA] + [DESVIO_P]) * 1.1",
+      "nameLabel": "Nome do Mecanismo",
+      "namePlaceholder": "Ex: Teto Inflacionário",
+      "save": "Salvar Mecanismo",
+      "title": "Mecanismo Matemático",
+      "variables": {
+        "containment": "Input de contenção % da UI (ex: 5%).",
+        "incomeAvg": "Média total de receitas no período.",
+        "lastIncome": "Receita do último mês.",
+        "lastMonth": "Valor fechado do mês anterior.",
+        "margin": "Margem customizável.",
+        "max": "Gasto máximo histórico.",
+        "mean": "Média dos gastos nos últimos meses.",
+        "min": "Gasto mínimo histórico.",
+        "stdDev": "Desvio padrão do gasto.",
+        "title": "Biblioteca de Variáveis (Case-Insensitive):"
+      }
+    },
+    "formulaCommon": {
+      "approach": "Abordagem",
+      "customMechanisms": "Mecanismos Customizados",
+      "customParams": {
+        "containment": "Contenção (%)",
+        "margin": "Margem Extra (%)",
+        "months": "Meses (Histórico)"
+      }
+    },
+    "formulaManager": {
+      "applied": "Aplicado",
+      "applyAll": "Aplicar a todos",
+      "applying": "Aplicando...",
+      "deleteMechanism": "Excluir Mecanismo",
+      "editMechanism": "Editar Mecanismo",
+      "expression": "Expressão:",
+      "globalConfig": "Configuração Global",
+      "newMechanism": "Novo Mecanismo",
+      "noHistory": "Sem histórico de gastos. Os dados serão incorporados ao cálculo à medida que houver movimentação.",
+      "title": "Fórmulas"
+    },
+    "formulas": {
+      "descriptions": {
+        "fixed_target": "Valor fixo definido manualmente",
+        "historical_max": "Máximo histórico com margem de segurança",
+        "income_pct": "Percentual da receita média do período",
+        "moving_avg": "Média ponderada com mais peso nos meses recentes",
+        "simple_avg": "Média dos gastos dos últimos N meses"
+      },
+      "names": {
+        "fixed_target": "Meta Fixa",
+        "historical_max": "Limite Histórico",
+        "income_pct": "% da Receita",
+        "moving_avg": "Média Móvel",
+        "simple_avg": "Média Simples",
+        "unknown": "Fórmula desconhecida"
+      },
+      "summary": {
+        "containment": "{value} contenção",
+        "margin": "+{value}% margem",
+        "months": "{count, plural, one {# mês} other {# meses}}"
+      },
+      "variables": {
+        "amount": "Valor",
+        "containment": "Contenção",
+        "margin": "Margem",
+        "months": "Meses",
+        "monthsIncome": "Meses de receita",
+        "percentage": "Percentual"
+      }
+    },
+    "itemCard": {
+      "budgeted": "Orçado",
+      "category": "Categoria",
+      "configureFormula": "Configurar Fórmula",
+      "customBadge": "Personalizada",
+      "customSuffix": "(personalizada)",
+      "dragToReorder": "Arraste para reordenar",
+      "editCard": "Editar Cartão",
+      "group": "Grupo",
+      "mayExceed": "Pode estourar",
+      "multiple": "Múltiplos",
+      "noData": "Sem dados",
+      "paid": "Pago",
+      "scheduled": "Agendado",
+      "used": "utilizado"
+    },
+    "newBudget": "Novo Orçamento",
+    "newCard": {
+      "subtitle": "Adicione uma categoria ao painel"
+    },
+    "overview": {
+      "count": "{count, plural, one {# orçamento} other {# orçamentos}}",
+      "periodSummary": "Resumo do Período",
+      "spent": "gasto",
+      "title": "Visão Geral",
+      "used": "{value} utilizado"
+    },
+    "status": {
+      "exceeded": "Excedido",
+      "remaining": "Restante"
+    },
+    "summary": {
+      "aboveBudget": "Acima do orçamento",
+      "budgetedTotal": "Orçado Total",
+      "itemCount": "{count, plural, one {# item} other {# itens}}",
+      "limitExceededLower": "limite excedido",
+      "limitForMonth": "Limite definido para o mês",
+      "marginAvailable": "Margem disponível",
+      "marginAvailableLower": "margem disponível",
+      "paidScheduled": "Pago: {paid} · Agendado: {scheduled}",
+      "periodExpenses": "Despesas do período",
+      "spentTotal": "Gasto Total",
+      "sumOfBudgets": "soma de todos os orçamentos",
+      "usage": "Utilização"
+    },
+    "zones": {
+      "danger": "Perigo",
+      "dangerFooter": "acima de 80%",
+      "dangerTitle": "Zona perigo",
+      "safe": "Seguro",
+      "safeFooter": "abaixo de 50%",
+      "safeTitle": "Zona seguro",
+      "warning": "Alerta",
+      "warningFooter": "entre 50% e 80%",
+      "warningTitle": "Zona alerta"
+    }
+  },
+  "calendar": {
+    "balance": {
+      "closing": "Saldo Final",
+      "opening": "Saldo Inicial"
+    },
+    "connect": {
+      "button": "Conectar Google Calendar"
+    },
+    "dayDetail": {
+      "description": "Extrato do dia",
+      "noMovement": "Nenhuma movimentação neste dia"
+    },
+    "google": {
+      "accountLabel": "Conta:",
+      "categoryLabel": "Categoria:",
+      "notConnected": "Google Calendar não conectado",
+      "payeeLabel": "Beneficiário:",
+      "statusLabel": "Status:",
+      "syncedTag": "Sincronizado via WISEVEO",
+      "transactionFallback": "Transação"
+    },
+    "googleClear": {
+      "button": "Limpar Google Calendar",
+      "clearing": "Limpando...",
+      "confirmAction": "Limpar tudo",
+      "confirmDescription": "Isso removerá todos os eventos criados pelo WISEVEO do seu Google Calendar. Eventos criados manualmente não serão afetados.",
+      "errors": {
+        "clearFailed": "Falha ao limpar eventos",
+        "generic": "Erro ao limpar Google Calendar",
+        "noFinalResponse": "Limpeza encerrada sem resposta final",
+        "noStream": "Resposta de limpeza sem stream"
+      },
+      "phaseClearing": "Limpando",
+      "preparing": "Preparando",
+      "toasts": {
+        "noEvents": "Nenhum evento WISEVEO encontrado no Google Calendar",
+        "removed": "{count, plural, one {# evento removido} other {# eventos removidos}} do Google Calendar"
+      }
+    },
+    "googleSync": {
+      "button": "Sincronizar com Google Calendar",
+      "errors": {
+        "generic": "Erro ao sincronizar com Google Calendar",
+        "noFinalResponse": "Sincronização encerrada sem resposta final",
+        "noStream": "Resposta de sincronização sem stream",
+        "syncFailed": "Falha na sincronização"
+      },
+      "phaseRemoving": "Removendo antigos",
+      "phaseSyncing": "Sincronizando",
+      "preparing": "Preparando",
+      "syncing": "Sincronizando...",
+      "toasts": {
+        "failed": "Falha ao sincronizar: {count, plural, one {# erro} other {# erros}}. Verifique se a Google Calendar API está habilitada.",
+        "partial": "{synced, plural, one {# evento sincronizado} other {# eventos sincronizados}}, {errors, plural, one {# erro} other {# erros}}",
+        "replacedSuffix": "{count, plural, one {# antigo substituído} other {# antigos substituídos}}",
+        "success": "{count, plural, one {# evento sincronizado} other {# eventos sincronizados}}"
+      }
+    },
+    "list": {
+      "noTransactions": "Nenhuma transação no período selecionado",
+      "transactionsCount": "{count, plural, one {# transação} other {# transações}}"
+    },
+    "sidebar": {
+      "description": "Resumo do Período",
+      "title": "Visão Geral"
+    },
+    "statusLabels": {
+      "overdue": "Vencido",
+      "paid": "Pago",
+      "pending": "Pendente",
+      "scheduled": "Agendado"
+    },
+    "summary": {
+      "expense": "Saídas",
+      "income": "Entradas",
+      "net": "Líquido"
+    },
+    "viewMode": {
+      "list": "Lista",
+      "month": "Mês"
+    }
+  },
+  "chat": {
+    "conversationList": {
+      "chatSettings": "Configurações do chat",
+      "filterMessages": "Filtrar mensagens",
+      "newChat": "Nova conversa",
+      "searchPlaceholder": "Buscar conversas..."
+    },
+    "deleteConversation": "Excluir conversa",
+    "header": {
+      "groupBadge": "Grupo",
+      "menu": {
+        "manageMembers": "Gerenciar membros",
+        "mute": "Silenciar conversa",
+        "searchMessages": "Buscar mensagens",
+        "unmute": "Reativar notificações"
+      },
+      "selectConversation": "Selecione uma conversa para começar a conversar",
+      "status": {
+        "away": "Ausente",
+        "groupOnline": "{total} membros, {online} online",
+        "lastSeen": "Visto por último em {date}",
+        "online": "Ativo agora"
+      },
+      "tooltips": {
+        "info": "Informações da conversa",
+        "search": "Buscar na conversa",
+        "videoCall": "Chamada de vídeo",
+        "voiceCall": "Chamada de voz"
+      }
+    },
+    "input": {
+      "addEmoji": "Adicionar emoji",
+      "attachFile": "Anexar arquivo",
+      "document": "Documento",
+      "moreOptions": "Mais opções",
+      "photoOrVideo": "Foto ou vídeo",
+      "placeholder": "Digite uma mensagem...",
+      "sendMessage": "Enviar mensagem",
+      "typing": "Você está digitando...",
+      "voiceMessage": "Mensagem de voz"
+    },
+    "loading": "Carregando chat...",
+    "message": {
+      "copy": "Copiar",
+      "delete": "Excluir",
+      "edited": "(editada)",
+      "reply": "Responder"
+    },
+    "messagePlaceholder": "Mensagem para {name}...",
+    "messagesTitle": "Mensagens",
+    "welcomeDescription": "Selecione uma conversa para começar a enviar mensagens",
+    "welcomeTitle": "Bem-vindo ao Chat"
   },
   "common": {
-    "save": "Salvar",
+    "actions": "Ações",
+    "add": "Adicionar",
+    "back": "Voltar",
     "cancel": "Cancelar",
+    "close": "Fechar",
+    "commandSearchTitle": "Busca de Comandos",
     "confirm": "Confirmar",
+    "datePicker": {
+      "dayCountBadge": "{count}d",
+      "fullMonth": "Mês completo",
+      "last3Months": "Últimos 3 meses",
+      "lastMonth": "Último mês",
+      "lastWeek": "Última semana",
+      "next3Months": "Próximos 3 meses",
+      "nextMonth": "Próximo mês",
+      "openPicker": "Abrir seletor de datas",
+      "prevMonth": "Mês anterior",
+      "selectDate": "Selecionar data",
+      "shortcuts": "Atalhos",
+      "shortcutsAria": "Atalhos de período",
+      "thisMonth": "Este mês",
+      "thisWeek": "Esta semana",
+      "today": "Hoje"
+    },
     "delete": "Excluir",
     "edit": "Editar",
-    "add": "Adicionar",
-    "loading": "Carregando...",
-    "search": "Buscar...",
-    "actions": "Ações",
-    "back": "Voltar",
-    "yes": "Sim",
-    "no": "Não",
-    "success": "Sucesso",
     "error": "Erro",
-    "openAppearanceCustomizer": "Abrir customizador de aparência",
-    "searchPlaceholder": "O que você precisa?",
-    "noResults": "Nenhum resultado encontrado."
-  },
-  "sidebar": {
-    "title": "WISEVEO",
-    "subtitle": "Aceleração Financeira",
-    "dashboards": "Dashboards",
-    "dashboard": "Dashboard",
-    "insights": "Insights",
-    "transacoes": "Transações",
-    "recorrentes": "Recorrentes",
-    "orcamento": "Orçamento",
-    "analise": "Análise",
-    "forecasting": "Forecasting",
-    "bancos": "Bancos",
-    "calendario": "Calendário",
-    "configuracoes": "Configurações",
-    "pages": "Páginas",
-    "settings": "Configurações",
-    "geral": "Geral",
-    "usersettings": "Configurações do Usuário",
-    "accountsettings": "Configurações da Conta",
-    "plansbilling": "Planos e Cobrança",
-    "appearance": "Aparência",
-    "notifications": "Notificações",
-    "connections": "Conexões",
-    "componentes": "Componentes",
-    "admin": "Administrador",
-    "apps": "Apps",
-    "mail": "Correio",
-    "tasks": "Tarefas",
-    "chat": "Chat",
-    "users": "Usuários",
-    "support": "Suporte",
-    "users": "Usuários",
-    "support": "Suporte",
-    "faqs": "FAQs",
-    "pricing": "Preços",
-    "logout": "Sair",
+    "loading": "Carregando...",
+    "loginDemo": {
+      "createAccount": "Criar conta",
+      "email": "Email*",
+      "forgotPassword": "Esqueceu a senha?",
+      "loginToAccount": "Faça login na sua conta agora",
+      "noAccount": "Não tem uma conta?",
+      "orSignInWith": "ou faça login com",
+      "password": "Senha*",
+      "passwordPlaceholder": "Digite sua senha",
+      "rememberDevice": "Lembrar este dispositivo",
+      "signIn": "Entrar",
+      "signInWithGithub": "Entrar com Github",
+      "signInWithGoogle": "Entrar com Google",
+      "welcomeTo": "Bem-vindo ao Shadcn Space"
+    },
+    "mobileMoreSheet": {
+      "descriptions": {
+        "analysis": "DRE e relatórios de período",
+        "banks": "Contas e saldos",
+        "forecasting": "Projeções financeiras",
+        "insights": "KPIs e análises financeiras",
+        "recurring": "Assinaturas e contas fixas",
+        "settings": "Preferências do sistema"
+      },
+      "secondaryNav": "Navegação secundária",
+      "title": "Mais opções"
+    },
+    "modeToggle": {
+      "switchToDark": "Alternar para o modo escuro",
+      "switchToLight": "Alternar para o modo claro"
+    },
     "more": "Mais",
-    "moreOptions": "Mais opções de navegação",
-    "mainNavigation": "Navegação principal",
-    "authPages": "Páginas de Autenticação",
-    "errorsGroup": "Erros",
-    "signIn1": "Entrar 1",
-    "signIn2": "Entrar 2",
-    "signUp1": "Cadastro 1",
-    "signUp2": "Cadastro 2",
-    "forgotPass1": "Esqueci a senha 1",
-    "forgotPass2": "Esqueci a senha 2",
-    "unauthorized": "Não autorizado",
-    "forbidden": "Proibido",
-    "notFound": "Não encontrado",
-    "internalError": "Erro interno do servidor",
-    "underMaintenance": "Em manutenção"
-  },
-  "login": {
-    "title": "Acesse sua conta",
-    "email": "Email",
-    "password": "Senha",
-    "forgotPassword": "Esqueceu a senha?",
-    "login": "Entrar",
-    "signup": "Criar Conta",
-    "orContinue": "Ou continue com",
-    "google": "Continuar com Google",
-    "loggingIn": "Entrando...",
-    "fullName": "Nome completo",
-    "confirmPassword": "Confirmar senha",
-    "creatingAccount": "Criando conta...",
-    "createAccount": "Criar conta",
-    "googleSyncNote": "Ao conectar com Google, será possível sincronizar sua agenda (em breve)"
+    "no": "Não",
+    "noResults": "Nenhum resultado encontrado.",
+    "noUserFound": "Nenhum usuário encontrado. Faça login para continuar.",
+    "openActions": "Abrir ações",
+    "openAppearanceCustomizer": "Abrir customizador de aparência",
+    "pricingPlans": {
+      "currentPlan": "Plano Atual",
+      "downgradePlan": "Rebaixar Plano",
+      "getStarted": "Começar",
+      "mostPopular": "Mais Popular",
+      "upgradePlan": "Fazer Upgrade"
+    },
+    "save": "Salvar",
+    "search": "Buscar...",
+    "searchPlaceholder": "O que você precisa?",
+    "selectPeriod": "Selecionar período",
+    "sidebarNotification": {
+      "blocks": "blocos premium do Shadcn UI",
+      "brandName": "ShadcnStore",
+      "closeNotification": "Fechar notificação",
+      "exploreBlocks": "Explore nossos",
+      "toBuildFaster": "para construir seu próximo projeto mais rápido.",
+      "welcomeTo": "Bem-vindo ao"
+    },
+    "sidebarPrimitive": {
+      "description": "Exibe a barra lateral no dispositivo móvel.",
+      "title": "Barra Lateral",
+      "toggle": "Alternar Barra Lateral"
+    },
+    "sidebarRadar": {
+      "currentBalance": "Saldo Atual",
+      "projected": "Projetado:",
+      "tooltipCollapsed": "Hoje: {today} | Projetado: {projected}",
+      "tooltipExpanded": "Projetado para o fim do mês: {projected}"
+    },
+    "siteFooter": {
+      "brandName": "WISEVEO",
+      "by": "por",
+      "madeWith": "Feito com",
+      "tagline": "Construindo blocos, templates e dashboards bonitos e acessíveis para aplicações web modernas."
+    },
+    "success": "Sucesso",
+    "upgradeToPro": {
+      "comingSoon": "Em breve",
+      "description": "Tenha acesso a blocos e dashboards premium exclusivos para o seu próximo projeto. Eleve sua UI instantaneamente!",
+      "live": "Ao vivo",
+      "proBlocks": "Blocos Pro",
+      "proDashboards": "Dashboards Pro",
+      "unlockPremiumBlocks": "Desbloquear Blocos Premium",
+      "upgradeToPro": "Fazer Upgrade para Pro"
+    },
+    "yes": "Sim"
   },
   "dashboard": {
-    "title": "Dashboard",
-    "subtitle": "Visão geral da sua saúde financeira",
-    "balance": "Saldo Geral",
-    "income": "Receitas",
-    "expenses": "Despesas",
-    "savings": "Economias",
-    "cashflow": "Fluxo de Caixa",
-    "expensesByGroup": "Despesas por Grupo",
-    "dailyMovement": "Movimento Diário",
-    "latestTransactions": "Últimos Lançamentos",
-    "upcomingTransactions": "Próximos Vencimentos",
-    "SectionCards": {
-      "balance": "Saldo",
-      "income": "Receitas",
-      "expense": "Despesas",
-      "savings": "Economias",
-      "balanceFooter": "Saldo consolidado",
-      "incomeFooter": "Entradas do mês",
-      "expenseFooter": "Saídas do mês",
-      "savingsFooter": "Economia do mês",
-      "vsPreviousMonth": "vs mês anterior"
-    },
     "ChartArea": {
-      "title": "Fluxo de Caixa do Período",
-      "description": "Acompanhe entradas, saídas e a evolução do saldo no intervalo selecionado",
       "currentBalance": "Saldo atual no período:",
+      "description": "Acompanhe entradas, saídas e a evolução do saldo no intervalo selecionado",
       "fetchError": "Falha ao carregar dados do gráfico de teste",
-      "loadError": "Não foi possível carregar o gráfico de teste."
+      "loadError": "Não foi possível carregar o gráfico de teste.",
+      "title": "Fluxo de Caixa do Período"
+    },
+    "DailyMovement": {
+      "accumulated": "ACUMULADO",
+      "balance": "SALDO",
+      "date": "DATA",
+      "description": "Consulte entradas, saídas, saldo diário e acumulado no intervalo selecionado",
+      "expense": "SAÍDAS",
+      "income": "ENTRADAS",
+      "loadError": "Erro ao carregar dados",
+      "loading": "Carregando...",
+      "mobileAccum": "ACUM.",
+      "mobileMinus": "-",
+      "mobilePlus": "+",
+      "noMovement": "Sem movimentação no período",
+      "title": "Movimentação Diária"
     },
     "ExpensesChart": {
-      "title": "Despesas por Grupo",
       "description": "Distribuição de gastos no período selecionado",
-      "totalExpenses": "Total de despesas:",
       "loading": "Carregando...",
       "noExpenses": "Sem despesas no período",
       "paid": "Pago:",
+      "title": "Despesas por Grupo",
       "toPay": "A Pagar:",
-      "total": "Total:"
-    },
-    "DailyMovement": {
-      "title": "Movimentação Diária",
-      "description": "Consulte entradas, saídas, saldo diário e acumulado no intervalo selecionado",
-      "date": "DATA",
-      "income": "ENTRADAS",
-      "expense": "SAÍDAS",
-      "balance": "SALDO",
-      "accumulated": "ACUMULADO",
-      "mobilePlus": "+",
-      "mobileMinus": "-",
-      "mobileAccum": "ACUM.",
-      "loading": "Carregando...",
-      "noMovement": "Sem movimentação no período"
+      "total": "Total:",
+      "totalExpenses": "Total de despesas:"
     },
     "LatestTransactions": {
-      "title": "Últimos Pagamentos",
       "description": "Acompanhe os pagamentos recentes",
+      "loadError": "Erro ao carregar dados",
       "loading": "Carregando...",
-      "noTransactions": "Sem pagamentos no período"
+      "noTransactions": "Sem pagamentos no período",
+      "title": "Últimos Pagamentos"
+    },
+    "SectionCards": {
+      "balance": "Saldo",
+      "balanceFooter": "Saldo consolidado",
+      "expense": "Despesas",
+      "expenseFooter": "Saídas do mês",
+      "income": "Receitas",
+      "incomeFooter": "Entradas do mês",
+      "savings": "Economias",
+      "savingsFooter": "Economia do mês",
+      "vsPreviousMonth": "vs mês anterior"
     },
     "UpcomingTransactions": {
-      "title": "Próximos Vencimentos",
       "description": "Acompanhe as próximas entradas e saídas",
+      "loadError": "Erro ao carregar dados",
       "loading": "Carregando...",
-      "noTransactions": "Sem vencimentos no período"
+      "noTransactions": "Sem vencimentos no período",
+      "title": "Próximos Vencimentos"
+    },
+    "balance": "Saldo Geral",
+    "cashflow": "Fluxo de Caixa",
+    "dailyMovement": "Movimento Diário",
+    "expenses": "Despesas",
+    "expensesByGroup": "Despesas por Grupo",
+    "income": "Receitas",
+    "latestTransactions": "Últimos Lançamentos",
+    "savings": "Economias",
+    "subtitle": "Visão geral da sua saúde financeira",
+    "title": "Dashboard",
+    "upcomingTransactions": "Próximos Vencimentos"
+  },
+  "faqs": {
+    "allCategoryLabel": "Todas",
+    "allFaqsHeading": "Todas as FAQs",
+    "categories": "Categorias",
+    "categoryFaqsHeading": "FAQs de {category}",
+    "categoryLabels": {
+      "account": "Conta",
+      "billing": "Faturamento",
+      "general": "Geral",
+      "privacy": "Privacidade",
+      "security": "Segurança",
+      "support": "Suporte",
+      "technical": "Técnico"
+    },
+    "learnMore": "Saiba mais",
+    "noResults": "Nenhuma FAQ encontrada com os critérios de busca.",
+    "resultCount": "{count, plural, one {# pergunta} other {# perguntas}}",
+    "searchPlaceholder": "Buscar FAQs..."
+  },
+  "forecasting": {
+    "client": {
+      "fetchError": "Falha ao carregar projeções",
+      "loadError": "Não foi possível carregar as projeções."
+    },
+    "fallback": {
+      "category": "Geral",
+      "expenseGroup": "Saídas diversas",
+      "incomeGroup": "Entradas diversas"
+    },
+    "sections": {
+      "expense": "Saídas",
+      "income": "Entradas"
+    },
+    "settings": {
+      "baseMonthLabel": "Mês Base Real",
+      "modeLabel": "Regime",
+      "modeOptions": {
+        "accrual": "Competência",
+        "cash": "Caixa"
+      },
+      "modePlaceholder": "Selecione...",
+      "modelLabel": "Motor Preditivo",
+      "modelOptions": {
+        "exponentialSmoothing": "Suavização Exponencial",
+        "movingAverage": "Média Móvel (3 Meses)",
+        "straightLine": "Linha Reta (Tendência)"
+      },
+      "modelPlaceholder": "Modelo Matemático",
+      "showAhLabel": "Análise Horizontal (AH)",
+      "showAvLabel": "Análise Vertical (AV)"
+    },
+    "table": {
+      "accountColumn": "Conta",
+      "accumulatedBalance": "SALDO ACUMULADO",
+      "actual": "Real",
+      "ahAbbrev": "AH",
+      "avAbbrev": "AV",
+      "netBalance": "SALDO FINAL",
+      "projected": "Projetado",
+      "projectedAbbrev": "Proj"
     }
   },
-  "setup": {
-    "welcome": {
-      "title": "Bem-vindo ao",
-      "subtitle": "Aceleração Financeira — Controle total sobre suas finanças pessoais com privacidade e liberdade.",
-      "chooseLanguage": "Escolha seu idioma",
-      "info": "Este assistente vai guiá-lo pela configuração inicial em poucos minutos. Você vai configurar o banco de dados, criar sua conta e personalizar seu plano de contas.",
-      "start": "Começar Configuração →"
+  "mail": {
+    "addLabel": "Adicionar etiqueta",
+    "allMail": "Todos os e-mails",
+    "archive": "Arquivar",
+    "forward": "Encaminhar",
+    "inbox": "Caixa de Entrada",
+    "laterToday": "Mais tarde hoje",
+    "markAsUnread": "Marcar como não lida",
+    "more": "Mais",
+    "moveToJunk": "Mover para spam",
+    "moveToTrash": "Mover para lixeira",
+    "muteThisThread": "Silenciar esta conversa",
+    "muteThread": "Silenciar conversa",
+    "nextWeek": "Próxima semana",
+    "noMessageSelected": "Nenhuma mensagem selecionada",
+    "reply": "Responder",
+    "replyAll": "Responder a todos",
+    "replyTo": "Responder para:",
+    "selectAccountAria": "Selecionar conta",
+    "selectAccountPlaceholder": "Selecionar uma conta",
+    "send": "Enviar",
+    "snooze": "Adiar",
+    "snoozeUntil": "Adiar até",
+    "starThread": "Marcar conversa com estrela",
+    "thisWeekend": "Neste fim de semana",
+    "tomorrow": "Amanhã",
+    "unread": "Não lidas"
+  },
+  "metadata": {
+    "description": "Aceleração Financeira"
+  },
+  "pricing": {
+    "faqDescription": "Obtenha respostas para as perguntas mais comuns sobre nossos preços e planos",
+    "faqTitle": "Perguntas Frequentes",
+    "featuresDescription": "Todo plano vem com estes recursos essenciais para ajudar sua equipe a ter sucesso",
+    "featuresTitle": "Todos os Planos Incluem"
+  },
+  "recurring": {
+    "actions": {
+      "delete": "Excluir",
+      "edit": "Editar",
+      "launchTransaction": "Lançar Transação"
     },
-    "database": {
-      "title": "Banco de Dados",
-      "subtitle": "Conecte-se a um banco PostgreSQL existente ou use o Docker local.",
-      "dockerTitle": "Docker Local",
-      "dockerSubtitle": "Banco novo via Docker Compose",
-      "existingTitle": "Banco Existente",
-      "existingSubtitle": "Supabase, Neon, Railway, etc.",
-      "connectionString": "Connection String (DATABASE_URL)",
-      "format": "Formato: postgresql://user:password@host:port/database",
-      "helpTitle": "Como pegar minha URL de conexão?",
-      "helpSupabase": "Vá em Project Settings > Database. Desça até a seção Connection string. Selecione a aba URI. Copie o link (geralmente usa a porta 6543 para Transaction Pooler) e substitua [YOUR-PASSWORD] pela sua senha.",
-      "helpNeon": "No seu Dashboard, vá em Dashboard > Connection Details. Selecione Postgres e marque a caixa para mostrar a senha. Copie a URL fornecida.",
-      "testConnection": "Testar Conexão",
-      "testing": "Testando conexão...",
-      "success": "Conexão estabelecida com sucesso!",
-      "existingDataFound": "📊 Dados existentes encontrados:",
-      "accounts": "Contas",
-      "transactions": "Transações",
-      "groups": "Grupos",
-      "categories": "Categorias",
-      "preserveDataMsg": "O banco será conectado preservando os dados existentes.",
-      "connectionFailed": "Falha na conexão",
-      "networkError": "Erro de rede. Verifique se o servidor está rodando.",
-      "cantConnect": "Não foi possível conectar ao banco de dados."
+    "batch": {
+      "dateLabel": "Data",
+      "delete": "Excluir",
+      "deleteDescription": "Esta ação excluirá {count, plural, one {# recorrência} other {# recorrências}} permanentemente.",
+      "deleteTitle": "Excluir Recorrências",
+      "deleteTooltip": "Excluir selecionados",
+      "deleting": "Excluindo...",
+      "editDate": "Editar Data",
+      "editDateDescription": "Defina a data para {count, plural, one {# recorrência selecionada} other {# recorrências selecionadas}}.",
+      "editDateTitle": "Editar Data em Lote",
+      "editDateTooltip": "Editar data dos selecionados",
+      "launch": "Lançar",
+      "launchDescription": "Confirmar lançamento de {count, plural, one {# recorrência} other {# recorrências}}?",
+      "launchTitle": "Lançar Transações",
+      "launchTooltip": "Lançar selecionados",
+      "launching": "Lançando...",
+      "saveDate": "Salvar data",
+      "saving": "Salvando...",
+      "selectedCount": "{count, plural, one {# selecionado} other {# selecionados}}"
     },
-    "admin": {
-      "title": "Conta Administrador",
-      "subtitle": "Crie a conta principal que terá acesso total ao sistema.",
-      "nameLabel": "Nome completo",
-      "namePlaceholder": "Seu nome",
-      "emailLabel": "Email",
-      "emailPlaceholder": "seu@email.com",
-      "passwordLabel": "Senha",
-      "passwordPlaceholder": "Mínimo 6 caracteres",
-      "confirmPasswordLabel": "Confirmar senha",
-      "confirmPasswordPlaceholder": "Repita a senha",
-      "errors": {
-        "nameRequired": "Nome é obrigatório",
-        "emailRequired": "Email é obrigatório",
-        "emailInvalid": "Email inválido",
-        "passwordRequired": "Senha é obrigatória",
-        "passwordMin": "Senha deve ter pelo menos 6 caracteres",
-        "passwordMismatch": "Senhas não conferem"
+    "card": {
+      "lastLabel": "Último:",
+      "noDescription": "Sem descrição",
+      "noHistory": "Sem histórico",
+      "noReference": "Sem referência",
+      "periodLabel": "Período:"
+    },
+    "columns": {
+      "account": "BANCO",
+      "actions": "AÇÕES",
+      "amount": "VALOR",
+      "category": "CATEGORIA",
+      "description": "DESCRIÇÃO",
+      "group": "GRUPO",
+      "lastLaunch": "ÚLT. LANÇAMENTO",
+      "note": "HISTÓRICO",
+      "period": "PERÍODO",
+      "reference": "REF",
+      "selectAllAria": "Selecionar tudo",
+      "selectRowAria": "Selecionar linha",
+      "type": "TIPO",
+      "typeExpense": "Despesa",
+      "typeIncome": "Receita",
+      "typeTransfer": "Transferência"
+    },
+    "dialogs": {
+      "deleteConfirm": {
+        "confirmText": "Esta ação excluirá definitivamente o modelo recorrente.",
+        "deleting": "Excluindo...",
+        "title": "Excluir Recorrência"
+      },
+      "editRecurring": {
+        "accountLabel": "Banco",
+        "amountLabel": "Valor",
+        "categoryLabel": "Categoria",
+        "dateLabel": "Data",
+        "description": "Atualize os dados da recorrência selecionada.",
+        "descriptionLabel": "Descrição",
+        "descriptionPlaceholder": "Detalhes opcionais...",
+        "groupLabel": "Grupo",
+        "historyLabel": "Histórico",
+        "historyPlaceholder": "Beneficiário ou descrição rápida...",
+        "refLabel": "REF",
+        "refPlaceholder": "ex: Boleto FIES",
+        "saving": "Salvando...",
+        "selectPlaceholder": "Selecione...",
+        "statusLabel": "Status",
+        "suggestionsCount": "{count, plural, one {# sugestão} other {# sugestões}}",
+        "title": "Editar Recorrência",
+        "typeExpense": "Despesa",
+        "typeIncome": "Receita",
+        "typeTransfer": "Transf.",
+        "updateButton": "Atualizar"
+      },
+      "historyFallback": "Sem histórico",
+      "launchConfirm": {
+        "confirmText": "Confirmar lançamento de uma nova transação a partir desta recorrência?",
+        "launchButton": "Lançar",
+        "launching": "Lançando...",
+        "title": "Lançar Transação"
       }
     },
-    "integrations": {
-      "title": "Integrações Opcionais",
-      "subtitle": "Ative os módulos extras para expandir as funcionalidades do sistema.",
-      "optional": "Opcional",
-      "google": {
-        "title": "Google Calendar & OAuth",
-        "desc": "Permite login com Google e sincronização de eventos financeiros na agenda.",
-        "clientId": "Client ID",
-        "clientSecret": "Client Secret"
-      },
-      "telegram": {
-        "title": "Bot do Telegram",
-        "desc": "Receba notificações, alertas de orçamento e registre transações via chat.",
-        "botToken": "Bot Token (BotFather)",
-        "botUsername": "Bot Username (@seu_bot)",
-        "webhookSecret": "Webhook Secret (Sua escolha)"
-      },
-      "openai": {
-        "title": "OpenAI (Assistente AI)",
-        "desc": "Necessário para a categorização automática e respostas inteligentes no Telegram.",
-        "apiKey": "API Key"
-      }
+    "filters": {
+      "allTypes": "Todos os tipos",
+      "apply": "Aplicar",
+      "clear": "Limpar",
+      "filterSheetTitle": "Filtrar Recorrências",
+      "filtersButton": "Filtros",
+      "searchPlaceholderDesktop": "Busca inteligente...",
+      "searchPlaceholderMobile": "Buscar...",
+      "typeFieldLabel": "Tipo"
     },
-    "chartOfAccounts": {
-      "title": "Plano de Contas",
-      "subtitle": "O coração financeiro do sistema. Este é o plano padrão que será criado.",
-      "existingDataNotice": "O seu banco já possui dados. Não vamos injetar o plano de contas padrão para evitar duplicação.",
-      "asset": "Ativo",
-      "liability": "Passivo",
-      "revenue": "Receitas",
-      "expense": "Despesas",
-      "preview": "Prévia do Plano de Contas",
-      "currentAssets": "Ativo Circulante (Contas, Dinheiro)",
-      "fixedAssets": "Ativo Não Circulante (Imóveis, Veículos)",
-      "shortTerm": "Passivo Circulante (Cartões, Contas a Pagar)",
-      "longTerm": "Passivo Não Circulante (Empréstimos, Financiamentos)",
-      "revenueCategories": "Salário, Vendas, Rendimentos",
-      "expenseCategories": "Moradia, Alimentação, Lazer, Transporte",
-      "customizationNote": "Você poderá editar, adicionar e remover contas, grupos e categorias depois, nas configurações do sistema."
+    "table": {
+      "noResults": "Nenhuma recorrência encontrada."
     },
-    "summary": {
-      "title": "Tudo Pronto!",
-      "subtitle": "Revise suas configurações antes de inicializar o sistema.",
-      "dbConnection": "Conexão com Banco",
-      "freshInstall": "Instalação Limpa (Semente padrão)",
-      "keepExisting": "Manter Dados Existentes",
-      "adminAccount": "Conta Admin",
-      "integrations": "Integrações Ativas",
-      "google": "Google",
-      "telegram": "Telegram",
-      "openai": "OpenAI",
-      "none": "Nenhuma",
-      "initialize": "Inicializar Sistema",
-      "configuring": "Configurando..."
-    },
-    "stepper": {
-      "welcome": "Bem-vindo",
-      "database": "Banco",
-      "admin": "Admin",
-      "integrations": "Integrações",
-      "chartOfAccounts": "Contas",
-      "summary": "Resumo"
-    },
-    "common": {
-      "next": "Próximo →",
-      "back": "← Voltar"
-    },
-    "wizard": {
-      "restarting": "Reiniciando...",
-      "restartingDesc": "O servidor está aplicando as configurações e reiniciando. Você será redirecionado para o login automaticamente.",
-      "success": "Setup concluído! Reiniciando servidor...",
-      "error": "Erro ao configurar o sistema.",
-      "fatalError": "Erro fatal ao tentar configurar o sistema."
+    "toasts": {
+      "batchDeleteError": "Falha ao excluir recorrências selecionadas",
+      "batchDeletePartial": "{succeeded} excluída(s) e {failed} com falha",
+      "batchDeleteSuccess": "{count, plural, one {# recorrência excluída} other {# recorrências excluídas}} com sucesso",
+      "batchEditDateError": "Falha ao atualizar data das recorrências selecionadas",
+      "batchEditDatePartial": "{succeeded} atualizada(s) e {failed} com falha",
+      "batchEditDateSuccess": "Data atualizada em {count, plural, one {# recorrência} other {# recorrências}}",
+      "batchLaunchError": "Falha ao lançar recorrências selecionadas",
+      "batchLaunchPartial": "{succeeded} lançada(s) e {failed} com falha",
+      "batchLaunchSuccess": "{count, plural, one {# transação lançada} other {# transações lançadas}} com sucesso",
+      "deleteError": "Erro ao excluir recorrência",
+      "deleteSuccess": "Recorrência excluída com sucesso",
+      "editError": "Erro ao editar recorrência",
+      "editSuccess": "Recorrência atualizada com sucesso",
+      "invalidAmount": "Informe um valor válido",
+      "launchError": "Erro ao lançar transação recorrente",
+      "launchSuccess": "Transação lançada com sucesso",
+      "requiredFields": "Preencha todos os campos obrigatórios"
     }
   },
   "settings": {
-    "onboardingSuccess": "Setup concluído com sucesso! 🎉",
-    "onboardingDesc": "Bem-vindo ao WISEVEO. Seu banco de dados e usuário administrador foram configurados. Recomendamos que você revise as abas abaixo (como <strong>Moeda</strong> e <strong>Geral</strong>) e depois navegue pelo menu lateral para configurar o Plano de Contas definitivo (Categorias e Contas).",
-    "tabs": {
-      "general": "Geral",
-      "appearance": "Aparência",
-      "monetary": "Moeda",
-      "profile": "Perfil",
-      "account": "Conta",
-      "admin": "Admin"
-    },
-    "appearance": {
-      "title": "Aparência & Idioma",
-      "description": "Defina aqui o modo, os presets visuais, o layout estrutural e o idioma que devem carregar em todas as páginas do projeto.",
-      "languageTitle": "Idioma do Sistema",
-      "languageDesc": "Escolha o idioma preferido para a interface. A mudança será aplicada imediatamente.",
-      "customizerDesc": "Modo claro/escuro, presets de tema, cores de marca e layout da sidebar agora vivem nesta seção e são aplicados globalmente."
-    },
-    "profile": {
-      "title": "Configurações de Perfil",
-      "description": "Atualize suas informações pessoais e preferências",
-      "uploadPhoto": "Enviar nova foto",
-      "reset": "Redefinir",
-      "photoLimits": "Permitido JPG, GIF ou PNG. Tamanho máximo de 800K.",
-      "success": "Perfil atualizado com sucesso!",
-      "error": "Erro ao atualizar perfil.",
-      "connError": "Erro de conexão ao salvar perfil.",
-      "firstName": "Nome",
-      "firstNamePl": "Digite seu nome",
-      "firstNameReq": "O nome é obrigatório",
-      "lastName": "Sobrenome",
-      "lastNamePl": "Digite seu sobrenome",
-      "lastNameReq": "O sobrenome é obrigatório",
-      "email": "E-mail",
-      "emailPl": "Digite seu e-mail",
-      "emailReq": "Endereço de e-mail inválido",
-      "company": "Empresa",
-      "companyPl": "Digite o nome da empresa",
-      "phone": "Telefone",
-      "phonePl": "Digite seu número de telefone",
-      "location": "Localização",
-      "locationPl": "Sua localização (ex: São Paulo, Brasil)",
-      "website": "Website",
-      "websitePl": "https://seu-site.com",
-      "language": "Idioma",
-      "languagePl": "Selecione o idioma",
-      "langPt": "Português (BR)",
-      "langEn": "Inglês",
-      "langEs": "Espanhol",
-      "role": "Cargo",
-      "rolePl": "Ex: Diretor Financeiro",
-      "timezone": "Fuso Horário",
-      "timezonePl": "Selecione o fuso horário",
-      "bio": "Biografia",
-      "bioPl": "Conte-nos um pouco sobre você...",
-      "save": "Salvar Alterações",
-      "cancel": "Cancelar"
-    },
     "account": {
-      "title": "Conta",
-      "description": "Gerencie as credenciais e o acesso à sua conta.",
-      "success": "Dados da conta atualizados!",
-      "error": "Erro ao atualizar conta.",
-      "connError": "Erro de conexão ao salvar dados da conta.",
-      "passwordMismatch": "As senhas não coincidem.",
-      "accessDataTitle": "Dados de Acesso",
       "accessDataDesc": "Atualize suas credenciais básicas de acesso e exibição.",
-      "username": "Nome de Usuário",
-      "usernamePl": "Digite seu nome de usuário (username)",
-      "usernameReq": "O nome de usuário deve ter pelo menos 3 caracteres",
-      "email": "Endereço de E-mail",
-      "emailPl": "Digite seu e-mail",
-      "emailReq": "Endereço de e-mail inválido",
-      "firstName": "Nome",
-      "firstNamePl": "Digite seu nome",
-      "firstNameReq": "O nome é obrigatório",
-      "lastName": "Sobrenome",
-      "lastNamePl": "Digite seu sobrenome",
-      "lastNameReq": "O sobrenome é obrigatório",
+      "accessDataTitle": "Dados de Acesso",
+      "cancel": "Cancelar",
       "changePassword": "Alterar Senha",
       "changePasswordDesc": "Mantenha sua conta segura atualizando sua senha regularmente.",
-      "currentPassword": "Senha Atual",
-      "currentPasswordPl": "Digite sua senha atual",
-      "newPassword": "Nova Senha",
-      "newPasswordPl": "Digite a nova senha",
       "confirmPassword": "Confirmar Nova Senha",
       "confirmPasswordPl": "Repita a nova senha",
+      "connError": "Erro de conexão ao salvar dados da conta.",
+      "currentPassword": "Senha Atual",
+      "currentPasswordPl": "Digite sua senha atual",
       "dangerZone": "Zona de Perigo",
       "dangerZoneDesc": "Ações destrutivas e irreversíveis.",
       "deleteAccount": "Excluir Conta",
       "deleteAccountDesc": "Excluir permanentemente a sua conta e todos os dados financeiros associados a ela.",
+      "description": "Gerencie as credenciais e o acesso à sua conta.",
+      "email": "Endereço de E-mail",
+      "emailPl": "Digite seu e-mail",
+      "emailReq": "Endereço de e-mail inválido",
+      "error": "Erro ao atualizar conta.",
+      "errors": {
+        "currentPasswordIncorrect": "A senha atual está incorreta.",
+        "noLocalPassword": "Usuário não possui senha definida localmente."
+      },
+      "firstName": "Nome",
+      "firstNamePl": "Digite seu nome",
+      "firstNameReq": "O nome é obrigatório",
+      "lastName": "Sobrenome",
+      "lastNamePl": "Digite seu sobrenome",
+      "lastNameReq": "O sobrenome é obrigatório",
+      "newPassword": "Nova Senha",
+      "newPasswordPl": "Digite a nova senha",
+      "passwordMismatch": "As senhas não coincidem.",
       "save": "Salvar Alterações",
-      "cancel": "Cancelar"
-    },
-    "general": {
-      "title": "Geral",
-      "description": "Defina preferências globais usadas pelos fluxos compartilhados do sistema.",
-      "success": "Configurações gerais atualizadas com sucesso!",
-      "error": "Não foi possível salvar as configurações gerais.",
-      "defaultAccountReq": "Selecione o banco padrão.",
-      "defaultStatusReq": "Selecione o status padrão.",
-      "defaultQuickPayment": "Pagamento Rápido Padrão",
-      "defaultQuickPaymentDesc": "Usado no menu da coluna de ações e no menu de ações em lote da página de Transações.",
-      "unavailableFeatures": "Cadastre pelo menos um banco ativo e um status no banco de dados para habilitar este recurso global.",
-      "invalidConfig": "A configuração salva não corresponde mais a um banco ou status disponível. Selecione novos valores e salve novamente.",
-      "defaultAccount": "Banco padrão",
-      "selectDefaultAccount": "Selecione o banco padrão",
-      "defaultAccountDesc": "Esta conta será aplicada automaticamente quando o Pagamento Rápido for confirmado.",
-      "defaultStatus": "Status padrão",
-      "selectDefaultStatus": "Selecione o status padrão",
-      "defaultStatusDesc": "O lançamento será atualizado para este status ao usar o Pagamento Rápido.",
-      "cancel": "Cancelar",
-      "save": "Salvar",
-      "saving": "Salvando..."
-    },
-    "monetary": {
-      "title": "Formatação Monetária",
-      "description": "Defina como valores financeiros devem ser exibidos em todo o sistema.",
-      "success": "Formatação monetária atualizada com sucesso!",
-      "error": "Não foi possível salvar a formatação monetária.",
-      "globalPrefs": "Preferências Globais",
-      "globalPrefsDesc": "Estas opções afetam cards, tabelas, gráficos e resumos financeiros.",
-      "currency": "Moeda",
-      "selectCurrency": "Selecione a moeda",
-      "brl": "Real brasileiro (BRL)",
-      "usd": "Dólar americano (USD)",
-      "eur": "Euro (EUR)",
-      "currencyDesc": "Define símbolo, código e separadores numéricos padrão.",
-      "displayMode": "Formato de Exibição",
-      "selectFormat": "Selecione o formato",
-      "symbol": "Símbolo monetário",
-      "code": "Código da moeda",
-      "number": "Somente número",
-      "displayModeDesc": "Exemplo: R$, BRL ou apenas o valor numérico.",
-      "negativeFormat": "Valores Negativos",
-      "parentheses": "Entre parênteses",
-      "minus": "Com sinal de menos",
-      "negativeFormatDesc": "Escolha como saídas, prejuízos e demais valores negativos serão mostrados.",
-      "previewTitle": "Pré-visualização em Tempo Real",
-      "previewDesc": "Veja como o mesmo valor ficará em versões positiva e negativa.",
-      "posValue": "Valor positivo",
-      "negValue": "Valor negativo",
-      "save": "Salvar Formatação",
-      "cancel": "Cancelar",
-      "saving": "Salvando..."
+      "success": "Dados da conta atualizados!",
+      "title": "Conta",
+      "username": "Nome de Usuário",
+      "usernamePl": "Digite seu nome de usuário (username)",
+      "usernameReq": "O nome de usuário deve ter pelo menos 3 caracteres"
     },
     "adminUsers": {
-      "title": "Admin",
-      "pendingCount": "Cadastros pendentes: {count}",
-      "usersTitle": "Usuários",
-      "usersDesc": "Liberação de novos acessos ao WISEVEO.",
-      "noUsers": "Nenhum usuário encontrado.",
-      "colUser": "Usuário",
-      "colStatus": "Status",
-      "colRole": "Perfil",
-      "colDate": "Cadastro",
-      "colAction": "Ação",
       "active": "Ativo",
-      "pending": "Pendente",
-      "approving": "Aprovando...",
       "approve": "Aprovar",
-      "approved": "Liberado",
+      "approveError": "Não foi possível aprovar o usuário.",
       "approveSuccess": "Usuário aprovado com sucesso.",
-      "approveError": "Não foi possível aprovar o usuário."
+      "approved": "Liberado",
+      "approving": "Aprovando...",
+      "colAction": "Ação",
+      "colDate": "Cadastro",
+      "colRole": "Perfil",
+      "colStatus": "Status",
+      "colUser": "Usuário",
+      "errors": {
+        "adminOnly": "Acesso restrito a administradores",
+        "notAuthenticated": "Não autenticado",
+        "userNotFound": "Usuário não encontrado"
+      },
+      "noUsers": "Nenhum usuário encontrado.",
+      "pending": "Pendente",
+      "pendingCount": "Cadastros pendentes: {count}",
+      "title": "Admin",
+      "usersDesc": "Liberação de novos acessos ao WISEVEO.",
+      "usersTitle": "Usuários"
+    },
+    "appearance": {
+      "customizerDesc": "Modo claro/escuro, presets de tema, cores de marca e layout da sidebar agora vivem nesta seção e são aplicados globalmente.",
+      "description": "Defina aqui o modo, os presets visuais, o layout estrutural e o idioma que devem carregar em todas as páginas do projeto.",
+      "languageDesc": "Escolha o idioma preferido para a interface. A mudança será aplicada imediatamente.",
+      "languageTitle": "Idioma do Sistema",
+      "title": "Aparência & Idioma"
+    },
+    "componentsShowcase": {
+      "chartsDescription": "Exemplos de visualizações de dados e gráficos interativos.",
+      "chartsTitle": "Gráficos",
+      "insightsDescription": "Componentes de métricas, gráficos e análises de desempenho.",
+      "insightsTitle": "Insights",
+      "tablesDescription": "Componentes de tabela com suporte a ordenação, filtragem e drag & drop.",
+      "tablesTitle": "Tabelas"
+    },
+    "general": {
+      "cancel": "Cancelar",
+      "defaultAccount": "Banco padrão",
+      "defaultAccountDesc": "Esta conta será aplicada automaticamente quando o Pagamento Rápido for confirmado.",
+      "defaultAccountReq": "Selecione o banco padrão.",
+      "defaultQuickPayment": "Pagamento Rápido Padrão",
+      "defaultQuickPaymentDesc": "Usado no menu da coluna de ações e no menu de ações em lote da página de Transações.",
+      "defaultStatus": "Status padrão",
+      "defaultStatusDesc": "O lançamento será atualizado para este status ao usar o Pagamento Rápido.",
+      "defaultStatusReq": "Selecione o status padrão.",
+      "description": "Defina preferências globais usadas pelos fluxos compartilhados do sistema.",
+      "error": "Não foi possível salvar as configurações gerais.",
+      "errors": {
+        "quickPaymentAccountUnavailable": "O banco selecionado para o Pagamento Rápido não está disponível.",
+        "quickPaymentSelectionRequired": "Selecione um banco e um status para o Pagamento Rápido.",
+        "quickPaymentStatusUnavailable": "O status selecionado para o Pagamento Rápido não está disponível."
+      },
+      "invalidConfig": "A configuração salva não corresponde mais a um banco ou status disponível. Selecione novos valores e salve novamente.",
+      "save": "Salvar",
+      "saving": "Salvando...",
+      "selectDefaultAccount": "Selecione o banco padrão",
+      "selectDefaultStatus": "Selecione o status padrão",
+      "success": "Configurações gerais atualizadas com sucesso!",
+      "title": "Geral",
+      "unavailableFeatures": "Cadastre pelo menos um banco ativo e um status no banco de dados para habilitar este recurso global."
+    },
+    "monetary": {
+      "brl": "Real brasileiro (BRL)",
+      "cancel": "Cancelar",
+      "code": "Código da moeda",
+      "currency": "Moeda",
+      "currencyDesc": "Define símbolo, código e separadores numéricos padrão.",
+      "description": "Defina como valores financeiros devem ser exibidos em todo o sistema.",
+      "displayMode": "Formato de Exibição",
+      "displayModeDesc": "Exemplo: R$, BRL ou apenas o valor numérico.",
+      "error": "Não foi possível salvar a formatação monetária.",
+      "eur": "Euro (EUR)",
+      "globalPrefs": "Preferências Globais",
+      "globalPrefsDesc": "Estas opções afetam cards, tabelas, gráficos e resumos financeiros.",
+      "minus": "Com sinal de menos",
+      "negValue": "Valor negativo",
+      "negativeFormat": "Valores Negativos",
+      "negativeFormatDesc": "Escolha como saídas, prejuízos e demais valores negativos serão mostrados.",
+      "number": "Somente número",
+      "parentheses": "Entre parênteses",
+      "posValue": "Valor positivo",
+      "previewDesc": "Veja como o mesmo valor ficará em versões positiva e negativa.",
+      "previewTitle": "Pré-visualização em Tempo Real",
+      "save": "Salvar Formatação",
+      "saving": "Salvando...",
+      "selectCurrency": "Selecione a moeda",
+      "selectFormat": "Selecione o formato",
+      "success": "Formatação monetária atualizada com sucesso!",
+      "symbol": "Símbolo monetário",
+      "title": "Formatação Monetária",
+      "usd": "Dólar americano (USD)"
+    },
+    "onboardingDesc": "Bem-vindo ao WISEVEO. Seu banco de dados e usuário administrador foram configurados. Recomendamos que você revise as abas abaixo (como <strong>Moeda</strong> e <strong>Geral</strong>) e depois navegue pelo menu lateral para configurar o Plano de Contas definitivo (Categorias e Contas).",
+    "onboardingSuccess": "Setup concluído com sucesso! 🎉",
+    "profile": {
+      "bio": "Biografia",
+      "bioPl": "Conte-nos um pouco sobre você...",
+      "cancel": "Cancelar",
+      "company": "Empresa",
+      "companyPl": "Digite o nome da empresa",
+      "connError": "Erro de conexão ao salvar perfil.",
+      "description": "Atualize suas informações pessoais e preferências",
+      "email": "E-mail",
+      "emailPl": "Digite seu e-mail",
+      "emailReq": "Endereço de e-mail inválido",
+      "error": "Erro ao atualizar perfil.",
+      "firstName": "Nome",
+      "firstNamePl": "Digite seu nome",
+      "firstNameReq": "O nome é obrigatório",
+      "langEn": "Inglês",
+      "langEs": "Espanhol",
+      "langPt": "Português (BR)",
+      "language": "Idioma",
+      "languagePl": "Selecione o idioma",
+      "lastName": "Sobrenome",
+      "lastNamePl": "Digite seu sobrenome",
+      "lastNameReq": "O sobrenome é obrigatório",
+      "location": "Localização",
+      "locationPl": "Sua localização (ex: São Paulo, Brasil)",
+      "phone": "Telefone",
+      "phonePl": "Digite seu número de telefone",
+      "photoLimits": "Permitido JPG, GIF ou PNG. Tamanho máximo de 800K.",
+      "reset": "Redefinir",
+      "role": "Cargo",
+      "rolePl": "Ex: Diretor Financeiro",
+      "save": "Salvar Alterações",
+      "success": "Perfil atualizado com sucesso!",
+      "timezone": "Fuso Horário",
+      "timezonePl": "Selecione o fuso horário",
+      "title": "Configurações de Perfil",
+      "tzBrt": "BRT (Brasília Time)",
+      "tzEst": "EST (Eastern Standard Time)",
+      "tzPst": "PST (Pacific Standard Time)",
+      "tzUtc": "UTC (Coordinated Universal Time)",
+      "uploadPhoto": "Enviar nova foto",
+      "website": "Website",
+      "websitePl": "https://seu-site.com"
+    },
+    "tabs": {
+      "account": "Conta",
+      "admin": "Admin",
+      "appearance": "Aparência",
+      "general": "Geral",
+      "monetary": "Moeda",
+      "profile": "Perfil"
+    }
+  },
+  "setup": {
+    "admin": {
+      "confirmPasswordLabel": "Confirmar senha",
+      "confirmPasswordPlaceholder": "Repita a senha",
+      "emailLabel": "Email",
+      "emailPlaceholder": "seu@email.com",
+      "errors": {
+        "emailInvalid": "Email inválido",
+        "emailRequired": "Email é obrigatório",
+        "nameRequired": "Nome é obrigatório",
+        "passwordMin": "Senha deve ter pelo menos 6 caracteres",
+        "passwordMismatch": "Senhas não conferem",
+        "passwordRequired": "Senha é obrigatória"
+      },
+      "nameLabel": "Nome completo",
+      "namePlaceholder": "Seu nome",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Mínimo 6 caracteres",
+      "subtitle": "Crie a conta principal que terá acesso total ao sistema.",
+      "title": "Conta Administrador"
+    },
+    "chartOfAccounts": {
+      "asset": "Ativo",
+      "bankAccounts": "Contas Bancárias",
+      "createNew": "Criar Novo (Padrão)",
+      "currentAssets": "Ativo Circulante (Contas, Dinheiro)",
+      "customizationNote": "Você poderá editar, adicionar e remover contas, grupos e categorias depois, nas configurações do sistema.",
+      "existingDataNotice": "O seu banco já possui dados. Não vamos injetar o plano de contas padrão para evitar duplicação.",
+      "expense": "Despesas",
+      "expenseCategories": "Moradia, Alimentação, Lazer, Transporte",
+      "fixedAssets": "Ativo Não Circulante (Imóveis, Veículos)",
+      "groupsAndCategories": "Grupos e Categorias",
+      "keepExisting": "Manter Existente",
+      "liability": "Passivo",
+      "longTerm": "Passivo Não Circulante (Empréstimos, Financiamentos)",
+      "newAccountPlaceholder": "Nova conta...",
+      "newCategoryPlaceholder": "Nova categoria...",
+      "preview": "Prévia do Plano de Contas",
+      "revenue": "Receitas",
+      "revenueCategories": "Salário, Vendas, Rendimentos",
+      "shortTerm": "Passivo Circulante (Cartões, Contas a Pagar)",
+      "subtitle": "O coração financeiro do sistema. Este é o plano padrão que será criado.",
+      "subtitleEditable": "Personalize seus grupos, categorias e contas bancárias. Você pode editá-los depois nas Configurações.",
+      "subtitleReadOnly": "Seu banco já possui dados — o plano de contas existente será preservado. (Somente leitura)",
+      "title": "Plano de Contas"
+    },
+    "common": {
+      "back": "← Voltar",
+      "next": "Próximo →"
+    },
+    "database": {
+      "accounts": "Contas",
+      "cantConnect": "Não foi possível conectar ao banco de dados.",
+      "categories": "Categorias",
+      "connectionFailed": "Falha na conexão",
+      "connectionPlaceholder": "postgresql://usuario:senha@host:5432/banco",
+      "connectionString": "Connection String (DATABASE_URL)",
+      "dockerSubtitle": "Banco novo via Docker Compose",
+      "dockerTitle": "Docker Local",
+      "existingDataFound": "📊 Dados existentes encontrados:",
+      "existingSubtitle": "Supabase, Neon, Railway, etc.",
+      "existingTitle": "Banco Existente",
+      "format": "Formato: postgresql://user:password@host:port/database",
+      "groups": "Grupos",
+      "helpNeon": "No seu Dashboard, vá em Dashboard > Connection Details. Selecione Postgres e marque a caixa para mostrar a senha. Copie a URL fornecida.",
+      "helpSupabase": "Vá em Project Settings > Database. Desça até a seção Connection string. Selecione a aba URI. Copie o link (geralmente usa a porta 6543 para Transaction Pooler) e substitua [YOUR-PASSWORD] pela sua senha.",
+      "helpSupabaseStep2": "Desça até a seção <strong>Connection string</strong>",
+      "helpSupabaseStep3": "Selecione a aba <strong>URI</strong>",
+      "helpSupabaseStep4": "Copie o link (geralmente usa a porta <code>6543</code> para Transaction Pooler) e substitua <code>[YOUR-PASSWORD]</code> pela sua senha.",
+      "helpTitle": "Como pegar minha URL de conexão?",
+      "neonLabel": "🟢 Neon.tech:",
+      "networkError": "Erro de rede. Verifique se o servidor está rodando.",
+      "preserveDataMsg": "O banco será conectado preservando os dados existentes.",
+      "subtitle": "Conecte-se a um banco PostgreSQL existente ou use o Docker local.",
+      "success": "Conexão estabelecida com sucesso!",
+      "supabaseLabel": "🟢 Supabase:",
+      "testConnection": "Testar Conexão",
+      "testing": "Testando conexão...",
+      "title": "Banco de Dados",
+      "transactions": "Transações"
+    },
+    "integrations": {
+      "configureCredentials": "Configurar credenciais",
+      "google": {
+        "clientId": "Client ID",
+        "clientSecret": "Client Secret",
+        "desc": "Permite login com Google e sincronização de eventos financeiros na agenda.",
+        "shortDesc": "Login via Google e sincronização de calendário",
+        "title": "Google Calendar & OAuth"
+      },
+      "heading": "Integrações",
+      "hideFields": "Ocultar campos",
+      "intro": "Configure integrações opcionais. Você pode pular e configurar depois.",
+      "openai": {
+        "apiKey": "API Key",
+        "desc": "Necessário para a categorização automática e respostas inteligentes no Telegram.",
+        "shortDesc": "Interpretação de texto natural no Telegram",
+        "title": "OpenAI (Assistente AI)"
+      },
+      "optional": "Opcional",
+      "subtitle": "Ative os módulos extras para expandir as funcionalidades do sistema.",
+      "telegram": {
+        "botToken": "Bot Token (BotFather)",
+        "botTokenLabel": "Bot Token",
+        "botUsername": "Bot Username (@seu_bot)",
+        "botUsernameLabel": "Bot Username",
+        "desc": "Receba notificações, alertas de orçamento e registre transações via chat.",
+        "shortDesc": "Registre transações por mensagem de texto ou áudio",
+        "title": "Bot do Telegram",
+        "webhookSecret": "Webhook Secret (Sua escolha)",
+        "webhookSecretLabel": "Webhook Secret",
+        "webhookSecretPlaceholder": "Chave aleatória para validar webhooks"
+      },
+      "title": "Integrações Opcionais"
+    },
+    "stepper": {
+      "admin": "Admin",
+      "chartOfAccounts": "Contas",
+      "database": "Banco",
+      "integrations": "Integrações",
+      "summary": "Resumo",
+      "welcome": "Bem-vindo"
+    },
+    "summary": {
+      "adminAccount": "Conta Admin",
+      "chartNew": "Novo plano de contas inicializado",
+      "chartPreserved": "Preservado do banco existente",
+      "configuring": "Configurando...",
+      "dbConnection": "Conexão com Banco",
+      "dbExisting": "Conectado com dados existentes",
+      "dbNew": "Novo banco (Docker / Limpo)",
+      "finish": "Finalizar Setup 🎉",
+      "finishNote": "Ao finalizar, o sistema irá aplicar as migrações no banco, salvar suas configurações e reiniciar o servidor automaticamente.",
+      "freshInstall": "Instalação Limpa (Semente padrão)",
+      "google": "Google",
+      "initialize": "Inicializar Sistema",
+      "integrationCount": "{count, plural, one {# configurada} other {# configuradas}}",
+      "integrations": "Integrações Ativas",
+      "keepExisting": "Manter Dados Existentes",
+      "none": "Nenhuma",
+      "openai": "OpenAI",
+      "sectionAdmin": "Administrador",
+      "sectionChart": "Plano de Contas",
+      "sectionDatabase": "Banco de Dados",
+      "sectionIntegrations": "Integrações",
+      "subtitle": "Revise suas configurações antes de inicializar o sistema.",
+      "telegram": "Telegram",
+      "title": "Tudo Pronto!"
+    },
+    "welcome": {
+      "brand": "WISEVEO",
+      "chooseLanguage": "Escolha seu idioma",
+      "info": "Este assistente vai guiá-lo pela configuração inicial em poucos minutos. Você vai configurar o banco de dados, criar sua conta e personalizar seu plano de contas.",
+      "start": "Começar Configuração →",
+      "subtitle": "Aceleração Financeira — Controle total sobre suas finanças pessoais com privacidade e liberdade.",
+      "title": "Bem-vindo ao"
+    },
+    "wizard": {
+      "error": "Erro ao configurar o sistema.",
+      "fatalError": "Erro fatal ao tentar configurar o sistema.",
+      "restarting": "Reiniciando...",
+      "restartingDesc": "O servidor está aplicando as configurações e reiniciando. Você será redirecionado para o login automaticamente.",
+      "success": "Setup concluído! Reiniciando servidor..."
+    }
+  },
+  "sidebar": {
+    "accountsettings": "Configurações da Conta",
+    "admin": "Administrador",
+    "analise": "Análise",
+    "appearance": "Aparência",
+    "apps": "Apps",
+    "authPages": "Páginas de Autenticação",
+    "bancos": "Bancos",
+    "calendario": "Calendário",
+    "chat": "Chat",
+    "componentes": "Componentes",
+    "configuracoes": "Configurações",
+    "connections": "Conexões",
+    "dashboard": "Dashboard",
+    "dashboards": "Dashboards",
+    "errorsGroup": "Erros",
+    "faqs": "FAQs",
+    "forbidden": "Proibido",
+    "forecasting": "Forecasting",
+    "forgotPass1": "Esqueci a senha 1",
+    "forgotPass2": "Esqueci a senha 2",
+    "geral": "Geral",
+    "insights": "Insights",
+    "internalError": "Erro interno do servidor",
+    "logout": "Sair",
+    "mail": "Correio",
+    "mainNavigation": "Navegação principal",
+    "more": "Mais",
+    "moreOptions": "Mais opções de navegação",
+    "notFound": "Não encontrado",
+    "notifications": "Notificações",
+    "orcamento": "Orçamento",
+    "pages": "Páginas",
+    "plansbilling": "Planos e Cobrança",
+    "pricing": "Preços",
+    "recorrentes": "Recorrentes",
+    "settings": "Configurações",
+    "signIn1": "Entrar 1",
+    "signIn2": "Entrar 2",
+    "signUp1": "Cadastro 1",
+    "signUp2": "Cadastro 2",
+    "subtitle": "Aceleração Financeira",
+    "support": "Suporte",
+    "tasks": "Tarefas",
+    "title": "WISEVEO",
+    "transacoes": "Transações",
+    "unauthorized": "Não autorizado",
+    "underMaintenance": "Em manutenção",
+    "users": "Usuários",
+    "usersettings": "Configurações do Usuário"
+  },
+  "tasks": {
+    "addTaskModal": {
+      "cancel": "Cancelar",
+      "categoryField": "Categoria",
+      "categoryPlaceholder": "Selecionar categoria",
+      "createTask": "Criar Tarefa",
+      "description": "Crie uma nova tarefa para acompanhar o trabalho e o progresso. Preencha os detalhes abaixo.",
+      "descriptionField": "Descrição",
+      "descriptionPlaceholder": "Forneça detalhes adicionais sobre a tarefa...",
+      "priorityField": "Prioridade",
+      "priorityPlaceholder": "Selecionar prioridade",
+      "statusField": "Status",
+      "statusPlaceholder": "Selecionar status",
+      "title": "Adicionar Nova Tarefa",
+      "titleField": "Título da Tarefa *",
+      "titlePlaceholder": "Digite o título da tarefa...",
+      "titleRequired": "O título é obrigatório",
+      "trigger": "Adicionar Tarefa"
+    },
+    "columns": {
+      "category": "Categoria",
+      "priority": "Prioridade",
+      "selectAllAria": "Selecionar todos",
+      "selectRowAria": "Selecionar linha",
+      "status": "Status",
+      "task": "Tarefa",
+      "title": "Título"
+    },
+    "filter": {
+      "clearFilters": "Limpar filtros",
+      "selectedCount": "{count} selecionado(s)"
+    },
+    "options": {
+      "categories": {
+        "bug": "Bug",
+        "documentation": "Documentação",
+        "feature": "Funcionalidade",
+        "improvement": "Melhoria",
+        "refactor": "Refatoração"
+      },
+      "priorities": {
+        "critical": "Crítica",
+        "important": "Importante",
+        "minor": "Menor",
+        "normal": "Normal"
+      },
+      "statuses": {
+        "completed": "Concluído",
+        "inProgress": "Em Andamento",
+        "pending": "Pendente",
+        "todo": "A Fazer"
+      }
+    },
+    "page": {
+      "completed": "Concluídas",
+      "description": "Visualize, filtre e gerencie todas as suas tarefas de projeto em um só lugar",
+      "inProgress": "Em Andamento",
+      "loading": "Carregando tarefas...",
+      "mobileDescription": "Use uma tela maior para visualizar a interface completa de tarefas.",
+      "mobileTitle": "Painel de Tarefas",
+      "pending": "Pendentes",
+      "title": "Gerenciamento de Tarefas",
+      "totalTasks": "Total de Tarefas"
+    },
+    "pagination": {
+      "firstPageAria": "Ir para a primeira página",
+      "lastPageAria": "Ir para a última página",
+      "nextPageAria": "Ir para a próxima página",
+      "pageOfTotal": "Página {page} de {total}",
+      "previousPageAria": "Ir para a página anterior",
+      "rowsPerPage": "Linhas por página",
+      "selectedOfTotal": "{selected} de {total} linha(s) selecionada(s)."
+    },
+    "rowActions": {
+      "delete": "Excluir",
+      "duplicate": "Duplicar",
+      "editTask": "Editar Tarefa",
+      "markAsFavorite": "Marcar como Favorito",
+      "openMenu": "Abrir menu",
+      "viewTask": "Ver Tarefa"
+    },
+    "toolbar": {
+      "allCategories": "Todas as Categorias",
+      "allPriorities": "Todas as Prioridades",
+      "allStatus": "Todos os Status",
+      "resetFilters": "Redefinir Filtros",
+      "searchPlaceholder": "Buscar Tarefa"
+    },
+    "userNav": {
+      "billing": "Faturamento",
+      "logout": "Sair",
+      "newTeam": "Nova Equipe",
+      "profile": "Perfil",
+      "settings": "Configurações"
+    },
+    "viewOptions": {
+      "toggleColumns": "Alternar colunas",
+      "view": "Visualizar"
+    }
+  },
+  "telegram": {
+    "bot": {
+      "cardFormatError": "Desculpe, não consegui processar sua solicitação no momento.",
+      "connected": "Conta WISEVEO conectada com sucesso. Você já pode me fazer perguntas sobre suas finanças.",
+      "genericError": "Desculpe, ocorreu um erro técnico ao processar sua pergunta.",
+      "invalidToken": "Link de conexão inválido ou expirado. Gere um novo no painel de configurações.",
+      "notConnected": "Você precisa conectar sua conta WISEVEO primeiro acessando as Configurações do painel.",
+      "unknownIntent": "Não conectei sua pergunta às finanças do WISEVEO. Posso ajudar com lançamentos, saldos, orçamento, DRE e vencimentos."
+    },
+    "cardFormatter": {
+      "bankBalance": "Saldo no banco",
+      "expenses": "Gastos",
+      "generalFilter": "Geral",
+      "income": "Recebimentos",
+      "noMatchesFallback": "Não encontrei lançamentos com esses filtros.",
+      "notFound": "Nada encontrado",
+      "parseError": "Não consegui formatar a resposta.",
+      "processError": "Erro ao processar resposta.",
+      "quantity": "Quantidade",
+      "showingCount": " Exibindo {shown} de {total} lançamentos.",
+      "totalInPeriod": "Total de {total} em {countLabel}.",
+      "transactions": "Lançamentos",
+      "transactionsAbbrev": "{count, plural, one {# lanç.} other {# lanç.}}",
+      "transactionsCount": "{count, plural, one {# lançamento} other {# lançamentos}}"
+    },
+    "cards": {
+      "couldNotAnswer": "Não consegui responder",
+      "execution": "Execução",
+      "somethingIncomplete": "Algo ficou incompleto",
+      "totalResult": "Resultado Total",
+      "tryRephrasing": "Tente reformular a pergunta com um período, conta ou categoria."
+    },
+    "connect": {
+      "connectCta": "Conectar com Telegram",
+      "connectErrorPrefix": "Erro ao conectar: {message}",
+      "connectedAs": "Conectado como",
+      "defaultUsername": "Usuário",
+      "description": "Conecte sua conta do Telegram para receber resumos financeiros diretamente no seu chat, fazendo perguntas de forma natural.",
+      "disconnect": "Desconectar Telegram",
+      "noDeepLink": "Erro: link de conexão não foi gerado",
+      "notConfigured": "A integração com o Telegram não está ativada no servidor. Para utilizar este recurso, configure as variáveis <code>TELEGRAM_BOT_TOKEN</code> e <code>TELEGRAM_BOT_USERNAME</code> no seu arquivo <code>.env</code>.",
+      "title": "Integração Telegram"
+    },
+    "greetings": {
+      "afternoon": "Boa tarde",
+      "evening": "Boa noite",
+      "helpPrompt": "Em que posso te ajudar?",
+      "morning": "Bom dia",
+      "withName": "{salutation}, {name}! {prompt}",
+      "withoutName": "{salutation}! {prompt}"
+    },
+    "staticResponses": {
+      "identity": "Você está conectado como {name} ({email}).",
+      "outOfScopeWeather": "Desculpe, não respondo assuntos de meteorologia. Posso ajudar com suas finanças no WISEVEO."
+    },
+    "toolDispatcher": {
+      "unknownFallback": "Não entendi como processar essa solicitação."
+    },
+    "toolUtils": {
+      "untitledTransaction": "Lançamento"
+    },
+    "transactionSearch": {
+      "noMatches": "Não encontrei lançamentos em {period}.",
+      "noMatchesWithFilters": "Não encontrei lançamentos com esses filtros em {period}.",
+      "noMatchesWithTerm": "Não encontrei lançamentos contendo \"{term}\" em {period}.",
+      "periodRangeJoiner": "a",
+      "statusOverdue": "Vencido",
+      "statusPaid": "Pago",
+      "statusPending": "Pendente",
+      "statusScheduled": "Agendado"
+    }
+  },
+  "templatePages": {
+    "account": {
+      "cancel": "Cancelar",
+      "changePasswordDescription": "Mantenha sua conta segura atualizando sua senha regularmente.",
+      "changePasswordTitle": "Alterar Senha",
+      "confirmNewPassword": "Confirmar Nova Senha",
+      "confirmPasswordPlaceholder": "Confirme a nova senha",
+      "currentPassword": "Senha Atual",
+      "currentPasswordPlaceholder": "Digite sua senha atual",
+      "dangerZoneDescription": "Ações irreversíveis e destrutivas.",
+      "dangerZoneTitle": "Zona de Perigo",
+      "deleteAccount": "Excluir Conta",
+      "deleteAccountDescription": "Exclua permanentemente sua conta e todos os dados associados.",
+      "emailAddress": "Endereço de E-mail",
+      "emailInvalid": "Endereço de e-mail inválido",
+      "emailPlaceholder": "Digite seu e-mail",
+      "firstName": "Nome",
+      "firstNamePlaceholder": "Digite seu nome",
+      "firstNameRequired": "O nome é obrigatório",
+      "lastName": "Sobrenome",
+      "lastNamePlaceholder": "Digite seu sobrenome",
+      "lastNameRequired": "O sobrenome é obrigatório",
+      "newPassword": "Nova Senha",
+      "newPasswordPlaceholder": "Digite a nova senha",
+      "personalInfoDescription": "Atualize suas informações pessoais que serão exibidas no seu perfil.",
+      "personalInfoTitle": "Informações Pessoais",
+      "saveChanges": "Salvar Alterações",
+      "username": "Nome de Usuário",
+      "usernameMinLength": "O nome de usuário deve ter pelo menos 3 caracteres",
+      "usernamePlaceholder": "Digite seu nome de usuário"
+    },
+    "billing": {
+      "availablePlansDescription": "Escolha um plano que funcione melhor para você.",
+      "availablePlansTitle": "Planos Disponíveis",
+      "currentPlanTitle": "Plano Atual",
+      "currentlyOnPlan": "Você está atualmente no {plan}.",
+      "daysLabel": "Dias",
+      "daysOfTotal": "{used} de {total} dias",
+      "daysRemaining": "{days} dias restantes até seu plano precisar de atualização",
+      "historyDescription": "Veja suas faturas e pagamentos anteriores.",
+      "historyTitle": "Histórico de Faturamento",
+      "needsAttention": "Precisamos da sua atenção!",
+      "nextBilling": "Próxima cobrança: {date}"
+    },
+    "connections": {
+      "addNewApiKey": "Adicionar Nova Chave de API",
+      "apiIntegrationsDescription": "Configure conexões de API e webhooks.",
+      "apiIntegrationsTitle": "Integrações de API",
+      "apiKeysDescription": "Gerencie suas chaves de API e tokens de acesso.",
+      "apiKeysTitle": "Chaves de API",
+      "automateWithZapier": "Automatize fluxos de trabalho com o Zapier",
+      "calendarAndContacts": "Calendário e contatos",
+      "communication": "Comunicação",
+      "configureWebhooks": "Configure endpoints de webhook personalizados",
+      "connected": "conectado",
+      "connectedAccountsDescription": "Exiba conteúdo das suas contas conectadas no seu site",
+      "connectedAccountsTitle": "Contas Conectadas",
+      "copy": "Copiar",
+      "databaseSync": "Sincronização de Banco de Dados",
+      "databaseSyncDescription": "Sincronize dados com bancos de dados externos",
+      "developmentApiKey": "Chave de API de Desenvolvimento",
+      "manageGitRepos": "Gerencie seus repositórios Git",
+      "notConnected": "Não Conectado",
+      "productionApiKey": "Chave de API de Produção",
+      "regenerate": "Regenerar",
+      "shareUpdatesFacebook": "Compartilhe atualizações no Facebook",
+      "shareUpdatesTwitter": "Compartilhe atualizações no Twitter",
+      "socialAccountsTitle": "Contas Sociais",
+      "stayConnectedDribbble": "Fique conectado no Dribbble",
+      "stayConnectedInstagram": "Fique conectado no Instagram",
+      "webhooksTitle": "Webhooks"
+    },
+    "notifications": {
+      "always": "Sempre",
+      "appColumn": "APP",
+      "browserColumn": "NAVEGADOR",
+      "cancel": "Cancelar",
+      "channelsDescription": "Escolha seus canais de notificação preferidos para diferentes tipos de alertas.",
+      "channelsTitle": "Canais de Notificação",
+      "dailyDigest": "Resumo diário",
+      "email": "E-mail",
+      "emailChannelDescription": "Receba notificações por e-mail",
+      "emailFrequency": "Frequência de E-mail",
+      "emailNotificationsDescription": "Escolha quais notificações por e-mail você deseja receber.",
+      "emailNotificationsTitle": "Notificações por E-mail",
+      "frequencyDescription": "Controle a frequência com que você recebe notificações.",
+      "frequencyPlaceholder": "Selecionar frequência",
+      "frequencyTitle": "Frequência de Notificações",
+      "hourlyDigest": "Resumo por hora",
+      "instant": "Instantâneo",
+      "invoiceReminders": "Lembretes de fatura",
+      "marketingEmailsDescription": "Receba e-mails sobre nossas últimas ofertas e promoções.",
+      "marketingEmailsTitle": "E-mails de marketing",
+      "mentionsDescription": "Seja notificado quando alguém mencionar você.",
+      "mentionsTitle": "Menções",
+      "never": "Nunca",
+      "newMessagesDescription": "Seja notificado quando receber novas mensagens.",
+      "newMessagesTitle": "Novas mensagens",
+      "onlineOption": "Somente quando eu estiver online",
+      "orderUpdates": "Atualizações de pedidos",
+      "permissionDescription": "Precisamos da permissão do seu navegador para exibir notificações.",
+      "preferencesTitle": "Preferências de Notificação",
+      "productUpdatesDescription": "Receba atualizações sobre novos recursos e melhorias.",
+      "productUpdatesTitle": "Atualizações de produto",
+      "promotionalOffers": "Ofertas promocionais",
+      "pushChannelDescription": "Receba notificações push do navegador",
+      "pushNotificationsDescription": "Configure notificações push do navegador e celular.",
+      "pushNotificationsTitle": "Notificações Push",
+      "quietHours": "Horário Silencioso",
+      "quietHoursEndPlaceholder": "Fim",
+      "quietHoursStartPlaceholder": "Início",
+      "requestPermission": "Solicitar Permissão",
+      "savePreferences": "Salvar Preferências",
+      "securityAlertsDescription": "Seja notificado quando houver eventos de segurança na sua conta.",
+      "securityAlertsTitle": "Alertas de segurança",
+      "sms": "SMS",
+      "smsChannelDescription": "Receba notificações por SMS",
+      "systemMaintenance": "Manutenção do sistema",
+      "taskUpdatesDescription": "Seja notificado sobre atribuições e atualizações de tarefas.",
+      "taskUpdatesTitle": "Atualizações de tarefas",
+      "timingPlaceholder": "Selecionar horário",
+      "timingQuestion": "Quando devemos enviar notificações para você?",
+      "to": "até",
+      "typeColumn": "TIPO",
+      "weeklyDigest": "Resumo semanal"
+    },
+    "user": {
+      "allowedFormats": "Permitido JPG, GIF ou PNG. Tamanho máximo de 800K",
+      "bio": "Biografia",
+      "bioPlaceholder": "Conte um pouco sobre você...",
+      "cancel": "Cancelar",
+      "company": "Empresa",
+      "companyPlaceholder": "Digite sua empresa",
+      "description": "Atualize suas informações pessoais e preferências",
+      "email": "E-mail",
+      "emailInvalid": "Endereço de e-mail inválido",
+      "emailPlaceholder": "Digite seu e-mail",
+      "firstName": "Nome",
+      "firstNamePlaceholder": "Digite seu nome",
+      "firstNameRequired": "O nome é obrigatório",
+      "language": "Idioma",
+      "languagePlaceholder": "Selecionar idioma",
+      "languages": {
+        "english": "Inglês",
+        "french": "Francês",
+        "german": "Alemão",
+        "italian": "Italiano",
+        "portuguese": "Português",
+        "spanish": "Espanhol"
+      },
+      "lastName": "Sobrenome",
+      "lastNamePlaceholder": "Digite seu sobrenome",
+      "lastNameRequired": "O sobrenome é obrigatório",
+      "location": "Localização",
+      "locationPlaceholder": "Digite sua localização",
+      "phoneNumber": "Número de Telefone",
+      "phonePlaceholder": "Digite seu telefone",
+      "resetButton": "Redefinir",
+      "role": "Cargo",
+      "rolePlaceholder": "Digite seu cargo",
+      "saveChanges": "Salvar Alterações",
+      "timezone": "Fuso Horário",
+      "timezonePlaceholder": "Selecionar fuso horário",
+      "timezones": {
+        "aest": "AEST (Horário Padrão do Leste da Austrália)",
+        "cet": "CET (Horário Central Europeu)",
+        "cst": "CST (Horário Padrão Central)",
+        "est": "EST (Horário Padrão do Leste)",
+        "jst": "JST (Horário Padrão do Japão)",
+        "mst": "MST (Horário Padrão da Montanha)",
+        "pst": "PST (Horário Padrão do Pacífico)",
+        "utc": "UTC (Tempo Universal Coordenado)"
+      },
+      "title": "Configurações de Perfil",
+      "uploadNewPhoto": "Enviar nova foto",
+      "website": "Website",
+      "websitePlaceholder": "Digite seu website"
+    }
+  },
+  "themeCustomizer": {
+    "advancedCustomization": "Customização avançada",
+    "advancedCustomizationDesc": "Para edição avançada com preview visual e centenas de presets prontos, abra o editor do Tweakcn.",
+    "appearanceSource": "Fonte global de aparência",
+    "brandColor": {
+      "accent": "Accent",
+      "accentForeground": "Texto do Accent",
+      "muted": "Muted",
+      "mutedForeground": "Texto do Muted",
+      "primary": "Primária",
+      "primaryForeground": "Texto da Primária",
+      "secondary": "Secundária",
+      "secondaryForeground": "Texto da Secundária"
+    },
+    "brandColors": "Cores de marca",
+    "chooseShadcnPreset": "Escolha um preset Shadcn",
+    "chooseTweakcnPreset": "Escolha um preset Tweakcn",
+    "customizer": "Customizer",
+    "dark": "Escuro",
+    "importModal": {
+      "description": "Cole abaixo o CSS do seu tema. Inclua as seções <code>:root</code> (modo claro) e <code>.dark</code> (modo escuro) com variáveis como <code>--primary</code>, <code>--background</code> e outras. O sistema alternará automaticamente entre claro e escuro.",
+      "importErrorLog": "Erro ao importar tema:",
+      "importTheme": "Importar Tema",
+      "noCssContent": "Nenhum conteúdo CSS foi informado",
+      "title": "Importar CSS Personalizado"
+    },
+    "importTheme": "Importar tema",
+    "light": "Claro",
+    "mode": "Modo",
+    "openTweakcn": "Abrir Tweakcn",
+    "panelDescription": "Centralize aqui as preferências globais que afetam o projeto inteiro.",
+    "radius": "Raio",
+    "random": "Aleatório",
+    "restoreDefault": "Restaurar padrão",
+    "shadcnPresets": "Presets Shadcn UI",
+    "sheetDescription": "Personalize o tema e o layout do projeto.",
+    "sidebarCollapseDesc": {
+      "icon": "Ícones: a sidebar recolhe para o modo compacto.",
+      "none": "Fixa: a sidebar permanece sempre visível.",
+      "offcanvas": "Off-canvas: a sidebar sai totalmente da tela."
+    },
+    "sidebarCollapseLabel": "Colapso da sidebar",
+    "sidebarCollapsible": {
+      "icon": "Ícones",
+      "none": "Fixa",
+      "offcanvas": "Off Canvas"
+    },
+    "sidebarPosition": {
+      "left": "Esquerda",
+      "right": "Direita"
+    },
+    "sidebarPositionDesc": {
+      "left": "Esquerda: navegação principal à esquerda do conteúdo.",
+      "right": "Direita: navegação principal à direita do conteúdo."
+    },
+    "sidebarPositionLabel": "Posição da sidebar",
+    "sidebarVariant": {
+      "floating": "Flutuante",
+      "inset": "Inset",
+      "sidebar": "Padrão"
+    },
+    "sidebarVariantDesc": {
+      "floating": "Flutuante: sidebar destacada com borda e respiro visual.",
+      "inset": "Inset: sidebar encaixada com cantos arredondados.",
+      "sidebar": "Padrão: estrutura tradicional com sidebar fixa."
+    },
+    "sidebarVariantLabel": "Variação da sidebar",
+    "system": "Sistema",
+    "tabLayout": "Layout",
+    "tabTheme": "Tema",
+    "tweakcnPresets": "Presets Tweakcn"
+  },
+  "transactions": {
+    "actions": {
+      "attachments": "Anexos",
+      "copy": "Copiar Lançamento",
+      "delete": "Excluir Lançamento",
+      "edit": "Editar Lançamento",
+      "makeRecurring": "Tornar recorrente",
+      "notes": "Observações/Mensagens",
+      "quickPay": "Pagar (Pagamento Rápido)"
+    },
+    "batch": {
+      "cancel": "Cancelar",
+      "clear": "Limpar",
+      "copy": "Copiar",
+      "copyDescription": "Defina a data dos novos registros para {count, plural, one {# lançamento selecionado} other {# lançamentos selecionados}}.",
+      "copyTitle": "Copiar Lançamentos em lote",
+      "copyTooltip": "Copiar Lançamentos",
+      "copying": "Copiando...",
+      "creating": "Criando...",
+      "dateLabel": "Data",
+      "delete": "Excluir",
+      "deleteDescription": "Esta ação excluirá {count, plural, one {# lançamento} other {# lançamentos}} dos registros ativos e moverá para histórico de excluídos.",
+      "deleteTitle": "Excluir Lançamentos em lote",
+      "deleteTooltip": "Excluir Lançamento",
+      "deleting": "Excluindo...",
+      "editDate": "Editar Data",
+      "editDateDescription": "Defina a data para {count, plural, one {# lançamento selecionado} other {# lançamentos selecionados}}.",
+      "editDateTitle": "Editar Data em lote",
+      "editPeriod": "Editar Período",
+      "editPeriodDescription": "Defina o período (YYYYMM) para {count, plural, one {# lançamento selecionado} other {# lançamentos selecionados}}.",
+      "editPeriodTitle": "Editar Período em lote",
+      "makeRecurring": "Tornar recorrente",
+      "makeRecurringDescription": "Confirmar criação de recorrência para {count, plural, one {# lançamento} other {# lançamentos}}?",
+      "makeRecurringTitle": "Tornar Recorrente em lote",
+      "newDateLabel": "Nova Data",
+      "notes": "Observações",
+      "notesTooltip": "Observações/Mensagens",
+      "pay": "Pagar",
+      "payTooltip": "Pagar (Pagamento Rápido)",
+      "periodLabel": "Período",
+      "periodPlaceholder": "YYYYMM",
+      "processing": "Processando...",
+      "quickPayDescription": "Confirmar pagamento rápido para {count, plural, one {# lançamento} other {# lançamentos}} usando as configurações padrão definidas em Configurações > Geral?",
+      "quickPayTitle": "Pagamento Rápido em lote",
+      "saveDate": "Salvar data",
+      "savePeriod": "Salvar período",
+      "saving": "Salvando..."
+    },
+    "card": {
+      "periodLabel": "Período:",
+      "refLabel": "REF:"
+    },
+    "columns": {
+      "account": "BANCO",
+      "actions": "AÇÕES",
+      "amount": "VALOR",
+      "category": "CATEGORIA",
+      "date": "DATA",
+      "description": "DESCRIÇÃO",
+      "group": "GRUPO",
+      "note": "HISTÓRICO",
+      "num": "NUM",
+      "payee": "BENEFICIÁRIO",
+      "period": "PERÍODO",
+      "reference": "REF",
+      "selectAllAria": "Selecionar tudo",
+      "selectRowAria": "Selecionar linha",
+      "status": "STATUS",
+      "statusOverdue": "Vencido",
+      "statusPaid": "Pago",
+      "statusPending": "Pendente",
+      "statusScheduled": "Agendado",
+      "type": "TIPO",
+      "typeExpense": "Despesa",
+      "typeIncome": "Receita",
+      "typeTransfer": "Transferência"
+    },
+    "dayNav": {
+      "nextDayAria": "Próximo dia",
+      "previousDayAria": "Dia anterior"
+    },
+    "dialogs": {
+      "attachments": {
+        "addButton": "Adicionar Anexo",
+        "deleteAction": "Excluir anexo",
+        "deleteConfirmText": "Tem certeza que deseja excluir este anexo?",
+        "deleteError": "Erro ao excluir anexo",
+        "deleteSuccess": "Anexo excluído com sucesso",
+        "deleteTitle": "Excluir Anexo",
+        "deleting": "Excluindo...",
+        "downloadAction": "Baixar anexo",
+        "downloadButton": "Baixar Anexo",
+        "downloadError": "Erro ao iniciar download do anexo",
+        "downloadStarted": "Download iniciado",
+        "dropHintSubtitle": "ou clique para selecionar (imagens e PDF, até 3 MB)",
+        "dropHintTitle": "Arraste e solte arquivos aqui",
+        "fileTooLarge": "{fileName}: excede 3 MB",
+        "fileTypeNotAllowed": "{fileName}: tipo não permitido",
+        "loadError": "Erro ao carregar anexos",
+        "noAttachments": "Nenhum anexo encontrado.",
+        "noPreviewAvailable": "Tipo de arquivo sem preview embutido. Use o download para abrir localmente.",
+        "openAction": "Abrir anexo",
+        "previewAction": "Visualizar anexo",
+        "previewFallbackTitle": "Visualizar anexo",
+        "previewLabel": "Preview do anexo",
+        "previewUnavailable": "Visualização indisponível para este tipo de arquivo. Use baixar.",
+        "someFilesFailed": "Alguns arquivos falharam: {errors}",
+        "title": "Anexos",
+        "uploadError": "Erro ao enviar anexos",
+        "uploadSuccess": "{count, plural, one {# anexo enviado} other {# anexos enviados}} com sucesso!",
+        "uploading": "Enviando..."
+      },
+      "deleteConfirm": {
+        "confirmText": "Tem certeza que deseja excluir este lançamento?",
+        "deleting": "Excluindo...",
+        "title": "Excluir Lançamento",
+        "undoNote": "Esta ação pode ser desfeita pelo administrador."
+      },
+      "makeRecurringConfirm": {
+        "confirmButton": "Criar Recorrente",
+        "confirmText": "Deseja criar uma transação recorrente a partir deste lançamento?",
+        "creating": "Criando...",
+        "note": "A transação original não será afetada. Um novo modelo recorrente será criado na página Recorrentes.",
+        "title": "Tornar Recorrente"
+      },
+      "messages": {
+        "deleteAction": "Apagar mensagem",
+        "deleteConfirmText": "Esta mensagem será removida permanentemente.",
+        "deleteError": "Erro ao apagar mensagem",
+        "deleteTitle": "Apagar Mensagem",
+        "deleted": "Apagar",
+        "deletedSuccess": "Mensagem apagada",
+        "deleting": "Apagando...",
+        "emptyMessageError": "Digite uma mensagem antes de enviar",
+        "loadError": "Erro ao carregar mensagens",
+        "loadingMessages": "Carregando mensagens...",
+        "noMessages": "Nenhuma mensagem registrada.",
+        "placeholder": "Digite sua mensagem...",
+        "previousMessages": "Mensagens anteriores",
+        "remainingChars": "{count, plural, one {# caractere restante} other {# caracteres restantes}}",
+        "send": "Enviar",
+        "sendError": "Erro ao enviar mensagem",
+        "sending": "Enviando...",
+        "sentSuccess": "Mensagem enviada",
+        "title": "Observações/Mensagens",
+        "unreadNotice": "Você tem {count, plural, one {# mensagem anterior} other {# mensagens anteriores}} para leitura."
+      },
+      "newTransaction": {
+        "accountLabel": "Banco",
+        "addFileButton": "+ Adicionar arquivo",
+        "amountLabel": "Valor",
+        "amountPlaceholder": "0,00",
+        "attachmentsLabel": "Anexos",
+        "automaticPlaceholder": "Automático",
+        "categoryLabel": "Categoria",
+        "dropHint": "Arraste ou clique para anexar imagem / PDF (máx. 3 MB)",
+        "dueDateLabel": "Vencimento",
+        "editTitle": "Editar Transação",
+        "fileInputTitle": "Seleção de arquivos",
+        "fileSizeKb": "{size} KB",
+        "formDescription": "Formulário de transação financeira",
+        "groupLabel": "Grupo",
+        "historyLabel": "Histórico",
+        "historyPlaceholder": "Beneficiário ou descrição rápida...",
+        "installmentsLabel": "Parcelas",
+        "installmentsPreviewHint": "Edite datas ou valores se necessário",
+        "installmentsPreviewTitle": "Parcelamento",
+        "newTitle": "Nova Transação",
+        "notesLabel": "Descrição",
+        "notesPlaceholder": "Detalhes opcionais...",
+        "numLabel": "NUM",
+        "periodLabel": "Período",
+        "periodPlaceholder": "YYYYMM",
+        "proRataAccrualHint": "Competência: toda a série usará o PERÍODO do primeiro pagamento.",
+        "proRataCashHint": "Caixa: cada parcela usará o PERÍODO do próprio vencimento.",
+        "proRataLabel": "Pro Rata",
+        "refCustomHint": "Personalizado (Ref-1, Ref-2...)",
+        "refDefaultHint": "Padrão (#01/NN)",
+        "refLabel": "REF",
+        "refPlaceholderInstallment": "ex: Compra",
+        "refPlaceholderSingle": "ex: Boleto FIES",
+        "removeFileAria": "Remover arquivo",
+        "save": "Salvar",
+        "saveInstallments": "Salvar {count} parcelas",
+        "saving": "Salvando...",
+        "selectPlaceholder": "Selecione...",
+        "statusLabel": "Status",
+        "suggestionsCount": "{count, plural, one {# sugestão} other {# sugestões}}",
+        "typeExpense": "Despesa",
+        "typeIncome": "Receita",
+        "typeTransfer": "Transf.",
+        "update": "Atualizar",
+        "updating": "Atualizando..."
+      },
+      "quickPayConfirm": {
+        "confirmButton": "Confirmar Pagamento",
+        "confirmText": "Deseja marcar este lançamento como pago usando as configurações padrão definidas em Configurações > Geral?",
+        "processing": "Processando...",
+        "title": "Pagamento Rápido"
+      },
+      "transactionFallback": "Transação"
+    },
+    "filters": {
+      "accountFieldLabel": "Conta",
+      "allAccounts": "Todas as contas",
+      "allStatuses": "Todos os status",
+      "allTypes": "Todos os tipos",
+      "apply": "Aplicar",
+      "clear": "Limpar",
+      "clearFiltersButton": "Limpar filtros",
+      "filterSheetTitle": "Filtrar Transações",
+      "filtersButton": "Filtros",
+      "searchPlaceholderDesktop": "Busca inteligente...",
+      "searchPlaceholderMobile": "Buscar...",
+      "statusFieldLabel": "Status",
+      "typeFieldLabel": "Tipo"
+    },
+    "form": {
+      "attachmentsCreateWarning": "Transação criada, mas falha ao enviar anexos",
+      "attachmentsUpdateWarning": "Transação atualizada, mas falha ao enviar anexos",
+      "autoNum": "Auto",
+      "createError": "Erro ao criar transação",
+      "createSuccess": "Transação criada com sucesso!",
+      "fileRejected": "{count, plural, one {# arquivo ignorado} other {# arquivos ignorados}}: apenas imagens/PDF com até 3 MB",
+      "installmentsCreateSuccess": "{count} parcelas criadas com sucesso!",
+      "negativeAmount": "Valor não pode ser negativo",
+      "requiredFields": "Preencha todos os campos obrigatórios",
+      "updateError": "Erro ao atualizar transação",
+      "updateSuccess": "Transação atualizada com sucesso!"
+    },
+    "formats": {
+      "shortDate": "d 'de' MMM."
+    },
+    "pagination": {
+      "firstPageAria": "Primeira página",
+      "inflows": "Entradas: {amount}",
+      "lastPageAria": "Última página",
+      "nextPageAria": "Próxima página",
+      "outflows": "Saídas: {amount}",
+      "pageOfTotal": "Página {page} de {total}",
+      "previousPageAria": "Página anterior",
+      "rowsPerPage": "Linhas por página",
+      "selectedOfTotal": "{selected} de {total} linha(s) selecionada(s).",
+      "total": "Total: {amount}"
+    },
+    "services": {
+      "copy": {
+        "notFound": "Transação não encontrada ou acesso negado."
+      },
+      "quickPay": {
+        "invalidDefaults": "Os padrões de Pagamento Rápido salvos não são mais válidos. Atualize Configurações > Geral antes de continuar.",
+        "missingDefaults": "Configure os padrões de Pagamento Rápido em Configurações > Geral antes de usar esta função.",
+        "transactionNotFound": "Transação não encontrada"
+      }
+    },
+    "summary": {
+      "balance": "Saldo",
+      "balanceAtDate": "Saldo em {date}",
+      "balanceOfPeriod": "Saldo do período",
+      "balancesByAccount": "Saldos por Conta",
+      "inflows": "Entradas",
+      "inflowsOfPeriod": "Entradas do período",
+      "outflows": "Saídas",
+      "outflowsOfPeriod": "Saídas do período",
+      "total": "Total",
+      "vsPreviousPeriod": "vs período anterior"
+    },
+    "table": {
+      "addButton": "Nova Transação",
+      "description": "{count, plural, one {# transação encontrada} other {# transações encontradas}} no período",
+      "title": "Registro de Transações",
+      "viewOptions": {
+        "columnsButton": "Colunas",
+        "displayColumnsLabel": "Exibir colunas"
+      }
+    },
+    "toasts": {
+      "attachmentsOpenError": "Erro ao abrir anexos do lançamento",
+      "attachmentsOpened": "Gerenciador de anexos aberto",
+      "batchCopyError": "Falha ao copiar os lançamentos selecionados",
+      "batchCopyPartial": "{succeeded} copiado(s) e {failed} com falha",
+      "batchCopySuccess": "{count, plural, one {# lançamento copiado} other {# lançamentos copiados}}",
+      "batchDeleteError": "Falha ao excluir lançamentos selecionados",
+      "batchDeletePartial": "{succeeded} excluído(s) e {failed} com falha",
+      "batchDeleteSuccess": "{count, plural, one {# lançamento excluído} other {# lançamentos excluídos}} com sucesso",
+      "batchEditDateError": "Falha ao atualizar data dos lançamentos selecionados",
+      "batchEditDateSuccess": "Data atualizada em {count, plural, one {# lançamento} other {# lançamentos}}",
+      "batchEditPeriodError": "Falha ao atualizar período dos lançamentos selecionados",
+      "batchEditPeriodSuccess": "Período atualizado em {count, plural, one {# lançamento} other {# lançamentos}}",
+      "batchMakeRecurringError": "Falha ao criar recorrências dos lançamentos selecionados",
+      "batchMakeRecurringPartial": "{succeeded} criada(s) e {failed} com falha",
+      "batchMakeRecurringSuccess": "{count, plural, one {# recorrência criada} other {# recorrências criadas}} com sucesso",
+      "batchNotesInDevelopment": "Observações/Mensagens em desenvolvimento",
+      "batchPartialUpdated": "{succeeded} atualizado(s) e {failed} com falha",
+      "batchQuickPayError": "Falha ao aplicar pagamento rápido nos lançamentos selecionados",
+      "batchQuickPayPartial": "{succeeded} processado(s) e {failed} com falha",
+      "batchQuickPaySuccess": "{count, plural, one {# lançamento atualizado} other {# lançamentos atualizados}} com pagamento rápido",
+      "copyOpenError": "Erro ao abrir cópia do lançamento",
+      "copyOpened": "Cópia de lançamento aberta",
+      "deleteError": "Erro ao excluir transação",
+      "deleteSuccess": "Lançamento excluído com sucesso",
+      "editOpenError": "Erro ao abrir edição do lançamento",
+      "editOpened": "Edição de lançamento aberta",
+      "quickPayError": "Erro ao efetuar pagamento rápido",
+      "quickPaySuccess": "Pagamento rápido efetuado com sucesso",
+      "recurringError": "Erro ao criar transação recorrente",
+      "recurringSuccess": "Transação recorrente criada com sucesso",
+      "syncError": "Erro ao sincronizar transações com o período selecionado"
+    }
+  },
+  "users": {
+    "filters": {
+      "allPlans": "Todos os Planos",
+      "allRoles": "Todos os Perfis",
+      "allStatus": "Todos os Status",
+      "plan": "Plano",
+      "role": "Perfil",
+      "status": "Status"
+    },
+    "form": {
+      "addNewUser": "Adicionar Novo Usuário",
+      "billing": "Faturamento",
+      "billingPlaceholder": "Selecionar faturamento",
+      "billingRequired": "Selecione um método de faturamento.",
+      "description": "Crie uma nova conta de usuário. Clique em salvar quando terminar.",
+      "email": "Email",
+      "emailInvalid": "Digite um endereço de e-mail válido.",
+      "emailPlaceholder": "Digite o endereço de e-mail",
+      "name": "Nome",
+      "nameMinLength": "O nome deve ter pelo menos 2 caracteres.",
+      "namePlaceholder": "Digite o nome completo",
+      "plan": "Plano",
+      "planPlaceholder": "Selecionar plano",
+      "planRequired": "Selecione um plano.",
+      "role": "Perfil",
+      "rolePlaceholder": "Selecionar perfil",
+      "roleRequired": "Selecione um perfil.",
+      "saveUser": "Salvar Usuário",
+      "status": "Status",
+      "statusPlaceholder": "Selecionar status",
+      "statusRequired": "Selecione um status."
+    },
+    "statCards": {
+      "activeUsers": "Usuários Ativos",
+      "fromPrevious": "de {previous}",
+      "paidUsers": "Usuários Pagantes",
+      "pendingUsers": "Usuários Pendentes",
+      "totalUsers": "Total de Usuários"
+    },
+    "table": {
+      "columnVisibility": "Visibilidade de Colunas",
+      "columns": "Colunas",
+      "deleteUser": "Excluir Usuário",
+      "editUser": "Editar usuário",
+      "export": "Exportar",
+      "moreActions": "Mais ações",
+      "next": "Próxima",
+      "pageOfTotal": "Página {page} de {total}",
+      "previous": "Anterior",
+      "resetPassword": "Redefinir Senha",
+      "searchPlaceholder": "Buscar usuários...",
+      "selectAllAria": "Selecionar todos",
+      "selectRowAria": "Selecionar linha",
+      "selectedOfTotal": "{selected} de {total} linha(s) selecionada(s).",
+      "sendEmail": "Enviar E-mail",
+      "show": "Mostrar",
+      "viewDetails": "Ver Detalhes",
+      "viewUser": "Ver usuário"
     }
   }
 }

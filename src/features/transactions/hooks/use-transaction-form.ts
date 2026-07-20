@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
+import { useTranslations } from "next-intl"
 
 import { periodFromDate } from "@/lib/financial"
 import type {
@@ -83,6 +84,7 @@ export function useTransactionForm({
   formOptions,
   onSuccess,
 }: UseTransactionFormParams) {
+  const t = useTranslations("transactions.form")
   const [open, setOpen] = useState(false)
   const [type, setType] = useState<TransactionType>("EXPENSE")
   const [formData, setFormData] = useState<FormData>(getInitialFormData)
@@ -92,7 +94,7 @@ export function useTransactionForm({
   const [editingTransactionId, setEditingTransactionId] = useState<string | null>(
     null
   )
-  const [displayNum, setDisplayNum] = useState("Auto")
+  const [displayNum, setDisplayNum] = useState(() => t("autoNum"))
 
   // ── Installments ────────────────────────────────────────────────────────
   const [installments, setInstallments] = useState<number | "">(1)
@@ -160,7 +162,7 @@ export function useTransactionForm({
       payeeId: "",
     })
     setEditingTransactionId(null)
-    setDisplayNum("Auto")
+    setDisplayNum(t("autoNum"))
     setInstallments(1)
     setInstallmentRows([])
     setIsProRata(false)
@@ -172,7 +174,7 @@ export function useTransactionForm({
     requestAnimationFrame(() => {
       isResettingRef.current = false
     })
-  }, [formOptions])
+  }, [formOptions, t])
 
   // ── Open dialog in edit mode ──────────────────────────────────────────────
   const openEditDialog = useCallback(
@@ -322,7 +324,7 @@ export function useTransactionForm({
         statusCode: statusToUse ? statusToUse.code.toString() : "",
         payeeId: transaction.payee?.id ? String(transaction.payee.id) : "",
       })
-      setDisplayNum("Auto")
+      setDisplayNum(t("autoNum"))
       setEditingTransactionId(null)
       setInstallments(1)
       setInstallmentRows([])
@@ -336,7 +338,7 @@ export function useTransactionForm({
         isResettingRef.current = false
       })
     },
-    [formOptions]
+    [formOptions, t]
   )
 
   // ── Filter groups by type ────────────────────────────────────────────────
@@ -496,12 +498,10 @@ export function useTransactionForm({
     )
     const rejected = Array.from(fileList).length - valid.length
     if (rejected > 0) {
-      toast.error(
-        `${rejected} arquivo(s) ignorado(s): apenas imagens/PDF com até 3 MB`
-      )
+      toast.error(t("fileRejected", { count: rejected }))
     }
     setQueuedFiles((prev) => [...prev, ...valid])
-  }, [])
+  }, [t])
 
   const removeQueued = useCallback((idx: number) => {
     setQueuedFiles((prev) => prev.filter((_, i) => i !== idx))
@@ -519,13 +519,13 @@ export function useTransactionForm({
       !formData.categoryCode ||
       !formData.statusCode
     ) {
-      toast.error("Preencha todos os campos obrigatórios")
+      toast.error(t("requiredFields"))
       return
     }
 
     const parsedAmount = parseFloat(formData.amount)
     if (isNaN(parsedAmount) || parsedAmount < 0) {
-      toast.error("Valor não pode ser negativo")
+      toast.error(t("negativeAmount"))
       return
     }
 
@@ -564,7 +564,7 @@ export function useTransactionForm({
 
         if (!res.ok) {
           const data = await res.json()
-          throw new Error(data.error || "Erro ao atualizar transação")
+          throw new Error(data.error || t("updateError"))
         }
 
         if (queuedFiles.length > 0) {
@@ -575,11 +575,11 @@ export function useTransactionForm({
             { method: "POST", body: fd }
           )
           if (!attRes.ok) {
-            toast.warning("Transação atualizada, mas falha ao enviar anexos")
+            toast.warning(t("attachmentsUpdateWarning"))
           }
         }
 
-        toast.success("Transação atualizada com sucesso!")
+        toast.success(t("updateSuccess"))
         setOpen(false)
         setEditingTransactionId(null)
         onSuccess()
@@ -636,7 +636,7 @@ export function useTransactionForm({
         })
         if (!res.ok) {
           const data = await res.json()
-          throw new Error(data.error || "Erro ao criar transação")
+          throw new Error(data.error || t("createError"))
         }
         const created = await res.json()
         createdIds.push(created.transaction?.id)
@@ -651,14 +651,14 @@ export function useTransactionForm({
           { method: "POST", body: fd }
         )
         if (!attRes.ok) {
-          toast.warning("Transação criada, mas falha ao enviar anexos")
+          toast.warning(t("attachmentsCreateWarning"))
         }
       }
 
       const msg =
         numInstallments > 1
-          ? `${numInstallments} parcelas criadas com sucesso!`
-          : "Transação criada com sucesso!"
+          ? t("installmentsCreateSuccess", { count: numInstallments })
+          : t("createSuccess")
       toast.success(msg)
       setOpen(false)
       setEditingTransactionId(null)
@@ -668,8 +668,8 @@ export function useTransactionForm({
         error instanceof Error
           ? error.message
           : editingTransactionId
-            ? "Erro ao atualizar transação"
-            : "Erro ao criar transação"
+            ? t("updateError")
+            : t("createError")
       )
     } finally {
       setIsSubmitting(false)
@@ -679,6 +679,7 @@ export function useTransactionForm({
     formData,
     type,
     installments,
+    t,
     installmentRows,
     isProRata,
     queuedFiles,

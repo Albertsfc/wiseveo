@@ -1,7 +1,7 @@
 "use client"
 
 import { Landmark, MoreVertical } from "lucide-react"
-import { format } from "date-fns"
+import { useLocale, useTranslations } from "next-intl"
 
 import {
   Card,
@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import { formatAppDate } from "@/i18n/format"
 
 interface AccountCardProps {
   name: string
@@ -28,6 +29,8 @@ export function AccountCard({
   initialBalance,
   legacyDate,
 }: AccountCardProps) {
+  const t = useTranslations("accounts")
+  const locale = useLocale()
   const monetary = useMonetaryFormattingSafe()
 
   return (
@@ -55,8 +58,8 @@ export function AccountCard({
           <button
             type="button"
             className="text-muted-foreground/40 hover:text-foreground transition-colors p-1"
-            aria-label="Opções da conta"
-            title="Opções da conta"
+            aria-label={t("card.optionsAriaLabel")}
+            title={t("card.optionsAriaLabel")}
           >
             <MoreVertical className="size-5" />
           </button>
@@ -64,10 +67,10 @@ export function AccountCard({
       </CardHeader>
       <CardFooter className="flex-col items-start gap-1.5 text-sm">
         <div className="line-clamp-1 flex gap-2 font-medium text-muted-foreground/60">
-          Saldo Atual
+          {t("card.currentBalance")}
         </div>
         <div className="text-muted-foreground text-xs">
-          Inicial: {monetary.formatMonetaryValue(initialBalance)} — {format(new Date(legacyDate), "dd/MM/yyyy")}
+          {t("card.initialLabel")} {monetary.formatMonetaryValue(initialBalance)} — {formatAppDate(new Date(legacyDate), "dd/MM/yyyy", locale)}
         </div>
       </CardFooter>
     </Card>

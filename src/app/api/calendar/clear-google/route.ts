@@ -1,16 +1,19 @@
+import { getTranslations } from "next-intl/server"
 import { getSessionUserId } from "@/lib/session"
 import { clearGoogleCalendarEvents } from "@/features/calendar/services/sync-google-calendar"
+import { CALENDAR_CLEAR_PHASE } from "@/features/calendar/types"
 
 function encodeSse(payload: unknown): Uint8Array {
   return new TextEncoder().encode(`data: ${JSON.stringify(payload)}\n\n`)
 }
 
 export async function POST() {
+  const t = await getTranslations("api")
   const userId = await getSessionUserId()
 
   if (!userId) {
     return Response.json(
-      { error: "Não autenticado" },
+      { error: t("errors.notAuthenticated") },
       { status: 401 },
     )
   }
@@ -23,7 +26,7 @@ export async function POST() {
         try {
           send({
             type: "status",
-            phase: "Preparando limpeza",
+            phase: CALENDAR_CLEAR_PHASE.preparing,
             current: 0,
             total: 0,
             percent: 0,
@@ -41,7 +44,7 @@ export async function POST() {
           send({ type: "done", result })
         } catch (err) {
           const message =
-            err instanceof Error ? err.message : "Erro ao limpar eventos"
+            err instanceof Error ? err.message : t("calendar.clearFailed")
           send({ type: "error", message })
         } finally {
           controller.close()
@@ -59,7 +62,7 @@ export async function POST() {
   } catch (err) {
     console.error("[clear-google API] error:", err)
     const message =
-      err instanceof Error ? err.message : "Erro ao limpar eventos"
+      err instanceof Error ? err.message : t("calendar.clearFailed")
     return Response.json({ error: message }, { status: 500 })
   }
 }

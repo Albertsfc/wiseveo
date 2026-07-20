@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import { startOfMonth, endOfMonth, subMonths } from "date-fns"
+import { getTranslations } from "next-intl/server"
 
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { getAccountsWithBalance } from "@/features/accounts/services/get-accounts"
@@ -13,7 +14,8 @@ function pctChange(current: number, previous: number): number {
 export async function GET() {
   const userId = await getDefaultUserId()
   if (!userId) {
-    return NextResponse.json({ error: "User not found" }, { status: 401 })
+    const t = await getTranslations("api.errors")
+    return NextResponse.json({ error: t("userNotFound") }, { status: 401 })
   }
 
   const now = new Date()

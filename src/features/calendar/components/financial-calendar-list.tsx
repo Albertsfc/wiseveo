@@ -1,5 +1,6 @@
 "use client"
 
+import { useLocale, useTranslations } from "next-intl"
 import {
   Card,
   CardContent,
@@ -8,27 +9,14 @@ import {
   CardDescription,
 } from "@/components/ui/card"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import { createDateFormatter } from "@/i18n/format"
 import { cn } from "@/lib/utils"
 import type { CalendarDayStatement } from "../types"
-
-const dateFmt = new Intl.DateTimeFormat("pt-BR", {
-  weekday: "short",
-  day: "2-digit",
-  month: "short",
-  timeZone: "UTC",
-})
 
 const TYPE_COLORS: Record<string, string> = {
   INCOME: "text-chart-2",
   EXPENSE: "text-destructive",
   TRANSFER: "text-chart-1",
-}
-
-const STATUS_LABELS: Record<string, string> = {
-  PAID: "Pago",
-  PENDING: "Pendente",
-  OVERDUE: "Vencido",
-  SCHEDULED: "Agendado",
 }
 
 interface FinancialCalendarListProps {
@@ -40,14 +28,28 @@ export function FinancialCalendarList({
   days,
   onSelectDate,
 }: FinancialCalendarListProps) {
+  const t = useTranslations("calendar")
+  const locale = useLocale()
   const monetary = useMonetaryFormattingSafe()
+  const dateFmt = createDateFormatter(locale, {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    timeZone: "UTC",
+  })
+  const STATUS_LABELS: Record<string, string> = {
+    PAID: t("statusLabels.paid"),
+    PENDING: t("statusLabels.pending"),
+    OVERDUE: t("statusLabels.overdue"),
+    SCHEDULED: t("statusLabels.scheduled"),
+  }
   const daysWithTx = days.filter((d) => d.transactions.length > 0)
 
   if (daysWithTx.length === 0) {
     return (
       <div className="flex-1 flex items-center justify-center p-6">
         <p className="text-muted-foreground">
-          Nenhuma transação no período selecionado
+          {t("list.noTransactions")}
         </p>
       </div>
     )
@@ -70,8 +72,7 @@ export function FinancialCalendarList({
               </CardDescription>
               <CardTitle className="flex items-center justify-between text-base">
                 <span>
-                  {day.transactions.length} transaç
-                  {day.transactions.length === 1 ? "ão" : "ões"}
+                  {t("list.transactionsCount", { count: day.transactions.length })}
                 </span>
                 <span
                   className={cn(
@@ -86,7 +87,7 @@ export function FinancialCalendarList({
             <CardContent className="space-y-1.5">
               {/* Opening */}
               <div className="flex justify-between text-xs font-semibold font-mono pb-1 border-b">
-                <span>Saldo Inicial</span>
+                <span>{t("balance.opening")}</span>
                 <span
                   className={cn(
                     day.openingBalance < 0 && "text-destructive",
@@ -123,7 +124,7 @@ export function FinancialCalendarList({
 
               {/* Closing */}
               <div className="flex justify-between text-xs font-semibold font-mono pt-1 border-t">
-                <span>Saldo Final</span>
+                <span>{t("balance.closing")}</span>
                 <span
                   className={cn(
                     day.closingBalance < 0 && "text-destructive",

@@ -14,27 +14,28 @@ import {
 } from "./formula-engine"
 import { periodFromDate } from "@/lib/financial"
 
+// Chaves de dados: nomes de grupos vindos do banco (pt), usados só para casar emoji.
 const GROUP_EMOJI_MAP: Record<string, string> = {
   receitas: "💰",
-  "habitação": "🏠",
+  "habitação": "🏠", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   "habitacao": "🏠",
-  "alimentação": "🍔",
+  "alimentação": "🍔", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   alimentacao: "🍔",
-  "saúde": "🏥",
+  "saúde": "🏥", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   saude: "🏥",
-  "educação": "🎓",
+  "educação": "🎓", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   educacao: "🎓",
   transporte: "🚗",
-  "vestuário": "👕",
+  "vestuário": "👕", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   vestuario: "👕",
-  "serviços": "🛠️",
+  "serviços": "🛠️", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   servicos: "🛠️",
   lazer: "🎭",
   turismo: "✈️",
   pet: "🐾",
   impostos: "🏛️",
   "outras despesas": "📦",
-  "caixa e captação": "💳",
+  "caixa e captação": "💳", // i18n-ignore — chave de dado (nome de grupo no banco), não é UI
   "caixa e captacao": "💳",
   financeira: "📊",
 }
@@ -451,7 +452,9 @@ export async function getBudgetData(
     items.push({
       id: cCard.id,
       name: cCard.name,
-      originalName: "Múltiplos",
+      // Sentinela de dados (também consumida pelo Telegram); a UI traduz
+      // cartões agregados via budget.itemCard.multiple no display site.
+      originalName: "Múltiplos", // i18n-ignore
       icon: "🗂️",
       limit,
       spent: spent + projectedFutureCard,

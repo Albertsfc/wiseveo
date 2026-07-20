@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import {
   CalendarClock,
   CheckCircle,
@@ -65,6 +66,8 @@ export function TransactionBatchActions<TData>({
   onDeleteSelectedTransactions,
   onClearSelection,
 }: TransactionBatchActionsProps<TData>) {
+  const t = useTranslations("transactions.batch")
+  const tCommon = useTranslations("common")
   const [showQuickPayConfirm, setShowQuickPayConfirm] = React.useState(false)
   const [showMakeRecurringConfirm, setShowMakeRecurringConfirm] = React.useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false)
@@ -184,10 +187,10 @@ export function TransactionBatchActions<TData>({
                 onClick={() => setShowQuickPayConfirm(true)}
               >
                 <CheckCircle className="h-4 w-4 text-chart-2" />
-                <span className="sr-only">Pagar</span>
+                <span className="sr-only">{t("pay")}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Pagar (Pagamento Rápido)</TooltipContent>
+            <TooltipContent>{t("payTooltip")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -200,10 +203,10 @@ export function TransactionBatchActions<TData>({
                 onClick={() => setShowEditDateDialog(true)}
               >
                 <Pencil className="h-4 w-4" />
-                <span className="sr-only">Editar Data</span>
+                <span className="sr-only">{t("editDate")}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Editar Data</TooltipContent>
+            <TooltipContent>{t("editDate")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -216,10 +219,10 @@ export function TransactionBatchActions<TData>({
                 onClick={() => setShowEditPeriodDialog(true)}
               >
                 <CalendarClock className="h-4 w-4" />
-                <span className="sr-only">Editar Período</span>
+                <span className="sr-only">{t("editPeriod")}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Editar Período</TooltipContent>
+            <TooltipContent>{t("editPeriod")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -232,10 +235,10 @@ export function TransactionBatchActions<TData>({
                 onClick={() => setShowMakeRecurringConfirm(true)}
               >
                 <RotateCcw className="h-4 w-4 text-chart-1" />
-                <span className="sr-only">Tornar recorrente</span>
+                <span className="sr-only">{t("makeRecurring")}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Tornar recorrente</TooltipContent>
+            <TooltipContent>{t("makeRecurring")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -248,10 +251,10 @@ export function TransactionBatchActions<TData>({
                 onClick={() => setShowCopyDateDialog(true)}
               >
                 <Copy className="h-4 w-4 text-blue-500" />
-                <span className="sr-only">Copiar</span>
+                <span className="sr-only">{t("copy")}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Copiar Lançamentos</TooltipContent>
+            <TooltipContent>{t("copyTooltip")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -264,10 +267,10 @@ export function TransactionBatchActions<TData>({
                 onClick={() => void handleNotesSelected()}
               >
                 <MessageSquare className="h-4 w-4 text-primary" />
-                <span className="sr-only">Observações</span>
+                <span className="sr-only">{t("notes")}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Observações/Mensagens</TooltipContent>
+            <TooltipContent>{t("notesTooltip")}</TooltipContent>
           </Tooltip>
 
           <Tooltip>
@@ -280,10 +283,10 @@ export function TransactionBatchActions<TData>({
                 onClick={() => setShowDeleteConfirm(true)}
               >
                 <Trash2 className="h-4 w-4 text-destructive" />
-                <span className="sr-only">Excluir</span>
+                <span className="sr-only">{t("delete")}</span>
               </Button>
             </TooltipTrigger>
-            <TooltipContent>Excluir Lançamento</TooltipContent>
+            <TooltipContent>{t("deleteTooltip")}</TooltipContent>
           </Tooltip>
         </div>
         <Button
@@ -292,28 +295,26 @@ export function TransactionBatchActions<TData>({
           className="text-muted-foreground cursor-pointer h-8 px-2 text-[11px] sm:text-sm shrink-0"
           onClick={onClearSelection}
         >
-          <span className="hidden sm:inline">Cancelar</span>
-          <span className="sm:hidden">Limpar</span>
+          <span className="hidden sm:inline">{t("cancel")}</span>
+          <span className="sm:hidden">{t("clear")}</span>
         </Button>
       </div>
 
       <AlertDialog open={showQuickPayConfirm} onOpenChange={setShowQuickPayConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Pagamento Rápido em lote</AlertDialogTitle>
+            <AlertDialogTitle>{t("quickPayTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Confirmar pagamento rápido para {selectedCount} lançamento
-              {selectedCount > 1 ? "s" : ""} usando as configurações padrão
-              definidas em Configurações &gt; Geral?
+              {t("quickPayDescription", { count: selectedCount })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={batchLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={batchLoading}>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               disabled={batchLoading}
               onClick={() => void handleQuickPaySelected()}
             >
-              {batchLoading ? "Processando..." : "Confirmar"}
+              {batchLoading ? t("processing") : tCommon("confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -322,15 +323,13 @@ export function TransactionBatchActions<TData>({
       <Dialog open={showEditDateDialog} onOpenChange={setShowEditDateDialog}>
         <DialogContent className="sm:max-w-[420px]">
           <DialogHeader>
-            <DialogTitle>Editar Data em lote</DialogTitle>
+            <DialogTitle>{t("editDateTitle")}</DialogTitle>
             <DialogDescription>
-              Defina a data para {selectedCount} lançamento
-              {selectedCount > 1 ? "s" : ""} selecionado
-              {selectedCount > 1 ? "s" : ""}.
+              {t("editDateDescription", { count: selectedCount })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="batch-transaction-date">Data</Label>
+            <Label htmlFor="batch-transaction-date">{t("dateLabel")}</Label>
             <Input
               id="batch-transaction-date"
               type="date"
@@ -344,13 +343,13 @@ export function TransactionBatchActions<TData>({
               onClick={() => setShowEditDateDialog(false)}
               disabled={batchLoading}
             >
-              Cancelar
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={() => void handleEditDateSelected()}
               disabled={batchLoading || !selectedDate}
             >
-              {batchLoading ? "Salvando..." : "Salvar data"}
+              {batchLoading ? t("saving") : t("saveDate")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -359,22 +358,20 @@ export function TransactionBatchActions<TData>({
       <Dialog open={showEditPeriodDialog} onOpenChange={setShowEditPeriodDialog}>
         <DialogContent className="sm:max-w-[420px]">
           <DialogHeader>
-            <DialogTitle>Editar Período em lote</DialogTitle>
+            <DialogTitle>{t("editPeriodTitle")}</DialogTitle>
             <DialogDescription>
-              Defina o período (YYYYMM) para {selectedCount} lançamento
-              {selectedCount > 1 ? "s" : ""} selecionado
-              {selectedCount > 1 ? "s" : ""}.
+              {t("editPeriodDescription", { count: selectedCount })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="batch-transaction-period">Período</Label>
+            <Label htmlFor="batch-transaction-period">{t("periodLabel")}</Label>
             <Input
               id="batch-transaction-period"
               value={selectedPeriod}
               onChange={(event) =>
                 setSelectedPeriod(event.target.value.replace(/\D/g, "").slice(0, 6))
               }
-              placeholder="YYYYMM"
+              placeholder={t("periodPlaceholder")}
               maxLength={6}
               inputMode="numeric"
               className="tabular-nums"
@@ -386,7 +383,7 @@ export function TransactionBatchActions<TData>({
               onClick={() => setShowEditPeriodDialog(false)}
               disabled={batchLoading}
             >
-              Cancelar
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={() => void handleEditPeriodSelected()}
@@ -394,7 +391,7 @@ export function TransactionBatchActions<TData>({
                 batchLoading || !/^\d{4}(0[1-9]|1[0-2])$/.test(selectedPeriod)
               }
             >
-              {batchLoading ? "Salvando..." : "Salvar período"}
+              {batchLoading ? t("saving") : t("savePeriod")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -403,15 +400,13 @@ export function TransactionBatchActions<TData>({
       <Dialog open={showCopyDateDialog} onOpenChange={setShowCopyDateDialog}>
         <DialogContent className="sm:max-w-[420px]">
           <DialogHeader>
-            <DialogTitle>Copiar Lançamentos em lote</DialogTitle>
+            <DialogTitle>{t("copyTitle")}</DialogTitle>
             <DialogDescription>
-              Defina a data dos novos registros para {selectedCount} lançamento
-              {selectedCount > 1 ? "s" : ""} selecionado
-              {selectedCount > 1 ? "s" : ""}.
+              {t("copyDescription", { count: selectedCount })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
-            <Label htmlFor="batch-copy-transaction-date">Nova Data</Label>
+            <Label htmlFor="batch-copy-transaction-date">{t("newDateLabel")}</Label>
             <Input
               id="batch-copy-transaction-date"
               type="date"
@@ -425,13 +420,13 @@ export function TransactionBatchActions<TData>({
               onClick={() => setShowCopyDateDialog(false)}
               disabled={batchLoading}
             >
-              Cancelar
+              {tCommon("cancel")}
             </Button>
             <Button
               onClick={() => void handleCopyDateSelected()}
               disabled={batchLoading || !selectedCopyDate}
             >
-              {batchLoading ? "Copiando..." : "Copiar"}
+              {batchLoading ? t("copying") : t("copy")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -440,19 +435,18 @@ export function TransactionBatchActions<TData>({
       <AlertDialog open={showMakeRecurringConfirm} onOpenChange={setShowMakeRecurringConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Tornar Recorrente em lote</AlertDialogTitle>
+            <AlertDialogTitle>{t("makeRecurringTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Confirmar criação de recorrência para {selectedCount} lançamento
-              {selectedCount > 1 ? "s" : ""}?
+              {t("makeRecurringDescription", { count: selectedCount })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={batchLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={batchLoading}>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               disabled={batchLoading}
               onClick={() => void handleMakeRecurringSelected()}
             >
-              {batchLoading ? "Criando..." : "Confirmar"}
+              {batchLoading ? t("creating") : tCommon("confirm")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -461,20 +455,19 @@ export function TransactionBatchActions<TData>({
       <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir Lançamentos em lote</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta ação excluirá {selectedCount} lançamento
-              {selectedCount > 1 ? "s" : ""} dos registros ativos e moverá para histórico de excluídos.
+              {t("deleteDescription", { count: selectedCount })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={batchLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={batchLoading}>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               disabled={batchLoading}
               onClick={() => void handleDeleteSelected()}
             >
-              {batchLoading ? "Excluindo..." : "Excluir"}
+              {batchLoading ? t("deleting") : tCommon("delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

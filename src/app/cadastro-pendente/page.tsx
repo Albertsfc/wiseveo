@@ -1,10 +1,13 @@
 import Link from "next/link"
 import { Clock3 } from "lucide-react"
+import { getTranslations } from "next-intl/server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Logo } from "@/components/logo"
 
-export default function CadastroPendentePage() {
+export default async function CadastroPendentePage() {
+  const t = await getTranslations("auth")
+
   return (
     <main className="flex min-h-svh w-full items-center justify-center bg-background p-6 md:p-10">
       <div className="w-full max-w-md space-y-6">
@@ -13,6 +16,7 @@ export default function CadastroPendentePage() {
             <div className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <Logo size={20} className="text-current" />
             </div>
+            {/* i18n-ignore: nome da marca, idêntico em todos os idiomas */}
             <span className="text-xl font-semibold">WISEVEO</span>
           </div>
         </div>
@@ -22,15 +26,14 @@ export default function CadastroPendentePage() {
             <div className="mb-2 flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
               <Clock3 className="size-6" />
             </div>
-            <CardTitle>Cadastro aguardando aprovação</CardTitle>
+            <CardTitle>{t("cadastroPendente.title")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <p className="text-sm text-muted-foreground">
-              Sua solicitação foi recebida. Assim que um administrador liberar
-              seu cadastro, você poderá fazer login novamente e acessar o sistema.
+              {t("cadastroPendente.description")}
             </p>
             <Button asChild className="w-full">
-              <Link href="/login">Voltar para o login</Link>
+              <Link href="/login">{t("cadastroPendente.backToLogin")}</Link>
             </Button>
           </CardContent>
         </Card>

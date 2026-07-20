@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useLocale, useTranslations } from "next-intl"
 import { ArrowRightLeft, TrendingDown, TrendingUp } from "lucide-react"
 import { toast } from "sonner"
 
 import { DataTable } from "./data-table"
-import { getRecurringColumns } from "./columns"
+import { getRecurringColumns, type RecurringColumnLabels } from "./columns"
 import { Button } from "@/components/ui/button"
 import {
   AlertDialog,
@@ -101,7 +102,31 @@ export function RecurringClient({
   formOptions,
 }: RecurringClientProps) {
   const monetary = useMonetaryFormattingSafe()
-  const columns = useMemo(() => getRecurringColumns(monetary), [monetary])
+  const t = useTranslations("recurring")
+  const tCommon = useTranslations("common")
+  const locale = useLocale()
+  const columnLabels: RecurringColumnLabels = useMemo(() => ({
+    account: t("columns.account"),
+    actions: t("columns.actions"),
+    amount: t("columns.amount"),
+    category: t("columns.category"),
+    description: t("columns.description"),
+    group: t("columns.group"),
+    lastLaunch: t("columns.lastLaunch"),
+    note: t("columns.note"),
+    period: t("columns.period"),
+    reference: t("columns.reference"),
+    selectAllAria: t("columns.selectAllAria"),
+    selectRowAria: t("columns.selectRowAria"),
+    type: t("columns.type"),
+    typeExpense: t("columns.typeExpense"),
+    typeIncome: t("columns.typeIncome"),
+    typeTransfer: t("columns.typeTransfer"),
+  }), [t])
+  const columns = useMemo(
+    () => getRecurringColumns(monetary, columnLabels, locale),
+    [monetary, columnLabels, locale],
+  )
   const [recurringData, setRecurringData] = useState(initialRecurring)
   const [launchTarget, setLaunchTarget] =
     useState<SerializedRecurringTransaction | null>(null)
@@ -242,7 +267,7 @@ export function RecurringClient({
       const payload = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        toast.error(payload.error || "Erro ao lançar transação recorrente")
+        toast.error(payload.error || t("toasts.launchError"))
         return
       }
 
@@ -265,10 +290,10 @@ export function RecurringClient({
         )
       )
 
-      toast.success("Transação lançada com sucesso")
+      toast.success(t("toasts.launchSuccess"))
       setLaunchTarget(null)
     } catch {
-      toast.error("Erro ao lançar transação recorrente")
+      toast.error(t("toasts.launchError"))
     } finally {
       setActionLoading(false)
     }
@@ -284,15 +309,15 @@ export function RecurringClient({
       const payload = await response.json().catch(() => ({}))
 
       if (!response.ok) {
-        toast.error(payload.error || "Erro ao excluir recorrência")
+        toast.error(payload.error || t("toasts.deleteError"))
         return
       }
 
       setRecurringData((prev) => prev.filter((item) => item.id !== deleteTarget.id))
-      toast.success("Recorrência excluída com sucesso")
+      toast.success(t("toasts.deleteSuccess"))
       setDeleteTarget(null)
     } catch {
-      toast.error("Erro ao excluir recorrência")
+      toast.error(t("toasts.deleteError"))
     } finally {
       setActionLoading(false)
     }
@@ -309,13 +334,13 @@ export function RecurringClient({
       !editForm.categoryCode ||
       !editForm.statusCode
     ) {
-      toast.error("Preencha todos os campos obrigatórios")
+      toast.error(t("toasts.requiredFields"))
       return
     }
 
     const parsedAmount = Number(editForm.amount.replace(",", "."))
     if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
-      toast.error("Informe um valor válido")
+      toast.error(t("toasts.invalidAmount"))
       return
     }
 
@@ -347,7 +372,7 @@ export function RecurringClient({
 
       const payload = await response.json().catch(() => ({}))
       if (!response.ok) {
-        toast.error(payload.error || "Erro ao editar recorrência")
+        toast.error(payload.error || t("toasts.editError"))
         return
       }
 
@@ -430,10 +455,10 @@ export function RecurringClient({
         )
       )
 
-      toast.success("Recorrência atualizada com sucesso")
+      toast.success(t("toasts.editSuccess"))
       closeEditDialog()
     } catch {
-      toast.error("Erro ao editar recorrência")
+      toast.error(t("toasts.editError"))
     } finally {
       setActionLoading(false)
     }
@@ -494,15 +519,13 @@ export function RecurringClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `${launched.length} transa${launched.length === 1 ? "ção lançada" : "ções lançadas"} com sucesso`
-        )
+        toast.success(t("toasts.batchLaunchSuccess", { count: launched.length }))
       } else if (launched.length > 0) {
         toast.warning(
-          `${launched.length} lançada(s) e ${failed} com falha`
+          t("toasts.batchLaunchPartial", { succeeded: launched.length, failed })
         )
       } else {
-        toast.error("Falha ao lançar recorrências selecionadas")
+        toast.error(t("toasts.batchLaunchError"))
       }
 
       return true
@@ -568,15 +591,13 @@ export function RecurringClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `Data atualizada em ${updatedRows.length} recorrência${updatedRows.length > 1 ? "s" : ""}`
-        )
+        toast.success(t("toasts.batchEditDateSuccess", { count: updatedRows.length }))
       } else if (updatedRows.length > 0) {
         toast.warning(
-          `${updatedRows.length} atualizada(s) e ${failed} com falha`
+          t("toasts.batchEditDatePartial", { succeeded: updatedRows.length, failed })
         )
       } else {
-        toast.error("Falha ao atualizar data das recorrências selecionadas")
+        toast.error(t("toasts.batchEditDateError"))
       }
 
       return true
@@ -618,15 +639,13 @@ export function RecurringClient({
       }
 
       if (failed === 0) {
-        toast.success(
-          `${deletedIds.length} recorrência${deletedIds.length > 1 ? "s excluídas" : " excluída"} com sucesso`
-        )
+        toast.success(t("toasts.batchDeleteSuccess", { count: deletedIds.length }))
       } else if (deletedIds.length > 0) {
         toast.warning(
-          `${deletedIds.length} excluída(s) e ${failed} com falha`
+          t("toasts.batchDeletePartial", { succeeded: deletedIds.length, failed })
         )
       } else {
-        toast.error("Falha ao excluir recorrências selecionadas")
+        toast.error(t("toasts.batchDeleteError"))
       }
 
       return true
@@ -657,24 +676,26 @@ export function RecurringClient({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Lançar Transação</AlertDialogTitle>
+            <AlertDialogTitle>{t("dialogs.launchConfirm.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Confirmar lançamento de uma nova transação a partir desta recorrência?
+              {t("dialogs.launchConfirm.confirmText")}
               {launchTarget && (
                 <span className="mt-2 block text-foreground">
-                  {(launchTarget.note || "Sem histórico")} •{" "}
+                  {(launchTarget.note || t("dialogs.historyFallback"))} •{" "}
                   {monetary.formatMonetaryValue(launchTarget.amount)}
                 </span>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={actionLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={actionLoading}>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               disabled={actionLoading}
               onClick={() => void handleLaunchConfirm()}
             >
-              {actionLoading ? "Lançando..." : "Lançar"}
+              {actionLoading
+                ? t("dialogs.launchConfirm.launching")
+                : t("dialogs.launchConfirm.launchButton")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -686,19 +707,23 @@ export function RecurringClient({
         title={
           <span className="flex items-center gap-2.5">
             <span className={`inline-block size-2 rounded-full ${getTypeDotClass(editForm.type)}`} />
-            Editar Recorrência
+            {t("dialogs.editRecurring.title")}
           </span>
         }
-        description="Atualize os dados da recorrência selecionada."
+        description={t("dialogs.editRecurring.description")}
         footer={
           <>
-            <DetailPanelCloseButton onClick={closeEditDialog} />
+            <DetailPanelCloseButton onClick={closeEditDialog}>
+              {tCommon("cancel")}
+            </DetailPanelCloseButton>
             <Button
               onClick={() => void handleSaveEdit()}
               disabled={actionLoading}
               className="flex-1 sm:flex-none cursor-pointer"
             >
-              {actionLoading ? "Salvando..." : "Atualizar"}
+              {actionLoading
+                ? t("dialogs.editRecurring.saving")
+                : t("dialogs.editRecurring.updateButton")}
             </Button>
           </>
         }
@@ -707,9 +732,9 @@ export function RecurringClient({
         <div className="flex gap-1 rounded-lg bg-muted p-1 mb-4">
           {(
             [
-              { key: "INCOME", label: "Receita", Icon: TrendingUp },
-              { key: "EXPENSE", label: "Despesa", Icon: TrendingDown },
-              { key: "TRANSFER", label: "Transf.", Icon: ArrowRightLeft },
+              { key: "INCOME", label: t("dialogs.editRecurring.typeIncome"), Icon: TrendingUp },
+              { key: "EXPENSE", label: t("dialogs.editRecurring.typeExpense"), Icon: TrendingDown },
+              { key: "TRANSFER", label: t("dialogs.editRecurring.typeTransfer"), Icon: ArrowRightLeft },
             ] as const
           ).map(({ key, label, Icon }) => (
             <button
@@ -734,7 +759,7 @@ export function RecurringClient({
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-[180px_1fr_140px]">
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Data <span className="text-destructive">*</span>
+                {t("dialogs.editRecurring.dateLabel")} <span className="text-destructive">*</span>
               </Label>
               <Input
                 type="date"
@@ -747,19 +772,19 @@ export function RecurringClient({
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                REF
+                {t("dialogs.editRecurring.refLabel")}
               </Label>
               <Input
                 value={editForm.reference}
                 onChange={(event) =>
                   setEditForm((prev) => ({ ...prev, reference: event.target.value }))
                 }
-                placeholder="ex: Boleto FIES"
+                placeholder={t("dialogs.editRecurring.refPlaceholder")}
               />
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Valor <span className="text-destructive">*</span>
+                {t("dialogs.editRecurring.amountLabel")} <span className="text-destructive">*</span>
               </Label>
               <Input
                 type="number"
@@ -779,11 +804,11 @@ export function RecurringClient({
           <div className="relative space-y-1.5">
             <div className="flex items-center gap-2">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Histórico
+                {t("dialogs.editRecurring.historyLabel")}
               </Label>
               {showSuggestions && suggestions.length > 0 && (
                 <span className="text-[10px] text-chart-1 font-medium">
-                  {suggestions.length} sugestões
+                  {t("dialogs.editRecurring.suggestionsCount", { count: suggestions.length })}
                 </span>
               )}
             </div>
@@ -814,7 +839,7 @@ export function RecurringClient({
               }}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               autoComplete="off"
-              placeholder="Beneficiário ou descrição rápida..."
+              placeholder={t("dialogs.editRecurring.historyPlaceholder")}
             />
             {showSuggestions && suggestions.length > 0 && (
               <ul className="absolute z-50 left-0 right-0 top-full mt-0.5 bg-popover border border-border rounded-md shadow-lg overflow-hidden max-h-36 overflow-y-auto">
@@ -841,21 +866,21 @@ export function RecurringClient({
 
           <div className="space-y-1.5">
             <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-              Descrição
+              {t("dialogs.editRecurring.descriptionLabel")}
             </Label>
             <Input
               value={editForm.description}
               onChange={(event) =>
                 setEditForm((prev) => ({ ...prev, description: event.target.value }))
               }
-              placeholder="Detalhes opcionais..."
+              placeholder={t("dialogs.editRecurring.descriptionPlaceholder")}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Grupo <span className="text-destructive">*</span>
+                {t("dialogs.editRecurring.groupLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={editForm.groupCode}
@@ -864,7 +889,7 @@ export function RecurringClient({
                 }
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("dialogs.editRecurring.selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredGroups.map((group) => (
@@ -882,7 +907,7 @@ export function RecurringClient({
 
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Categoria <span className="text-destructive">*</span>
+                {t("dialogs.editRecurring.categoryLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={editForm.categoryCode}
@@ -892,7 +917,7 @@ export function RecurringClient({
                 disabled={!editForm.groupCode}
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("dialogs.editRecurring.selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredCategories.map((category) => (
@@ -912,7 +937,7 @@ export function RecurringClient({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Banco <span className="text-destructive">*</span>
+                {t("dialogs.editRecurring.accountLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={editForm.accountId}
@@ -921,7 +946,7 @@ export function RecurringClient({
                 }
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("dialogs.editRecurring.selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {formOptions.accounts.map((account) => (
@@ -939,7 +964,7 @@ export function RecurringClient({
 
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Status <span className="text-destructive">*</span>
+                {t("dialogs.editRecurring.statusLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={editForm.statusCode}
@@ -948,7 +973,7 @@ export function RecurringClient({
                 }
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("dialogs.editRecurring.selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {formOptions.statuses.map((status) => (
@@ -973,25 +998,25 @@ export function RecurringClient({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir Recorrência</AlertDialogTitle>
+            <AlertDialogTitle>{t("dialogs.deleteConfirm.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta ação excluirá definitivamente o modelo recorrente.
+              {t("dialogs.deleteConfirm.confirmText")}
               {deleteTarget && (
                 <span className="mt-2 block text-foreground">
-                  {(deleteTarget.note || "Sem histórico")} •{" "}
+                  {(deleteTarget.note || t("dialogs.historyFallback"))} •{" "}
                   {monetary.formatMonetaryValue(deleteTarget.amount)}
                 </span>
               )}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={actionLoading}>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel disabled={actionLoading}>{tCommon("cancel")}</AlertDialogCancel>
             <AlertDialogAction
               variant="destructive"
               disabled={actionLoading}
               onClick={() => void handleDeleteConfirm()}
             >
-              {actionLoading ? "Excluindo..." : "Excluir"}
+              {actionLoading ? t("dialogs.deleteConfirm.deleting") : tCommon("delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

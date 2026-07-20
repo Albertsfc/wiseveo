@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { prisma } from "@/lib/prisma"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
@@ -8,9 +9,10 @@ export async function DELETE(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string; messageId: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
-    return NextResponse.json({ error: "Usuário não encontrado" }, { status: 401 })
+    return NextResponse.json({ error: t("errors.userNotFound") }, { status: 401 })
   }
 
   const { id: transactionId, messageId } = await params
@@ -21,7 +23,7 @@ export async function DELETE(
   })
 
   if (!transaction) {
-    return NextResponse.json({ error: "Transação não encontrada" }, { status: 404 })
+    return NextResponse.json({ error: t("errors.transactionNotFound") }, { status: 404 })
   }
 
   try {
@@ -33,12 +35,12 @@ export async function DELETE(
     `
 
     if (deleted.length === 0) {
-      return NextResponse.json({ error: "Mensagem não encontrada" }, { status: 404 })
+      return NextResponse.json({ error: t("transactions.messageNotFound") }, { status: 404 })
     }
 
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error("Error deleting transaction message:", error)
-    return NextResponse.json({ error: "Erro ao apagar mensagem" }, { status: 500 })
+    return NextResponse.json({ error: t("transactions.deleteMessageFailed") }, { status: 500 })
   }
 }

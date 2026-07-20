@@ -62,7 +62,7 @@ export async function exchangeCodeForTokens(code: string): Promise<GoogleTokens>
 
   if (!res.ok) {
     const error = await res.text()
-    throw new Error(`Google token exchange failed: ${error}`)
+    throw new Error(`Google token exchange failed: ${error}`) // i18n-ignore: mensagem interna de Error (inclui payload cru da API do Google), nunca exibida ao usuário
   }
 
   return res.json()
@@ -126,7 +126,7 @@ export async function exchangeCalendarCodeForTokens(
 
   if (!res.ok) {
     const error = await res.text()
-    throw new Error(`Google calendar token exchange failed: ${error}`)
+    throw new Error(`Google calendar token exchange failed: ${error}`) // i18n-ignore: mensagem interna de Error (inclui payload cru da API do Google), nunca exibida ao usuário
   }
 
   return res.json()
@@ -152,7 +152,7 @@ export async function refreshAccessToken(
 
   if (!res.ok) {
     const error = await res.text()
-    throw new Error(`Google token refresh failed: ${error}`)
+    throw new Error(`Google token refresh failed: ${error}`) // i18n-ignore: mensagem interna de Error (inclui payload cru da API do Google), nunca exibida ao usuário
   }
 
   return res.json()

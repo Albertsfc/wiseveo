@@ -1,13 +1,16 @@
 import { tool } from "ai";
 import { z } from "zod";
 import { getFinancialSummary } from "@/features/shared/services/get-financial-summary";
-import { formatMoney, resolveToolRange } from "./tool-utils";
+import { resolveToolRange } from "./tool-utils";
+import type { TelegramToolContext } from "../types/telegram.types";
 
-export const createSummaryTool = (userId: string) => tool({
-  description: "Obtem um resumo financeiro (entradas, saidas, saldo/economia) para um periodo especifico. Use para perguntas como 'como foi meu mes', 'resumo de gastos', 'qual meu saldo'.",
+export const createSummaryTool = (userId: string, ctx: TelegramToolContext) => tool({
+  // Tool metadata below is an LLM function-calling definition, not UI copy —
+  // kept in Portuguese and i18n-ignored.
+  description: "Obtem um resumo financeiro (entradas, saidas, saldo/economia) para um periodo especifico. Use para perguntas como 'como foi meu mes', 'resumo de gastos', 'qual meu saldo'.", // i18n-ignore
   inputSchema: z.object({
-    from: z.string().optional().describe("Data de inicio no formato YYYY-MM-DD. Padrao: inicio do mes atual."),
-    to: z.string().optional().describe("Data de fim no formato YYYY-MM-DD. Padrao: fim do mes atual."),
+    from: z.string().optional().describe("Data de inicio no formato YYYY-MM-DD. Padrao: inicio do mes atual."), // i18n-ignore
+    to: z.string().optional().describe("Data de fim no formato YYYY-MM-DD. Padrao: fim do mes atual."), // i18n-ignore
   }),
   execute: async ({ from, to }) => {
     const range = resolveToolRange({ from, to });
@@ -19,9 +22,9 @@ export const createSummaryTool = (userId: string) => tool({
         to: range.to.toISOString(),
       },
       ...summary,
-      formattedIncome: formatMoney(summary.income),
-      formattedExpense: formatMoney(summary.expense),
-      formattedSavings: formatMoney(summary.savings),
+      formattedIncome: ctx.monetary.formatNumberValue(summary.income),
+      formattedExpense: ctx.monetary.formatNumberValue(summary.expense),
+      formattedSavings: ctx.monetary.formatNumberValue(summary.savings),
     };
   },
 });

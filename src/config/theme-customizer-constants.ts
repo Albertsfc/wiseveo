@@ -16,33 +16,37 @@ export const radiusOptions: RadiusOption[] = [
 ]
 
 // Sidebar variant options
+// NOTE: `name`/`description` hold stable i18n key suffixes (not display text).
+// Consuming components resolve the actual label via t(`themeCustomizer.sidebarVariant.${value}`)
+// — see layout-tab.tsx. `value` is the real, non-translatable identifier used by the app.
 export const sidebarVariants: SidebarVariant[] = [
-  { name: "Padrão", value: "sidebar", description: "Layout clássico de sidebar" },
-  { name: "Flutuante", value: "floating", description: "Sidebar destacada com borda" },
-  { name: "Inset", value: "inset", description: "Sidebar integrada com cantos arredondados" },
+  { name: "sidebar", value: "sidebar", description: "sidebar" },
+  { name: "floating", value: "floating", description: "floating" },
+  { name: "inset", value: "inset", description: "inset" },
 ]
 
-// Sidebar collapsible options
+// Sidebar collapsible options — `name`/`description` are i18n key suffixes, see layout-tab.tsx.
 export const sidebarCollapsibleOptions: SidebarCollapsibleOption[] = [
-  { name: "Off Canvas", value: "offcanvas", description: "Sai da área principal" },
-  { name: "Ícones", value: "icon", description: "Recolhe para ícones" },
-  { name: "Fixa", value: "none", description: "Sempre visível" },
+  { name: "offcanvas", value: "offcanvas", description: "offcanvas" },
+  { name: "icon", value: "icon", description: "icon" },
+  { name: "none", value: "none", description: "none" },
 ]
 
-// Sidebar side options
+// Sidebar side options — `name` is an i18n key suffix, see layout-tab.tsx.
 export const sidebarSideOptions: SidebarSideOption[] = [
-  { name: "Esquerda", value: "left" },
-  { name: "Direita", value: "right" },
+  { name: "left", value: "left" },
+  { name: "right", value: "right" },
 ]
 
-// Define brand colors for custom color inputs
+// Define brand colors for custom color inputs.
+// `name` is an i18n key suffix resolved via t(`themeCustomizer.brandColor.${name}`) in theme-tab.tsx.
 export const baseColors: BrandColor[] = [
-  { name: "Primária", cssVar: "--primary" },
-  { name: "Texto da Primária", cssVar: "--primary-foreground" },
-  { name: "Secundária", cssVar: "--secondary" },
-  { name: "Texto da Secundária", cssVar: "--secondary-foreground" },
-  { name: "Accent", cssVar: "--accent" },
-  { name: "Texto do Accent", cssVar: "--accent-foreground" },
-  { name: "Muted", cssVar: "--muted" },
-  { name: "Texto do Muted", cssVar: "--muted-foreground" },
+  { name: "primary", cssVar: "--primary" },
+  { name: "primaryForeground", cssVar: "--primary-foreground" },
+  { name: "secondary", cssVar: "--secondary" },
+  { name: "secondaryForeground", cssVar: "--secondary-foreground" },
+  { name: "accent", cssVar: "--accent" },
+  { name: "accentForeground", cssVar: "--accent-foreground" },
+  { name: "muted", cssVar: "--muted" },
+  { name: "mutedForeground", cssVar: "--muted-foreground" },
 ]

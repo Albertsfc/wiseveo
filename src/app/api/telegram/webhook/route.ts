@@ -19,6 +19,7 @@ export async function POST(req: Request) {
   try {
     update = (await req.json()) as TelegramWebhookUpdate
   } catch {
+    // i18n-ignore: webhook chamado pelos servidores do Telegram, não por um usuário via UI
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 })
   }
 

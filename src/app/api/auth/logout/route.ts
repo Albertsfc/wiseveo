@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { COOKIE_NAME } from "@/lib/auth"
 
 export async function POST() {
+  const t = await getTranslations("api.auth")
   const response = NextResponse.json(
-    { success: true, message: "Logout realizado com sucesso" },
+    { success: true, message: t("logoutSuccess") },
     { status: 200 }
   )
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import {
   CheckCircle,
   Copy,
@@ -38,37 +39,39 @@ export function TransactionActions({
   onDelete = () => {},
   triggerClassName,
 }: TransactionActionsProps) {
+  const t = useTranslations("transactions.actions")
+
   const items: SmoothDropdownEntry[] = [
     {
       id: "quick-pay",
-      label: "Pagar (Pagamento Rápido)",
+      label: t("quickPay"),
       icon: CheckCircle,
       iconClassName: "text-chart-2",
       onClick: () => onQuickPay(transaction),
     },
     {
       id: "edit",
-      label: "Editar Lançamento",
+      label: t("edit"),
       icon: Pencil,
       onClick: () => onEdit(transaction),
     },
     {
       id: "copy",
-      label: "Copiar Lançamento",
+      label: t("copy"),
       icon: Copy,
       iconClassName: "text-blue-500",
       onClick: () => onCopy(transaction),
     },
     {
       id: "make-recurring",
-      label: "Tornar recorrente",
+      label: t("makeRecurring"),
       icon: RotateCcw,
       iconClassName: "text-chart-1",
       onClick: () => onMakeRecurring(transaction),
     },
     {
       id: "attachments",
-      label: "Anexos",
+      label: t("attachments"),
       icon: Paperclip,
       badge: transaction.attachmentCount > 0 ? transaction.attachmentCount : undefined,
       badgeClassName: "bg-yellow-400 text-yellow-950",
@@ -77,7 +80,7 @@ export function TransactionActions({
     },
     {
       id: "notes",
-      label: "Observações/Mensagens",
+      label: t("notes"),
       icon: MessageSquare,
       badge: transaction.messageCount > 0 ? transaction.messageCount : undefined,
       badgeClassName: "bg-primary text-primary-foreground",
@@ -87,7 +90,7 @@ export function TransactionActions({
     { id: "separator", separator: true },
     {
       id: "delete",
-      label: "Excluir Lançamento",
+      label: t("delete"),
       icon: Trash2,
       variant: "destructive",
       onClick: () => onDelete(transaction),

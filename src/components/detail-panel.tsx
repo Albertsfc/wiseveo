@@ -18,6 +18,7 @@
  */
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { X } from "lucide-react"
 
 import { useDeviceClass } from "@/hooks/use-device-class"
@@ -185,11 +186,13 @@ export function DetailPanel({
 
 export function DetailPanelCloseButton({
   onClick,
-  children = "Cancelar",
+  children,
 }: {
   onClick?: () => void
   children?: React.ReactNode
 }) {
+  const t = useTranslations("common")
+
   return (
     <Button
       type="button"
@@ -197,7 +200,7 @@ export function DetailPanelCloseButton({
       onClick={onClick}
       className="cursor-pointer"
     >
-      {children}
+      {children ?? t("cancel")}
     </Button>
   )
 }

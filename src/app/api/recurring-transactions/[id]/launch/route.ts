@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { prisma } from "@/lib/prisma"
 import { createTransaction } from "@/features/transactions/services/create-transaction"
@@ -22,11 +23,12 @@ export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
 
   if (!userId) {
     return NextResponse.json(
-      { error: "Usuário não encontrado" },
+      { error: t("errors.userNotFound") },
       { status: 401 }
     )
   }
@@ -53,7 +55,7 @@ export async function POST(
 
   if (!recurring) {
     return NextResponse.json(
-      { error: "Recorrência não encontrada" },
+      { error: t("errors.recurrenceNotFound") },
       { status: 404 }
     )
   }
@@ -100,7 +102,7 @@ export async function POST(
   } catch (error) {
     console.error("Error launching transaction from recurring:", error)
     return NextResponse.json(
-      { error: "Erro ao lançar transação recorrente" },
+      { error: t("recurringTransactions.launchFailed") },
       { status: 500 }
     )
   }

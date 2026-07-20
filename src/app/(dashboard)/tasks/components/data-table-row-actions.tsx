@@ -2,6 +2,7 @@
 
 import type { Row } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -22,6 +23,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+  const t = useTranslations("tasks.rowActions")
   const task = taskSchema.parse(row.original)
 
   return (
@@ -32,18 +34,18 @@ export function DataTableRowActions<TData>({
           className="flex h-8 w-8 p-0 data-[state=open]:bg-muted cursor-pointer"
         >
           <MoreHorizontal />
-          <span className="sr-only">Open menu</span>
+          <span className="sr-only">{t("openMenu")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem className="cursor-pointer">View Task</DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">Edit Task</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">{t("viewTask")}</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">{t("editTask")}</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">Duplicate</DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">Mark as Favorite</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">{t("duplicate")}</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">{t("markAsFavorite")}</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="cursor-pointer" variant="destructive">
-          Delete
+          {t("delete")}
           <DropdownMenuShortcut className="text-destructive">⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

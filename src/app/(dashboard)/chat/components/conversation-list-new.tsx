@@ -10,6 +10,8 @@ import {
   Hash
 } from "lucide-react"
 
+import { useTranslations } from "next-intl"
+
 import { cn } from "@/lib/utils"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -53,6 +55,7 @@ export function ConversationList({
   selectedConversation,
   onSelectConversation
 }: ConversationListProps) {
+  const t = useTranslations("chat")
   const { searchQuery, setSearchQuery, togglePin, toggleMute } = useChat()
 
   const filteredConversations = conversations.filter((conversation) =>
@@ -80,7 +83,7 @@ export function ConversationList({
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b flex-shrink-0">
-        <h2 className="text-lg font-semibold">Messages</h2>
+        <h2 className="text-lg font-semibold">{t("messagesTitle")}</h2>
       </div>
 
       {/* Search */}
@@ -89,7 +92,7 @@ export function ConversationList({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="text"
-            placeholder="Search conversations..."
+            placeholder={t("conversationList.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 cursor-text"
@@ -207,7 +210,7 @@ export function ConversationList({
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="cursor-pointer text-destructive">
-                      Delete conversation
+                      {t("deleteConversation")}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

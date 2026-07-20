@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { useTheme } from "@/hooks/use-theme"
 import { useCircularTransition } from "@/hooks/use-circular-transition"
 import { useThemePreferencesSafe } from "@/contexts/theme-preferences-context"
+import { useTranslations } from "next-intl"
 import "./theme-customizer/circular-transition.css"
 
 interface ModeToggleProps {
@@ -14,6 +15,7 @@ interface ModeToggleProps {
 }
 
 export function ModeToggle({ variant = "outline" }: ModeToggleProps) {
+  const t = useTranslations("common.modeToggle")
   const { theme } = useTheme()
   const { toggleTheme } = useCircularTransition()
 
@@ -69,7 +71,7 @@ export function ModeToggle({ variant = "outline" }: ModeToggleProps) {
         <Moon className="h-[1.2rem] w-[1.2rem] transition-transform duration-300 rotate-0 scale-100" />
       )}
       <span className="sr-only">
-        Alternar para o modo {isDarkMode ? "claro" : "escuro"}
+        {isDarkMode ? t("switchToLight") : t("switchToDark")}
       </span>
     </Button>
   )

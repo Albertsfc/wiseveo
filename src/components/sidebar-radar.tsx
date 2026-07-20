@@ -1,7 +1,9 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 import { useSidebar } from "@/components/ui/sidebar"
+import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
 import { startOfMonth, endOfMonth } from "date-fns"
 
 interface CashflowPoint {
@@ -11,20 +13,12 @@ interface CashflowPoint {
   balance: number
 }
 
-// formatCurrency helper function, assuming BRL and pt-BR format is default in preferences
-// mas para simplificar, usaremos Intl.NumberFormat como fallback e depois podemos ajustar
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    signDisplay: 'auto',
-  }).format(value).replace(/^-R\$/, 'R$ -') // Padrão de exibir negativo
-}
-
 export function SidebarRadar() {
   const { state } = useSidebar()
   const collapsed = state === "collapsed"
-  
+  const t = useTranslations("common.sidebarRadar")
+  const monetary = useMonetaryFormattingSafe()
+
   const [todayBalance, setTodayBalance] = React.useState<number | null>(null)
   const [monthEndBalance, setMonthEndBalance] = React.useState<number | null>(null)
 
@@ -93,13 +87,13 @@ export function SidebarRadar() {
       {!collapsed && (
         <div className="flex flex-col gap-1 overflow-hidden">
           <span className="text-[10px] font-bold uppercase tracking-wider text-sidebar-foreground/60">
-            Saldo Atual
+            {t("currentBalance")}
           </span>
           <span className="font-mono-financial truncate text-2xl font-bold text-primary">
-            {todayBalance !== null ? formatCurrency(todayBalance).replace('R$', '').trim() : "---"}
+            {todayBalance !== null ? monetary.formatNumberValue(todayBalance) : "---"}
           </span>
           <span className="truncate text-[11px] text-sidebar-foreground/60">
-            Projetado: {monthEndBalance !== null ? formatCurrency(monthEndBalance).replace('R$', '').trim() : "---"}
+            {t("projected")} {monthEndBalance !== null ? monetary.formatNumberValue(monthEndBalance) : "---"}
           </span>
         </div>
       )}
@@ -109,9 +103,14 @@ export function SidebarRadar() {
         className="status-radar w-3 h-3 min-w-3 min-h-3 shrink-0"
         style={{ color: getRadarColor(monthEndBalance) }}
         title={
-          collapsed 
-            ? `Hoje: ${todayBalance !== null ? formatCurrency(todayBalance) : '---'} | Projetado: ${monthEndBalance !== null ? formatCurrency(monthEndBalance) : '---'}` 
-            : `Projetado para o fim do mês: ${monthEndBalance !== null ? formatCurrency(monthEndBalance) : '---'}`
+          collapsed
+            ? t("tooltipCollapsed", {
+                today: todayBalance !== null ? monetary.formatMonetaryValue(todayBalance) : "---",
+                projected: monthEndBalance !== null ? monetary.formatMonetaryValue(monthEndBalance) : "---",
+              })
+            : t("tooltipExpanded", {
+                projected: monthEndBalance !== null ? monetary.formatMonetaryValue(monthEndBalance) : "---",
+              })
         }
       >
         <div className="ring" />

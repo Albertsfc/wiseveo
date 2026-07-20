@@ -1,19 +1,20 @@
 import * as React from "react"
 import { ChevronRight, ChevronDown } from "lucide-react"
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import { useTranslations } from "next-intl"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table"
 import { formatPercentValue } from "@/lib/monetary"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
 import { cn } from "@/lib/utils"
-import type { 
-  ForecastingData, 
-  ForecastingCell, 
+import type {
+  ForecastingData,
+  ForecastingCell,
   ForecastingSection
 } from "../types"
 
@@ -25,6 +26,7 @@ interface ForecastingDataTableProps {
 }
 
 export function ForecastingDataTable({ data, showAv, showAh, loading }: ForecastingDataTableProps) {
+  const t = useTranslations("forecasting.table")
   const monetary = useMonetaryFormattingSafe()
   const [expanded, setExpanded] = React.useState<Record<string, boolean>>({
     "section-income": true,
@@ -39,8 +41,8 @@ export function ForecastingDataTable({ data, showAv, showAh, loading }: Forecast
     if (!showAv && !showAh) return null
     return (
       <div className="flex flex-col gap-0.5 text-[10px] text-muted-foreground mt-1 text-right">
-        {showAv && <span>AV: {formatPercentValue(cell.avPercentage)}</span>}
-        {showAh && <span>AH: {formatPercentValue(cell.ahPercentage)}</span>}
+        {showAv && <span>{t("avAbbrev")}: {formatPercentValue(cell.avPercentage)}</span>}
+        {showAh && <span>{t("ahAbbrev")}: {formatPercentValue(cell.ahPercentage)}</span>}
       </div>
     )
   }
@@ -77,7 +79,7 @@ export function ForecastingDataTable({ data, showAv, showAh, loading }: Forecast
                   {monetary.formatMonetaryValue(cell.amount)}
                 </span>
                   <span className="text-[9px] uppercase text-muted-foreground">
-                    {cell.isProjected ? "Projetado" : "Real"}
+                    {cell.isProjected ? t("projected") : t("actual")}
                   </span>
                 {renderCellMetrics(cell)}
               </div>
@@ -151,7 +153,7 @@ export function ForecastingDataTable({ data, showAv, showAh, loading }: Forecast
         <TableHeader>
           <TableRow>
             <TableHead className="w-[250px] sticky left-0 z-30 bg-background/95 backdrop-blur shadow-[1px_0_0_0_var(--border)]">
-              Conta
+              {t("accountColumn")}
             </TableHead>
             {data.columns.map((col, i) => (
               <TableHead key={i} className="text-right min-w-[140px] z-10 bg-background/95 backdrop-blur">
@@ -163,7 +165,7 @@ export function ForecastingDataTable({ data, showAv, showAh, loading }: Forecast
                       ? "text-muted-foreground bg-muted"
                       : "text-chart-2/80 bg-chart-2/10"
                   )}>
-                    {col.isProjected ? "Proj" : "Real"}
+                    {col.isProjected ? t("projectedAbbrev") : t("actual")}
                   </span>
                 </div>
               </TableHead>
@@ -173,10 +175,10 @@ export function ForecastingDataTable({ data, showAv, showAh, loading }: Forecast
         <TableBody>
           {renderSection(data.income, "section-income", "income")}
           {renderSection(data.expense, "section-expense", "expense")}
-          
+
           <TableRow className="bg-primary/5">
             <TableCell className="font-bold py-4 sticky left-0 bg-background/95 backdrop-blur z-20 shadow-[1px_0_0_0_var(--border)]">
-              SALDO FINAL
+              {t("netBalance")}
             </TableCell>
             {data.netResultCells.map((cell, idx) => (
               <TableCell key={idx} className="text-right align-top py-4">
@@ -196,7 +198,7 @@ export function ForecastingDataTable({ data, showAv, showAh, loading }: Forecast
 
           <TableRow className="bg-primary/10 border-t-2 border-dashed border-primary/30">
             <TableCell className="font-bold py-4 sticky left-0 bg-background/95 backdrop-blur z-20 shadow-[1px_0_0_0_var(--border)] text-primary">
-              SALDO ACUMULADO
+              {t("accumulatedBalance")}
             </TableCell>
             {data.accumulatedCells.map((cell, idx) => (
               <TableCell key={idx} className="text-right align-top py-4">
@@ -209,7 +211,7 @@ export function ForecastingDataTable({ data, showAv, showAh, loading }: Forecast
                     {monetary.formatMonetaryValue(cell.amount)}
                   </span>
                   <span className="text-[9px] uppercase text-muted-foreground">
-                    {cell.isProjected ? "Projetado" : "Real"}
+                    {cell.isProjected ? t("projected") : t("actual")}
                   </span>
                   {renderCellMetrics(cell)}
                 </div>

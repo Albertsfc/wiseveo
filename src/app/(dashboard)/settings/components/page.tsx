@@ -1,5 +1,7 @@
 "use client"
 
+import { useTranslations } from "next-intl"
+
 import { ChartAreaInteractiveLibrary } from "@/features/component-library/components/chart-area-interactive-library"
 import { DataTable } from "@/features/component-library/components/data-table"
 
@@ -17,6 +19,8 @@ import { QuickActions } from "@/features/component-library/components/quick-acti
 import { RevenueBreakdown } from "@/features/component-library/components/revenue-breakdown"
 
 export default function ComponentsPage() {
+    const t = useTranslations("settings.componentsShowcase")
+
     return (
         <div className="flex flex-col gap-8 pb-10">
 
@@ -24,9 +28,9 @@ export default function ComponentsPage() {
                 {/* Insights Section */}
                 <section className="space-y-4">
                     <div className="px-4 lg:px-6">
-                        <h2 className="text-xl font-semibold tracking-tight">Insights</h2>
+                        <h2 className="text-xl font-semibold tracking-tight">{t("insightsTitle")}</h2>
                         <p className="text-sm text-muted-foreground">
-                            Componentes de métricas, gráficos e análises de desempenho.
+                            {t("insightsDescription")}
                         </p>
                     </div>
                     <div className="px-4 lg:px-6">
@@ -51,9 +55,9 @@ export default function ComponentsPage() {
                 {/* Gráficos Section */}
                 <section className="space-y-4">
                     <div className="px-4 lg:px-6">
-                        <h2 className="text-xl font-semibold tracking-tight">Gráficos</h2>
+                        <h2 className="text-xl font-semibold tracking-tight">{t("chartsTitle")}</h2>
                         <p className="text-sm text-muted-foreground">
-                            Exemplos de visualizações de dados e gráficos interativos.
+                            {t("chartsDescription")}
                         </p>
                     </div>
                     <div className="px-4 lg:px-6">
@@ -64,9 +68,9 @@ export default function ComponentsPage() {
                 {/* Tabelas Section */}
                 <section className="space-y-4">
                     <div className="px-4 lg:px-6">
-                        <h2 className="text-xl font-semibold tracking-tight">Tabelas</h2>
+                        <h2 className="text-xl font-semibold tracking-tight">{t("tablesTitle")}</h2>
                         <p className="text-sm text-muted-foreground">
-                            Componentes de tabela com suporte a ordenação, filtragem e drag & drop.
+                            {t("tablesDescription")}
                         </p>
                     </div>
                     <div className="@container/main">

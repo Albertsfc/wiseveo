@@ -1,5 +1,8 @@
+import { getTranslations } from "next-intl/server"
+
 import { prisma } from "@/lib/prisma"
 import { periodFromDate } from "@/lib/financial"
+import type { AppLocale } from "@/i18n/config"
 import type { DreData, DreLineItem } from "../types"
 
 interface AggregateBucket {
@@ -62,7 +65,14 @@ export async function getDreData(
   userId: string,
   from: Date,
   to: Date,
+  locale?: AppLocale,
 ): Promise<DreData> {
+  // Telegram passes the user's persisted locale explicitly (no request cookie
+  // available there); web callers omit it and keep resolving from the cookie.
+  const t = locale
+    ? await getTranslations({ locale, namespace: "analysis.fallback" })
+    : await getTranslations("analysis.fallback")
+
   const transactions = await prisma.transaction.findMany({
     where: {
       userId,
@@ -110,11 +120,11 @@ export async function getDreData(
       const bucketCode = `${groupCode}:${categoryCode}`
       const groupName = normalizeGroupName(
         transaction.group?.name,
-        "Transferências",
+        t("transferGroup"),
       )
       const categoryName = normalizeCategoryName(
         transaction.category?.name,
-        "Transferência",
+        t("transferCategory"),
       )
       const bucketName = buildTransferBucketName(groupName, categoryName)
       const absoluteAmount = Math.abs(amount)
@@ -140,7 +150,7 @@ export async function getDreData(
     const groupCode = String(transaction.group?.code ?? transaction.groupCode ?? 0)
     const groupName = normalizeGroupName(
       transaction.group?.name,
-      isIncome ? "Receitas diversas" : "Despesas diversas",
+      isIncome ? t("incomeGroup") : t("expenseGroup"),
     )
     const existing = targetBuckets.get(groupCode)
     const absoluteAmount = Math.abs(amount)

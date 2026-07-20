@@ -10,7 +10,9 @@ import {
   Bell,
   BellOff
 } from "lucide-react"
+import { useLocale, useTranslations } from "next-intl"
 
+import { formatAppDate } from "@/i18n/format"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -42,10 +44,13 @@ export function ChatHeader({
   onToggleMute,
   onToggleInfo
 }: ChatHeaderProps) {
+  const t = useTranslations("chat")
+  const locale = useLocale()
+
   if (!conversation) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-muted-foreground">Select a conversation to start chatting</p>
+        <p className="text-muted-foreground">{t("header.selectConversation")}</p>
       </div>
     )
   }
@@ -63,15 +68,20 @@ export function ChatHeader({
   const getStatusText = () => {
     if (conversation.type === "group") {
       const onlineCount = conversationUsers.filter(user => user.status === "online").length
-      return `${conversation.participants.length} members, ${onlineCount} online`
+      return t("header.status.groupOnline", {
+        total: conversation.participants.length,
+        online: onlineCount,
+      })
     } else if (primaryUser) {
       switch (primaryUser.status) {
         case "online":
-          return "Active now"
+          return t("header.status.online")
         case "away":
-          return "Away"
+          return t("header.status.away")
         case "offline":
-          return `Last seen ${new Date(primaryUser.lastSeen).toLocaleDateString()}`
+          return t("header.status.lastSeen", {
+            date: formatAppDate(new Date(primaryUser.lastSeen), "P", locale),
+          })
         default:
           return ""
       }
@@ -117,7 +127,7 @@ export function ChatHeader({
             )}
             {conversation.type === "group" && (
               <Badge variant="secondary" className="text-xs cursor-pointer">
-                Group
+                {t("header.groupBadge")}
               </Badge>
             )}
           </div>
@@ -138,7 +148,7 @@ export function ChatHeader({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Search in conversation</p>
+              <p>{t("header.tooltips.search")}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -150,7 +160,7 @@ export function ChatHeader({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Voice call</p>
+              <p>{t("header.tooltips.voiceCall")}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -162,7 +172,7 @@ export function ChatHeader({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Video call</p>
+              <p>{t("header.tooltips.videoCall")}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -179,7 +189,7 @@ export function ChatHeader({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Conversation info</p>
+              <p>{t("header.tooltips.info")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -199,31 +209,31 @@ export function ChatHeader({
               {conversation.isMuted ? (
                 <>
                   <Bell className="h-4 w-4 mr-2" />
-                  Unmute conversation
+                  {t("header.menu.unmute")}
                 </>
               ) : (
                 <>
                   <BellOff className="h-4 w-4 mr-2" />
-                  Mute conversation
+                  {t("header.menu.mute")}
                 </>
               )}
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer">
               <Search className="h-4 w-4 mr-2" />
-              Search messages
+              {t("header.menu.searchMessages")}
             </DropdownMenuItem>
             {conversation.type === "group" && (
               <>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer">
                   <Users className="h-4 w-4 mr-2" />
-                  Manage members
+                  {t("header.menu.manageMembers")}
                 </DropdownMenuItem>
               </>
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer text-destructive">
-              Delete conversation
+              {t("deleteConversation")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

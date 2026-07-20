@@ -1,6 +1,7 @@
 "use client"
 
 import type { ColumnDef } from "@tanstack/react-table"
+import type { useTranslations } from "next-intl"
 
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -11,7 +12,16 @@ import type { Task } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 
-export const columns: ColumnDef<Task>[] = [
+// Translator scoped at the "tasks" root namespace — gives access to both
+// tasks.columns.* (aria-labels/column titles) and tasks.options.* (status,
+// priority and category display labels). `columns` is a plain module-level
+// array, not a component, so it cannot call useTranslations() itself; the
+// page component builds `t` and passes it in (same pattern as
+// getRecurringColumns/getTransactionColumns).
+type TasksTranslator = ReturnType<typeof useTranslations<"tasks">>
+
+export function getColumns(t: TasksTranslator): ColumnDef<Task>[] {
+  return [
   {
     id: "select",
     header: ({ table }) => (
@@ -21,7 +31,7 @@ export const columns: ColumnDef<Task>[] = [
           (table.getIsSomePageRowsSelected() && "indeterminate")
         }
         onCheckedChange={(value: any) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
+        aria-label={t("columns.selectAllAria")}
         className="translate-y-[2px] cursor-pointer"
       />
     ),
@@ -29,7 +39,7 @@ export const columns: ColumnDef<Task>[] = [
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value: any) => row.toggleSelected(!!value)}
-        aria-label="Select row"
+        aria-label={t("columns.selectRowAria")}
         className="translate-y-[2px] cursor-pointer"
       />
     ),
@@ -39,7 +49,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+      <DataTableColumnHeader column={column} title={t("columns.task")} />
     ),
     cell: ({ row }) => (
       <div className="w-[90px] font-medium">{row.getValue("id")}</div>
@@ -49,7 +59,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "title",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title={t("columns.title")} />
     ),
     cell: ({ row }) => {
       return (
@@ -64,7 +74,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "category",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Category" />
+      <DataTableColumnHeader column={column} title={t("columns.category")} />
     ),
     cell: ({ row }) => {
       const category = categories.find(
@@ -78,7 +88,7 @@ export const columns: ColumnDef<Task>[] = [
       return (
         <div className="flex w-[120px] items-center">
           <Badge variant="outline">
-            {category.label}
+            {t(`options.categories.${category.labelKey}` as never)}
           </Badge>
         </div>
       )
@@ -90,7 +100,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title={t("columns.status")} />
     ),
     cell: ({ row }) => {
       const status = statuses.find(
@@ -106,7 +116,7 @@ export const columns: ColumnDef<Task>[] = [
           {status.icon && (
             <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
-          <span className="text-sm">{status.label}</span>
+          <span className="text-sm">{t(`options.statuses.${status.labelKey}` as never)}</span>
         </div>
       )
     },
@@ -117,7 +127,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "priority",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Priority" />
+      <DataTableColumnHeader column={column} title={t("columns.priority")} />
     ),
     cell: ({ row }) => {
       const priority = priorities.find(
@@ -144,7 +154,7 @@ export const columns: ColumnDef<Task>[] = [
               priorityColors[priority.value as keyof typeof priorityColors]
             )}
           >
-            <span className="text-sm">{priority.label}</span>
+            <span className="text-sm">{t(`options.priorities.${priority.labelKey}` as never)}</span>
           </Badge>
         </div>
       )
@@ -157,4 +167,5 @@ export const columns: ColumnDef<Task>[] = [
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
-]
+  ]
+}

@@ -1,5 +1,6 @@
 "use client"
 
+import { useLocale, useTranslations } from "next-intl"
 import {
   Dialog,
   DialogContent,
@@ -9,29 +10,15 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { useMonetaryFormattingSafe } from "@/hooks/use-monetary-formatting"
+import { createDateFormatter } from "@/i18n/format"
 import { cn } from "@/lib/utils"
 import type { CalendarDayStatement } from "../types"
-
-const dateFmt = new Intl.DateTimeFormat("pt-BR", {
-  weekday: "long",
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-  timeZone: "UTC",
-})
 
 const STATUS_COLORS: Record<string, string> = {
   PAID: "bg-chart-2/15 text-chart-2 border-chart-2/30",
   PENDING: "bg-chart-4/15 text-chart-4 border-chart-4/30",
   OVERDUE: "bg-destructive/15 text-destructive border-destructive/30",
   SCHEDULED: "bg-chart-1/15 text-chart-1 border-chart-1/30",
-}
-
-const STATUS_LABELS: Record<string, string> = {
-  PAID: "Pago",
-  PENDING: "Pendente",
-  OVERDUE: "Vencido",
-  SCHEDULED: "Agendado",
 }
 
 const TYPE_COLORS: Record<string, string> = {
@@ -53,7 +40,22 @@ export function DayStatementDialog({
   open,
   onOpenChange,
 }: DayStatementDialogProps) {
+  const t = useTranslations("calendar")
+  const locale = useLocale()
   const monetary = useMonetaryFormattingSafe()
+  const dateFmt = createDateFormatter(locale, {
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  })
+  const STATUS_LABELS: Record<string, string> = {
+    PAID: t("statusLabels.paid"),
+    PENDING: t("statusLabels.pending"),
+    OVERDUE: t("statusLabels.overdue"),
+    SCHEDULED: t("statusLabels.scheduled"),
+  }
 
   if (!day) return null
 
@@ -66,14 +68,14 @@ export function DayStatementDialog({
           <DialogTitle className="capitalize">
             {dateFmt.format(dateObj)}
           </DialogTitle>
-          <DialogDescription>Extrato do dia</DialogDescription>
+          <DialogDescription>{t("dayDetail.description")}</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-3">
           {/* Opening balance */}
           <div className="flex justify-between items-center py-2 border-b">
             <span className="text-sm font-semibold">
-              Saldo Inicial
+              {t("balance.opening")}
             </span>
             <span
               className={cn(
@@ -88,7 +90,7 @@ export function DayStatementDialog({
           {/* Transactions */}
           {day.transactions.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Nenhuma movimentação neste dia
+              {t("dayDetail.noMovement")}
             </p>
           ) : (
             <div className="space-y-2">
@@ -134,7 +136,7 @@ export function DayStatementDialog({
 
           {/* Closing balance */}
           <div className="flex justify-between items-center py-2 border-t">
-            <span className="text-sm font-semibold">Saldo Final</span>
+            <span className="text-sm font-semibold">{t("balance.closing")}</span>
             <span
               className={cn(
                 "font-mono text-sm font-bold",
@@ -149,19 +151,19 @@ export function DayStatementDialog({
           {day.transactions.length > 0 && (
             <div className="grid grid-cols-3 gap-2 pt-2 border-t text-center">
               <div>
-                <p className="text-xs text-muted-foreground">Entradas</p>
+                <p className="text-xs text-muted-foreground">{t("summary.income")}</p>
                 <p className="font-mono text-sm text-chart-2">
                   {monetary.formatMonetaryValue(day.income)}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Saídas</p>
+                <p className="text-xs text-muted-foreground">{t("summary.expense")}</p>
                 <p className="font-mono text-sm text-destructive">
                   {monetary.formatMonetaryValue(day.expense)}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Líquido</p>
+                <p className="text-xs text-muted-foreground">{t("summary.net")}</p>
                 <p
                   className={cn(
                     "font-mono text-sm",

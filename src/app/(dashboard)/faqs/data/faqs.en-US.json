@@ -1,8 +1,8 @@
 [
   {
     "id": 1,
-    "question": "O que é o WISEVEO?",
-    "answer": "WISEVEO é um dashboard financeiro completo focado em aceleração e controle, desenvolvido com React, TypeScript e componentes shadcn/ui. Ele oferece uma solução robusta para gestão de despesas e operações pessoais ou empresariais.",
+    "question": "What is WISEVEO?",
+    "answer": "WISEVEO is a complete financial dashboard focused on acceleration and control, built with React, TypeScript, and shadcn/ui components. It offers a robust solution for managing personal or business expenses and operations.",
     "category": "General"
   },
   {
@@ -26,7 +26,7 @@
   {
     "id": 5,
     "question": "How do I contact support?",
-    "answer": "Você pode entrar em contato com nosso time de suporte através da página de suporte, por e-mail em suporte@wiseveo.com.br, ou através do chat ao vivo disponível 24/7.",
+    "answer": "You can contact our support team through the support page, by email at suporte@wiseveo.com.br, or through the live chat available 24/7.",
     "category": "General"
   },
   {

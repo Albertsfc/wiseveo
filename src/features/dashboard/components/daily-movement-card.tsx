@@ -78,7 +78,7 @@ export function DailyMovementCard() {
         console.error("Failed to fetch daily movement:", err)
         if (!isCancelled) {
           setRows([])
-          setError(t("loadError") || "Não foi possível carregar a movimentação diária.")
+          setError(t("loadError"))
         }
       } finally {
         if (!isCancelled) {

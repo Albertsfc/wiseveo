@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import bcrypt from "bcryptjs"
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
 import { createSessionToken, COOKIE_NAME } from "@/lib/auth"
 import {
@@ -9,13 +10,15 @@ import {
 } from "@/lib/user-approval"
 
 export async function POST(request: Request) {
+  const t = await getTranslations("api.auth")
+
   try {
     const { email, password } = await request.json()
     const normalizedEmail = typeof email === "string" ? normalizeEmail(email) : ""
 
     if (!normalizedEmail || !password) {
       return NextResponse.json(
-        { success: false, message: "Email e senha são obrigatórios" },
+        { success: false, message: t("emailPasswordRequired") },
         { status: 400 }
       )
     }
@@ -24,7 +27,7 @@ export async function POST(request: Request) {
 
     if (!user) {
       return NextResponse.json(
-        { success: false, message: "Email ou senha incorretos" },
+        { success: false, message: t("invalidCredentials") },
         { status: 401 }
       )
     }
@@ -34,7 +37,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             success: true,
-            message: "Seu cadastro ainda está aguardando aprovação.",
+            message: t("pendingApprovalLogin"),
             redirectTo: PENDING_APPROVAL_PATH,
           },
           { status: 200 }
@@ -42,7 +45,7 @@ export async function POST(request: Request) {
       }
 
       return NextResponse.json(
-        { success: false, message: "Esta conta usa login pelo Google. Clique em 'Continuar com Google'." },
+        { success: false, message: t("googleAccountRequired") },
         { status: 401 }
       )
     }
@@ -51,7 +54,7 @@ export async function POST(request: Request) {
 
     if (!passwordMatch) {
       return NextResponse.json(
-        { success: false, message: "Email ou senha incorretos" },
+        { success: false, message: t("invalidCredentials") },
         { status: 401 }
       )
     }
@@ -60,7 +63,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: true,
-          message: "Seu cadastro ainda está aguardando aprovação.",
+          message: t("pendingApprovalLogin"),
           redirectTo: PENDING_APPROVAL_PATH,
         },
         { status: 200 }
@@ -72,7 +75,7 @@ export async function POST(request: Request) {
     const redirectTo = isNewSetup ? "/configuracoes?onboarding=true" : undefined
 
     const response = NextResponse.json(
-      { success: true, message: "Login realizado com sucesso", redirectTo },
+      { success: true, message: t("loginSuccess"), redirectTo },
       { status: 200 }
     )
 
@@ -90,8 +93,9 @@ export async function POST(request: Request) {
 
     return response
   } catch {
+    const tErrors = await getTranslations("api.errors")
     return NextResponse.json(
-      { success: false, message: "Erro interno do servidor" },
+      { success: false, message: tErrors("internalError") },
       { status: 500 }
     )
   }

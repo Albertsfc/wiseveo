@@ -15,6 +15,8 @@ import {
   Users2,
 } from "lucide-react"
 
+import { useTranslations } from "next-intl"
+
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
@@ -48,6 +50,7 @@ export function Mail({
   defaultCollapsed = false,
   navCollapsedSize,
 }: MailProps) {
+  const t = useTranslations("mail")
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const [mail] = useMail();
 
@@ -174,10 +177,10 @@ export function Mail({
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
           <Tabs defaultValue="all" className="gap-1">
             <div className="flex items-center px-4 py-1.5">
-              <h1 className="text-foreground text-xl font-bold">Inbox</h1>
+              <h1 className="text-foreground text-xl font-bold">{t("inbox")}</h1>
               <TabsList className="ml-auto">
-                <TabsTrigger value="all" className="cursor-pointer">All mail</TabsTrigger>
-                <TabsTrigger value="unread" className="cursor-pointer">Unread</TabsTrigger>
+                <TabsTrigger value="all" className="cursor-pointer">{t("allMail")}</TabsTrigger>
+                <TabsTrigger value="unread" className="cursor-pointer">{t("unread")}</TabsTrigger>
               </TabsList>
             </div>
             <Separator />

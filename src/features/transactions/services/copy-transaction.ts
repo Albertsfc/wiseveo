@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
 import { periodFromDate } from "@/lib/financial"
 import { createTransaction } from "./create-transaction"
@@ -19,7 +20,8 @@ export async function copyTransaction(
   })
 
   if (!original) {
-    throw new Error("Transação não encontrada ou acesso negado.")
+    const t = await getTranslations("transactions.services.copy")
+    throw new Error(t("notFound"))
   }
 
   // Cria um clone estruturado com base no payload da original

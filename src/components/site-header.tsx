@@ -84,8 +84,8 @@ export function SiteHeader({ onOpenThemeCustomizer }: SiteHeaderProps) {
     if (match) {
       const key = match.replace(/\//g, "_").replace(/^_/, "");
       return {
-        title: t(`${key}.title`),
-        description: t(`${key}.description`),
+        title: t(`${key}.title` as never),
+        description: t(`${key}.description` as never),
       }
     }
     return { title: t("default.title"), description: t("default.description") }

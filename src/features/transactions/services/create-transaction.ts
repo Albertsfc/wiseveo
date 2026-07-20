@@ -59,6 +59,7 @@ async function resolvePayeeId(
 
 export async function createTransaction(input: CreateTransactionInput) {
   return prisma.$transaction(async (tx) => {
+    // i18n-ignore: string SQL bruta, não é texto de UI
     await tx.$executeRaw`LOCK TABLE transactions IN EXCLUSIVE MODE`
 
     const result = await tx.$queryRaw<[{ next_num: number }]>`

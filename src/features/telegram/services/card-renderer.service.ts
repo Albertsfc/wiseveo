@@ -9,7 +9,7 @@ import { ErrorCard } from "../cards/error-card"
 import { ListCard } from "../cards/list-card"
 import { SingleValueCard } from "../cards/single-value-card"
 import { SummaryCard } from "../cards/summary-card"
-import type { CardData } from "../types/telegram.types"
+import type { CardData, TelegramTranslator } from "../types/telegram.types"
 
 let cachedFont: ArrayBuffer | null = null
 
@@ -53,19 +53,22 @@ async function loadCardFont() {
   cachedFont = await readFirstAvailableFont(candidates)
 
   if (!cachedFont) {
-    throw new Error("No compatible font found for Telegram card rendering")
+    // Internal diagnostic error (missing font asset on the server) — never
+    // reaches the Telegram user; the caller's try/catch surfaces
+    // bot.genericError instead.
+    throw new Error("No compatible font found for Telegram card rendering") // i18n-ignore
   }
 
   return cachedFont
 }
 
-function renderCard(data: CardData) {
+function renderCard(data: CardData, t: TelegramTranslator) {
   if (data.type === "list") return createElement(ListCard, { data })
-  if (data.type === "category" || data.type === "comparison") return createElement(CategoryCard, { data })
+  if (data.type === "category" || data.type === "comparison") return createElement(CategoryCard, { data, t })
   if (data.type === "single-value") return createElement(SingleValueCard, { data })
-  if (data.type === "error") return createElement(ErrorCard, { data })
+  if (data.type === "error") return createElement(ErrorCard, { data, t })
 
-  return createElement(SummaryCard, { data })
+  return createElement(SummaryCard, { data, t })
 }
 
 function resolveCardSize(data: CardData) {
@@ -78,15 +81,16 @@ function resolveCardSize(data: CardData) {
   }
 }
 
-export async function generateCardImage(data: CardData): Promise<Buffer> {
+export async function generateCardImage(data: CardData, t: TelegramTranslator): Promise<Buffer> {
   const fontData = await loadCardFont()
   const cardSize = resolveCardSize(data)
-  const svg = await satori(renderCard(data), {
+  const svg = await satori(renderCard(data, t), {
     width: cardSize.width,
     height: cardSize.height,
     fonts: [
-      { name: "Noto Sans", data: fontData, weight: 400, style: "normal" },
-      { name: "Noto Sans", data: fontData, weight: 700, style: "normal" },
+      // Font family identifier for satori's renderer, not UI copy.
+      { name: "Noto Sans", data: fontData, weight: 400, style: "normal" }, // i18n-ignore
+      { name: "Noto Sans", data: fontData, weight: 700, style: "normal" }, // i18n-ignore
     ],
   })
 

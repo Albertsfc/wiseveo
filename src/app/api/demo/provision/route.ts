@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import crypto from "crypto"
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
 import { initializeUserData } from "@/lib/user-init"
 import { createSessionToken, COOKIE_NAME } from "@/lib/auth"
@@ -77,7 +78,10 @@ function generateTransactions(
 }
 
 export async function GET(request: Request) {
+  const t = await getTranslations("api.errors")
+
   if (process.env.NEXT_PUBLIC_DEMO_MODE !== "true") {
+    // i18n-ignore: guarda interna (rota só existe com demo mode ligado), nunca chega a um usuário real
     return NextResponse.json({ error: "Demo mode is disabled" }, { status: 403 })
   }
 
@@ -93,7 +97,7 @@ export async function GET(request: Request) {
       await tx.user.create({
         data: {
           id: userId,
-          name: "Visitante Demo",
+          name: "Visitante Demo", // i18n-ignore: nome padrão do usuário demo provisionado automaticamente — dado semente, não copy de UI
           email: `${userId}@wiseveo.demo`,
           status: "ACTIVE",
           role: "USER",
@@ -105,6 +109,7 @@ export async function GET(request: Request) {
       const checkingAccountId = accountIds["CHECKING"]
 
       if (!checkingAccountId) {
+        // i18n-ignore: mensagem interna de Error, só logada (console.error), nunca exibida ao usuário
         throw new Error("Failed to resolve checking account ID for demo user")
       }
 
@@ -133,6 +138,6 @@ export async function GET(request: Request) {
     return response
   } catch (error) {
     console.error("Error provisioning demo user:", error)
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return NextResponse.json({ error: t("internalError") }, { status: 500 })
   }
 }

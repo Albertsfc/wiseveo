@@ -75,7 +75,7 @@ const data: { navGroups: SidebarNavGroup[] } = {
           icon: LayoutPanelLeft,
         },
         {
-          title: "Transações",
+          title: "Transacoes",
           url: "/transactions",
           icon: ArrowLeftRight,
         },
@@ -85,12 +85,12 @@ const data: { navGroups: SidebarNavGroup[] } = {
           icon: RotateCcw,
         },
         {
-          title: "Orçamento",
+          title: "Orcamento",
           url: "/budget",
           icon: Wallet,
         },
         {
-          title: "Análise",
+          title: "Analise",
           url: "/analysis",
           icon: Calculator,
         },
@@ -105,12 +105,12 @@ const data: { navGroups: SidebarNavGroup[] } = {
           icon: Landmark,
         },
         {
-          title: "Calendário",
+          title: "Calendario",
           url: "/calendar",
           icon: Calendar,
         },
         {
-          title: "Configurações",
+          title: "Configuracoes",
           url: "/configuracoes?tab=general",
           icon: Settings,
         },
@@ -130,10 +130,12 @@ const data: { navGroups: SidebarNavGroup[] } = {
               url: "/configuracoes?tab=general",
             },
             {
+              // i18n-ignore: chave de navegação — traduzida via t(normalizeKey(title)) em nav-main.tsx (sidebar.usersettings existe), não é texto renderizado literalmente
               title: "User Settings",
               url: "/configuracoes?tab=profile",
             },
             {
+              // i18n-ignore: chave de navegação — traduzida via t(normalizeKey(title)) em nav-main.tsx (sidebar.accountsettings existe), não é texto renderizado literalmente
               title: "Account Settings",
               url: "/configuracoes?tab=account",
             },

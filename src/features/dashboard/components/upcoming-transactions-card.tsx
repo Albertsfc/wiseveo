@@ -26,13 +26,13 @@ interface UpcomingTransactionItem {
 
 const PAYMENT_ROW_HEIGHT_PX = 56
 
-function formatShortDate(isoDate: string): string {
+function formatShortDate(isoDate: string, locale: string): string {
   const [year, month, day] = isoDate.split("-")
   if (!year || !month || !day) return isoDate
 
   const date = new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 12, 0, 0))
-  return date
-    .toLocaleDateString("pt-BR", { day: "2-digit", month: "short", timeZone: "UTC" })
+  return createDateFormatter(locale, { day: "2-digit", month: "short", timeZone: "UTC" })
+    .format(date)
     .replace(".", "")
 }
 
@@ -42,7 +42,8 @@ function amountColorClass(value: number): string {
   return "text-foreground"
 }
 
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { createDateFormatter } from "@/i18n/format"
 
 export function UpcomingTransactionsCard() {
   const monetary = useMonetaryFormattingSafe()
@@ -53,8 +54,9 @@ export function UpcomingTransactionsCard() {
   const [visibleRows, setVisibleRows] = React.useState(0)
   const listViewportRef = React.useRef<HTMLDivElement | null>(null)
   const measureRowRef = React.useRef<HTMLDivElement | null>(null)
-  
+
   const t = useTranslations("dashboard.UpcomingTransactions")
+  const locale = useLocale()
 
   const recalcVisibleRows = React.useCallback(() => {
     const viewport = listViewportRef.current
@@ -98,7 +100,7 @@ export function UpcomingTransactionsCard() {
         console.error("Failed to fetch upcoming transactions:", err)
         if (!isCancelled) {
           setItems([])
-          setError(t("loadError") || "Não foi possível carregar os próximos vencimentos.")
+          setError(t("loadError"))
         }
       } finally {
         if (!isCancelled) {
@@ -158,16 +160,16 @@ export function UpcomingTransactionsCard() {
           >
             <div className="size-7 rounded-md md:size-8" />
             <div className="min-w-0">
-              <p className="truncate text-sm font-medium uppercase">A</p>
-              <p className="truncate text-[9px] leading-tight tracking-tight uppercase text-muted-foreground">A</p>
+              <p className="truncate text-sm font-medium uppercase">0</p>
+              <p className="truncate text-[9px] leading-tight tracking-tight uppercase text-muted-foreground">0</p>
             </div>
             {/* groupName column — hidden on mobile */}
             <div className="hidden md:flex min-w-0 items-center justify-start text-left">
-              <p className="w-full truncate text-left text-[9px] leading-tight tracking-tight uppercase text-muted-foreground">A</p>
+              <p className="w-full truncate text-left text-[9px] leading-tight tracking-tight uppercase text-muted-foreground">0</p>
             </div>
             <div className="text-right">
               <p className="text-sm font-semibold">0,00</p>
-              <p className="text-[9px] leading-tight tracking-tight text-muted-foreground">01 jan</p>
+              <p className="text-[9px] leading-tight tracking-tight text-muted-foreground">00 000</p>
             </div>
           </div>
 
@@ -206,7 +208,7 @@ export function UpcomingTransactionsCard() {
                       <p className={cn("text-sm font-semibold", amountColorClass(item.amount))}>
                         {monetary.formatMonetaryValue(item.amount)}
                       </p>
-                      <p className="text-[9px] leading-tight tracking-tight text-muted-foreground">{formatShortDate(item.date)}</p>
+                      <p className="text-[9px] leading-tight tracking-tight text-muted-foreground">{formatShortDate(item.date, locale)}</p>
                     </div>
                   </div>
                 )

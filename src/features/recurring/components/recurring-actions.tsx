@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { Pencil, Play, Trash2 } from "lucide-react"
 
 import {
@@ -21,24 +22,26 @@ export function RecurringActions({
   onEdit,
   onDelete,
 }: RecurringActionsProps) {
+  const t = useTranslations("recurring.actions")
+
   const items: SmoothDropdownEntry[] = [
     {
       id: "launch-transaction",
-      label: "Lançar Transação",
+      label: t("launchTransaction"),
       icon: Play,
       iconClassName: "text-chart-2",
       onClick: () => onLaunch?.(recurring),
     },
     {
       id: "edit",
-      label: "Editar",
+      label: t("edit"),
       icon: Pencil,
       onClick: () => onEdit?.(recurring),
     },
     { id: "separator", separator: true },
     {
       id: "delete",
-      label: "Excluir",
+      label: t("delete"),
       icon: Trash2,
       variant: "destructive",
       onClick: () => onDelete?.(recurring),

@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { getTranslations } from "next-intl/server"
 
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { quickPayTransaction } from "@/features/transactions/services/quick-pay-transaction"
@@ -7,10 +8,11 @@ export async function POST(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const t = await getTranslations("api")
   const userId = await getDefaultUserId()
   if (!userId) {
     return NextResponse.json(
-      { error: "Usuário não encontrado" },
+      { error: t("errors.userNotFound") },
       { status: 401 }
     )
   }
@@ -31,7 +33,7 @@ export async function POST(
   } catch (error) {
     console.error("Error quick-paying transaction:", error)
     return NextResponse.json(
-      { error: "Erro ao efetuar pagamento rápido" },
+      { error: t("transactions.quickPayFailed") },
       { status: 500 }
     )
   }

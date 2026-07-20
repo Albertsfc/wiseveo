@@ -2,6 +2,7 @@
 
 import type { Table } from "@tanstack/react-table"
 import { RefreshCcw } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -27,6 +28,8 @@ export function DataTableToolbar<TData>({
   table,
   onAddTask,
 }: DataTableToolbarProps<TData>) {
+  const t = useTranslations("tasks.toolbar")
+  const tOptions = useTranslations("tasks.options")
   const isFiltered = table.getState().columnFilters.length > 0
 
   const handleStatusChange = (value: string) => {
@@ -74,7 +77,7 @@ export function DataTableToolbar<TData>({
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="cursor-pointer">All Status</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">{t("allStatus")}</SelectItem>
               {statuses.map((status) => (
                 <SelectItem
                   key={status.value}
@@ -85,7 +88,7 @@ export function DataTableToolbar<TData>({
                     {status.icon && (
                       <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                     )}
-                    {status.label}
+                    {tOptions(`statuses.${status.labelKey}` as never)}
                   </div>
                 </SelectItem>
               ))}
@@ -101,14 +104,14 @@ export function DataTableToolbar<TData>({
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="cursor-pointer">All Categories</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">{t("allCategories")}</SelectItem>
               {categories.map((category) => (
                 <SelectItem
                   key={category.value}
                   value={category.value}
                   className="cursor-pointer"
                 >
-                  {category.label}
+                  {tOptions(`categories.${category.labelKey}` as never)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -123,14 +126,14 @@ export function DataTableToolbar<TData>({
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all" className="cursor-pointer">All Priorities</SelectItem>
+              <SelectItem value="all" className="cursor-pointer">{t("allPriorities")}</SelectItem>
               {priorities.map((priority) => (
                 <SelectItem
                   key={priority.value}
                   value={priority.value}
                   className="cursor-pointer"
                 >
-                  {priority.label}
+                  {tOptions(`priorities.${priority.labelKey}` as never)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -142,7 +145,7 @@ export function DataTableToolbar<TData>({
       <div className="flex items-center justify-between">
         <div className="flex flex-1 items-center space-x-2">
           <Input
-            placeholder="Search Task"
+            placeholder={t("searchPlaceholder")}
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("title")?.setFilterValue(event.target.value)
@@ -156,7 +159,7 @@ export function DataTableToolbar<TData>({
             disabled={!isFiltered}
           >
             <RefreshCcw className="h-4 w-4" />
-            <span className="hidden lg:block">Reset Filters</span>
+            <span className="hidden lg:block">{t("resetFilters")}</span>
           </Button>
         </div>
         <div className="flex items-center space-x-2">

@@ -17,7 +17,7 @@ interface CreateBudgetInput {
  */
 export async function createBudgetItem(input: CreateBudgetInput) {
   const userId = await getDefaultUserId()
-  if (!userId) throw new Error("User not found")
+  if (!userId) throw new Error("User not found") // i18n-ignore: código de erro interno do service layer (rota traduz, service retorna código estável)
 
   const now = new Date()
   const month = now.getMonth() + 1

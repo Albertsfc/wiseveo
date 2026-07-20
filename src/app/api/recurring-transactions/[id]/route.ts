@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { normalizeDate, periodFromDate, isValidPeriod } from "@/lib/financial"
@@ -7,10 +8,11 @@ export async function PATCH(
     req: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const t = await getTranslations("api.errors")
     const userId = await getDefaultUserId()
 
     if (!userId) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+        return NextResponse.json({ error: t("userNotFound") }, { status: 401 })
     }
 
     const { id } = await params
@@ -29,7 +31,7 @@ export async function PATCH(
         const p = data.period
         if (typeof p !== "string" || !isValidPeriod(p)) {
             return NextResponse.json(
-                { error: "Período inválido (esperado YYYYMM)" },
+                { error: t("invalidPeriod") },
                 { status: 400 }
             )
         }
@@ -96,7 +98,7 @@ export async function PATCH(
     })
 
     if (!existing) {
-        return NextResponse.json({ error: "Recorrência não encontrada" }, { status: 404 })
+        return NextResponse.json({ error: t("recurrenceNotFound") }, { status: 404 })
     }
 
     const recurring = await prisma.recurringTransaction.update({
@@ -114,10 +116,11 @@ export async function DELETE(
     _req: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
+    const t = await getTranslations("api.errors")
     const userId = await getDefaultUserId()
 
     if (!userId) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+        return NextResponse.json({ error: t("userNotFound") }, { status: 401 })
     }
 
     const { id } = await params
@@ -128,7 +131,7 @@ export async function DELETE(
     })
 
     if (!existing) {
-        return NextResponse.json({ error: "Recorrência não encontrada" }, { status: 404 })
+        return NextResponse.json({ error: t("recurrenceNotFound") }, { status: 404 })
     }
 
     await prisma.recurringTransaction.delete({

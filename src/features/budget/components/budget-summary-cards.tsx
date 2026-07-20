@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import {
   Target,
   ArrowDownCircle,
@@ -29,8 +30,7 @@ function getZoneInfo(pct: number) {
       bgColor: "bg-chart-2/15",
       borderColor: "border-chart-2/30",
       Icon: Shield,
-      label: "Seguro",
-      footerText: "abaixo de 50%",
+      labelKey: "safe" as const,
     }
   if (pct <= 80)
     return {
@@ -38,16 +38,14 @@ function getZoneInfo(pct: number) {
       bgColor: "bg-chart-4/15",
       borderColor: "border-chart-4/30",
       Icon: AlertTriangle,
-      label: "Alerta",
-      footerText: "entre 50% e 80%",
+      labelKey: "warning" as const,
     }
   return {
     color: "text-destructive",
     bgColor: "bg-destructive/15",
     borderColor: "border-destructive/30",
     Icon: Flame,
-    label: "Perigo",
-    footerText: "acima de 80%",
+    labelKey: "danger" as const,
   }
 }
 
@@ -68,11 +66,15 @@ export function BudgetSummaryCards({
   overallPct,
   itemCount,
 }: BudgetSummaryCardsProps) {
+  const t = useTranslations("budget")
   const monetary = useMonetaryFormattingSafe()
   const remaining = totalLimit - totalSpent
   const zone = getZoneInfo(overallPct)
   const remainingColor = remaining >= 0 ? "text-chart-2" : "text-destructive"
-  const remainingLabel = remaining >= 0 ? "margem disponível" : "limite excedido"
+  const remainingLabel =
+    remaining >= 0
+      ? t("summary.marginAvailableLower")
+      : t("summary.limitExceededLower")
 
   return (
     <SectionCardsGrid>
@@ -81,20 +83,20 @@ export function BudgetSummaryCards({
         <CardHeader>
           <CardDescription className="flex items-center gap-1.5">
             <Target className="size-3.5" />
-            Orçado Total
+            {t("summary.budgetedTotal")}
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl font-mono">
             {monetary.formatMonetaryValue(totalLimit)}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">
-              {itemCount} {itemCount === 1 ? "item" : "itens"}
+              {t("summary.itemCount", { count: itemCount })}
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="font-medium">Limite definido para o mês</div>
-          <div className="text-muted-foreground">soma de todos os orçamentos</div>
+          <div className="font-medium">{t("summary.limitForMonth")}</div>
+          <div className="text-muted-foreground">{t("summary.sumOfBudgets")}</div>
         </CardFooter>
       </Card>
 
@@ -103,7 +105,7 @@ export function BudgetSummaryCards({
         <CardHeader>
           <CardDescription className="flex items-center gap-1.5">
             <ArrowDownCircle className="size-3.5" />
-            Gasto Total
+            {t("summary.spentTotal")}
           </CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl font-mono text-destructive">
             {monetary.formatMonetaryValue(totalSpent)}
@@ -115,9 +117,12 @@ export function BudgetSummaryCards({
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="font-medium">Despesas do período</div>
+          <div className="font-medium">{t("summary.periodExpenses")}</div>
           <div className="text-muted-foreground text-xs">
-            Pago: {monetary.formatMonetaryValue(totalPaid)} · Agendado: {monetary.formatMonetaryValue(totalScheduled)}
+            {t("summary.paidScheduled", {
+              paid: monetary.formatMonetaryValue(totalPaid),
+              scheduled: monetary.formatMonetaryValue(totalScheduled),
+            })}
           </div>
         </CardFooter>
       </Card>
@@ -127,7 +132,7 @@ export function BudgetSummaryCards({
         <CardHeader>
           <CardDescription className="flex items-center gap-1.5">
             <PiggyBank className="size-3.5" />
-            {remaining >= 0 ? "Restante" : "Excedido"}
+            {remaining >= 0 ? t("status.remaining") : t("status.exceeded")}
           </CardDescription>
           <CardTitle
             className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl font-mono ${remainingColor}`}
@@ -142,7 +147,7 @@ export function BudgetSummaryCards({
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="font-medium">
-            {remaining >= 0 ? "Margem disponível" : "Acima do orçamento"}
+            {remaining >= 0 ? t("summary.marginAvailable") : t("summary.aboveBudget")}
           </div>
           <div className="text-muted-foreground">{remainingLabel}</div>
         </CardFooter>
@@ -153,7 +158,7 @@ export function BudgetSummaryCards({
         <CardHeader>
           <CardDescription className="flex items-center gap-1.5">
             <Gauge className="size-3.5" />
-            Utilização
+            {t("summary.usage")}
           </CardDescription>
           <CardTitle
             className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl font-mono ${zone.color}`}
@@ -163,13 +168,13 @@ export function BudgetSummaryCards({
           <CardAction>
             <Badge variant="outline" className={`${zone.bgColor} ${zone.color} ${zone.borderColor}`}>
               <zone.Icon className="size-3" />
-              <span className="ml-1">{zone.label}</span>
+              <span className="ml-1">{t(`zones.${zone.labelKey}`)}</span>
             </Badge>
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="font-medium">Zona {zone.label.toLowerCase()}</div>
-          <div className="text-muted-foreground">{zone.footerText}</div>
+          <div className="font-medium">{t(`zones.${zone.labelKey}Title`)}</div>
+          <div className="text-muted-foreground">{t(`zones.${zone.labelKey}Footer`)}</div>
         </CardFooter>
       </Card>
     </SectionCardsGrid>

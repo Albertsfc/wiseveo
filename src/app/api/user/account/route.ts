@@ -1,23 +1,25 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { getSessionUserId } from "@/lib/session"
 import { updateUserAccount } from "@/features/settings/services/user-settings-service"
 
 export async function PUT(request: Request) {
+  const t = await getTranslations("api")
   const userId = await getSessionUserId()
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Não autenticado" },
+      { success: false, message: t("errors.notAuthenticated") },
       { status: 401 }
     )
   }
 
   try {
     const data = await request.json()
-    
-    // Validação básica de confirmação de senha no servidor
+
+    // Server-side password confirmation check
     if (data.newPassword && data.newPassword !== data.confirmPassword) {
       return NextResponse.json(
-        { success: false, message: "As senhas não coincidem." },
+        { success: false, message: t("user.passwordMismatch") },
         { status: 400 }
       )
     }
@@ -26,7 +28,7 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Conta atualizada com sucesso!",
+      message: t("user.accountUpdateSuccess"),
     })
   } catch (error: any) {
     return NextResponse.json(

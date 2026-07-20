@@ -5,67 +5,70 @@ import {
   PlayCircle,
 } from "lucide-react"
 
+// `labelKey` maps to tasks.options.{statuses,priorities,categories}.<labelKey>
+// in src/i18n/messages — display text is resolved via t() at render sites,
+// `value` stays the stable wire value used for filtering/matching.
 export const categories = [
   {
     value: "bug",
-    label: "Bug",
+    labelKey: "bug",
   },
   {
     value: "feature",
-    label: "Feature",
+    labelKey: "feature",
   },
   {
     value: "documentation",
-    label: "Docs",
+    labelKey: "documentation",
   },
   {
     value: "improvement",
-    label: "Improvement",
+    labelKey: "improvement",
   },
   {
     value: "refactor",
-    label: "Refactor",
+    labelKey: "refactor",
   },
 ]
 
 export const statuses = [
   {
     value: "pending",
-    label: "Pending",
+    labelKey: "pending",
     icon: Clock,
   },
   {
     value: "todo",
-    label: "Todo",
+    labelKey: "todo",
     icon: Circle,
   },
   {
     value: "in progress",
-    label: "In Progress",
+    labelKey: "inProgress",
     icon: PlayCircle,
   },
   {
     value: "completed",
-    label: "Completed",
+    labelKey: "completed",
     icon: CheckCircle2,
   },
 ]
 
 export const priorities = [
   {
-    label: "Minor",
+    labelKey: "minor",
     value: "minor"
   },
   {
-    label: "Normal",
+    labelKey: "normal",
     value: "normal"
   },
   {
-    label: "Important",
+    labelKey: "important",
     value: "important"
   },
   {
-    label: "Critical",
+    labelKey: "critical",
     value: "critical"
   },
 ]

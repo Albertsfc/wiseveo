@@ -1,5 +1,6 @@
 import { addDays } from "date-fns"
 import { endOfUTCDay, startOfUTCDay } from "@/lib/financial"
+import type { TelegramTranslator } from "../types/telegram.types"
 
 export const DEFAULT_TOOL_LIMIT = 5
 export const MAX_TOOL_LIMIT = 20
@@ -65,16 +66,6 @@ export function clampToolLimit(limit: number | undefined, fallback = DEFAULT_TOO
   return Math.max(1, Math.min(Math.trunc(limit), MAX_TOOL_LIMIT))
 }
 
-export function formatMoney(value: number): string {
-  const absolute = Math.abs(value)
-  const formatted = new Intl.NumberFormat("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(absolute)
-
-  return value < 0 ? `(${formatted})` : formatted
-}
-
 export function normalizeSearch(value: string | null | undefined): string {
   return (value ?? "")
     .normalize("NFD")
@@ -90,19 +81,22 @@ export function includesSearch(value: string | null | undefined, search: string 
   return normalizeSearch(value).includes(normalizedSearch)
 }
 
-export function pickTransactionTitle(input: {
-  description?: string | null
-  note?: string | null
-  reference?: string | null
-  payeeName?: string | null
-  categoryName?: string | null
-}): string {
+export function pickTransactionTitle(
+  input: {
+    description?: string | null
+    note?: string | null
+    reference?: string | null
+    payeeName?: string | null
+    categoryName?: string | null
+  },
+  t: TelegramTranslator,
+): string {
   return (
     input.description?.trim() ||
     input.payeeName?.trim() ||
     input.note?.trim() ||
     input.reference?.trim() ||
     input.categoryName?.trim() ||
-    "Lancamento"
+    t("toolUtils.untitledTransaction")
   )
 }

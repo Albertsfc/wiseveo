@@ -1,10 +1,15 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card,CardContent,CardDescription,CardHeader,CardTitle } from "@/components/ui/card";
 import { Field,FieldDescription,FieldGroup,FieldLabel,FieldSeparator } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useTranslations } from "next-intl";
 
 const LoginForm = () => {
+  const t = useTranslations("common.loginDemo");
+
   return (
     <section className="bg-foreground dark:bg-background min-h-screen flex items-center justify-center relative">
       <div className="pointer-events-none absolute inset-0 right-0 overflow-hidden md:block hidden">
@@ -33,10 +38,10 @@ const LoginForm = () => {
             </div>
             <div className="flex flex-col gap-1">
               <CardTitle className="text-2xl font-medium text-card-foreground">
-                Welcome to Shadcn Space
+                {t("welcomeTo")}
               </CardTitle>
               <CardDescription className="text-sm text-muted-foreground font-normal">
-                Login to your account now
+                {t("loginToAccount")}
               </CardDescription>
             </div>
           </CardHeader>
@@ -54,7 +59,7 @@ const LoginForm = () => {
                       alt="google icon"
                       className="h-4 w-4"
                     />
-                    Sign in with Google
+                    {t("signInWithGoogle")}
                   </Button>
                   <Button
                     variant="outline"
@@ -71,11 +76,11 @@ const LoginForm = () => {
                       alt="github icon"
                       className="hidden dark:block  h-4 w-4"
                     />
-                    Sign in with Github
+                    {t("signInWithGithub")}
                   </Button>
                 </Field>
                 <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card text-sm text-muted-foreground bg-transparent">
-                  <span className="px-4">or sign in with</span>
+                  <span className="px-4">{t("orSignInWith")}</span>
                 </FieldSeparator>
 
                 <div className="flex flex-col gap-4">
@@ -84,7 +89,7 @@ const LoginForm = () => {
                       htmlFor="email"
                       className="text-sm text-muted-foreground font-normal"
                     >
-                      Email*
+                      {t("email")}
                     </FieldLabel>
                     <Input
                       id="email"
@@ -99,13 +104,13 @@ const LoginForm = () => {
                       htmlFor="password"
                       className="text-sm text-muted-foreground font-normal"
                     >
-                      Password*
+                      {t("password")}
                     </FieldLabel>
 
                     <Input
                       id="password"
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder={t("passwordPlaceholder")}
                       required
                       className="dark:bg-background h-9 rounded-md"
                     />
@@ -123,28 +128,28 @@ const LoginForm = () => {
                       htmlFor="terms"
                       className="text-sm text-primary font-normal cursor-pointer"
                     >
-                      Remember this device
+                      {t("rememberDevice")}
                     </FieldLabel>
                   </div>
                   <a
                     href="#"
                     className="text-sm text-card-foreground font-medium text-end"
                   >
-                    Forgot password?
+                    {t("forgotPassword")}
                   </a>
                 </Field>
 
                 <Field className="gap-4">
                   <Button type="submit" size={"lg"} className="rounded-lg h-10 cursor-pointer">
-                    Sign in
+                    {t("signIn")}
                   </Button>
                   <FieldDescription className="text-center text-sm font-normal text-muted-foreground">
-                    Don&apos;t have an account?{" "}
+                    {t("noAccount")}{" "}
                     <a
                       href="#"
                       className="font-medium text-card-foreground !no-underline"
                     >
-                      Create an account
+                      {t("createAccount")}
                     </a>
                   </FieldDescription>
                 </Field>

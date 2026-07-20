@@ -23,6 +23,7 @@ import {
   Download,
   Search,
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -84,7 +85,16 @@ interface DataTableProps {
   onAddUser: (userData: UserFormValues) => void
 }
 
+// i18n-ignore: valores de enum idênticos aos dados brutos em data.json (dado, não é UI)
+const ROLE_OPTIONS = ["Admin", "Author", "Editor", "Maintainer", "Subscriber"] as const
+// i18n-ignore: valores de enum idênticos aos dados brutos em data.json (dado, não é UI)
+const PLAN_OPTIONS = ["Basic", "Professional", "Enterprise"] as const
+// i18n-ignore: valores de enum idênticos aos dados brutos em data.json (dado, não é UI)
+const STATUS_OPTIONS = ["Active", "Pending", "Error", "Inactive"] as const
+
 export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTableProps) {
+  const t = useTranslations("users")
+  const tCommon = useTranslations("common")
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -138,7 +148,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
               (table.getIsSomePageRowsSelected() && "indeterminate")
             }
             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
+            aria-label={t("table.selectAllAria")}
           />
         </div>
       ),
@@ -147,7 +157,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
+            aria-label={t("table.selectRowAria")}
           />
         </div>
       ),
@@ -227,7 +237,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer">
               <Eye className="size-4" />
-              <span className="sr-only">View user</span>
+              <span className="sr-only">{t("table.viewUser")}</span>
             </Button>
             <Button
               variant="ghost"
@@ -236,24 +246,24 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
               onClick={() => onEditUser(user)}
             >
               <Pencil className="size-4" />
-              <span className="sr-only">Edit user</span>
+              <span className="sr-only">{t("table.editUser")}</span>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-8 w-8 cursor-pointer">
                   <EllipsisVertical className="size-4" />
-                  <span className="sr-only">More actions</span>
+                  <span className="sr-only">{t("table.moreActions")}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem className="cursor-pointer">
-                  View Details
+                  {t("table.viewDetails")}
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer">
-                  Send Email
+                  {t("table.sendEmail")}
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer">
-                  Reset Password
+                  {t("table.resetPassword")}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -262,7 +272,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
                   onClick={() => onDeleteUser(user.id)}
                 >
                   <Trash2 className="mr-2 size-4" />
-                  Delete User
+                  {t("table.deleteUser")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -304,7 +314,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search users..."
+              placeholder={t("table.searchPlaceholder")}
               value={globalFilter ?? ""}
               onChange={(event) => setGlobalFilter(String(event.target.value))}
               className="pl-9"
@@ -314,7 +324,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
         <div className="flex items-center space-x-2">
           <Button variant="outline" className="cursor-pointer">
             <Download className="mr-2 size-4" />
-            Export
+            {t("table.export")}
           </Button>
           <UserFormDialog onAddUser={onAddUser} />
         </div>
@@ -323,7 +333,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
       <div className="grid gap-2 sm:grid-cols-4 sm:gap-4">
         <div className="space-y-2">
           <Label htmlFor="role-filter" className="text-sm font-medium">
-            Role
+            {t("filters.role")}
           </Label>
           <Select
             value={roleFilter || ""}
@@ -332,21 +342,19 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
             }
           >
             <SelectTrigger className="cursor-pointer w-full" id="role-filter">
-              <SelectValue placeholder="Select Role" />
+              <SelectValue placeholder={t("filters.role")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Roles</SelectItem>
-              <SelectItem value="Admin">Admin</SelectItem>
-              <SelectItem value="Author">Author</SelectItem>
-              <SelectItem value="Editor">Editor</SelectItem>
-              <SelectItem value="Maintainer">Maintainer</SelectItem>
-              <SelectItem value="Subscriber">Subscriber</SelectItem>
+              <SelectItem value="all">{t("filters.allRoles")}</SelectItem>
+              {ROLE_OPTIONS.map((role) => (
+                <SelectItem key={role} value={role}>{role}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="plan-filter" className="text-sm font-medium">
-            Plan
+            {t("filters.plan")}
           </Label>
           <Select
             value={planFilter || ""}
@@ -355,19 +363,19 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
             }
           >
             <SelectTrigger className="cursor-pointer w-full" id="plan-filter">
-              <SelectValue placeholder="Select Plan" />
+              <SelectValue placeholder={t("filters.plan")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Plans</SelectItem>
-              <SelectItem value="Basic">Basic</SelectItem>
-              <SelectItem value="Professional">Professional</SelectItem>
-              <SelectItem value="Enterprise">Enterprise</SelectItem>
+              <SelectItem value="all">{t("filters.allPlans")}</SelectItem>
+              {PLAN_OPTIONS.map((plan) => (
+                <SelectItem key={plan} value={plan}>{plan}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
           <Label htmlFor="status-filter" className="text-sm font-medium">
-            Status
+            {t("filters.status")}
           </Label>
           <Select
             value={statusFilter || ""}
@@ -376,26 +384,25 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
             }
           >
             <SelectTrigger className="cursor-pointer w-full" id="status-filter">
-              <SelectValue placeholder="Select Status" />
+              <SelectValue placeholder={t("filters.status")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="Active">Active</SelectItem>
-              <SelectItem value="Pending">Pending</SelectItem>
-              <SelectItem value="Error">Error</SelectItem>
-              <SelectItem value="Inactive">Inactive</SelectItem>
+              <SelectItem value="all">{t("filters.allStatus")}</SelectItem>
+              {STATUS_OPTIONS.map((status) => (
+                <SelectItem key={status} value={status}>{status}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
 
           <Label htmlFor="column-visibility" className="text-sm font-medium">
-            Column Visibility
+            {t("table.columnVisibility")}
           </Label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild id="column-visibility">
               <Button variant="outline" className="cursor-pointer w-full">
-                Columns <ChevronDown className="ml-2 size-4" />
+                {t("table.columns")} <ChevronDown className="ml-2 size-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -464,7 +471,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {tCommon("noResults")}
                 </TableCell>
               </TableRow>
             )}
@@ -476,7 +483,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
 
         <div className="flex items-center space-x-2">
           <Label htmlFor="page-size" className="text-sm font-medium">
-            Show
+            {t("table.show")}
           </Label>
           <Select
             value={`${table.getState().pagination.pageSize}`}
@@ -497,16 +504,19 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           </Select>
         </div>
         <div className="flex-1 text-sm text-muted-foreground hidden sm:block">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
+          {t("table.selectedOfTotal", {
+            selected: table.getFilteredSelectedRowModel().rows.length,
+            total: table.getFilteredRowModel().rows.length,
+          })}
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2 hidden sm:block">
-            <p className="text-sm font-medium">Page</p>
-            <strong className="text-sm">
-              {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </strong>
+            <p className="text-sm font-medium">
+              {t("table.pageOfTotal", {
+                page: table.getState().pagination.pageIndex + 1,
+                total: table.getPageCount(),
+              })}
+            </p>
           </div>
           <div className="flex items-center space-x-2">
             <Button
@@ -516,7 +526,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
               disabled={!table.getCanPreviousPage()}
               className="cursor-pointer"
             >
-              Previous
+              {t("table.previous")}
             </Button>
             <Button
               variant="outline"
@@ -525,7 +535,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
               disabled={!table.getCanNextPage()}
               className="cursor-pointer"
             >
-              Next
+              {t("table.next")}
             </Button>
           </div>
         </div>

@@ -41,6 +41,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       ok: true,
+      // i18n-ignore: endpoint de ops/deploy (protegido por secret), chamado manualmente por um dev — nunca renderizado em UI
       message: 'Webhook registered successfully',
       webhook_url: webhookUrl,
       telegram_response: data,
@@ -48,6 +49,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       {
+        // i18n-ignore: endpoint de ops/deploy (protegido por secret), chamado manualmente por um dev — nunca renderizado em UI
         error: 'Failed to register webhook',
         details: error instanceof Error ? error.message : String(error),
       },

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { Prisma } from "@/generated/prisma_new/client"
 import { prisma } from "@/lib/prisma"
 import { getSessionUserId } from "@/lib/session"
@@ -16,10 +17,11 @@ function toInputJsonValue(value: unknown): Prisma.InputJsonValue {
 }
 
 export async function GET() {
+  const t = await getTranslations("api.errors")
   const userId = await getSessionUserId()
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Não autenticado" },
+      { success: false, message: t("notAuthenticated") },
       { status: 401 }
     )
   }
@@ -40,7 +42,7 @@ export async function GET() {
 
   if (!user) {
     return NextResponse.json(
-      { success: false, message: "Usuário não encontrado" },
+      { success: false, message: t("userNotFound") },
       { status: 404 }
     )
   }
@@ -59,10 +61,11 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const t = await getTranslations("api.errors")
   const userId = await getSessionUserId()
   if (!userId) {
     return NextResponse.json(
-      { success: false, message: "Não autenticado" },
+      { success: false, message: t("notAuthenticated") },
       { status: 401 }
     )
   }
@@ -95,8 +98,9 @@ export async function PUT(request: Request) {
       data: updatedUser,
     })
   } catch (error) {
+    const tUser = await getTranslations("api.user")
     const message =
-      error instanceof Error ? error.message : "Erro ao atualizar perfil"
+      error instanceof Error ? error.message : tUser("updateProfileFailed")
 
     return NextResponse.json(
       { success: false, message },

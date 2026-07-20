@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
+import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getSettingsUserId } from "@/features/settings/services/get-settings-user-id";
 import crypto from "crypto";
 
 export async function POST() {
+  const t = await getTranslations("api");
+
   if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_BOT_USERNAME) {
-    return NextResponse.json({ error: "Telegram Bot integration not configured" }, { status: 503 });
+    return NextResponse.json({ error: t("telegram.notConfigured") }, { status: 503 });
   }
 
   try {
@@ -32,7 +35,7 @@ export async function POST() {
   } catch (error) {
     console.error("[Telegram Connect] Error:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Internal server error" },
+      { error: error instanceof Error ? error.message : t("errors.internalError") },
       { status: 500 }
     );
   }

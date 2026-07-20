@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Badge } from "@/components/ui/badge"
 import { Sparkles, Check } from "lucide-react"
 import { cn } from '@/lib/utils'
+import { useTranslations } from "next-intl"
 
 export interface PricingPlan {
   id: string
@@ -18,75 +19,38 @@ export interface PricingPlan {
 }
 
 interface PricingPlansProps {
-  plans?: PricingPlan[]
+  // Locale-aware plan copy lives in src/app/(dashboard)/pricing/data/plans.*.json
+  // (mirrors the features.*.json/faqs.*.json pattern already used by that
+  // route) — callers must load and pass the plans for the current locale.
+  plans: PricingPlan[]
   mode?: 'pricing' | 'billing'
   currentPlanId?: string
   onPlanSelect?: (planId: string) => void
 }
 
-const defaultPlans: PricingPlan[] = [
-  {
-    id: 'basic',
-    name: 'Basic',
-    description: 'Perfect for small online stores',
-    price: '19',
-    frequency: '/month',
-    features: ['Up to 10 products', 'Basic inventory tracking', 'Email support', 'Mobile-responsive themes'],
-  },
-  {
-    id: 'professional',
-    name: 'Professional',
-    description: 'Ideal for growing businesses',
-    price: '79',
-    frequency: '/month',
-    features: [
-      'Up to 100 products',
-      'Advanced analytics',
-      'Priority email & chat support',
-      'API access',
-      'Custom domain',
-      'Abandoned cart recovery',
-    ],
-    popular: true,
-  },
-  {
-    id: 'enterprise',
-    name: 'Enterprise',
-    description: 'For high-volume stores',
-    price: '199',
-    frequency: '/month',
-    features: [
-      'Unlimited products',
-      'Advanced reporting',
-      '24/7 priority support',
-      'Custom integrations',
-      'Dedicated account manager',
-      'Advanced security features',
-    ],
-  },
-]
-
-export function PricingPlans({ 
-  plans = defaultPlans, 
-  mode = 'pricing', 
+export function PricingPlans({
+  plans,
+  mode = 'pricing',
   currentPlanId,
-  onPlanSelect 
+  onPlanSelect
 }: PricingPlansProps) {
+  const t = useTranslations("common.pricingPlans")
+
   const getButtonText = (plan: PricingPlan) => {
     if (mode === 'billing') {
       if (currentPlanId === plan.id) {
-        return 'Current Plan'
+        return t('currentPlan')
       }
       const currentIndex = plans.findIndex(p => p.id === currentPlanId)
       const planIndex = plans.findIndex(p => p.id === plan.id)
-      
+
       if (planIndex > currentIndex) {
-        return 'Upgrade Plan'
+        return t('upgradePlan')
       } else if (planIndex < currentIndex) {
-        return 'Downgrade Plan'
+        return t('downgradePlan')
       }
     }
-    return 'Get Started'
+    return t('getStarted')
   }
 
   const getButtonVariant = (plan: PricingPlan) => {
@@ -116,10 +80,10 @@ export function PricingPlans({
               <Badge className='mx-auto flex w-fit gap-1.5 rounded-full font-medium'>
                 <Sparkles className='!size-4' />
                 {mode === 'pricing' && (
-                <span>Most Popular</span>
+                <span>{t('mostPopular')}</span>
                 )}
                 {currentPlanId === tier.id && mode === 'billing' && (
-                  <span>Current Plan</span>
+                  <span>{t('currentPlan')}</span>
                 )}
               </Badge>
             </div>

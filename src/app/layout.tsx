@@ -11,7 +11,9 @@ import {
   type ThemePreferences,
 } from "@/lib/theme-preferences"
 import { NextIntlClientProvider } from "next-intl"
-import { getMessages, getLocale } from "next-intl/server"
+import { getMessages, getLocale, getTranslations } from "next-intl/server"
+import { getIntlLocale } from "@/i18n/format"
+import { ZodLocaleSync } from "@/components/zod-locale-sync"
 import "./globals.css"
 
 const geistSans = Geist({
@@ -24,9 +26,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 })
 
-export const metadata: Metadata = {
-  title: "WISEVEO",
-  description: "Aceleração Financeira",
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("metadata")
+
+  return {
+    // Nome da marca: literal, idêntico em todos os idiomas (não é chave i18n)
+    title: "WISEVEO",
+    description: t("description"),
+  }
 }
 
 async function getInitialThemePreferences(): Promise<ThemePreferences> {
@@ -67,7 +74,7 @@ export default async function RootLayout({
 
   return (
     <html
-      lang={locale}
+      lang={getIntlLocale(locale)}
       suppressHydrationWarning
       className={htmlClassName}
       style={htmlStyle}
@@ -84,6 +91,7 @@ export default async function RootLayout({
         <div id="wiseveo-app-root" className="contents">
           <AppProviders initialThemePreferences={initialThemePreferences}>
             <NextIntlClientProvider messages={messages}>
+              <ZodLocaleSync />
               {children}
             </NextIntlClientProvider>
           </AppProviders>

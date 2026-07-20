@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { getBudgetData } from "@/features/budget/services/get-budget-data"
 import { startOfMonth, endOfMonth } from "date-fns"
 
 export async function GET(req: NextRequest) {
+  const t = await getTranslations("api.errors")
   try {
     const userId = await getDefaultUserId()
     if (!userId) {
@@ -25,7 +27,7 @@ export async function GET(req: NextRequest) {
       : (dateStr ? endOfMonth(new Date(dateStr)) : endOfMonth(fromRaw))
 
     if (isNaN(fromRaw.getTime()) || isNaN(toRaw.getTime())) {
-      return NextResponse.json({ error: "Invalid date format" }, { status: 400 })
+      return NextResponse.json({ error: t("invalidDateFormat") }, { status: 400 })
     }
 
     // Enforce full months regardless of what the client sends
@@ -38,7 +40,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("Budget API error:", error)
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: t("internalError") },
       { status: 500 }
     )
   }

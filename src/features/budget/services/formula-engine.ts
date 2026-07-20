@@ -1,11 +1,30 @@
+import type { useTranslations } from "next-intl"
+
 import type { FormulaId, FormulaParams, HistoryData, CustomFormulaDefinition } from "../types"
 import { formatMonetaryValue, formatPercentValue } from "@/lib/monetary"
 
 // ── Formula Definitions (metadata for UI) ──
+// Display strings live in the "budget.formulas" i18n namespace; this module only
+// exposes stable ids/keys that components resolve via useTranslations.
+
+export type BuiltinFormulaId =
+  | "simple_avg"
+  | "moving_avg"
+  | "income_pct"
+  | "fixed_target"
+  | "historical_max"
+
+export type FormulaVariableLabelKey =
+  | "amount"
+  | "containment"
+  | "margin"
+  | "months"
+  | "monthsIncome"
+  | "percentage"
 
 export interface FormulaVariable {
   key: keyof FormulaParams
-  label: string
+  labelKey: FormulaVariableLabelKey
   type: "number" | "percent" | "currency"
   min: number
   max: number
@@ -14,64 +33,71 @@ export interface FormulaVariable {
 }
 
 export interface FormulaDefinition {
-  id: FormulaId
-  name: string
-  description: string
+  id: BuiltinFormulaId
   icon: string
   variables: FormulaVariable[]
 }
 
+// Translator bound to the "budget.formulas" namespace (client or server).
+export type FormulasTranslator = ReturnType<typeof useTranslations<"budget.formulas">>
+
+export const FORMULA_NAME_KEYS = {
+  fixed_target: "names.fixed_target",
+  historical_max: "names.historical_max",
+  income_pct: "names.income_pct",
+  moving_avg: "names.moving_avg",
+  simple_avg: "names.simple_avg",
+} as const
+
+export const FORMULA_DESCRIPTION_KEYS = {
+  fixed_target: "descriptions.fixed_target",
+  historical_max: "descriptions.historical_max",
+  income_pct: "descriptions.income_pct",
+  moving_avg: "descriptions.moving_avg",
+  simple_avg: "descriptions.simple_avg",
+} as const
+
 export const FORMULA_DEFINITIONS: FormulaDefinition[] = [
   {
     id: "simple_avg",
-    name: "Média Simples",
-    description: "Média dos gastos dos últimos N meses",
     icon: "📊",
     variables: [
-      { key: "months", label: "Meses", type: "number", min: 1, max: 24, step: 1, defaultValue: 3 },
-      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+      { key: "months", labelKey: "months", type: "number", min: 1, max: 24, step: 1, defaultValue: 3 },
+      { key: "containment", labelKey: "containment", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
     ],
   },
   {
     id: "moving_avg",
-    name: "Média Móvel",
-    description: "Média ponderada com mais peso nos meses recentes",
     icon: "📈",
     variables: [
-      { key: "months", label: "Meses", type: "number", min: 2, max: 24, step: 1, defaultValue: 3 },
-      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+      { key: "months", labelKey: "months", type: "number", min: 2, max: 24, step: 1, defaultValue: 3 },
+      { key: "containment", labelKey: "containment", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
     ],
   },
   {
     id: "income_pct",
-    name: "% da Receita",
-    description: "Percentual da receita média do período",
     icon: "💰",
     variables: [
-      { key: "months", label: "Meses de receita", type: "number", min: 1, max: 12, step: 1, defaultValue: 3 },
-      { key: "percentage", label: "Percentual", type: "percent", min: 1, max: 100, step: 1, defaultValue: 30 },
-      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+      { key: "months", labelKey: "monthsIncome", type: "number", min: 1, max: 12, step: 1, defaultValue: 3 },
+      { key: "percentage", labelKey: "percentage", type: "percent", min: 1, max: 100, step: 1, defaultValue: 30 },
+      { key: "containment", labelKey: "containment", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
     ],
   },
   {
     id: "fixed_target",
-    name: "Meta Fixa",
-    description: "Valor fixo definido manualmente",
     icon: "🎯",
     variables: [
-      { key: "amount", label: "Valor", type: "currency", min: 0, max: 999999, step: 50, defaultValue: 0 },
-      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+      { key: "amount", labelKey: "amount", type: "currency", min: 0, max: 999999, step: 50, defaultValue: 0 },
+      { key: "containment", labelKey: "containment", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
     ],
   },
   {
     id: "historical_max",
-    name: "Limite Histórico",
-    description: "Máximo histórico com margem de segurança",
     icon: "🛡️",
     variables: [
-      { key: "months", label: "Meses", type: "number", min: 2, max: 24, step: 1, defaultValue: 6 },
-      { key: "margin", label: "Margem", type: "percent", min: 0, max: 100, step: 5, defaultValue: 10 },
-      { key: "containment", label: "Contenção", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
+      { key: "months", labelKey: "months", type: "number", min: 2, max: 24, step: 1, defaultValue: 6 },
+      { key: "margin", labelKey: "margin", type: "percent", min: 0, max: 100, step: 5, defaultValue: 10 },
+      { key: "containment", labelKey: "containment", type: "percent", min: 0, max: 100, step: 1, defaultValue: 0 },
     ],
   },
 ]
@@ -227,12 +253,13 @@ export function calculateFormulaLimit(
 }
 
 export function getFormulaDescription(
-  formulaId: FormulaId, 
+  t: FormulasTranslator,
+  formulaId: FormulaId,
   params: FormulaParams,
   customDefinitions?: CustomFormulaDefinition[]
 ): string {
-  let name = "Fórmula desconhecida"
-  
+  let name = t("names.unknown")
+
   if (customDefinitions) {
     const customMatch = customDefinitions.find((def) => def.id === formulaId)
     if (customMatch) {
@@ -242,13 +269,13 @@ export function getFormulaDescription(
 
   const def = FORMULA_DEFINITIONS.find((f) => f.id === formulaId)
   if (def) {
-    name = def.name
+    name = t(FORMULA_NAME_KEYS[def.id])
   }
 
   const parts: string[] = [name]
 
   if (params.months && formulaId !== "fixed_target") {
-    parts.push(`${params.months} meses`)
+    parts.push(t("summary.months", { count: params.months }))
   }
   if (params.percentage) {
     parts.push(`${params.percentage}%`)
@@ -257,10 +284,10 @@ export function getFormulaDescription(
     parts.push(formatMonetaryValue(params.amount))
   }
   if (params.margin) {
-    parts.push(`+${params.margin}% margem`)
+    parts.push(t("summary.margin", { value: params.margin }))
   }
   if (params.containment && params.containment > 0) {
-    parts.push(`${formatPercentValue(-params.containment, 0)} contenção`)
+    parts.push(t("summary.containment", { value: formatPercentValue(-params.containment, 0) }))
   }
 
   return parts.join(" · ")

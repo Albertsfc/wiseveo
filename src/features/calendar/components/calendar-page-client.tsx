@@ -10,8 +10,8 @@ import {
   Menu,
   Loader2,
 } from "lucide-react"
-import { format } from "date-fns"
-import { ptBR } from "date-fns/locale"
+import { useLocale, useTranslations } from "next-intl"
+import { formatAppDate } from "@/i18n/format"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -45,6 +45,9 @@ export function CalendarPageClient({
   hasGoogleCalendar,
   isGoogleConfigured = false,
 }: CalendarPageClientProps) {
+  const t = useTranslations("calendar")
+  const tCommon = useTranslations("common")
+  const locale = useLocale()
   const [sheetOpen, setSheetOpen] = useState(false)
 
   const cal = useFinancialCalendar({ initialData })
@@ -124,12 +127,12 @@ export function CalendarPageClient({
                 onClick={cal.goToToday}
                 className="cursor-pointer"
               >
-                Hoje
+                {tCommon("datePicker.today")}
               </Button>
             </div>
 
             <h1 className="text-2xl font-semibold capitalize">
-              {format(cal.currentDate, "MMMM yyyy", { locale: ptBR })}
+              {formatAppDate(cal.currentDate, "MMMM yyyy", locale)}
             </h1>
 
             {cal.isLoading && (
@@ -146,7 +149,7 @@ export function CalendarPageClient({
                 ) : (
                   <List className="w-4 h-4 mr-2" />
                 )}
-                {cal.viewMode === "month" ? "Mês" : "Lista"}
+                {cal.viewMode === "month" ? t("viewMode.month") : t("viewMode.list")}
                 <ChevronDown className="w-4 h-4 ml-2" />
               </Button>
             </DropdownMenuTrigger>
@@ -156,14 +159,14 @@ export function CalendarPageClient({
                 className="cursor-pointer"
               >
                 <Grid3X3 className="w-4 h-4 mr-2" />
-                Mês
+                {t("viewMode.month")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => cal.setViewMode("list")}
                 className="cursor-pointer"
               >
                 <List className="w-4 h-4 mr-2" />
-                Lista
+                {t("viewMode.list")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

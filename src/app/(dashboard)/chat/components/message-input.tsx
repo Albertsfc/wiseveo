@@ -10,6 +10,7 @@ import {
   Mic,
   MoreHorizontal
 } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -36,8 +37,10 @@ interface MessageInputProps {
 export function MessageInput({
   onSendMessage,
   disabled = false,
-  placeholder = "Type a message..."
+  placeholder
 }: MessageInputProps) {
+  const t = useTranslations("chat")
+  const resolvedPlaceholder = placeholder ?? t("input.placeholder")
   const [message, setMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -106,7 +109,7 @@ export function MessageInput({
                 </DropdownMenuTrigger>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Attach file</p>
+                <p>{t("input.attachFile")}</p>
               </TooltipContent>
             </Tooltip>
             <DropdownMenuContent side="top" align="start">
@@ -115,14 +118,14 @@ export function MessageInput({
                 className="cursor-pointer"
               >
                 <ImageIcon className="h-4 w-4 mr-2" />
-                Photo or video
+                {t("input.photoOrVideo")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleFileUpload("file")}
                 className="cursor-pointer"
               >
                 <FileText className="h-4 w-4 mr-2" />
-                Document
+                {t("input.document")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -132,7 +135,7 @@ export function MessageInput({
         <div className="flex-1 relative">
           <Textarea
             ref={textareaRef}
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             value={message}
             onChange={handleTextareaChange}
             onKeyDown={handleKeyPress}
@@ -159,7 +162,7 @@ export function MessageInput({
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Add emoji</p>
+                  <p>{t("input.addEmoji")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -177,7 +180,7 @@ export function MessageInput({
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>More options</p>
+                  <p>{t("input.moreOptions")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -208,7 +211,7 @@ export function MessageInput({
               )}
             </TooltipTrigger>
             <TooltipContent>
-              <p>{message.trim() ? "Send message" : "Voice message"}</p>
+              <p>{message.trim() ? t("input.sendMessage") : t("input.voiceMessage")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -217,7 +220,7 @@ export function MessageInput({
       {/* Typing indicator */}
       {isTyping && (
         <div className="text-xs text-muted-foreground mt-2">
-          You are typing...
+          {t("input.typing")}
         </div>
       )}
     </div>

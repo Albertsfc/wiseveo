@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { getTranslations } from "next-intl/server"
 import { getSessionUserId } from "@/lib/session"
 import {
   AdminAccessError,
@@ -8,7 +9,7 @@ import {
 
 export const dynamic = "force-dynamic"
 
-function errorResponse(error: unknown) {
+async function errorResponse(error: unknown) {
   if (error instanceof AdminAccessError) {
     return NextResponse.json(
       { success: false, message: error.message },
@@ -16,26 +17,25 @@ function errorResponse(error: unknown) {
     )
   }
 
-  const message =
-    error instanceof Error ? error.message : "Erro interno do servidor"
+  const t = await getTranslations("api.errors")
+  const message = error instanceof Error ? error.message : t("internalError")
 
-  return NextResponse.json(
-    { success: false, message },
-    { status: message === "Usuário não encontrado" ? 404 : 500 },
-  )
+  return NextResponse.json({ success: false, message }, { status: 500 })
 }
 
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const t = await getTranslations("api.admin")
+
   try {
     await requireAdminUser(await getSessionUserId())
 
     const body = await request.json().catch(() => null)
     if (body?.action !== "approve") {
       return NextResponse.json(
-        { success: false, message: "Ação administrativa inválida" },
+        { success: false, message: t("invalidAction") },
         { status: 400 },
       )
     }
@@ -45,7 +45,7 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      message: "Usuário aprovado com sucesso.",
+      message: t("userApproved"),
       data: user,
     })
   } catch (error) {

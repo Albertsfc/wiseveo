@@ -1,5 +1,6 @@
 "use client"
 
+import { useLocale, useTranslations } from "next-intl"
 import {
   ArrowRightLeft,
   File,
@@ -23,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { DetailPanel, DetailPanelCloseButton } from "@/components/detail-panel"
+import { createDateFormatter } from "@/i18n/format"
 
 import type {
   FormCategory,
@@ -145,6 +147,8 @@ export function NewTransactionDialog({
   handleFiles,
   removeQueued,
 }: NewTransactionDialogProps) {
+  const t = useTranslations("transactions.dialogs.newTransaction")
+  const locale = useLocale()
   const numInstallments = Number(installments || 1)
   const valueAccentClass = getTypeAccentClass(effectiveType)
   const isInstallmentProRata = numInstallments > 1 && isProRata
@@ -169,7 +173,7 @@ export function NewTransactionDialog({
       <span
         className={`inline-block size-2 rounded-full ${getTypeDotClass(type)}`}
       />
-      {isEditing ? "Editar Transação" : "Nova Transação"}
+      {isEditing ? t("editTitle") : t("newTitle")}
     </span>
   )
 
@@ -184,13 +188,13 @@ export function NewTransactionDialog({
       >
         {isSubmitting
           ? isEditing
-            ? "Atualizando..."
-            : "Salvando..."
+            ? t("updating")
+            : t("saving")
           : isEditing
-            ? "Atualizar"
+            ? t("update")
             : numInstallments > 1
-              ? `Salvar ${numInstallments} parcelas`
-              : "Salvar"}
+              ? t("saveInstallments", { count: numInstallments })
+              : t("save")}
       </Button>
     </>
   )
@@ -200,7 +204,7 @@ export function NewTransactionDialog({
       open={open}
       onOpenChange={setOpen}
       title={panelTitle}
-      description="Formulário de transação financeira"
+      description={t("formDescription")}
       footer={panelFooter}
       className="gap-0"
     >
@@ -208,9 +212,9 @@ export function NewTransactionDialog({
       <div className="flex gap-1 rounded-lg bg-muted p-1 mb-4">
         {(
           [
-            { key: "INCOME", label: "Receita", Icon: TrendingUp },
-            { key: "EXPENSE", label: "Despesa", Icon: TrendingDown },
-            { key: "TRANSFER", label: "Transf.", Icon: ArrowRightLeft },
+            { key: "INCOME", label: t("typeIncome"), Icon: TrendingUp },
+            { key: "EXPENSE", label: t("typeExpense"), Icon: TrendingDown },
+            { key: "TRANSFER", label: t("typeTransfer"), Icon: ArrowRightLeft },
           ] as const
         ).map(({ key, label, Icon }) => (
           <button
@@ -238,7 +242,7 @@ export function NewTransactionDialog({
           <div className="grid grid-cols-[64px_72px_1fr_72px] gap-3">
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                NUM
+                {t("numLabel")}
               </Label>
               <Input
                 value={displayNum}
@@ -248,14 +252,14 @@ export function NewTransactionDialog({
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Período
+                {t("periodLabel")}
               </Label>
               <Input
                 value={isInstallmentProRata ? "" : formData.period}
                 onChange={(e) =>
                   updateField("period", e.target.value.replace(/\D/g, "").slice(0, 6))
                 }
-                placeholder={isInstallmentProRata ? "Automático" : "YYYYMM"}
+                placeholder={isInstallmentProRata ? t("automaticPlaceholder") : t("periodPlaceholder")}
                 maxLength={6}
                 inputMode="numeric"
                 disabled={isInstallmentProRata}
@@ -264,7 +268,7 @@ export function NewTransactionDialog({
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Vencimento <span className="text-destructive">*</span>
+                {t("dueDateLabel")} <span className="text-destructive">*</span>
               </Label>
               <Input
                 type="date"
@@ -275,7 +279,7 @@ export function NewTransactionDialog({
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Parcelas
+                {t("installmentsLabel")}
               </Label>
               <Input
                 type="number"
@@ -319,12 +323,12 @@ export function NewTransactionDialog({
                   htmlFor="transaction-pro-rata"
                   className="cursor-pointer text-[11px] uppercase tracking-wider font-semibold text-muted-foreground"
                 >
-                  Pro Rata
+                  {t("proRataLabel")}
                 </Label>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">
                   {isProRata
-                    ? "Caixa: cada parcela usará o PERÍODO do próprio vencimento."
-                    : "Competência: toda a série usará o PERÍODO do primeiro pagamento."}
+                    ? t("proRataCashHint")
+                    : t("proRataAccrualHint")}
                 </p>
               </div>
             </div>
@@ -334,26 +338,26 @@ export function NewTransactionDialog({
           <div className="grid grid-cols-[1fr_140px] gap-3">
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                REF
+                {t("refLabel")}
               </Label>
               <Input
                 value={formData.reference}
                 onChange={(e) => updateField("reference", e.target.value)}
                 placeholder={
-                  numInstallments > 1 ? "ex: Compra" : "ex: Boleto FIES"
+                  numInstallments > 1 ? t("refPlaceholderInstallment") : t("refPlaceholderSingle")
                 }
               />
               {numInstallments > 1 && (
                 <p className="text-[10px] text-muted-foreground mt-1">
                   {formData.reference?.includes("-")
-                    ? "Personalizado (Ref-1, Ref-2...)"
-                    : "Padrão (#01/NN)"}
+                    ? t("refCustomHint")
+                    : t("refDefaultHint")}
                 </p>
               )}
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Valor <span className="text-destructive">*</span>
+                {t("amountLabel")} <span className="text-destructive">*</span>
               </Label>
               <Input
                 type="number"
@@ -361,7 +365,7 @@ export function NewTransactionDialog({
                 min="0"
                 value={formData.amount}
                 onChange={(e) => updateField("amount", e.target.value)}
-                placeholder="0,00"
+                placeholder={t("amountPlaceholder")}
                 required
                 className={`font-bold text-right font-mono border-l-4 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none ${valueAccentClass}`}
               />
@@ -372,11 +376,11 @@ export function NewTransactionDialog({
           <div className="relative space-y-1.5">
             <div className="flex items-center gap-2">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Histórico <span className="text-destructive">*</span>
+                {t("historyLabel")} <span className="text-destructive">*</span>
               </Label>
               {showSuggestions && suggestions.length > 0 && (
                 <span className="text-[10px] text-chart-1 font-medium">
-                  {suggestions.length} sugestões
+                  {t("suggestionsCount", { count: suggestions.length })}
                 </span>
               )}
             </div>
@@ -385,7 +389,7 @@ export function NewTransactionDialog({
               onChange={(e) => updateField("note", e.target.value)}
               onBlur={closeSuggestions}
               autoComplete="off"
-              placeholder="Beneficiário ou descrição rápida..."
+              placeholder={t("historyPlaceholder")}
               required
             />
             {showSuggestions && suggestions.length > 0 && (
@@ -406,12 +410,12 @@ export function NewTransactionDialog({
           {/* Row 4: Descrição */}
           <div className="space-y-1.5">
             <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-              Descrição
+              {t("notesLabel")}
             </Label>
             <Input
               value={formData.description}
               onChange={(e) => updateField("description", e.target.value)}
-              placeholder="Detalhes opcionais..."
+              placeholder={t("notesPlaceholder")}
             />
           </div>
 
@@ -419,7 +423,7 @@ export function NewTransactionDialog({
           <div className="space-y-1.5">
             <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground flex items-center gap-1.5">
               <Paperclip className="size-3 text-yellow-500" />
-              Anexos
+              {t("attachmentsLabel")}
               {queuedFiles.length > 0 && (
                 <span className="text-yellow-500">({queuedFiles.length})</span>
               )}
@@ -445,11 +449,11 @@ export function NewTransactionDialog({
                         {f.name}
                       </span>
                       <span className="text-[10px] text-muted-foreground shrink-0">
-                        {(f.size / 1024).toFixed(0)} KB
+                        {t("fileSizeKb", { size: (f.size / 1024).toFixed(0) })}
                       </span>
                       <button
                         type="button"
-                        aria-label="Remover arquivo"
+                        aria-label={t("removeFileAria")}
                         onClick={(e) => {
                           e.stopPropagation()
                           removeQueued(i)
@@ -468,14 +472,14 @@ export function NewTransactionDialog({
                     }}
                     className="text-[11px] text-yellow-500 hover:text-yellow-400 transition-colors text-left mt-0.5"
                   >
-                    + Adicionar arquivo
+                    {t("addFileButton")}
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 text-muted-foreground text-xs">
                   <Paperclip className="size-3.5 text-yellow-500 shrink-0" />
                   <span>
-                    Arraste ou clique para anexar imagem / PDF (máx. 3 MB)
+                    {t("dropHint")}
                   </span>
                 </div>
               )}
@@ -487,7 +491,7 @@ export function NewTransactionDialog({
               multiple
               className="hidden"
               aria-hidden="true"
-              title="Seleção de arquivos"
+              title={t("fileInputTitle")}
               onChange={(e) => {
                 if (e.target.files) handleFiles(e.target.files)
                 e.target.value = ""
@@ -499,14 +503,14 @@ export function NewTransactionDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Grupo <span className="text-destructive">*</span>
+                {t("groupLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={formData.groupCode}
                 onValueChange={(v) => updateField("groupCode", v)}
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredGroups.map((g) => (
@@ -523,7 +527,7 @@ export function NewTransactionDialog({
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Categoria <span className="text-destructive">*</span>
+                {t("categoryLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={formData.categoryCode}
@@ -533,7 +537,7 @@ export function NewTransactionDialog({
                 <SelectTrigger
                   className={`w-full cursor-pointer ${!formData.groupCode ? "opacity-60" : ""}`}
                 >
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {filteredCategories.map((c) => (
@@ -554,14 +558,14 @@ export function NewTransactionDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Banco <span className="text-destructive">*</span>
+                {t("accountLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={formData.accountId}
                 onValueChange={(v) => updateField("accountId", v)}
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {formOptions.accounts.map((a) => (
@@ -578,14 +582,14 @@ export function NewTransactionDialog({
             </div>
             <div className="space-y-1.5">
               <Label className="text-[11px] uppercase tracking-wider font-semibold text-muted-foreground">
-                Status <span className="text-destructive">*</span>
+                {t("statusLabel")} <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={formData.statusCode}
                 onValueChange={(v) => updateField("statusCode", v)}
               >
                 <SelectTrigger className="w-full cursor-pointer">
-                  <SelectValue placeholder="Selecione..." />
+                  <SelectValue placeholder={t("selectPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {formOptions.statuses.map((s) => (
@@ -607,10 +611,10 @@ export function NewTransactionDialog({
             <div className="rounded-lg border border-border bg-muted/40 p-3 space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-semibold text-foreground">
-                  Parcelamento
+                  {t("installmentsPreviewTitle")}
                 </span>
                 <span className="text-[11px] text-muted-foreground">
-                  Edite datas ou valores se necessário
+                  {t("installmentsPreviewHint")}
                 </span>
               </div>
               <div className="space-y-1.5">
@@ -630,8 +634,8 @@ export function NewTransactionDialog({
                     {/* Data */}
                     {i === 0 ? (
                       <div className="text-[11px] text-muted-foreground bg-muted rounded px-2 py-1.5 text-center">
-                        {new Date(row.date + "T12:00:00").toLocaleDateString(
-                          "pt-BR"
+                        {createDateFormatter(locale, {}).format(
+                          new Date(row.date + "T12:00:00")
                         )}
                       </div>
                     ) : (

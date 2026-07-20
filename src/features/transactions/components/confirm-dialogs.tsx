@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,14 +28,16 @@ export function DeleteConfirmDialog({
   loading,
 }: DeleteConfirmDialogProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.dialogs.deleteConfirm")
+  const tCommon = useTranslations("common")
 
   return (
     <AlertDialog open={!!transaction} onOpenChange={(open) => !open && onCancel()}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Excluir Lançamento</AlertDialogTitle>
+          <AlertDialogTitle>{t("title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Tem certeza que deseja excluir este lançamento?
+            {t("confirmText")}
             {transaction?.note && (
               <span className="mt-1 block font-medium text-foreground">
                 {transaction.note}
@@ -46,18 +49,18 @@ export function DeleteConfirmDialog({
               </span>
             )}
             <span className="mt-2 block">
-              Esta ação pode ser desfeita pelo administrador.
+              {t("undoNote")}
             </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>{tCommon("cancel")}</AlertDialogCancel>
           <AlertDialogAction
             variant="destructive"
             onClick={onConfirm}
             disabled={loading}
           >
-            {loading ? "Excluindo..." : "Excluir"}
+            {loading ? t("deleting") : tCommon("delete")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -79,15 +82,16 @@ export function QuickPayConfirmDialog({
   loading,
 }: QuickPayConfirmDialogProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.dialogs.quickPayConfirm")
+  const tCommon = useTranslations("common")
 
   return (
     <AlertDialog open={!!transaction} onOpenChange={(open) => !open && onCancel()}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Pagamento Rápido</AlertDialogTitle>
+          <AlertDialogTitle>{t("title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Deseja marcar este lançamento como pago usando as configurações
-            padrão definidas em Configurações &gt; Geral?
+            {t("confirmText")}
             {transaction?.note && (
               <span className="mt-1 block font-medium text-foreground">
                 {transaction.note}
@@ -101,9 +105,9 @@ export function QuickPayConfirmDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>{tCommon("cancel")}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={loading}>
-            {loading ? "Processando..." : "Confirmar Pagamento"}
+            {loading ? t("processing") : t("confirmButton")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -125,14 +129,16 @@ export function MakeRecurringConfirmDialog({
   loading,
 }: MakeRecurringConfirmDialogProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.dialogs.makeRecurringConfirm")
+  const tCommon = useTranslations("common")
 
   return (
     <AlertDialog open={!!transaction} onOpenChange={(open) => !open && onCancel()}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Tornar Recorrente</AlertDialogTitle>
+          <AlertDialogTitle>{t("title")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Deseja criar uma transação recorrente a partir deste lançamento?
+            {t("confirmText")}
             {transaction?.note && (
               <span className="mt-1 block font-medium text-foreground">
                 {transaction.note}
@@ -144,15 +150,14 @@ export function MakeRecurringConfirmDialog({
               </span>
             )}
             <span className="mt-2 block">
-              A transação original não será afetada. Um novo modelo recorrente
-              será criado na página Recorrentes.
+              {t("note")}
             </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={loading}>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel disabled={loading}>{tCommon("cancel")}</AlertDialogCancel>
           <AlertDialogAction onClick={onConfirm} disabled={loading}>
-            {loading ? "Criando..." : "Criar Recorrente"}
+            {loading ? t("creating") : t("confirmButton")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

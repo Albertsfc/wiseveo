@@ -28,8 +28,8 @@ function Command({
 }
 
 function CommandDialog({
-  title = "Command Palette",
-  description = "Search for a command to run...",
+  title = "Command Palette", // i18n-ignore: valor padrão do primitivo genérico shadcn/cmdk — <CommandDialog> não é instanciado em nenhum lugar do app
+  description = "Search for a command to run...", // i18n-ignore: idem — sempre sobrescrito pelo chamador real, nunca renderizado como está
   children,
   className,
   showCloseButton = true,

@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { TrendingUp } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +29,7 @@ interface AccountBalanceCardProps {
 
 function AccountBalanceSection({ label, accounts }: AccountBalanceCardProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.summary")
   const total = accounts.reduce((sum, acc) => sum + acc.currentBalance, 0)
 
   return (
@@ -52,7 +54,7 @@ function AccountBalanceSection({ label, accounts }: AccountBalanceCardProps) {
         ))}
       </div>
       <div className="flex items-center justify-between border-t pt-1">
-        <span className="text-sm font-semibold">Total</span>
+        <span className="text-sm font-semibold">{t("total")}</span>
         <span
           className={`text-sm font-semibold font-mono tabular-nums ${
             total < 0 ? "text-destructive" : "text-foreground"
@@ -77,6 +79,7 @@ interface SummaryCardProps {
 
 function SummaryCard({ label, value, variant }: SummaryCardProps) {
   const monetary = useMonetaryFormattingSafe()
+  const t = useTranslations("transactions.summary")
   const colorClass =
     variant === "income"
       ? "text-chart-2"
@@ -105,13 +108,13 @@ function SummaryCard({ label, value, variant }: SummaryCardProps) {
       </CardHeader>
       <CardFooter className="flex-col items-start gap-1.5 text-sm">
         <div className="line-clamp-1 flex gap-2 font-medium">
-          {variant === "income" && "Entradas do período"}
-          {variant === "expense" && "Saídas do período"}
-          {variant === "balance" && "Saldo do período"}
+          {variant === "income" && t("inflowsOfPeriod")}
+          {variant === "expense" && t("outflowsOfPeriod")}
+          {variant === "balance" && t("balanceOfPeriod")}
           {trendIcon && <TrendingUp className="size-4" />}
         </div>
         <div className="text-muted-foreground">
-          vs período anterior
+          {t("vsPreviousPeriod")}
         </div>
       </CardFooter>
     </Card>
@@ -137,29 +140,31 @@ export function BalanceSummaryCards({
   dateLabel,
   endOfMonthLabel,
 }: BalanceSummaryData) {
+  const t = useTranslations("transactions.summary")
+
   return (
     <SectionCardsGrid>
       {/* Account balances card */}
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Saldos por Conta</CardDescription>
+          <CardDescription>{t("balancesByAccount")}</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <AccountBalanceSection
-            label={`Saldo em ${dateLabel}`}
+            label={t("balanceAtDate", { date: dateLabel })}
             accounts={balancesAtDate}
           />
           <AccountBalanceSection
-            label={`Saldo em ${endOfMonthLabel}`}
+            label={t("balanceAtDate", { date: endOfMonthLabel })}
             accounts={balancesAtEndOfMonth}
           />
         </CardContent>
       </Card>
 
       {/* Summary cards */}
-      <SummaryCard label="Entradas" value={summary.income} variant="income" />
-      <SummaryCard label="Saídas" value={summary.expense} variant="expense" />
-      <SummaryCard label="Saldo" value={summary.savings} variant="balance" />
+      <SummaryCard label={t("inflows")} value={summary.income} variant="income" />
+      <SummaryCard label={t("outflows")} value={summary.expense} variant="expense" />
+      <SummaryCard label={t("balance")} value={summary.savings} variant="balance" />
     </SectionCardsGrid>
   )
 }

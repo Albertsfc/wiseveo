@@ -7,23 +7,58 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { formatPeriod } from "@/lib/financial"
 import type { MonetaryFormatter } from "@/lib/monetary"
 import { cn } from "@/lib/utils"
+import { createDateFormatter } from "@/i18n/format"
 
 import type { SerializedTransaction, TransactionTableMeta } from "../types"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { TransactionActions } from "./transaction-actions"
 import { StatusDot } from "../../shared/components/status-dot"
 
-const statusConfig: Record<string, { label: string; className: string }> = {
-  PAID: { label: "Pago", className: "bg-chart-2/15 text-chart-2 border-chart-2/30" },
-  PENDING: { label: "Pendente", className: "bg-chart-4/15 text-chart-4 border-chart-4/30" },
-  OVERDUE: { label: "Vencido", className: "bg-destructive/15 text-destructive border-destructive/30" },
-  SCHEDULED: { label: "Agendado", className: "bg-chart-1/15 text-chart-1 border-chart-1/30" },
+export interface TransactionColumnLabels {
+  num: string
+  period: string
+  date: string
+  reference: string
+  note: string
+  description: string
+  group: string
+  category: string
+  amount: string
+  account: string
+  status: string
+  type: string
+  actions: string
+  payee: string
+  selectAllAria: string
+  selectRowAria: string
+  statusPaid: string
+  statusPending: string
+  statusOverdue: string
+  statusScheduled: string
+  typeIncome: string
+  typeExpense: string
+  typeTransfer: string
 }
 
-const typeConfig: Record<string, { label: string; className: string }> = {
-  INCOME: { label: "Receita", className: "text-chart-2" },
-  EXPENSE: { label: "Despesa", className: "text-destructive" },
-  TRANSFER: { label: "Transferência", className: "text-muted-foreground" },
+function buildStatusConfig(
+  labels: TransactionColumnLabels
+): Record<string, { label: string; className: string }> {
+  return {
+    PAID: { label: labels.statusPaid, className: "bg-chart-2/15 text-chart-2 border-chart-2/30" },
+    PENDING: { label: labels.statusPending, className: "bg-chart-4/15 text-chart-4 border-chart-4/30" },
+    OVERDUE: { label: labels.statusOverdue, className: "bg-destructive/15 text-destructive border-destructive/30" },
+    SCHEDULED: { label: labels.statusScheduled, className: "bg-chart-1/15 text-chart-1 border-chart-1/30" },
+  }
+}
+
+function buildTypeConfig(
+  labels: TransactionColumnLabels
+): Record<string, { label: string; className: string }> {
+  return {
+    INCOME: { label: labels.typeIncome, className: "text-chart-2" },
+    EXPENSE: { label: labels.typeExpense, className: "text-destructive" },
+    TRANSFER: { label: labels.typeTransfer, className: "text-muted-foreground" },
+  }
 }
 
 type TransactionColumnFormatter = Pick<
@@ -110,7 +145,12 @@ function getAmountColorClass(amount: number): string {
 
 export function createTransactionGlobalFilter(
   monetary: TransactionColumnFormatter,
+  labels: TransactionColumnLabels,
+  locale: string,
 ): FilterFn<SerializedTransaction> {
+  const statusConfig = buildStatusConfig(labels)
+  const typeConfig = buildTypeConfig(labels)
+
   return (row: Row<SerializedTransaction>, _columnId: string, filterValue: string) => {
     const search = filterValue.toLowerCase()
 
@@ -127,7 +167,7 @@ export function createTransactionGlobalFilter(
 
     const dateStr = row.getValue("date") as string
     const formattedDate = dateStr
-      ? new Intl.DateTimeFormat("pt-BR", {
+      ? createDateFormatter(locale, {
           day: "2-digit",
           month: "2-digit",
           year: "numeric",
@@ -187,7 +227,12 @@ export const statusSortFn = (
 export function getTransactionColumns(
   monetary: TransactionColumnFormatter,
   isMobile: boolean = false,
+  labels: TransactionColumnLabels,
+  locale: string,
 ): ColumnDef<SerializedTransaction>[] {
+  const statusConfig = buildStatusConfig(labels)
+  const typeConfig = buildTypeConfig(labels)
+
   return [
     {
       id: "select",
@@ -198,7 +243,7 @@ export function getTransactionColumns(
             (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Selecionar tudo"
+          aria-label={labels.selectAllAria}
           className="translate-y-[2px] cursor-pointer"
         />
       ),
@@ -206,7 +251,7 @@ export function getTransactionColumns(
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Selecionar linha"
+          aria-label={labels.selectRowAria}
           className="translate-y-[2px] cursor-pointer"
         />
       ),
@@ -216,7 +261,7 @@ export function getTransactionColumns(
     {
       accessorKey: "num",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="NUM" />
+        <DataTableColumnHeader column={column} title={labels.num} />
       ),
       cell: ({ row }) => {
         const num = row.getValue("num") as number | null
@@ -227,7 +272,7 @@ export function getTransactionColumns(
     {
       accessorKey: "period",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="PERÍODO" />
+        <DataTableColumnHeader column={column} title={labels.period} />
       ),
       cell: ({ row }) => {
         const period = (row.getValue("period") as string | null) ?? ""
@@ -239,11 +284,11 @@ export function getTransactionColumns(
     {
       accessorKey: "date",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="DATA" />
+        <DataTableColumnHeader column={column} title={labels.date} />
       ),
       cell: ({ row }) => {
         const dateStr = row.getValue("date") as string
-        const formattedDate = new Intl.DateTimeFormat("pt-BR", {
+        const formattedDate = createDateFormatter(locale, {
           day: "2-digit",
           month: "2-digit",
           year: isMobile ? undefined : "numeric",
@@ -260,7 +305,7 @@ export function getTransactionColumns(
     {
       accessorKey: "reference",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="REF" />
+        <DataTableColumnHeader column={column} title={labels.reference} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[140px] truncate text-sm">
@@ -272,7 +317,7 @@ export function getTransactionColumns(
     {
       accessorKey: "note",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="HISTÓRICO" />
+        <DataTableColumnHeader column={column} title={labels.note} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[220px] truncate text-sm">
@@ -284,7 +329,7 @@ export function getTransactionColumns(
     {
       accessorKey: "description",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="DESCRIÇÃO" />
+        <DataTableColumnHeader column={column} title={labels.description} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[260px] truncate text-sm">
@@ -296,7 +341,7 @@ export function getTransactionColumns(
       id: "group",
       accessorFn: (row) => row.category.group.name,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="GRUPO" />
+        <DataTableColumnHeader column={column} title={labels.group} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[160px] truncate text-sm">{row.original.category.group.name}</div>
@@ -307,7 +352,7 @@ export function getTransactionColumns(
       id: "category",
       accessorFn: (row) => row.category.name,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="CATEGORIA" />
+        <DataTableColumnHeader column={column} title={labels.category} />
       ),
       cell: ({ row }) => (
         <div className="max-w-[180px] truncate text-sm">{row.original.category.name}</div>
@@ -320,7 +365,7 @@ export function getTransactionColumns(
     {
       accessorKey: "amount",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="VALOR" />
+        <DataTableColumnHeader column={column} title={labels.amount} />
       ),
       cell: ({ row }) => {
         const amount = row.getValue("amount") as number
@@ -335,7 +380,7 @@ export function getTransactionColumns(
       id: "account",
       accessorFn: (row) => row.account.name,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="BANCO" />
+        <DataTableColumnHeader column={column} title={labels.account} />
       ),
       cell: ({ row }) => (
         <div className="text-sm">{row.original.account.name}</div>
@@ -348,7 +393,7 @@ export function getTransactionColumns(
     {
       accessorKey: "status",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="STATUS" />
+        <DataTableColumnHeader column={column} title={labels.status} />
       ),
       cell: ({ row }) => {
         const status = row.getValue("status") as string
@@ -376,7 +421,7 @@ export function getTransactionColumns(
       id: "type",
       accessorFn: (row) => row.type,
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="TIPO" />
+        <DataTableColumnHeader column={column} title={labels.type} />
       ),
       cell: ({ row }) => {
         const type = row.original.type
@@ -389,7 +434,7 @@ export function getTransactionColumns(
     },
     {
       id: "actions",
-      header: () => <div className="text-right">AÇÕES</div>,
+      header: () => <div className="text-right">{labels.actions}</div>,
       cell: ({ row, table }) => {
         const meta = table.options.meta as TransactionTableMeta | undefined
 
@@ -414,7 +459,7 @@ export function getTransactionColumns(
     {
       id: "payee",
       accessorFn: (row) => row.payee?.name ?? "",
-      header: ({ column }) => <DataTableColumnHeader column={column} title="BENEFICIÁRIO" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title={labels.payee} />,
       cell: ({ row }) => (
         <div className="text-sm text-muted-foreground">
           {row.original.payee?.name || "—"}
