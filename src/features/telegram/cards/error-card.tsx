@@ -1,10 +1,10 @@
-import type { CardData } from "../types/telegram.types"
+import type { CardData, TelegramTranslator } from "../types/telegram.types"
 import { BaseCard } from "./base-card"
 import { cardTheme } from "./card-theme"
 
-export function ErrorCard({ data }: { data: CardData }) {
+export function ErrorCard({ data, t }: { data: CardData; t: TelegramTranslator }) {
   return (
-    <BaseCard eyebrow={data.eyebrow ?? "WISEVEO"} headline={data.headline || "Nao consegui responder"}>
+    <BaseCard eyebrow={data.eyebrow ?? "WISEVEO"} headline={data.headline || t("cards.couldNotAnswer")}>
       <div
         style={{
           display: "flex",
@@ -18,10 +18,10 @@ export function ErrorCard({ data }: { data: CardData }) {
         }}
       >
         <div style={{ color: cardTheme.negative, fontSize: 24, fontWeight: 700, marginBottom: 12 }}>
-          Algo ficou incompleto
+          {t("cards.somethingIncomplete")}
         </div>
         <div style={{ color: cardTheme.muted, fontSize: 22, lineHeight: 1.35 }}>
-          {data.insight ?? "Tente reformular a pergunta com um periodo, conta ou categoria."}
+          {data.insight ?? t("cards.tryRephrasing")}
         </div>
       </div>
     </BaseCard>

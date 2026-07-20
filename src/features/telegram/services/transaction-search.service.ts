@@ -1,14 +1,16 @@
 import { getTransactions } from "@/features/transactions/services/get-transactions"
 import type { SerializedTransaction } from "@/features/transactions/types"
 import { endOfUTCDay, startOfUTCDay } from "@/lib/financial"
+import type { MonetaryFormatter } from "@/lib/monetary"
+import { createDateFormatter } from "@/i18n/format"
 import {
   clampToolLimit,
-  formatMoney,
   includesSearch,
   normalizeSearch,
   startOfCurrentMonthUtc,
   endOfCurrentMonthUtc,
 } from "../tools/tool-utils"
+import type { TelegramToolContext } from "../types/telegram.types"
 
 type TransactionType = "INCOME" | "EXPENSE" | "TRANSFER"
 type TransactionStatus = "PAID" | "PENDING" | "OVERDUE" | "SCHEDULED"
@@ -65,11 +67,13 @@ export interface TransactionSearchResult {
   noMatchesMessage?: string
 }
 
-const STATUS_LABELS: Record<TransactionStatus, string> = {
-  PAID: "Pago",
-  PENDING: "Pendente",
-  OVERDUE: "Vencido",
-  SCHEDULED: "Agendado",
+function buildStatusLabels(t: TelegramToolContext["t"]): Record<TransactionStatus, string> {
+  return {
+    PAID: t("transactionSearch.statusPaid"),
+    PENDING: t("transactionSearch.statusPending"),
+    OVERDUE: t("transactionSearch.statusOverdue"),
+    SCHEDULED: t("transactionSearch.statusScheduled"),
+  }
 }
 
 function resolveRange(period: TransactionSearchInput["period"]) {
@@ -78,37 +82,45 @@ function resolveRange(period: TransactionSearchInput["period"]) {
   return from > to ? { from: to, to: from } : { from, to }
 }
 
-function formatDatePtBr(value: string) {
-  return new Intl.DateTimeFormat("pt-BR", { timeZone: "UTC" }).format(new Date(value))
+function formatDate(value: string, ctx: TelegramToolContext) {
+  return createDateFormatter(ctx.locale, { timeZone: "UTC" }).format(new Date(value))
 }
 
-function formatPeriodLabel(from: Date, to: Date) {
+function formatPeriodLabel(from: Date, to: Date, ctx: TelegramToolContext) {
   const sameMonth =
     from.getUTCFullYear() === to.getUTCFullYear() && from.getUTCMonth() === to.getUTCMonth()
 
   if (sameMonth) {
-    const month = new Intl.DateTimeFormat("pt-BR", {
+    const month = createDateFormatter(ctx.locale, {
       month: "long",
       timeZone: "UTC",
     }).format(from)
     return `${month.charAt(0).toUpperCase()}${month.slice(1)} ${from.getUTCFullYear()}`
   }
 
-  return `${formatDatePtBr(from.toISOString())} a ${formatDatePtBr(to.toISOString())}`
+  return `${formatDate(from.toISOString(), ctx)} ${ctx.t("transactionSearch.periodRangeJoiner")} ${formatDate(to.toISOString(), ctx)}`
 }
 
-function searchableColumns(transaction: SerializedTransaction) {
-  const formattedDate = formatDatePtBr(transaction.date)
-  const formattedAmount = formatMoney(transaction.amount)
-  const statusLabel = STATUS_LABELS[transaction.status]
+// Internal search-match bookkeeping tags: they identify which field matched a
+// free-text search term (see matchedColumns below) but are never serialized
+// into card output or fed to the LLM prompt (formatTransactionSearchCard only
+// reads label/value/detail/tone from items) — lookup keys, not UI copy.
+function searchableColumns(
+  transaction: SerializedTransaction,
+  ctx: TelegramToolContext,
+  statusLabels: Record<TransactionStatus, string>,
+) {
+  const formattedDate = formatDate(transaction.date, ctx)
+  const formattedAmount = ctx.monetary.formatNumberValue(transaction.amount)
+  const statusLabel = statusLabels[transaction.status]
 
   return [
-    { name: "PERÍODO", value: transaction.period },
+    { name: "PERÍODO", value: transaction.period }, // i18n-ignore
     { name: "DATA", value: transaction.date.slice(0, 10) },
     { name: "DATA", value: formattedDate },
     { name: "REF", value: transaction.reference },
-    { name: "HISTÓRICO", value: transaction.note },
-    { name: "DESCRIÇÃO", value: transaction.description },
+    { name: "HISTÓRICO", value: transaction.note }, // i18n-ignore
+    { name: "DESCRIÇÃO", value: transaction.description }, // i18n-ignore
     { name: "GRUPO", value: transaction.category.group.name },
     { name: "CATEGORIA", value: transaction.category.name },
     { name: "VALOR", value: formattedAmount },
@@ -134,19 +146,29 @@ export function includesLiteralSearch(value: string | null | undefined, search: 
   return Boolean(lightSearch) && normalizeLightLiteralSearch(value).includes(lightSearch)
 }
 
-function matchesLiteralSearch(transaction: SerializedTransaction, searchText: string | undefined) {
+function matchesLiteralSearch(
+  transaction: SerializedTransaction,
+  searchText: string | undefined,
+  ctx: TelegramToolContext,
+  statusLabels: Record<TransactionStatus, string>,
+) {
   const term = searchText?.trim()
   if (!term) return true
-  return searchableColumns(transaction).some((column) => includesLiteralSearch(column.value, term))
+  return searchableColumns(transaction, ctx, statusLabels).some((column) => includesLiteralSearch(column.value, term))
 }
 
-function matchedColumns(transaction: SerializedTransaction, searchText: string | undefined) {
+function matchedColumns(
+  transaction: SerializedTransaction,
+  searchText: string | undefined,
+  ctx: TelegramToolContext,
+  statusLabels: Record<TransactionStatus, string>,
+) {
   const term = searchText?.trim()
   if (!term) return []
 
   return Array.from(
     new Set(
-      searchableColumns(transaction)
+      searchableColumns(transaction, ctx, statusLabels)
         .filter((column) => includesLiteralSearch(column.value, term))
         .map((column) => column.name),
     ),
@@ -156,6 +178,7 @@ function matchedColumns(transaction: SerializedTransaction, searchText: string |
 function buildAggregate(
   transactions: SerializedTransaction[],
   getName: (transaction: SerializedTransaction) => string,
+  monetary: MonetaryFormatter,
 ) {
   const groups = new Map<string, { count: number; total: number }>()
 
@@ -175,31 +198,38 @@ function buildAggregate(
       name,
       count: value.count,
       total: value.total,
-      formattedTotal: formatMoney(value.total),
+      formattedTotal: monetary.formatNumberValue(value.total),
     }))
 }
 
-function buildNoMatchesMessage(input: {
-  searchText?: string
-  periodLabel: string
-  hasStructuredFilters: boolean
-}) {
+function buildNoMatchesMessage(
+  input: {
+    searchText?: string
+    periodLabel: string
+    hasStructuredFilters: boolean
+  },
+  t: TelegramToolContext["t"],
+) {
   const term = input.searchText?.trim()
   if (term) {
-    return `Não encontrei lançamentos contendo "${term}" em ${input.periodLabel}.`
+    return t("transactionSearch.noMatchesWithTerm", { term, period: input.periodLabel })
   }
 
   if (input.hasStructuredFilters) {
-    return `Não encontrei lançamentos com esses filtros em ${input.periodLabel}.`
+    return t("transactionSearch.noMatchesWithFilters", { period: input.periodLabel })
   }
 
-  return `Não encontrei lançamentos em ${input.periodLabel}.`
+  return t("transactionSearch.noMatches", { period: input.periodLabel })
 }
 
-export async function searchTransactions(input: TransactionSearchInput): Promise<TransactionSearchResult> {
+export async function searchTransactions(
+  input: TransactionSearchInput,
+  ctx: TelegramToolContext,
+): Promise<TransactionSearchResult> {
   const { from, to } = resolveRange(input.period)
   const { transactions } = await getTransactions({ userId: input.userId, from, to })
   const take = clampToolLimit(input.limit, 10)
+  const statusLabels = buildStatusLabels(ctx.t)
 
   const allFiltered = transactions
     .filter((transaction) => !input.transactionType || transaction.type === input.transactionType)
@@ -207,11 +237,11 @@ export async function searchTransactions(input: TransactionSearchInput): Promise
     .filter((transaction) => includesSearch(transaction.account.name, input.accountName))
     .filter((transaction) => includesSearch(transaction.category.group.name, input.groupName))
     .filter((transaction) => includesSearch(transaction.category.name, input.categoryName))
-    .filter((transaction) => matchesLiteralSearch(transaction, input.searchText))
+    .filter((transaction) => matchesLiteralSearch(transaction, input.searchText, ctx, statusLabels))
 
   const total = allFiltered.reduce((sum, transaction) => sum + transaction.amount, 0)
   const items = allFiltered.slice(0, take)
-  const periodLabel = formatPeriodLabel(from, to)
+  const periodLabel = formatPeriodLabel(from, to, ctx)
   const hasStructuredFilters = Boolean(
     input.transactionType || input.status || input.accountName || input.groupName || input.categoryName,
   )
@@ -233,35 +263,38 @@ export async function searchTransactions(input: TransactionSearchInput): Promise
     totalCount: allFiltered.length,
     shownCount: items.length,
     total,
-    formattedTotal: formatMoney(total),
+    formattedTotal: ctx.monetary.formatNumberValue(total),
     items: items.map((transaction) => ({
       id: transaction.id,
       period: transaction.period,
       date: transaction.date,
-      formattedDate: formatDatePtBr(transaction.date),
+      formattedDate: formatDate(transaction.date, ctx),
       reference: transaction.reference,
       note: transaction.note,
       description: transaction.description,
       groupName: transaction.category.group.name,
       categoryName: transaction.category.name,
-      formattedAmount: formatMoney(transaction.amount),
+      formattedAmount: ctx.monetary.formatNumberValue(transaction.amount),
       accountName: transaction.account.name,
       status: transaction.status,
-      statusLabel: STATUS_LABELS[transaction.status],
-      matchedColumns: matchedColumns(transaction, input.searchText),
+      statusLabel: statusLabels[transaction.status],
+      matchedColumns: matchedColumns(transaction, input.searchText, ctx, statusLabels),
     })),
     aggregates: {
-      byCategory: buildAggregate(allFiltered, (transaction) => transaction.category.name),
-      byAccount: buildAggregate(allFiltered, (transaction) => transaction.account.name),
-      byStatus: buildAggregate(allFiltered, (transaction) => STATUS_LABELS[transaction.status]),
+      byCategory: buildAggregate(allFiltered, (transaction) => transaction.category.name, ctx.monetary),
+      byAccount: buildAggregate(allFiltered, (transaction) => transaction.account.name, ctx.monetary),
+      byStatus: buildAggregate(allFiltered, (transaction) => statusLabels[transaction.status], ctx.monetary),
     },
     noMatchesMessage:
       allFiltered.length === 0
-        ? buildNoMatchesMessage({
-            searchText: input.searchText,
-            periodLabel,
-            hasStructuredFilters,
-          })
+        ? buildNoMatchesMessage(
+            {
+              searchText: input.searchText,
+              periodLabel,
+              hasStructuredFilters,
+            },
+            ctx.t,
+          )
         : undefined,
   }
 }

@@ -1,4 +1,11 @@
+import { getTranslations } from "next-intl/server"
 import { prisma } from "@/lib/prisma"
+import { DEFAULT_LOCALE } from "@/i18n/config"
+import { createMonetaryFormatter } from "@/lib/monetary"
+import {
+  getUserLocale,
+  getUserMonetarySettings,
+} from "@/features/settings/services/user-settings-service"
 import { generateCardImage } from "./card-renderer.service"
 import {
   sendTelegramChatAction,
@@ -12,7 +19,7 @@ import { formatCard } from "./card-formatter.service"
 import { generateAnalystResponse } from "./analyst-response.service"
 import { buildStaticResponse } from "./static-response.service"
 import { buildTelegramUserContext } from "./user-context.service"
-import type { TelegramChatId, TelegramWebhookUpdate } from "../types/telegram.types"
+import type { TelegramChatId, TelegramToolContext, TelegramWebhookUpdate } from "../types/telegram.types"
 
 function getStartToken(text: string) {
   const match = /^\/start\s+(.+)$/i.exec(text.trim())
@@ -28,11 +35,15 @@ async function handleStartConnection(input: {
     where: { token: input.token },
   })
 
+  // The pending token already resolves to a userId even when it is expired
+  // or already used, so we can greet the user in their own persisted
+  // locale; only when no pending token exists at all do we have no user to
+  // resolve, so we fall back to the default locale.
+  const locale = pending ? await getUserLocale(pending.userId) : DEFAULT_LOCALE
+  const t = await getTranslations({ locale, namespace: "telegram" })
+
   if (!pending || pending.used || pending.expiresAt <= new Date()) {
-    await sendTelegramMessage(
-      input.chatId,
-      "Link de conexao invalido ou expirado. Gere um novo no painel de configuracoes.",
-    )
+    await sendTelegramMessage(input.chatId, t("bot.invalidToken"))
     return
   }
 
@@ -55,10 +66,7 @@ async function handleStartConnection(input: {
     data: { used: true },
   })
 
-  await sendTelegramMessage(
-    input.chatId,
-    "Conta WISEVEO conectada com sucesso. Voce ja pode me fazer perguntas sobre suas financas.",
-  )
+  await sendTelegramMessage(input.chatId, t("bot.connected"))
 }
 
 async function handleFinancialQuestion(chatId: TelegramChatId, text: string) {
@@ -68,11 +76,21 @@ async function handleFinancialQuestion(chatId: TelegramChatId, text: string) {
   })
 
   if (!connection || !connection.isActive) {
-    await sendTelegramMessage(
-      chatId,
-      "Voce precisa conectar sua conta WISEVEO primeiro acessando as Configuracoes do painel.",
-    )
+    // No linked user yet, so there is no persisted locale to resolve from.
+    const t = await getTranslations({ locale: DEFAULT_LOCALE, namespace: "telegram" })
+    await sendTelegramMessage(chatId, t("bot.notConnected"))
     return
+  }
+
+  const locale = await getUserLocale(connection.userId)
+  const [t, monetarySettings] = await Promise.all([
+    getTranslations({ locale, namespace: "telegram" }),
+    getUserMonetarySettings(connection.userId),
+  ])
+  const ctx: TelegramToolContext = {
+    t,
+    locale,
+    monetary: createMonetaryFormatter(monetarySettings),
   }
 
   const chatKey = String(chatId)
@@ -81,7 +99,7 @@ async function handleFinancialQuestion(chatId: TelegramChatId, text: string) {
     user: connection.user,
   })
 
-  const staticResponse = buildStaticResponse(text, userContext)
+  const staticResponse = buildStaticResponse(text, userContext, t)
   if (staticResponse) {
     await sendTelegramMessage(chatId, staticResponse.response)
     await recordTelegramInteraction({
@@ -98,11 +116,10 @@ async function handleFinancialQuestion(chatId: TelegramChatId, text: string) {
   const memory = await getConversationMemory({ chatId: chatKey, userId: connection.userId })
   const history = memory.recentMessages
 
-  const classified = await classifyQuery(text, history, memory)
+  const classified = await classifyQuery(text, history, memory, locale)
 
   if (classified.intent === "unknown") {
-    const response =
-      "Não conectei sua pergunta às finanças do WISEVEO. Posso ajudar com lançamentos, saldos, orçamento, DRE e vencimentos."
+    const response = t("bot.unknownIntent")
     await sendTelegramMessage(chatId, response)
     await recordTelegramInteraction({
       chatId: chatKey,
@@ -114,11 +131,11 @@ async function handleFinancialQuestion(chatId: TelegramChatId, text: string) {
     return
   }
 
-  const dispatched = await dispatchQuery(connection.userId, classified)
+  const dispatched = await dispatchQuery(connection.userId, classified, ctx)
 
   if (classified.intent === "financial_analysis") {
     await sendTelegramChatAction(chatId, "typing")
-    const analysisText = await generateAnalystResponse(text, classified, dispatched)
+    const analysisText = await generateAnalystResponse(text, classified, dispatched, locale)
     await sendTelegramMessage(chatId, analysisText)
     await recordTelegramInteraction({
       chatId: chatKey,
@@ -130,10 +147,10 @@ async function handleFinancialQuestion(chatId: TelegramChatId, text: string) {
     return
   }
 
-  const cardData = await formatCard(text, classified, dispatched)
+  const cardData = await formatCard(text, classified, dispatched, t, locale)
 
   if (cardData.type === "error") {
-    const response = cardData.insight ?? "Desculpe, não consegui processar sua solicitação no momento."
+    const response = cardData.insight ?? t("bot.cardFormatError")
     await sendTelegramMessage(chatId, response)
     await recordTelegramInteraction({
       chatId: chatKey,
@@ -154,7 +171,7 @@ async function handleFinancialQuestion(chatId: TelegramChatId, text: string) {
   })
 
   await sendTelegramChatAction(chatId, "upload_photo")
-  const imageBuffer = await generateCardImage(cardData)
+  const imageBuffer = await generateCardImage(cardData, t)
   await sendTelegramPhoto(chatId, imageBuffer, cardData.insight)
 }
 
@@ -179,6 +196,10 @@ export async function handleTelegramUpdate(update: TelegramWebhookUpdate) {
     await handleFinancialQuestion(chatId, text)
   } catch (error) {
     console.error("Telegram message processing error", error)
-    await sendTelegramMessage(chatId, "Desculpe, ocorreu um erro tecnico ao processar sua pergunta.")
+    // Best-effort fallback: at this point we may not have a resolved user
+    // locale (the error could have happened before the connection lookup),
+    // so DEFAULT_LOCALE is the safest fallback here.
+    const t = await getTranslations({ locale: DEFAULT_LOCALE, namespace: "telegram" })
+    await sendTelegramMessage(chatId, t("bot.genericError"))
   }
 }

@@ -1,15 +1,18 @@
 import { tool } from "ai"
 import { z } from "zod"
 import { getAccountsWithBalance } from "@/features/accounts/services/get-accounts"
-import { formatMoney, parseToolDate } from "./tool-utils"
+import { parseToolDate } from "./tool-utils"
 import { endOfUTCDay } from "@/lib/financial"
+import type { TelegramToolContext } from "../types/telegram.types"
 
-export function createAccountBalancesTool(userId: string) {
+export function createAccountBalancesTool(userId: string, ctx: TelegramToolContext) {
   return tool({
+    // Tool metadata below (description/describe) is an LLM function-calling
+    // definition, not UI copy — kept in Portuguese and i18n-ignored throughout.
     description:
-      "Retorna os saldos atuais ou saldos ate uma data de todas as contas ativas do usuario.",
+      "Retorna os saldos atuais ou saldos ate uma data de todas as contas ativas do usuario.", // i18n-ignore
     inputSchema: z.object({
-      toDate: z.string().optional().describe("Data limite no formato YYYY-MM-DD. Padrao: agora."),
+      toDate: z.string().optional().describe("Data limite no formato YYYY-MM-DD. Padrao: agora."), // i18n-ignore
     }),
     execute: async ({ toDate }) => {
       const cutoff = toDate ? parseToolDate(toDate, endOfUTCDay(new Date()), "end") : undefined
@@ -19,15 +22,15 @@ export function createAccountBalancesTool(userId: string) {
       return {
         asOf: cutoff?.toISOString() ?? new Date().toISOString(),
         totalBalance,
-        formattedTotalBalance: formatMoney(totalBalance),
+        formattedTotalBalance: ctx.monetary.formatNumberValue(totalBalance),
         accounts: accounts.map((account) => ({
           id: account.id,
           name: account.name,
           type: account.type,
           initialBalance: account.initialBalance,
-          formattedInitialBalance: formatMoney(account.initialBalance),
+          formattedInitialBalance: ctx.monetary.formatNumberValue(account.initialBalance),
           currentBalance: account.currentBalance,
-          formattedCurrentBalance: formatMoney(account.currentBalance),
+          formattedCurrentBalance: ctx.monetary.formatNumberValue(account.currentBalance),
         })),
       }
     },

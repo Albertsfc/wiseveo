@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import type { TelegramConnectionStatus, TelegramConnectResponse } from "../types/telegram.types";
 
 export function useTelegramConnection() {
+  const t = useTranslations("telegram.connect");
   const [status, setStatus] = useState<TelegramConnectionStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,19 +31,19 @@ export function useTelegramConnection() {
       if (!res.ok) {
         const error = await res.json().catch(() => ({ error: res.statusText }));
         console.error("Connect failed:", res.status, error);
-        alert(`Erro ao conectar: ${error.error || res.statusText}`);
+        alert(t("connectErrorPrefix", { message: error.error || res.statusText }));
         return;
       }
       const data: TelegramConnectResponse = await res.json();
       if (!data.deepLink) {
         console.error("No deepLink in response:", data);
-        alert("Erro: link de conexão não foi gerado");
+        alert(t("noDeepLink"));
         return;
       }
       window.location.href = data.deepLink;
     } catch (err) {
       console.error("Connect error:", err);
-      alert(`Erro ao conectar: ${err instanceof Error ? err.message : String(err)}`);
+      alert(t("connectErrorPrefix", { message: err instanceof Error ? err.message : String(err) }));
     }
   };
 

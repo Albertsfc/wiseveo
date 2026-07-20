@@ -3,29 +3,31 @@ import { z } from "zod"
 import { getTransactions } from "@/features/transactions/services/get-transactions"
 import {
   clampToolLimit,
-  formatMoney,
   includesSearch,
   pickTransactionTitle,
   resolveToolRange,
 } from "./tool-utils"
+import type { TelegramToolContext } from "../types/telegram.types"
 
 const transactionTypeSchema = z.enum(["INCOME", "EXPENSE", "TRANSFER"])
 const transactionStatusSchema = z.enum(["PAID", "PENDING", "OVERDUE", "SCHEDULED"])
 
-export function createTransactionsTool(userId: string) {
+export function createTransactionsTool(userId: string, ctx: TelegramToolContext) {
   return tool({
+    // Tool metadata below (description/describe) is an LLM function-calling
+    // definition, not UI copy — kept in Portuguese and i18n-ignored throughout.
     description:
-      "Busca lancamentos financeiros por periodo e filtros de tipo, status, banco, grupo, categoria ou texto livre.",
+      "Busca lancamentos financeiros por periodo e filtros de tipo, status, banco, grupo, categoria ou texto livre.", // i18n-ignore
     inputSchema: z.object({
-      from: z.string().optional().describe("Data inicial no formato YYYY-MM-DD. Padrao: inicio do mes atual."),
-      to: z.string().optional().describe("Data final no formato YYYY-MM-DD. Padrao: fim do mes atual."),
-      type: transactionTypeSchema.optional().describe("Tipo do lancamento."),
-      status: transactionStatusSchema.optional().describe("Status normalizado do lancamento."),
-      accountName: z.string().optional().describe("Nome parcial do banco/conta."),
-      categoryName: z.string().optional().describe("Nome parcial da categoria."),
-      groupName: z.string().optional().describe("Nome parcial do grupo."),
-      search: z.string().optional().describe("Texto livre para buscar em historico, descricao, referencia ou favorecido."),
-      limit: z.number().int().positive().max(20).optional().describe("Quantidade maxima de itens."),
+      from: z.string().optional().describe("Data inicial no formato YYYY-MM-DD. Padrao: inicio do mes atual."), // i18n-ignore
+      to: z.string().optional().describe("Data final no formato YYYY-MM-DD. Padrao: fim do mes atual."), // i18n-ignore
+      type: transactionTypeSchema.optional().describe("Tipo do lancamento."), // i18n-ignore
+      status: transactionStatusSchema.optional().describe("Status normalizado do lancamento."), // i18n-ignore
+      accountName: z.string().optional().describe("Nome parcial do banco/conta."), // i18n-ignore
+      categoryName: z.string().optional().describe("Nome parcial da categoria."), // i18n-ignore
+      groupName: z.string().optional().describe("Nome parcial do grupo."), // i18n-ignore
+      search: z.string().optional().describe("Texto livre para buscar em historico, descricao, referencia ou favorecido."), // i18n-ignore
+      limit: z.number().int().positive().max(20).optional().describe("Quantidade maxima de itens."), // i18n-ignore
     }),
     execute: async (input) => {
       const range = resolveToolRange({ from: input.from, to: input.to })
@@ -64,25 +66,28 @@ export function createTransactionsTool(userId: string) {
         totalCount: allFiltered.length,
         shownCount: items.length,
         total,
-        formattedTotal: formatMoney(total),
+        formattedTotal: ctx.monetary.formatNumberValue(total),
         items: items.map((transaction) => ({
           id: transaction.id,
           date: transaction.date,
           period: transaction.period,
-          title: pickTransactionTitle({
-            description: transaction.description,
-            note: transaction.note,
-            reference: transaction.reference,
-            payeeName: transaction.payee?.name,
-            categoryName: transaction.category.name,
-          }),
+          title: pickTransactionTitle(
+            {
+              description: transaction.description,
+              note: transaction.note,
+              reference: transaction.reference,
+              payeeName: transaction.payee?.name,
+              categoryName: transaction.category.name,
+            },
+            ctx.t,
+          ),
           description: transaction.description,
           note: transaction.note,
           reference: transaction.reference,
           type: transaction.type,
           status: transaction.status,
           amount: transaction.amount,
-          formattedAmount: formatMoney(transaction.amount),
+          formattedAmount: ctx.monetary.formatNumberValue(transaction.amount),
           accountName: transaction.account.name,
           categoryName: transaction.category.name,
           groupName: transaction.category.group.name,

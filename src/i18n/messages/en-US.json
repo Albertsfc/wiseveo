@@ -1516,6 +1516,78 @@
       "view": "View"
     }
   },
+  "telegram": {
+    "bot": {
+      "cardFormatError": "Sorry, I couldn't process your request right now.",
+      "connected": "WISEVEO account connected successfully. You can now ask me questions about your finances.",
+      "genericError": "Sorry, a technical error occurred while processing your question.",
+      "invalidToken": "Invalid or expired connection link. Generate a new one in the settings panel.",
+      "notConnected": "You need to connect your WISEVEO account first by going to the panel's Settings.",
+      "unknownIntent": "I couldn't connect your question to your WISEVEO finances. I can help with transactions, balances, budget, income statement, and due dates."
+    },
+    "cardFormatter": {
+      "bankBalance": "Bank balance",
+      "expenses": "Expenses",
+      "generalFilter": "General",
+      "income": "Income",
+      "noMatchesFallback": "I couldn't find transactions matching these filters.",
+      "notFound": "Nothing found",
+      "parseError": "I couldn't format the response.",
+      "processError": "Error processing response.",
+      "quantity": "Quantity",
+      "showingCount": " Showing {shown} of {total} transactions.",
+      "totalInPeriod": "Total of {total} in {countLabel}.",
+      "transactions": "Transactions",
+      "transactionsAbbrev": "{count, plural, one {# txn.} other {# txns.}}",
+      "transactionsCount": "{count, plural, one {# transaction} other {# transactions}}"
+    },
+    "cards": {
+      "couldNotAnswer": "I couldn't answer",
+      "execution": "Execution",
+      "somethingIncomplete": "Something was left incomplete",
+      "totalResult": "Total Result",
+      "tryRephrasing": "Try rephrasing the question with a period, account, or category."
+    },
+    "connect": {
+      "connectCta": "Connect with Telegram",
+      "connectErrorPrefix": "Error connecting: {message}",
+      "connectedAs": "Connected as",
+      "defaultUsername": "User",
+      "description": "Connect your Telegram account to receive financial summaries directly in your chat by asking questions naturally.",
+      "disconnect": "Disconnect Telegram",
+      "noDeepLink": "Error: connection link was not generated",
+      "notConfigured": "Telegram integration is not enabled on the server. To use this feature, configure the <code>TELEGRAM_BOT_TOKEN</code> and <code>TELEGRAM_BOT_USERNAME</code> variables in your <code>.env</code> file.",
+      "title": "Telegram Integration"
+    },
+    "greetings": {
+      "afternoon": "Good afternoon",
+      "evening": "Good evening",
+      "helpPrompt": "How can I help you?",
+      "morning": "Good morning",
+      "withName": "{salutation}, {name}! {prompt}",
+      "withoutName": "{salutation}! {prompt}"
+    },
+    "staticResponses": {
+      "identity": "You are connected as {name} ({email}).",
+      "outOfScopeWeather": "Sorry, I don't answer weather-related questions. I can help with your finances on WISEVEO."
+    },
+    "toolDispatcher": {
+      "unknownFallback": "I didn't understand how to process this request."
+    },
+    "toolUtils": {
+      "untitledTransaction": "Transaction"
+    },
+    "transactionSearch": {
+      "noMatches": "I couldn't find transactions in {period}.",
+      "noMatchesWithFilters": "I couldn't find transactions matching these filters in {period}.",
+      "noMatchesWithTerm": "I couldn't find transactions containing \"{term}\" in {period}.",
+      "periodRangeJoiner": "to",
+      "statusOverdue": "Overdue",
+      "statusPaid": "Paid",
+      "statusPending": "Pending",
+      "statusScheduled": "Scheduled"
+    }
+  },
   "templatePages": {
     "account": {
       "cancel": "Cancel",

@@ -1,5 +1,6 @@
 import { generateText } from "ai"
 import { getLlmModels } from "./llm-models"
+import { DEFAULT_LOCALE, LOCALE_META, type AppLocale } from "@/i18n/config"
 import type { HistoryMessage, TelegramConversationMemoryState } from "./conversation-history.service"
 
 export type QueryIntent =
@@ -60,13 +61,18 @@ function parseClassification(text: string): ClassifiedQuery {
   }
 }
 
-const MONTH_WORDS =
+// Detection data (Portuguese keyword lists driving the regex-based extraction
+// heuristics below) — not UI copy. The LLM classification itself is
+// multilingual; these regexes are a fast-path/refinement layer that only
+// engages for Portuguese phrasing, degrading gracefully for other locales.
+const MONTH_WORDS = // i18n-ignore
   "janeiro|jan|fevereiro|fev|marco|março|mar|abril|abr|maio|mai|junho|jun|julho|jul|agosto|ago|setembro|set|outubro|out|novembro|nov|dezembro|dez"
 
 const EXPENSE_QUERY_RE = /\bquanto\s+(?:eu\s+)?gastei\b/i
 const GROUPING_QUERY_RE =
   /\b(por\s+(?:loja|lojas|benefici[aá]rio|beneficiarios|beneficiários|estabelecimento|estabelecimentos|fornecedor|fornecedores)|onde\s+mais\s+gastei|ranking|top\s+\d*|maiores\s+gastos|agrupad[ao]s?)\b/i
 const EXPENSE_SEARCH_RE = new RegExp(
+  // i18n-ignore
   String.raw`\bquanto\s+(?:eu\s+)?gastei\s+(?:em|com|no|na|nos|nas|do|da|dos|das|de)\s+(.+?)(?=\s+(?:em|este|esta|esse|essa|neste|nesta|nesse|nessa|m[eê]s|ano|semana|hoje|ontem|amanh[aã]|${MONTH_WORDS}|20\d{2}|\d{1,2}\/\d{2,4})\b|[?!.,;:]|$)`,
   "i",
 )
@@ -138,6 +144,7 @@ export async function classifyQuery(
   query: string,
   history: HistoryMessage[] = [],
   memory?: TelegramConversationMemoryState,
+  locale: AppLocale = DEFAULT_LOCALE,
 ): Promise<ClassifiedQuery> {
   const todayStr = new Date().toISOString().slice(0, 10)
 
@@ -148,7 +155,8 @@ export async function classifyQuery(
     .join("\n")
 
   const contextSection = recentContext ? `\nContexto recente:\n${recentContext}` : ""
-  const memorySection = memory
+  // LLM prompt content (data recap), not UI copy.
+  const memorySection = memory // i18n-ignore
     ? `\nMemória persistente:
 - Última intenção: ${memory.lastIntent ?? "nenhuma"}
 - Último período: ${
@@ -158,7 +166,12 @@ export async function classifyQuery(
 - Última pergunta sobre lançamentos: ${memory.lastTransactionQuestion ?? "nenhuma"}`
     : ""
 
-  const systemPrompt = `Classificador de perguntas financeiras do WISEVEO. Hoje: ${todayStr}.${contextSection}${memorySection}
+  // LLM system-prompt instructions (content, not UI copy). This classifier
+  // only ever outputs structured JSON, so there is no natural-language
+  // "output language" to enforce — the directive below instead clarifies
+  // that category/group taxonomy stays in Portuguese (system data)
+  // regardless of the language the user's question is written in. i18n-ignore
+  const systemPrompt = `Classificador de perguntas financeiras do WISEVEO. Hoje: ${todayStr}. Idioma do usuário: ${LOCALE_META[locale].label}.${contextSection}${memorySection}
 
 Retorne APENAS JSON:
 {"intent":"...","period":{"from":"YYYY-MM-DD","to":"YYYY-MM-DD"},"groupName":"...","categoryName":"...","accountName":"...","searchText":"...","transactionType":"INCOME|EXPENSE|TRANSFER","status":"PAID|PENDING|OVERDUE|SCHEDULED","date":"YYYY-MM-DD","limit":N}
@@ -185,6 +198,7 @@ Regras de período:
 
 Regras de categorias e grupos:
 - Mapeie termos do usuário para categorias do sistema em SINGULAR se possível ("supermercados" -> categoryName: "supermercado").
+- As categorias/grupos do sistema estão sempre em português, mesmo se a pergunta do usuário estiver em outro idioma (ex: "supermarkets" em inglês -> categoryName: "supermercado"). Nunca traduza categoryName/groupName para o idioma do usuário.
 - Se o usuário pedir "gastos com X", e X parecer uma categoria, use categoryName.
 - Se a pergunta pedir ranking/top/maiores gastos ("quais os 3 supermercados...", "onde mais gastei"), use intent: "spending_by_payee".
 

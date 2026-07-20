@@ -1,12 +1,12 @@
 import { getTransactions } from "@/features/transactions/services/get-transactions"
 import {
-  formatMoney,
   endOfCurrentMonthUtc,
 } from "../tools/tool-utils"
 import { startOfUTCDay, endOfUTCDay } from "@/lib/financial"
 import type { ClassifiedQuery } from "./query-classifier.service"
 import { searchTransactions, includesLiteralSearch } from "./transaction-search.service"
 import { executeTelegramTool } from "./tool-executor.service"
+import type { TelegramToolContext } from "../types/telegram.types"
 
 export interface DispatchResult {
   intent: string
@@ -32,7 +32,11 @@ async function resolveRange(userId: string, classified: ClassifiedQuery) {
   return { from, to }
 }
 
-async function groupByPayee(userId: string, classified: ClassifiedQuery): Promise<DispatchResult> {
+async function groupByPayee(
+  userId: string,
+  classified: ClassifiedQuery,
+  ctx: TelegramToolContext,
+): Promise<DispatchResult> {
   const { from, to } = await resolveRange(userId, classified)
   const { transactions } = await getTransactions({ userId, from, to })
 
@@ -86,7 +90,7 @@ async function groupByPayee(userId: string, classified: ClassifiedQuery): Promis
       name,
       total,
       count,
-      formattedTotal: formatMoney(total),
+      formattedTotal: ctx.monetary.formatNumberValue(total),
     }))
 
   const grandTotal = filtered.reduce((sum, t) => sum + t.amount, 0)
@@ -95,12 +99,14 @@ async function groupByPayee(userId: string, classified: ClassifiedQuery): Promis
     intent: "spending_by_payee",
     data: {
       period: { from: from.toISOString(), to: to.toISOString() },
-      filter: [classified.categoryName, classified.groupName, classified.searchText].filter(Boolean).join(" + ") || "Geral",
+      filter:
+        [classified.categoryName, classified.groupName, classified.searchText].filter(Boolean).join(" + ") ||
+        ctx.t("cardFormatter.generalFilter"),
       totalTransactions: filtered.length,
       totalGroups: groups.size,
       shownGroups: items.length,
       grandTotal,
-      formattedGrandTotal: formatMoney(grandTotal),
+      formattedGrandTotal: ctx.monetary.formatNumberValue(grandTotal),
       items,
     },
   }
@@ -109,6 +115,7 @@ async function groupByPayee(userId: string, classified: ClassifiedQuery): Promis
 async function financialAnalysis(
   userId: string,
   classified: ClassifiedQuery,
+  ctx: TelegramToolContext,
 ): Promise<DispatchResult> {
   const { from, to } = await resolveRange(userId, classified)
   const { transactions } = await getTransactions({ userId, from, to })
@@ -164,14 +171,16 @@ async function financialAnalysis(
     .sort((a, b) => b.year - a.year || Number(b.month) - Number(a.month))
     .map(m => ({
       ...m,
-      formattedTotal: formatMoney(m.total)
+      formattedTotal: ctx.monetary.formatNumberValue(m.total)
     }))
 
   return {
     intent: "financial_analysis",
     data: {
       period: { from: from.toISOString(), to: to.toISOString() },
-      filter: [classified.categoryName, classified.groupName, classified.searchText].filter(Boolean).join(" + ") || "Geral",
+      filter:
+        [classified.categoryName, classified.groupName, classified.searchText].filter(Boolean).join(" + ") ||
+        ctx.t("cardFormatter.generalFilter"),
       totalTransactions: filtered.length,
       history
     }
@@ -181,6 +190,7 @@ async function financialAnalysis(
 export async function dispatchQuery(
   userId: string,
   classified: ClassifiedQuery,
+  ctx: TelegramToolContext,
 ): Promise<DispatchResult> {
   console.log("[Dispatcher] Intent:", classified.intent, "Filters:", {
     cat: classified.categoryName,
@@ -192,35 +202,38 @@ export async function dispatchQuery(
     case "transaction_search":
       return {
         intent: "transaction_search",
-        data: await searchTransactions({
-          userId,
-          period: classified.period,
-          searchText: classified.searchText,
-          transactionType: classified.transactionType,
-          categoryName: classified.categoryName,
-          groupName: classified.groupName,
-          limit: classified.limit,
-        }),
+        data: await searchTransactions(
+          {
+            userId,
+            period: classified.period,
+            searchText: classified.searchText,
+            transactionType: classified.transactionType,
+            categoryName: classified.categoryName,
+            groupName: classified.groupName,
+            limit: classified.limit,
+          },
+          ctx,
+        ),
       }
 
     case "spending_by_payee":
-      return groupByPayee(userId, classified)
+      return groupByPayee(userId, classified, ctx)
 
     case "financial_analysis":
-      return financialAnalysis(userId, classified)
+      return financialAnalysis(userId, classified, ctx)
 
     case "upcoming":
       return {
         intent: "upcoming",
         data: await executeTelegramTool(userId, "get_upcoming_transactions", {
           days: classified.limit ?? 30,
-        }),
+        }, ctx),
       }
 
     case "account_balance":
       return {
         intent: "account_balance",
-        data: await executeTelegramTool(userId, "get_account_balances", {}),
+        data: await executeTelegramTool(userId, "get_account_balances", {}, ctx),
       }
 
     case "financial_summary":
@@ -229,7 +242,7 @@ export async function dispatchQuery(
         data: await executeTelegramTool(userId, "get_financial_summary", {
           from: classified.period?.from,
           to: classified.period?.to,
-        }),
+        }, ctx),
       }
 
     case "transaction_list":
@@ -245,7 +258,7 @@ export async function dispatchQuery(
           groupName: classified.groupName,
           search: classified.searchText,
           limit: classified.limit,
-        }),
+        }, ctx),
       }
 
     case "dre":
@@ -255,7 +268,7 @@ export async function dispatchQuery(
           from: classified.period?.from,
           to: classified.period?.to,
           limit: classified.limit,
-        }),
+        }, ctx),
       }
 
     case "budget":
@@ -264,7 +277,7 @@ export async function dispatchQuery(
         data: await executeTelegramTool(userId, "get_budget", {
           referenceDate: classified.period?.from ?? classified.date,
           limit: classified.limit,
-        }),
+        }, ctx),
       }
 
     case "calendar_day":
@@ -273,7 +286,7 @@ export async function dispatchQuery(
         data: await executeTelegramTool(userId, "get_calendar_day", {
           date: classified.date ?? classified.period?.from ?? new Date().toISOString().slice(0, 10),
           limit: classified.limit,
-        }),
+        }, ctx),
       }
 
     case "recurring":
@@ -286,13 +299,13 @@ export async function dispatchQuery(
           groupName: classified.groupName,
           search: classified.searchText,
           limit: classified.limit,
-        }),
+        }, ctx),
       }
 
     default:
       return {
         intent: "unknown",
-        data: { message: "Não entendi como processar essa solicitação." },
+        data: { message: ctx.t("toolDispatcher.unknownFallback") },
       }
   }
 }

@@ -12,6 +12,14 @@ export function LocaleSwitcher() {
 
   const handleValueChange = (newLocale: string) => {
     document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
+    // Fire-and-forget: persist the locale to the user record too, so
+    // cookie-less channels (Telegram, background jobs) also pick it up.
+    // Don't block the cookie-driven refresh below on this.
+    fetch("/api/user/preferences", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ locale: newLocale }),
+    }).catch(() => {})
     router.refresh()
   }
 

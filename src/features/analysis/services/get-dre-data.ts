@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server"
 
 import { prisma } from "@/lib/prisma"
 import { periodFromDate } from "@/lib/financial"
+import type { AppLocale } from "@/i18n/config"
 import type { DreData, DreLineItem } from "../types"
 
 interface AggregateBucket {
@@ -64,8 +65,13 @@ export async function getDreData(
   userId: string,
   from: Date,
   to: Date,
+  locale?: AppLocale,
 ): Promise<DreData> {
-  const t = await getTranslations("analysis.fallback")
+  // Telegram passes the user's persisted locale explicitly (no request cookie
+  // available there); web callers omit it and keep resolving from the cookie.
+  const t = locale
+    ? await getTranslations({ locale, namespace: "analysis.fallback" })
+    : await getTranslations("analysis.fallback")
 
   const transactions = await prisma.transaction.findMany({
     where: {

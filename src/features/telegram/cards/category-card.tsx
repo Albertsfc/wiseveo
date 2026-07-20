@@ -1,4 +1,4 @@
-import type { CardData } from "../types/telegram.types"
+import type { CardData, TelegramTranslator } from "../types/telegram.types"
 import { BaseCard } from "./base-card"
 import { cardTheme, toneColor } from "./card-theme"
 
@@ -7,7 +7,7 @@ function clampProgress(progress: number | undefined) {
   return Math.max(0, Math.min(progress ?? 0, 100))
 }
 
-export function CategoryCard({ data }: { data: CardData }) {
+export function CategoryCard({ data, t }: { data: CardData; t: TelegramTranslator }) {
   const items = (data.items ?? []).slice(0, 4)
   const mainProgress = clampProgress(data.progress)
 
@@ -25,7 +25,7 @@ export function CategoryCard({ data }: { data: CardData }) {
           }}
         >
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
-            <div style={{ color: cardTheme.muted, fontSize: 18 }}>Execucao</div>
+            <div style={{ color: cardTheme.muted, fontSize: 18 }}>{t("cards.execution")}</div>
             <div style={{ color: cardTheme.foreground, fontSize: 18, fontWeight: 700 }}>
               {data.value ?? `${mainProgress.toFixed(0)}%`}
             </div>

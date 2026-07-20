@@ -18,7 +18,7 @@ export function BaseCard({ eyebrow = "WISEVEO", headline, children, footer }: Ba
         flexDirection: "column",
         background: `linear-gradient(135deg, ${cardTheme.gradientStart} 0%, ${cardTheme.gradientEnd} 100%)`,
         color: cardTheme.foreground,
-        fontFamily: "Noto Sans",
+        fontFamily: "Noto Sans", // i18n-ignore: font family identifier, not UI copy
         padding: 35,
         position: "relative",
       }}
@@ -79,6 +79,7 @@ export function BaseCard({ eyebrow = "WISEVEO", headline, children, footer }: Ba
             fontWeight: 800,
           }}
         >
+          {/* Decorative avatar initial — fixed brand mark, not translatable UI copy. i18n-ignore */}
           A
         </div>
       </div>

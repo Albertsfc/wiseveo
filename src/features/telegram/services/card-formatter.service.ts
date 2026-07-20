@@ -1,14 +1,15 @@
 import { generateText } from "ai"
 import { getLlmModels } from "./llm-models"
+import { LOCALE_META, type AppLocale } from "@/i18n/config"
 import type { ClassifiedQuery } from "./query-classifier.service"
 import type { DispatchResult } from "./tool-dispatcher.service"
-import type { CardData } from "../types/telegram.types"
+import type { CardData, TelegramTranslator } from "../types/telegram.types"
 import type { TransactionSearchResult } from "./transaction-search.service"
 
-function parseCardData(text: string): CardData {
+function parseCardData(text: string, t: TelegramTranslator): CardData {
   const jsonMatch = text.match(/\{[\s\S]*\}/)
   if (!jsonMatch) {
-    return { type: "error", headline: "Erro", insight: "Não consegui formatar a resposta." }
+    return { type: "error", headline: t("cards.couldNotAnswer"), insight: t("cardFormatter.parseError") }
   }
 
   try {
@@ -33,7 +34,7 @@ function parseCardData(text: string): CardData {
       })),
     }
   } catch {
-    return { type: "error", headline: "Erro", insight: "Erro ao processar resposta." }
+    return { type: "error", headline: t("cards.couldNotAnswer"), insight: t("cardFormatter.processError") }
   }
 }
 
@@ -49,27 +50,27 @@ const TRANSACTION_LIST_CARD_ITEM_LIMIT = 4
 const DETAIL_QUERY_RE =
   /\b(?:detalh(?:e|es|ar|ado|ada|ados|adas)|listar|liste|lista|mostre|mostrar|exibir|exiba|quais|transa[cç][aã]o|transa[cç][oõ]es|lan[cç]amento|lan[cç]amentos|extrato)\b/i
 
-function transactionHeadlineBase(data: TransactionSearchResult) {
+function transactionHeadlineBase(data: TransactionSearchResult, t: TelegramTranslator) {
   return data.filters.transactionType === "EXPENSE"
-    ? "Gastos"
+    ? t("cardFormatter.expenses")
     : data.filters.transactionType === "INCOME"
-      ? "Recebimentos"
-      : "Lançamentos"
+      ? t("cardFormatter.income")
+      : t("cardFormatter.transactions")
 }
 
 function transactionTermSuffix(data: TransactionSearchResult) {
   return data.filters.searchText ? `: ${data.filters.searchText}` : ""
 }
 
-function formatTransactionCount(count: number) {
-  return `${count} lançamento${count === 1 ? "" : "s"}`
+function formatTransactionCount(count: number, t: TelegramTranslator) {
+  return t("cardFormatter.transactionsCount", { count })
 }
 
 function shouldShowTransactionDetails(query: string) {
   return DETAIL_QUERY_RE.test(query)
 }
 
-function formatTransactionSearchSummaryCard(data: TransactionSearchResult): CardData {
+function formatTransactionSearchSummaryCard(data: TransactionSearchResult, t: TelegramTranslator): CardData {
   const items: CardData["items"] = []
 
   // Add top categories if multiple categories matched
@@ -78,7 +79,7 @@ function formatTransactionSearchSummaryCard(data: TransactionSearchResult): Card
       items.push({
         label: cat.name,
         value: cat.formattedTotal,
-        detail: `${cat.count} lanç.`,
+        detail: t("cardFormatter.transactionsAbbrev", { count: cat.count }),
         tone: cat.formattedTotal.startsWith("(") ? "negative" : "positive",
       })
     })
@@ -89,7 +90,7 @@ function formatTransactionSearchSummaryCard(data: TransactionSearchResult): Card
     items.push({
       label: acc.name,
       value: acc.formattedTotal,
-      detail: "Saldo no banco",
+      detail: t("cardFormatter.bankBalance"),
       tone: "default",
     })
   })
@@ -97,8 +98,8 @@ function formatTransactionSearchSummaryCard(data: TransactionSearchResult): Card
   // Fallback if no items
   if (items.length === 0) {
     items.push({
-      label: "Quantidade",
-      value: formatTransactionCount(data.totalCount),
+      label: t("cardFormatter.quantity"),
+      value: formatTransactionCount(data.totalCount, t),
       tone: "default",
     })
   }
@@ -106,26 +107,32 @@ function formatTransactionSearchSummaryCard(data: TransactionSearchResult): Card
   return {
     type: "summary",
     eyebrow: data.period.label,
-    headline: `${transactionHeadlineBase(data)}${transactionTermSuffix(data)}`,
+    headline: `${transactionHeadlineBase(data, t)}${transactionTermSuffix(data)}`,
     value: data.formattedTotal,
-    insight: `Total de ${data.formattedTotal} em ${formatTransactionCount(data.totalCount)}.`,
+    insight: t("cardFormatter.totalInPeriod", {
+      total: data.formattedTotal,
+      countLabel: formatTransactionCount(data.totalCount, t),
+    }),
     items: items.slice(0, 3),
   }
 }
 
-function formatTransactionSearchListCard(data: TransactionSearchResult): CardData {
+function formatTransactionSearchListCard(data: TransactionSearchResult, t: TelegramTranslator): CardData {
   const items = data.items.slice(0, TRANSACTION_LIST_CARD_ITEM_LIMIT)
   const moreInfo =
     data.totalCount > items.length
-      ? ` Exibindo ${items.length} de ${data.totalCount} lançamentos.`
+      ? t("cardFormatter.showingCount", { shown: items.length, total: data.totalCount })
       : ""
 
   return {
     type: "list",
     eyebrow: data.period.label,
-    headline: `${transactionHeadlineBase(data)}${transactionTermSuffix(data)}`,
+    headline: `${transactionHeadlineBase(data, t)}${transactionTermSuffix(data)}`,
     value: data.formattedTotal,
-    insight: `Total de ${data.formattedTotal} em ${formatTransactionCount(data.totalCount)}.${moreInfo}`,
+    insight: `${t("cardFormatter.totalInPeriod", {
+      total: data.formattedTotal,
+      countLabel: formatTransactionCount(data.totalCount, t),
+    })}${moreInfo}`,
     items: items.map((item) => ({
       label: pickTransactionSearchLabel(item),
       value: item.formattedAmount,
@@ -135,29 +142,34 @@ function formatTransactionSearchListCard(data: TransactionSearchResult): CardDat
   }
 }
 
-function formatTransactionSearchCard(query: string, data: TransactionSearchResult): CardData {
+function formatTransactionSearchCard(query: string, data: TransactionSearchResult, t: TelegramTranslator): CardData {
   if (data.totalCount === 0) {
     return {
       type: "error",
-      headline: "Nada encontrado",
-      insight: data.noMatchesMessage ?? "Não encontrei lançamentos com esses filtros.",
+      headline: t("cardFormatter.notFound"),
+      insight: data.noMatchesMessage ?? t("cardFormatter.noMatchesFallback"),
     }
   }
 
   return shouldShowTransactionDetails(query)
-    ? formatTransactionSearchListCard(data)
-    : formatTransactionSearchSummaryCard(data)
+    ? formatTransactionSearchListCard(data, t)
+    : formatTransactionSearchSummaryCard(data, t)
 }
 
 export async function formatCard(
   originalQuery: string,
   classified: ClassifiedQuery,
   dispatched: DispatchResult,
+  t: TelegramTranslator,
+  locale: AppLocale,
 ): Promise<CardData> {
   if (dispatched.intent === "transaction_search" && isTransactionSearchResult(dispatched.data)) {
-    return formatTransactionSearchCard(originalQuery, dispatched.data)
+    return formatTransactionSearchCard(originalQuery, dispatched.data, t)
   }
 
+  // System prompt below is an LLM instruction (content, not UI copy) — the
+  // examples stay in Portuguese as format illustrations; the actual output
+  // language is enforced by the explicit directive at the end. i18n-ignore
   const systemPrompt = `Você é um formatador de cards financeiros de ALTA PERFORMANCE para o bot Telegram do WISEVEO.
 Sua missão é transformar dados crus em cards elegantes, inteligentes e úteis.
 
@@ -185,7 +197,9 @@ ORIENTAÇÕES POR TIPO:
 - transaction_search → Use os agregados (byCategory, byAccount) para mostrar onde o dinheiro está circulando.
 
 Intenção: ${dispatched.intent}
-Pergunta: "${originalQuery}"`
+Pergunta: "${originalQuery}"
+
+Responda SEMPRE em ${LOCALE_META[locale].label} (idioma do usuário) — inclusive headline, eyebrow, trend, insight e labels dos items.`
 
   const dataStr = JSON.stringify(dispatched.data, null, 2)
   const models = getLlmModels()
@@ -199,7 +213,7 @@ Pergunta: "${originalQuery}"`
         prompt: `Dados:\n${dataStr}`,
         maxOutputTokens: 600,
       })
-      return parseCardData(result.text)
+      return parseCardData(result.text, t)
     } catch (e) {
       lastError = e
       console.warn("Card formatter model failed, trying next:", e)
@@ -207,5 +221,5 @@ Pergunta: "${originalQuery}"`
   }
 
   console.error("Card formatter failed:", lastError)
-  return { type: "error", headline: "Erro", insight: "Não consegui formatar a resposta." }
+  return { type: "error", headline: t("cards.couldNotAnswer"), insight: t("cardFormatter.parseError") }
 }

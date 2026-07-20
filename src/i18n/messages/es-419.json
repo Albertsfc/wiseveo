@@ -1516,6 +1516,78 @@
       "view": "Ver"
     }
   },
+  "telegram": {
+    "bot": {
+      "cardFormatError": "Lo siento, no pude procesar tu solicitud en este momento.",
+      "connected": "Cuenta de WISEVEO conectada con éxito. Ya puedes hacerme preguntas sobre tus finanzas.",
+      "genericError": "Lo siento, ocurrió un error técnico al procesar tu pregunta.",
+      "invalidToken": "Enlace de conexión inválido o vencido. Genera uno nuevo en el panel de configuración.",
+      "notConnected": "Primero debes conectar tu cuenta de WISEVEO accediendo a Configuración en el panel.",
+      "unknownIntent": "No pude relacionar tu pregunta con tus finanzas de WISEVEO. Puedo ayudarte con transacciones, saldos, presupuesto, estado de resultados y vencimientos."
+    },
+    "cardFormatter": {
+      "bankBalance": "Saldo bancario",
+      "expenses": "Gastos",
+      "generalFilter": "General",
+      "income": "Ingresos",
+      "noMatchesFallback": "No encontré transacciones con esos filtros.",
+      "notFound": "Nada encontrado",
+      "parseError": "No pude formatear la respuesta.",
+      "processError": "Error al procesar la respuesta.",
+      "quantity": "Cantidad",
+      "showingCount": " Mostrando {shown} de {total} transacciones.",
+      "totalInPeriod": "Total de {total} en {countLabel}.",
+      "transactions": "Transacciones",
+      "transactionsAbbrev": "{count, plural, one {# transac.} other {# transac.}}",
+      "transactionsCount": "{count, plural, one {# transacción} other {# transacciones}}"
+    },
+    "cards": {
+      "couldNotAnswer": "No pude responder",
+      "execution": "Ejecución",
+      "somethingIncomplete": "Algo quedó incompleto",
+      "totalResult": "Resultado Total",
+      "tryRephrasing": "Intenta reformular la pregunta con un período, cuenta o categoría."
+    },
+    "connect": {
+      "connectCta": "Conectar con Telegram",
+      "connectErrorPrefix": "Error al conectar: {message}",
+      "connectedAs": "Conectado como",
+      "defaultUsername": "Usuario",
+      "description": "Conecta tu cuenta de Telegram para recibir resúmenes financieros directamente en tu chat, haciendo preguntas de forma natural.",
+      "disconnect": "Desconectar Telegram",
+      "noDeepLink": "Error: no se generó el enlace de conexión",
+      "notConfigured": "La integración con Telegram no está activada en el servidor. Para usar esta función, configura las variables <code>TELEGRAM_BOT_TOKEN</code> y <code>TELEGRAM_BOT_USERNAME</code> en tu archivo <code>.env</code>.",
+      "title": "Integración de Telegram"
+    },
+    "greetings": {
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches",
+      "helpPrompt": "¿En qué puedo ayudarte?",
+      "morning": "Buenos días",
+      "withName": "{salutation}, {name}! {prompt}",
+      "withoutName": "{salutation}! {prompt}"
+    },
+    "staticResponses": {
+      "identity": "Estás conectado como {name} ({email}).",
+      "outOfScopeWeather": "Lo siento, no respondo preguntas sobre el clima. Puedo ayudarte con tus finanzas en WISEVEO."
+    },
+    "toolDispatcher": {
+      "unknownFallback": "No entendí cómo procesar esta solicitud."
+    },
+    "toolUtils": {
+      "untitledTransaction": "Transacción"
+    },
+    "transactionSearch": {
+      "noMatches": "No encontré transacciones en {period}.",
+      "noMatchesWithFilters": "No encontré transacciones con esos filtros en {period}.",
+      "noMatchesWithTerm": "No encontré transacciones que contengan \"{term}\" en {period}.",
+      "periodRangeJoiner": "a",
+      "statusOverdue": "Vencido",
+      "statusPaid": "Pagado",
+      "statusPending": "Pendiente",
+      "statusScheduled": "Programado"
+    }
+  },
   "templatePages": {
     "account": {
       "cancel": "Cancelar",

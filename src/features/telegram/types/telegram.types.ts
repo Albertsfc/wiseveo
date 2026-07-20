@@ -1,3 +1,21 @@
+import type { getTranslations } from "next-intl/server"
+import type { AppLocale } from "@/i18n/config"
+import type { MonetaryFormatter } from "@/lib/monetary"
+
+/** Translator bound to the "telegram" namespace, resolved once per incoming
+ * message in message-handler.service.ts and threaded down to every service
+ * that produces user-visible text (single resolution point — see CLAUDE.md). */
+export type TelegramTranslator = Awaited<ReturnType<typeof getTranslations<"telegram">>>
+
+/** Per-request context (locale-aware translator, UI locale, and the user's
+ * monetary formatting preference) threaded through the tool-dispatch chain so
+ * every service/tool can produce localized text without re-resolving it. */
+export interface TelegramToolContext {
+  t: TelegramTranslator
+  locale: AppLocale
+  monetary: MonetaryFormatter
+}
+
 export interface TelegramConnectionStatus {
   connected: boolean;
   configured?: boolean;
