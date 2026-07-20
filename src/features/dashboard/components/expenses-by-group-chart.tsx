@@ -206,7 +206,7 @@ export function ExpensesByGroupChart() {
           `/api/dashboard/expenses-by-group?${params.toString()}`,
         )
 
-        if (!res.ok) throw new Error("Falha ao carregar despesas por grupo")
+        if (!res.ok) throw new Error("Falha ao carregar despesas por grupo") // i18n-ignore: mensagem interna de Error, só logada (console.error), nunca exibida ao usuário
 
         const payload = (await res.json()) as {
           groups: ExpenseGroupItem[]

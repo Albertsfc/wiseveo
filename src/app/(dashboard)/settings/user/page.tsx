@@ -23,28 +23,41 @@ import { useRef, useState } from "react"
 import { Separator } from "@/components/ui/separator"
 import { Logo } from "@/components/logo"
 
-const userFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  phone: z.string().optional(),
-  website: z.string().optional(),
-  location: z.string().optional(),
-  role: z.string().optional(),
-  bio: z.string().optional(),
-  company: z.string().optional(),
-  timezone: z.string().optional(),
-  language: z.string().optional(),
-})
-
-type UserFormValues = z.infer<typeof userFormSchema>
+type UserFormValues = {
+  firstName: string
+  lastName: string
+  email: string
+  phone?: string
+  website?: string
+  location?: string
+  role?: string
+  bio?: string
+  company?: string
+  timezone?: string
+  language?: string
+}
 
 export default function UserSettingsPage() {
   const t = useTranslations("templatePages.user")
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [profileImage, setProfileImage] = useState<string | null>(null)
   const [useDefaultIcon, setUseDefaultIcon] = useState(true)
-  
+
+  // Defined inside the component so zod messages can be localized via t().
+  const userFormSchema = z.object({
+    firstName: z.string().min(1, t("firstNameRequired")),
+    lastName: z.string().min(1, t("lastNameRequired")),
+    email: z.string().email(t("emailInvalid")),
+    phone: z.string().optional(),
+    website: z.string().optional(),
+    location: z.string().optional(),
+    role: z.string().optional(),
+    bio: z.string().optional(),
+    company: z.string().optional(),
+    timezone: z.string().optional(),
+    language: z.string().optional(),
+  })
+
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
@@ -158,7 +171,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("firstName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your first name" {...field} />
+                      <Input placeholder={t("firstNamePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -173,7 +186,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("lastName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your last name" {...field} />
+                      <Input placeholder={t("lastNamePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -188,7 +201,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("email")}</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="Enter your email" {...field} />
+                      <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -203,7 +216,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("company")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your company" {...field} />
+                      <Input placeholder={t("companyPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -218,7 +231,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("phoneNumber")}</FormLabel>
                     <FormControl>
-                      <Input type="tel" placeholder="Enter your phone number" {...field} />
+                      <Input type="tel" placeholder={t("phonePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -233,7 +246,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("location")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your location" {...field} />
+                      <Input placeholder={t("locationPlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -248,7 +261,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("website")}</FormLabel>
                     <FormControl>
-                      <Input type="url" placeholder="Enter your website" {...field} />
+                      <Input type="url" placeholder={t("websitePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -265,7 +278,7 @@ export default function UserSettingsPage() {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select Language" />
+                          <SelectValue placeholder={t("languagePlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -290,7 +303,7 @@ export default function UserSettingsPage() {
                   <FormItem>
                     <FormLabel>{t("role")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your role" {...field} />
+                      <Input placeholder={t("rolePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -307,7 +320,7 @@ export default function UserSettingsPage() {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select Timezone" />
+                          <SelectValue placeholder={t("timezonePlaceholder")} />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -336,7 +349,7 @@ export default function UserSettingsPage() {
                   <FormLabel>{t("bio")}</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="Tell us a little about yourself..." 
+                      placeholder={t("bioPlaceholder")} 
                       className="min-h-[100px]"
                       {...field}
                     />

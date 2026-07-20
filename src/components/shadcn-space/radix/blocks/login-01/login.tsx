@@ -110,7 +110,7 @@ const LoginForm = () => {
                     <Input
                       id="password"
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder={t("passwordPlaceholder")}
                       required
                       className="dark:bg-background h-9 rounded-md"
                     />

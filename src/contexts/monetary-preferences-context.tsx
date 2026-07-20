@@ -118,7 +118,7 @@ export function MonetaryPreferencesProvider({
         const json = await res.json().catch(() => null)
 
         if (!res.ok || !json?.success) {
-          throw new Error("Failed to persist monetary preferences")
+          throw new Error("Failed to persist monetary preferences") // i18n-ignore: mensagem interna de Error, capturada silenciosamente (rollback de estado)
         }
 
         const persisted = resolveMonetarySettings(json.data ?? next)

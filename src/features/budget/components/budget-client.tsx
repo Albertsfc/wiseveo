@@ -65,7 +65,7 @@ export function BudgetClient({ data: initialData }: BudgetClientProps) {
           to: dateRange.to.toISOString(),
         })
         const res = await fetch(`/api/budget?${params}`, { cache: "no-store" })
-        if (!res.ok) throw new Error("Failed to fetch budget data")
+        if (!res.ok) throw new Error("Failed to fetch budget data") // i18n-ignore: mensagem interna de Error, só logada (console.error), nunca exibida ao usuário
         const newData = await res.json()
         
         if (requestId !== latestRequestRef.current) return

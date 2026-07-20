@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useTranslations } from "next-intl"
 
 import { cn } from "@/lib/utils"
 import {
@@ -21,6 +22,7 @@ interface AccountSwitcherProps {
 }
 
 export function AccountSwitcher({ isCollapsed, accounts }: AccountSwitcherProps) {
+  const t = useTranslations("mail")
   const [selectedAccount, setSelectedAccount] = React.useState<string>(
     accounts[0].email
   );
@@ -33,9 +35,9 @@ export function AccountSwitcher({ isCollapsed, accounts }: AccountSwitcherProps)
           isCollapsed &&
             "flex size-9 shrink-0 items-center justify-center p-0 [&>span]:w-auto [&>svg]:hidden"
         )}
-        aria-label="Select account"
+        aria-label={t("selectAccountAria")}
       >
-        <SelectValue placeholder="Select an account">
+        <SelectValue placeholder={t("selectAccountPlaceholder")}>
           {accounts.find((account) => account.email === selectedAccount)?.icon}
           <span className={cn("ml-2", isCollapsed && "hidden")}>
             {accounts.find((account) => account.email === selectedAccount)?.label}

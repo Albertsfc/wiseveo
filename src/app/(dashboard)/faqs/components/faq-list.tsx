@@ -27,6 +27,14 @@ interface FAQListProps {
   categories: Category[]
 }
 
+function categoryLabel(
+  t: ReturnType<typeof useTranslations<"faqs">>,
+  name: string
+): string {
+  if (name === "All") return t("allCategoryLabel")
+  return t(`categoryLabels.${name.toLowerCase()}` as never)
+}
+
 export function FAQList({ faqs, categories }: FAQListProps) {
   const t = useTranslations("faqs")
   const [selectedCategory, setSelectedCategory] = useState("All")
@@ -49,8 +57,8 @@ export function FAQList({ faqs, categories }: FAQListProps) {
           <CardTitle className="text-lg">{t("categories")}</CardTitle>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search FAQs..." 
+            <Input
+              placeholder={t("searchPlaceholder")}
               className="pl-10 cursor-pointer"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -67,7 +75,7 @@ export function FAQList({ faqs, categories }: FAQListProps) {
               )}
               onClick={() => setSelectedCategory(category.name)}
             >
-              <span className="font-medium">{category.name}</span>
+              <span className="font-medium">{categoryLabel(t, category.name)}</span>
               <Badge 
                 variant="secondary" 
                 className={cn(
@@ -87,9 +95,11 @@ export function FAQList({ faqs, categories }: FAQListProps) {
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">
-              {selectedCategory === "All" ? "All FAQs" : `${selectedCategory} FAQs`}
+              {selectedCategory === "All"
+                ? t("allFaqsHeading")
+                : t("categoryFaqsHeading", { category: categoryLabel(t, selectedCategory) })}
               <span className="text-sm font-normal text-muted-foreground ml-2">
-                ({filteredFaqs.length} {filteredFaqs.length === 1 ? 'question' : 'questions'})
+                ({t("resultCount", { count: filteredFaqs.length })})
               </span>
             </CardTitle>
           </CardHeader>
@@ -111,7 +121,7 @@ export function FAQList({ faqs, categories }: FAQListProps) {
                         <div className="flex items-start text-left">
                           <span>{item.question}</span>
                           <Badge variant="outline" className="ms-3 mt-0.5 shrink-0 text-xs">
-                            {item.category}
+                            {categoryLabel(t, item.category)}
                           </Badge>
                         </div>
                       </AccordionTrigger>

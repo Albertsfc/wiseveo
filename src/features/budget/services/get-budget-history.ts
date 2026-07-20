@@ -40,7 +40,8 @@ export async function getBudgetHistory(
   const expenseRows = await prisma.$queryRawUnsafe<
     { m: number; y: number; total: number }[]
   >(
-    `SELECT EXTRACT(MONTH FROM "DATA")::int AS m, 
+    // i18n-ignore: string SQL bruta, não é texto de UI
+    `SELECT EXTRACT(MONTH FROM "DATA")::int AS m,
             EXTRACT(YEAR FROM "DATA")::int AS y, 
             COALESCE(SUM(ABS("VALOR")), 0)::float AS total
      FROM transactions
@@ -58,6 +59,7 @@ export async function getBudgetHistory(
   const incomeRows = await prisma.$queryRawUnsafe<
     { m: number; y: number; total: number }[]
   >(
+    // i18n-ignore: string SQL bruta, não é texto de UI
     `SELECT EXTRACT(MONTH FROM "DATA")::int AS m,
             EXTRACT(YEAR FROM "DATA")::int AS y,
             COALESCE(SUM(ABS("VALOR")), 0)::float AS total

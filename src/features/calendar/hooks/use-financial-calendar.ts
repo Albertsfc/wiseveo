@@ -76,7 +76,7 @@ export function useFinancialCalendar({
       const res = await fetch(`/api/calendar?from=${from}&to=${to}`, {
         cache: "no-store",
       })
-      if (!res.ok) throw new Error("Fetch failed")
+      if (!res.ok) throw new Error("Fetch failed") // i18n-ignore: mensagem interna de Error, capturada silenciosamente (mantém dados anteriores)
 
       const data: CalendarStatementResponse = await res.json()
 

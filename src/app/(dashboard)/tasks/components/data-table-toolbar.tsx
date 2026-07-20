@@ -29,6 +29,7 @@ export function DataTableToolbar<TData>({
   onAddTask,
 }: DataTableToolbarProps<TData>) {
   const t = useTranslations("tasks.toolbar")
+  const tOptions = useTranslations("tasks.options")
   const isFiltered = table.getState().columnFilters.length > 0
 
   const handleStatusChange = (value: string) => {
@@ -87,7 +88,7 @@ export function DataTableToolbar<TData>({
                     {status.icon && (
                       <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
                     )}
-                    {status.label}
+                    {tOptions(`statuses.${status.labelKey}` as never)}
                   </div>
                 </SelectItem>
               ))}
@@ -110,7 +111,7 @@ export function DataTableToolbar<TData>({
                   value={category.value}
                   className="cursor-pointer"
                 >
-                  {category.label}
+                  {tOptions(`categories.${category.labelKey}` as never)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -132,7 +133,7 @@ export function DataTableToolbar<TData>({
                   value={priority.value}
                   className="cursor-pointer"
                 >
-                  {priority.label}
+                  {tOptions(`priorities.${priority.labelKey}` as never)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -144,7 +145,7 @@ export function DataTableToolbar<TData>({
       <div className="flex items-center justify-between">
         <div className="flex flex-1 items-center space-x-2">
           <Input
-            placeholder="Search Task"
+            placeholder={t("searchPlaceholder")}
             value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("title")?.setFilterValue(event.target.value)

@@ -6,7 +6,7 @@ import { ArrowUp, BarChart3, CheckCircle2, Clock, ListTodo } from "lucide-react"
 import { useTranslations } from "next-intl"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { columns } from "./components/columns"
+import { getColumns } from "./components/columns"
 import { DataTable } from "./components/data-table"
 import { taskSchema, type Task } from "./data/schema"
 import tasksData from "./data/tasks.json"
@@ -18,6 +18,8 @@ async function getTasks() {
 
 export default function TaskPage() {
   const t = useTranslations("tasks.page")
+  const tTasks = useTranslations("tasks")
+  const columns = getColumns(tTasks)
   const [tasks, setTasks] = useState<z.infer<typeof taskSchema>[]>([])
   const [loading, setLoading] = useState(true)
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
+import { getTranslations } from "next-intl/server"
 import { getForecastingData } from "@/features/forecasting/services/get-forecasting-data"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import type { ForecastingModel } from "@/features/forecasting/services/forecasting-engine"
@@ -11,6 +12,7 @@ const querySchema = z.object({
 })
 
 export async function GET(req: NextRequest) {
+  const t = await getTranslations("api.errors")
   const userId = await getDefaultUserId()
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
@@ -24,7 +26,7 @@ export async function GET(req: NextRequest) {
   })
 
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid query parameters", details: parsed.error }, { status: 400 })
+    return NextResponse.json({ error: t("invalidQueryParams"), details: parsed.error }, { status: 400 })
   }
 
     try {
@@ -43,7 +45,7 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     console.error("Forecasting API Error:", err)
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: t("internalError") },
       { status: 500 }
     )
   }

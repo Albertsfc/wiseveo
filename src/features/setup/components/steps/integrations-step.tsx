@@ -128,7 +128,7 @@ export function IntegrationsStep({
         {/* Google OAuth */}
         <IntegrationCard
           icon={<GoogleIcon />}
-          title="Google OAuth & Calendar"
+          title={t("google.title")}
           description={t("google.shortDesc")}
           enabled={integrations.google.enabled}
           onToggle={(val) => onIntegrationChange("google", "enabled", val)}
@@ -159,7 +159,7 @@ export function IntegrationsStep({
         {/* Telegram */}
         <IntegrationCard
           icon={<Bot className="w-6 h-6 text-blue-400" />}
-          title="Telegram Bot"
+          title={t("telegram.title")}
           description={t("telegram.shortDesc")}
           enabled={integrations.telegram.enabled}
           onToggle={(val) => onIntegrationChange("telegram", "enabled", val)}

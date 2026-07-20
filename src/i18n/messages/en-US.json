@@ -1,90 +1,4 @@
 {
-  "Routes": {
-    "analysis": {
-      "description": "Performance reports and metrics",
-      "title": "Analysis"
-    },
-    "banks": {
-      "description": "Sync and manage your accounts",
-      "title": "Banks"
-    },
-    "budget": {
-      "description": "Financial planning and goals",
-      "title": "Budget"
-    },
-    "calendar": {
-      "description": "View your due dates and receipts",
-      "title": "Calendar"
-    },
-    "chat": {
-      "description": "Communicate with the team",
-      "title": "Chat"
-    },
-    "configuracoes": {
-      "description": "Manage your preferences",
-      "title": "Settings"
-    },
-    "dashboard": {
-      "description": "Overview of your finances",
-      "title": "Dashboard"
-    },
-    "default": {
-      "description": "Financial Acceleration",
-      "title": "WISEVEO"
-    },
-    "faqs": {
-      "description": "Frequently asked questions",
-      "title": "FAQs"
-    },
-    "forecasting": {
-      "description": "Financial projections and trends",
-      "title": "Forecasting"
-    },
-    "insights": {
-      "description": "Detailed analysis and trends",
-      "title": "Insights"
-    },
-    "mail": {
-      "description": "Inbox",
-      "title": "Mail"
-    },
-    "pricing": {
-      "description": "Subscription plans",
-      "title": "Pricing"
-    },
-    "recurring": {
-      "description": "Manage subscriptions and fixed bills",
-      "title": "Recurring"
-    },
-    "settings_billing": {
-      "description": "Manage your payments",
-      "title": "Billing"
-    },
-    "settings_components": {
-      "description": "System style guide",
-      "title": "Components"
-    },
-    "settings_connections": {
-      "description": "Integrations with other apps",
-      "title": "Connections"
-    },
-    "settings_notifications": {
-      "description": "Configure your alerts",
-      "title": "Notifications"
-    },
-    "tasks": {
-      "description": "Manage your tasks",
-      "title": "Tasks"
-    },
-    "transactions": {
-      "description": "Manage your income and expenses",
-      "title": "Transactions"
-    },
-    "users": {
-      "description": "Manage team members",
-      "title": "Users"
-    }
-  },
   "accounts": {
     "addAccount": "Add Account",
     "card": {
@@ -185,6 +99,7 @@
       "googleAccountRequired": "This account uses Google sign-in. Click 'Continue with Google'.",
       "invalidCredentials": "Incorrect email or password",
       "loginSuccess": "Login successful",
+      "logoutSuccess": "Logout successful",
       "passwordTooShort": "Password must be at least 8 characters",
       "pendingApprovalExisting": "Your registration is already awaiting approval.",
       "pendingApprovalLogin": "Your registration is still awaiting approval.",
@@ -197,10 +112,12 @@
     },
     "errors": {
       "internalError": "Internal server error",
+      "invalidDateFormat": "Invalid date format",
       "invalidDateRange": "Invalid range: 'from' must be <= 'to'",
       "invalidDates": "Invalid dates",
       "invalidJson": "Invalid JSON",
       "invalidPeriod": "Invalid period (expected YYYYMM)",
+      "invalidQueryParams": "Invalid query parameters",
       "missingDateRange": "'from' and 'to' parameters are required",
       "missingField": "Required field: {field}",
       "notAuthenticated": "Not authenticated",
@@ -213,9 +130,14 @@
     },
     "setup": {
       "adminCreationFailed": "Failed to create admin user: {message}",
+      "connectionFailed": "Failed to connect: {message}",
+      "connectionStringRequired": "Connection string is required.",
       "migrationFailed": "Failed to migrate the database.",
       "missingFields": "Missing required fields.",
       "unknownError": "Unknown error"
+    },
+    "telegram": {
+      "notConfigured": "Telegram Bot integration not configured"
     },
     "transactions": {
       "attachmentNotFound": "Attachment not found",
@@ -548,7 +470,8 @@
     "conversationList": {
       "chatSettings": "Chat Settings",
       "filterMessages": "Filter Messages",
-      "newChat": "New Chat"
+      "newChat": "New Chat",
+      "searchPlaceholder": "Search conversations..."
     },
     "deleteConversation": "Delete conversation",
     "header": {
@@ -560,6 +483,12 @@
         "unmute": "Unmute conversation"
       },
       "selectConversation": "Select a conversation to start chatting",
+      "status": {
+        "away": "Away",
+        "groupOnline": "{total} members, {online} online",
+        "lastSeen": "Last seen {date}",
+        "online": "Active now"
+      },
       "tooltips": {
         "info": "Conversation info",
         "search": "Search in conversation",
@@ -573,7 +502,10 @@
       "document": "Document",
       "moreOptions": "More options",
       "photoOrVideo": "Photo or video",
-      "typing": "You are typing..."
+      "placeholder": "Type a message...",
+      "sendMessage": "Send message",
+      "typing": "You are typing...",
+      "voiceMessage": "Voice message"
     },
     "loading": "Loading chat...",
     "message": {
@@ -624,6 +556,7 @@
       "noAccount": "Don't have an account?",
       "orSignInWith": "or sign in with",
       "password": "Password*",
+      "passwordPlaceholder": "Enter your password",
       "rememberDevice": "Remember this device",
       "signIn": "Sign in",
       "signInWithGithub": "Sign in with Github",
@@ -701,6 +634,8 @@
     "yes": "Yes"
   },
   "dashboard": {
+    "balance": "Total Balance",
+    "cashflow": "Cash Flow",
     "ChartArea": {
       "currentBalance": "Current balance in period:",
       "description": "Track income, expenses and balance evolution in the selected interval",
@@ -708,6 +643,7 @@
       "loadError": "Could not load the chart.",
       "title": "Period Cash Flow"
     },
+    "dailyMovement": "Daily Movement",
     "DailyMovement": {
       "accumulated": "ACCUMULATED",
       "balance": "BALANCE",
@@ -723,6 +659,8 @@
       "noMovement": "No movement in period",
       "title": "Daily Movement"
     },
+    "expenses": "Expenses",
+    "expensesByGroup": "Expenses by Group",
     "ExpensesChart": {
       "description": "Expense distribution in the selected period",
       "loading": "Loading...",
@@ -733,6 +671,8 @@
       "total": "Total:",
       "totalExpenses": "Total expenses:"
     },
+    "income": "Income",
+    "latestTransactions": "Latest Transactions",
     "LatestTransactions": {
       "description": "Track recent payments",
       "loadError": "Failed to load data",
@@ -740,6 +680,7 @@
       "noTransactions": "No payments in period",
       "title": "Latest Payments"
     },
+    "savings": "Savings",
     "SectionCards": {
       "balance": "Balance",
       "balanceFooter": "Consolidated balance",
@@ -751,29 +692,35 @@
       "savingsFooter": "Monthly savings",
       "vsPreviousMonth": "vs previous month"
     },
+    "subtitle": "Overview of your financial health",
+    "title": "Dashboard",
+    "upcomingTransactions": "Upcoming Due Dates",
     "UpcomingTransactions": {
       "description": "Track upcoming income and expenses",
       "loadError": "Failed to load data",
       "loading": "Loading...",
       "noTransactions": "No due dates in period",
       "title": "Upcoming Due Dates"
-    },
-    "balance": "Total Balance",
-    "cashflow": "Cash Flow",
-    "dailyMovement": "Daily Movement",
-    "expenses": "Expenses",
-    "expensesByGroup": "Expenses by Group",
-    "income": "Income",
-    "latestTransactions": "Latest Transactions",
-    "savings": "Savings",
-    "subtitle": "Overview of your financial health",
-    "title": "Dashboard",
-    "upcomingTransactions": "Upcoming Due Dates"
+    }
   },
   "faqs": {
+    "allCategoryLabel": "All",
+    "allFaqsHeading": "All FAQs",
     "categories": "Categories",
+    "categoryFaqsHeading": "{category} FAQs",
+    "categoryLabels": {
+      "account": "Account",
+      "billing": "Billing",
+      "general": "General",
+      "privacy": "Privacy",
+      "security": "Security",
+      "support": "Support",
+      "technical": "Technical"
+    },
     "learnMore": "Learn more",
-    "noResults": "No FAQs found matching your search criteria."
+    "noResults": "No FAQs found matching your search criteria.",
+    "resultCount": "{count, plural, one {# question} other {# questions}}",
+    "searchPlaceholder": "Search FAQs..."
   },
   "forecasting": {
     "client": {
@@ -792,11 +739,6 @@
     "settings": {
       "baseMonthLabel": "Actual Base Month",
       "modeLabel": "Basis",
-      "modeOptions": {
-        "accrual": "Accrual",
-        "cash": "Cash"
-      },
-      "modePlaceholder": "Select...",
       "modelLabel": "Predictive Engine",
       "modelOptions": {
         "exponentialSmoothing": "Exponential Smoothing",
@@ -804,6 +746,11 @@
         "straightLine": "Straight Line (Trend)"
       },
       "modelPlaceholder": "Mathematical Model",
+      "modeOptions": {
+        "accrual": "Accrual",
+        "cash": "Cash"
+      },
+      "modePlaceholder": "Select...",
       "showAhLabel": "Horizontal Analysis (HA)",
       "showAvLabel": "Vertical Analysis (VA)"
     },
@@ -836,6 +783,8 @@
     "reply": "Reply",
     "replyAll": "Reply all",
     "replyTo": "Reply-To:",
+    "selectAccountAria": "Select account",
+    "selectAccountPlaceholder": "Select an account",
     "send": "Send",
     "snooze": "Snooze",
     "snoozeUntil": "Snooze until",
@@ -872,9 +821,9 @@
       "editDateTooltip": "Edit date of selected items",
       "launch": "Launch",
       "launchDescription": "Confirm launching {count, plural, one {# recurrence} other {# recurrences}}?",
+      "launching": "Launching...",
       "launchTitle": "Launch Transactions",
       "launchTooltip": "Launch selected",
-      "launching": "Launching...",
       "saveDate": "Save date",
       "saving": "Saving...",
       "selectedCount": "{count, plural, one {# selected} other {# selected}}"
@@ -945,8 +894,8 @@
       "allTypes": "All types",
       "apply": "Apply",
       "clear": "Clear",
-      "filterSheetTitle": "Filter Recurrences",
       "filtersButton": "Filters",
+      "filterSheetTitle": "Filter Recurrences",
       "searchPlaceholderDesktop": "Smart search...",
       "searchPlaceholderMobile": "Search...",
       "typeFieldLabel": "Type"
@@ -972,6 +921,96 @@
       "launchError": "Failed to launch recurring transaction",
       "launchSuccess": "Transaction launched successfully",
       "requiredFields": "Fill in all required fields"
+    }
+  },
+  "Routes": {
+    "analysis": {
+      "description": "Performance reports and metrics",
+      "title": "Analysis"
+    },
+    "banks": {
+      "description": "Sync and manage your accounts",
+      "title": "Banks"
+    },
+    "budget": {
+      "description": "Financial planning and goals",
+      "title": "Budget"
+    },
+    "calendar": {
+      "description": "View your due dates and receipts",
+      "title": "Calendar"
+    },
+    "chat": {
+      "description": "Communicate with the team",
+      "title": "Chat"
+    },
+    "configuracoes": {
+      "description": "Manage your preferences",
+      "title": "Settings"
+    },
+    "dashboard": {
+      "description": "Overview of your finances",
+      "title": "Dashboard"
+    },
+    "default": {
+      "description": "Financial Acceleration",
+      "title": "WISEVEO"
+    },
+    "faqs": {
+      "description": "Frequently asked questions",
+      "title": "FAQs"
+    },
+    "forecasting": {
+      "description": "Financial projections and trends",
+      "title": "Forecasting"
+    },
+    "insights": {
+      "description": "Detailed analysis and trends",
+      "title": "Insights"
+    },
+    "mail": {
+      "description": "Inbox",
+      "title": "Mail"
+    },
+    "pricing": {
+      "description": "Subscription plans",
+      "title": "Pricing"
+    },
+    "recurring": {
+      "description": "Manage subscriptions and fixed bills",
+      "title": "Recurring"
+    },
+    "settings_billing": {
+      "description": "Manage your payments",
+      "title": "Billing"
+    },
+    "settings_components": {
+      "description": "System style guide",
+      "title": "Components"
+    },
+    "settings_connections": {
+      "description": "Integrations with other apps",
+      "title": "Connections"
+    },
+    "settings_notifications": {
+      "description": "Configure your alerts",
+      "title": "Notifications"
+    },
+    "setup": {
+      "description": "Configure your WISEVEO environment",
+      "title": "WISEVEO — Setup"
+    },
+    "tasks": {
+      "description": "Manage your tasks",
+      "title": "Tasks"
+    },
+    "transactions": {
+      "description": "Manage your income and expenses",
+      "title": "Transactions"
+    },
+    "users": {
+      "description": "Manage team members",
+      "title": "Users"
     }
   },
   "settings": {
@@ -1018,9 +1057,9 @@
     "adminUsers": {
       "active": "Active",
       "approve": "Approve",
+      "approved": "Approved",
       "approveError": "Could not approve the user.",
       "approveSuccess": "User approved successfully.",
-      "approved": "Approved",
       "approving": "Approving...",
       "colAction": "Action",
       "colDate": "Registered",
@@ -1094,9 +1133,9 @@
       "globalPrefs": "Global Preferences",
       "globalPrefsDesc": "These options affect cards, tables, charts, and financial summaries.",
       "minus": "With a minus sign",
-      "negValue": "Negative value",
       "negativeFormat": "Negative Values",
       "negativeFormatDesc": "Choose how outflows, losses, and other negative values will be shown.",
+      "negValue": "Negative value",
       "number": "Number only",
       "parentheses": "In parentheses",
       "posValue": "Positive value",
@@ -1386,18 +1425,49 @@
     "addTaskModal": {
       "cancel": "Cancel",
       "categoryField": "Category",
+      "categoryPlaceholder": "Select category",
       "createTask": "Create Task",
       "description": "Create a new task to track work and progress. Fill in the details below.",
       "descriptionField": "Description",
+      "descriptionPlaceholder": "Provide additional details about the task...",
       "priorityField": "Priority",
+      "priorityPlaceholder": "Select priority",
       "statusField": "Status",
+      "statusPlaceholder": "Select status",
       "title": "Add New Task",
       "titleField": "Task Title *",
+      "titlePlaceholder": "Enter task title...",
+      "titleRequired": "Title is required",
       "trigger": "Add Task"
+    },
+    "columns": {
+      "selectAllAria": "Select all",
+      "selectRowAria": "Select row"
     },
     "filter": {
       "clearFilters": "Clear filters",
       "selectedCount": "{count} selected"
+    },
+    "options": {
+      "categories": {
+        "bug": "Bug",
+        "documentation": "Docs",
+        "feature": "Feature",
+        "improvement": "Improvement",
+        "refactor": "Refactor"
+      },
+      "priorities": {
+        "critical": "Critical",
+        "important": "Important",
+        "minor": "Minor",
+        "normal": "Normal"
+      },
+      "statuses": {
+        "completed": "Completed",
+        "inProgress": "In Progress",
+        "pending": "Pending",
+        "todo": "Todo"
+      }
     },
     "page": {
       "completed": "Completed",
@@ -1431,7 +1501,8 @@
       "allCategories": "All Categories",
       "allPriorities": "All Priorities",
       "allStatus": "All Status",
-      "resetFilters": "Reset Filters"
+      "resetFilters": "Reset Filters",
+      "searchPlaceholder": "Search Task"
     },
     "userNav": {
       "billing": "Billing",
@@ -1451,25 +1522,36 @@
       "changePasswordDescription": "Update your password to keep your account secure.",
       "changePasswordTitle": "Change Password",
       "confirmNewPassword": "Confirm New Password",
+      "confirmPasswordPlaceholder": "Confirm new password",
       "currentPassword": "Current Password",
+      "currentPasswordPlaceholder": "Enter current password",
       "dangerZoneDescription": "Irreversible and destructive actions.",
       "dangerZoneTitle": "Danger Zone",
       "deleteAccount": "Delete Account",
       "deleteAccountDescription": "Permanently delete your account and all associated data.",
       "emailAddress": "Email Address",
+      "emailInvalid": "Invalid email address",
+      "emailPlaceholder": "Enter your email",
       "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "firstNameRequired": "First name is required",
       "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "lastNameRequired": "Last name is required",
       "newPassword": "New Password",
+      "newPasswordPlaceholder": "Enter new password",
       "personalInfoDescription": "Update your personal information that will be displayed on your profile.",
       "personalInfoTitle": "Personal Information",
       "saveChanges": "Save Changes",
-      "username": "Username"
+      "username": "Username",
+      "usernameMinLength": "Username must be at least 3 characters",
+      "usernamePlaceholder": "Enter your username"
     },
     "billing": {
       "availablePlansDescription": "Choose a plan that works best for you.",
       "availablePlansTitle": "Available Plans",
-      "currentPlanTitle": "Current Plan",
       "currentlyOnPlan": "You are currently on the {plan}.",
+      "currentPlanTitle": "Current Plan",
       "daysLabel": "Days",
       "daysOfTotal": "{used} of {total} Days",
       "daysRemaining": "{days} days remaining until your plan requires update",
@@ -1520,6 +1602,7 @@
       "emailNotificationsDescription": "Choose what email notifications you want to receive.",
       "emailNotificationsTitle": "Email Notifications",
       "frequencyDescription": "Control how often you receive notifications.",
+      "frequencyPlaceholder": "Select frequency",
       "frequencyTitle": "Notification Frequency",
       "hourlyDigest": "Hourly digest",
       "instant": "Instant",
@@ -1542,6 +1625,8 @@
       "pushNotificationsDescription": "Configure browser and mobile push notifications.",
       "pushNotificationsTitle": "Push Notifications",
       "quietHours": "Quiet Hours",
+      "quietHoursEndPlaceholder": "End",
+      "quietHoursStartPlaceholder": "Start",
       "requestPermission": "Request Permission",
       "savePreferences": "Save Preferences",
       "securityAlertsDescription": "Get notified when there are security events on your account.",
@@ -1551,6 +1636,7 @@
       "systemMaintenance": "System maintenance",
       "taskUpdatesDescription": "Get notified about task assignments and updates.",
       "taskUpdatesTitle": "Task updates",
+      "timingPlaceholder": "Select timing",
       "timingQuestion": "When should we send you notifications?",
       "to": "to",
       "typeColumn": "TYPE",
@@ -1559,12 +1645,19 @@
     "user": {
       "allowedFormats": "Allowed JPG, GIF or PNG. Max size of 800K",
       "bio": "Bio",
+      "bioPlaceholder": "Tell us a little about yourself...",
       "cancel": "Cancel",
       "company": "Company",
+      "companyPlaceholder": "Enter your company",
       "description": "Update your personal information and preferences",
       "email": "E-mail",
+      "emailInvalid": "Invalid email address",
+      "emailPlaceholder": "Enter your email",
       "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "firstNameRequired": "First name is required",
       "language": "Language",
+      "languagePlaceholder": "Select Language",
       "languages": {
         "english": "English",
         "french": "French",
@@ -1574,12 +1667,18 @@
         "spanish": "Spanish"
       },
       "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "lastNameRequired": "Last name is required",
       "location": "Location",
+      "locationPlaceholder": "Enter your location",
       "phoneNumber": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
       "resetButton": "Reset",
       "role": "Role",
+      "rolePlaceholder": "Enter your role",
       "saveChanges": "Save Changes",
       "timezone": "Timezone",
+      "timezonePlaceholder": "Select Timezone",
       "timezones": {
         "aest": "AEST (Australian Eastern Standard Time)",
         "cet": "CET (Central European Time)",
@@ -1592,7 +1691,8 @@
       },
       "title": "Profile Settings",
       "uploadNewPhoto": "Upload new photo",
-      "website": "Website"
+      "website": "Website",
+      "websitePlaceholder": "Enter your website"
     }
   },
   "themeCustomizer": {
@@ -1682,9 +1782,9 @@
       "clear": "Clear",
       "copy": "Copy",
       "copyDescription": "Set the date for the new records for {count, plural, one {# selected transaction} other {# selected transactions}}.",
+      "copying": "Copying...",
       "copyTitle": "Batch Copy Transactions",
       "copyTooltip": "Copy Transactions",
-      "copying": "Copying...",
       "creating": "Creating...",
       "dateLabel": "Date",
       "delete": "Delete",
@@ -1776,8 +1876,8 @@
         "someFilesFailed": "Some files failed: {errors}",
         "title": "Attachments",
         "uploadError": "Failed to upload attachments",
-        "uploadSuccess": "{count, plural, one {# attachment uploaded} other {# attachments uploaded}} successfully!",
-        "uploading": "Uploading..."
+        "uploading": "Uploading...",
+        "uploadSuccess": "{count, plural, one {# attachment uploaded} other {# attachments uploaded}} successfully!"
       },
       "deleteConfirm": {
         "confirmText": "Are you sure you want to delete this transaction?",
@@ -1795,10 +1895,10 @@
       "messages": {
         "deleteAction": "Delete message",
         "deleteConfirmText": "This message will be permanently removed.",
-        "deleteError": "Failed to delete message",
-        "deleteTitle": "Delete Message",
         "deleted": "Delete",
         "deletedSuccess": "Message deleted",
+        "deleteError": "Failed to delete message",
+        "deleteTitle": "Delete Message",
         "deleting": "Deleting...",
         "emptyMessageError": "Type a message before sending",
         "loadError": "Failed to load messages",
@@ -1877,8 +1977,8 @@
       "apply": "Apply",
       "clear": "Clear",
       "clearFiltersButton": "Clear filters",
-      "filterSheetTitle": "Filter Transactions",
       "filtersButton": "Filters",
+      "filterSheetTitle": "Filter Transactions",
       "searchPlaceholderDesktop": "Smart search...",
       "searchPlaceholderMobile": "Search...",
       "statusFieldLabel": "Status",
@@ -1944,8 +2044,8 @@
       }
     },
     "toasts": {
-      "attachmentsOpenError": "Failed to open transaction attachments",
       "attachmentsOpened": "Attachment manager opened",
+      "attachmentsOpenError": "Failed to open transaction attachments",
       "batchCopyError": "Failed to copy the selected transactions",
       "batchCopyPartial": "{succeeded} succeeded and {failed} failed",
       "batchCopySuccess": "{count, plural, one {# transaction copied} other {# transactions copied}}",
@@ -1964,12 +2064,12 @@
       "batchQuickPayError": "Failed to apply quick pay to the selected transactions",
       "batchQuickPayPartial": "{succeeded} processed and {failed} failed",
       "batchQuickPaySuccess": "{count, plural, one {# transaction updated} other {# transactions updated}} with quick pay",
-      "copyOpenError": "Failed to open transaction copy",
       "copyOpened": "Transaction copy opened",
+      "copyOpenError": "Failed to open transaction copy",
       "deleteError": "Failed to delete transaction",
       "deleteSuccess": "Transaction deleted successfully",
-      "editOpenError": "Failed to open transaction edit",
       "editOpened": "Transaction edit opened",
+      "editOpenError": "Failed to open transaction edit",
       "quickPayError": "Failed to process quick pay",
       "quickPaySuccess": "Quick pay processed successfully",
       "recurringError": "Failed to create recurring transaction",
@@ -1989,20 +2089,36 @@
     "form": {
       "addNewUser": "Add New User",
       "billing": "Billing",
+      "billingPlaceholder": "Select billing",
+      "billingRequired": "Please select a billing method.",
       "description": "Create a new user account. Click save when you're done.",
       "email": "Email",
+      "emailInvalid": "Please enter a valid email address.",
+      "emailPlaceholder": "Enter email address",
       "name": "Name",
+      "nameMinLength": "Name must be at least 2 characters.",
+      "namePlaceholder": "Enter full name",
       "plan": "Plan",
+      "planPlaceholder": "Select plan",
+      "planRequired": "Please select a plan.",
       "role": "Role",
+      "rolePlaceholder": "Select role",
+      "roleRequired": "Please select a role.",
       "saveUser": "Save User",
-      "status": "Status"
+      "status": "Status",
+      "statusPlaceholder": "Select status",
+      "statusRequired": "Please select a status."
     },
     "statCards": {
-      "fromPrevious": "from {previous}"
+      "activeUsers": "Active Users",
+      "fromPrevious": "from {previous}",
+      "paidUsers": "Paid Users",
+      "pendingUsers": "Pending Users",
+      "totalUsers": "Total Users"
     },
     "table": {
-      "columnVisibility": "Column Visibility",
       "columns": "Columns",
+      "columnVisibility": "Column Visibility",
       "deleteUser": "Delete User",
       "editUser": "Edit user",
       "export": "Export",
@@ -2011,7 +2127,10 @@
       "pageOfTotal": "Page {page} of {total}",
       "previous": "Previous",
       "resetPassword": "Reset Password",
+      "searchPlaceholder": "Search users...",
+      "selectAllAria": "Select all",
       "selectedOfTotal": "{selected} of {total} row(s) selected.",
+      "selectRowAria": "Select row",
       "sendEmail": "Send Email",
       "show": "Show",
       "viewDetails": "View Details",

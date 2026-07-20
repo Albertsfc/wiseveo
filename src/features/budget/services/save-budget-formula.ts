@@ -9,7 +9,7 @@ import type { BudgetFormulaPreferences, FormulaConfig } from "../types"
  */
 export async function saveBudgetFormula(config: BudgetFormulaPreferences) {
   const userId = await getDefaultUserId()
-  if (!userId) throw new Error("User not found")
+  if (!userId) throw new Error("User not found") // i18n-ignore: código de erro interno do service layer (rota traduz, service retorna código estável)
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -34,7 +34,7 @@ export async function saveCardFormula(
   formula: FormulaConfig | null
 ) {
   const userId = await getDefaultUserId()
-  if (!userId) throw new Error("User not found")
+  if (!userId) throw new Error("User not found") // i18n-ignore: código de erro interno do service layer (rota traduz, service retorna código estável)
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -68,7 +68,7 @@ export async function saveCustomBudgetCard(
   card: { id: string, name: string, groupIds: string[], categoryIds: string[], amount: number }
 ) {
   const userId = await getDefaultUserId()
-  if (!userId) throw new Error("User not found")
+  if (!userId) throw new Error("User not found") // i18n-ignore: código de erro interno do service layer (rota traduz, service retorna código estável)
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -100,7 +100,7 @@ export async function saveCustomBudgetCard(
  */
 export async function deleteBudgetCard(id: string, isCustomCard: boolean) {
   const userId = await getDefaultUserId()
-  if (!userId) throw new Error("User not found")
+  if (!userId) throw new Error("User not found") // i18n-ignore: código de erro interno do service layer (rota traduz, service retorna código estável)
 
   if (isCustomCard) {
     const user = await prisma.user.findUnique({

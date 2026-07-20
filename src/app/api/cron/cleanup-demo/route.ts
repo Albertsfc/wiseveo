@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   // Guard: only run in demo environment — no-op in the real app project
   if (process.env.NEXT_PUBLIC_DEMO_MODE !== "true") {
+    // i18n-ignore: endpoint de cron interno (Vercel Cron), resposta nunca é renderizada em UI
     return NextResponse.json({ skipped: true, reason: "Demo mode is disabled" }, { status: 200 })
   }
 
@@ -39,6 +40,7 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     console.error("Cron Cleanup Error:", error)
+    // i18n-ignore: endpoint de cron interno (Vercel Cron), resposta nunca é renderizada em UI
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
   }
 }

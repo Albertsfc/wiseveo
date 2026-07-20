@@ -19,8 +19,8 @@ const TYPE_COLOR_ID: Record<string, string> = {
 // pode ser confundido e apagado. Se o valor de syncedTag mudar nos JSONs, a
 // frase antiga DEVE permanecer nesta lista (eventos legados dependem dela).
 const WISEVEO_MARKERS = [
-  "Sincronizado via WISEVEO",
-  "Synced via WISEVEO",
+  "Sincronizado via WISEVEO", // i18n-ignore: marcador histórico congelado (ver comentário acima) — nunca traduzir/alterar
+  "Synced via WISEVEO", // i18n-ignore: marcador histórico congelado (ver comentário acima) — nunca traduzir/alterar
   "Sincronizado a través de WISEVEO", // i18n-ignore
 ]
 

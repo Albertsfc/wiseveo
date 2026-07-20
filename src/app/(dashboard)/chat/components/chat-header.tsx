@@ -10,8 +10,9 @@ import {
   Bell,
   BellOff
 } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 
+import { formatAppDate } from "@/i18n/format"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -44,6 +45,7 @@ export function ChatHeader({
   onToggleInfo
 }: ChatHeaderProps) {
   const t = useTranslations("chat")
+  const locale = useLocale()
 
   if (!conversation) {
     return (
@@ -66,15 +68,20 @@ export function ChatHeader({
   const getStatusText = () => {
     if (conversation.type === "group") {
       const onlineCount = conversationUsers.filter(user => user.status === "online").length
-      return `${conversation.participants.length} members, ${onlineCount} online`
+      return t("header.status.groupOnline", {
+        total: conversation.participants.length,
+        online: onlineCount,
+      })
     } else if (primaryUser) {
       switch (primaryUser.status) {
         case "online":
-          return "Active now"
+          return t("header.status.online")
         case "away":
-          return "Away"
+          return t("header.status.away")
         case "offline":
-          return `Last seen ${new Date(primaryUser.lastSeen).toLocaleDateString()}`
+          return t("header.status.lastSeen", {
+            date: formatAppDate(new Date(primaryUser.lastSeen), "P", locale),
+          })
         default:
           return ""
       }

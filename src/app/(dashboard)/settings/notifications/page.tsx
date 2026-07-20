@@ -3,7 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
+import { resolveAppLocale } from "@/i18n/config"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import {
@@ -51,8 +52,21 @@ const notificationsFormSchema = z.object({
 
 type NotificationsFormValues = z.infer<typeof notificationsFormSchema>
 
+// pt-BR/es-419 use the 24h clock (the raw "HH:mm" value is already the right
+// display text); en-US uses the 12h clock with an AM/PM suffix.
+function formatHourOption(value: string, use12h: boolean): string {
+  if (!use12h) return value
+  const [hourStr, minute] = value.split(":")
+  const hour = parseInt(hourStr, 10)
+  const period = hour >= 12 ? "PM" : "AM"
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12
+  return `${hour12}:${minute} ${period}`
+}
+
 export default function NotificationSettings() {
   const t = useTranslations("templatePages.notifications")
+  const locale = useLocale()
+  const use12h = resolveAppLocale(locale) === "en-US"
   const form = useForm<NotificationsFormValues>({
     resolver: zodResolver(notificationsFormSchema),
     defaultValues: {
@@ -259,7 +273,7 @@ export default function NotificationSettings() {
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select frequency" />
+                            <SelectValue placeholder={t("frequencyPlaceholder")} />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -284,13 +298,13 @@ export default function NotificationSettings() {
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-50">
-                              <SelectValue placeholder="Start" />
+                              <SelectValue placeholder={t("quietHoursStartPlaceholder")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="22:00">10:00 PM</SelectItem>{/* i18n-ignore: horário de exemplo, notação universal */}
-                            <SelectItem value="23:00">11:00 PM</SelectItem>{/* i18n-ignore: horário de exemplo, notação universal */}
-                            <SelectItem value="00:00">12:00 AM</SelectItem>{/* i18n-ignore: horário de exemplo, notação universal */}
+                            <SelectItem value="22:00">{formatHourOption("22:00", use12h)}</SelectItem>
+                            <SelectItem value="23:00">{formatHourOption("23:00", use12h)}</SelectItem>
+                            <SelectItem value="00:00">{formatHourOption("00:00", use12h)}</SelectItem>
                           </SelectContent>
                         </Select>
                       )}
@@ -303,13 +317,13 @@ export default function NotificationSettings() {
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-50">
-                              <SelectValue placeholder="End" />
+                              <SelectValue placeholder={t("quietHoursEndPlaceholder")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="06:00">6:00 AM</SelectItem>{/* i18n-ignore: horário de exemplo, notação universal */}
-                            <SelectItem value="07:00">7:00 AM</SelectItem>{/* i18n-ignore: horário de exemplo, notação universal */}
-                            <SelectItem value="08:00">8:00 AM</SelectItem>{/* i18n-ignore: horário de exemplo, notação universal */}
+                            <SelectItem value="06:00">{formatHourOption("06:00", use12h)}</SelectItem>
+                            <SelectItem value="07:00">{formatHourOption("07:00", use12h)}</SelectItem>
+                            <SelectItem value="08:00">{formatHourOption("08:00", use12h)}</SelectItem>
                           </SelectContent>
                         </Select>
                       )}
@@ -558,7 +572,7 @@ export default function NotificationSettings() {
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger className="w-full max-w-sm">
-                                <SelectValue placeholder="Select timing" />
+                                <SelectValue placeholder={t("timingPlaceholder")} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>

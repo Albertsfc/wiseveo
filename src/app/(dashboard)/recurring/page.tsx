@@ -1,11 +1,17 @@
+import { Metadata } from "next"
 import { getTranslations } from "next-intl/server"
 import { getRecurring } from "@/features/recurring/services/get-recurring"
 import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 import { RecurringClient } from "@/features/recurring/components/recurring-client"
 import { getFormOptions } from "@/features/transactions/services/get-form-options"
 
-export const metadata = {
-    title: "Recorrentes | WISEVEO",
+export async function generateMetadata(): Promise<Metadata> {
+    const t = await getTranslations("Routes.recurring")
+
+    return {
+        title: `${t("title")} | WISEVEO`,
+        description: t("description"),
+    }
 }
 
 export default async function RecurringPage() {

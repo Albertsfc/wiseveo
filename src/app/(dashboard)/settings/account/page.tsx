@@ -17,20 +17,30 @@ import {
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 
-const accountFormSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  username: z.string().min(3, "Username must be at least 3 characters"),
-  currentPassword: z.string().optional(),
-  newPassword: z.string().optional(),
-  confirmPassword: z.string().optional(),
-})
-
-type AccountFormValues = z.infer<typeof accountFormSchema>
+type AccountFormValues = {
+  firstName: string
+  lastName: string
+  email: string
+  username: string
+  currentPassword?: string
+  newPassword?: string
+  confirmPassword?: string
+}
 
 export default function AccountSettings() {
   const t = useTranslations("templatePages.account")
+
+  // Defined inside the component so zod messages can be localized via t().
+  const accountFormSchema = z.object({
+    firstName: z.string().min(1, t("firstNameRequired")),
+    lastName: z.string().min(1, t("lastNameRequired")),
+    email: z.string().email(t("emailInvalid")),
+    username: z.string().min(3, t("usernameMinLength")),
+    currentPassword: z.string().optional(),
+    newPassword: z.string().optional(),
+    confirmPassword: z.string().optional(),
+  })
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
@@ -70,7 +80,7 @@ export default function AccountSettings() {
                       <FormItem>
                         <FormLabel>{t("firstName")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your first name" {...field} />
+                          <Input placeholder={t("firstNamePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -83,7 +93,7 @@ export default function AccountSettings() {
                       <FormItem>
                         <FormLabel>{t("lastName")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your last name" {...field} />
+                          <Input placeholder={t("lastNamePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -97,7 +107,7 @@ export default function AccountSettings() {
                     <FormItem>
                       <FormLabel>{t("emailAddress")}</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="Enter your email" {...field} />
+                        <Input type="email" placeholder={t("emailPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -110,7 +120,7 @@ export default function AccountSettings() {
                     <FormItem>
                       <FormLabel>{t("username")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your username" {...field} />
+                        <Input placeholder={t("usernamePlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -134,7 +144,7 @@ export default function AccountSettings() {
                     <FormItem>
                       <FormLabel>{t("currentPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Enter current password" {...field} />
+                        <Input type="password" placeholder={t("currentPasswordPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -147,7 +157,7 @@ export default function AccountSettings() {
                     <FormItem>
                       <FormLabel>{t("newPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Enter new password" {...field} />
+                        <Input type="password" placeholder={t("newPasswordPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -160,7 +170,7 @@ export default function AccountSettings() {
                     <FormItem>
                       <FormLabel>{t("confirmNewPassword")}</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Confirm new password" {...field} />
+                        <Input type="password" placeholder={t("confirmPasswordPlaceholder")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

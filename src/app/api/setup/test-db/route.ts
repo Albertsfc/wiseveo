@@ -1,26 +1,28 @@
 import { NextResponse } from "next/server"
 import { Client } from "pg"
+import { getTranslations } from "next-intl/server"
 
 export async function POST(req: Request) {
+  const t = await getTranslations("api.setup")
   try {
     const { connectionString } = await req.json()
 
     if (!connectionString) {
       return NextResponse.json(
-        { success: false, message: "Connection string is required." },
+        { success: false, message: t("connectionStringRequired") },
         { status: 400 }
       )
     }
 
     // Use native pg client to avoid instantiating Prisma with a bad URL
     const client = new Client({ connectionString })
-    
+
     try {
       await client.connect()
     } catch (e: any) {
       return NextResponse.json({
         success: false,
-        message: `Falha ao conectar: ${e.message}`,
+        message: t("connectionFailed", { message: e.message }),
       })
     }
 
@@ -41,11 +43,12 @@ export async function POST(req: Request) {
         hasData = true
         
         // Fetch actual existing data for the chart of accounts
+        // i18n-ignore: strings SQL brutas, não são texto de UI
         const [accountsRes, transactionsRes, categoriesRes, groupsRes] = await Promise.all([
-          client.query('SELECT "COD_ACC" as id, "CONTA" as name, "TIPO" as type FROM accounts'),
-          client.query('SELECT COUNT(*) FROM transactions'),
-          client.query('SELECT id, "COD_CAT" as code, "CATEGORIA" as name, "TIPO" as type, group_id FROM categories'),
-          client.query('SELECT id, "COD_GRU" as code, "GRUPO" as name, type FROM category_groups'),
+          client.query('SELECT "COD_ACC" as id, "CONTA" as name, "TIPO" as type FROM accounts'), // i18n-ignore
+          client.query('SELECT COUNT(*) FROM transactions'), // i18n-ignore
+          client.query('SELECT id, "COD_CAT" as code, "CATEGORIA" as name, "TIPO" as type, group_id FROM categories'), // i18n-ignore
+          client.query('SELECT id, "COD_GRU" as code, "GRUPO" as name, type FROM category_groups'), // i18n-ignore
         ])
 
         const dbGroups = groupsRes.rows.map((g: any) => ({
@@ -93,7 +96,7 @@ export async function POST(req: Request) {
     })
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, message: error.message || "Unknown error occurred" },
+      { success: false, message: error.message || t("unknownError") },
       { status: 500 }
     )
   }

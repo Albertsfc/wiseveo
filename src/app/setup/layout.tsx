@@ -1,8 +1,13 @@
 import type { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 
-export const metadata: Metadata = {
-  title: "WISEVEO — Setup",
-  description: "Configure seu ambiente WISEVEO",
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Routes.setup")
+
+  return {
+    title: t("title"),
+    description: t("description"),
+  }
 }
 
 export default function SetupLayout({

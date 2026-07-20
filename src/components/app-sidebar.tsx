@@ -130,10 +130,12 @@ const data: { navGroups: SidebarNavGroup[] } = {
               url: "/configuracoes?tab=general",
             },
             {
+              // i18n-ignore: chave de navegação — traduzida via t(normalizeKey(title)) em nav-main.tsx (sidebar.usersettings existe), não é texto renderizado literalmente
               title: "User Settings",
               url: "/configuracoes?tab=profile",
             },
             {
+              // i18n-ignore: chave de navegação — traduzida via t(normalizeKey(title)) em nav-main.tsx (sidebar.accountsettings existe), não é texto renderizado literalmente
               title: "Account Settings",
               url: "/configuracoes?tab=account",
             },

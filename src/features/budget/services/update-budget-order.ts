@@ -40,6 +40,6 @@ export async function updateBudgetOrder(itemIds: string[]) {
     return { success: true }
   } catch (error) {
     console.error("Failed to update budget order:", error)
-    return { success: false, error: "Internal Server Error" }
+    return { success: false, error: "Internal Server Error" } // i18n-ignore: código de erro interno do service layer (rota traduz, service retorna código estável)
   }
 }

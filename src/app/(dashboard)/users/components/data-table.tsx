@@ -148,7 +148,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
               (table.getIsSomePageRowsSelected() && "indeterminate")
             }
             onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-            aria-label="Select all"
+            aria-label={t("table.selectAllAria")}
           />
         </div>
       ),
@@ -157,7 +157,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           <Checkbox
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
+            aria-label={t("table.selectRowAria")}
           />
         </div>
       ),
@@ -314,7 +314,7 @@ export function DataTable({ users, onDeleteUser, onEditUser, onAddUser }: DataTa
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search users..."
+              placeholder={t("table.searchPlaceholder")}
               value={globalFilter ?? ""}
               onChange={(event) => setGlobalFilter(String(event.target.value))}
               className="pl-9"

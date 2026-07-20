@@ -37,9 +37,10 @@ interface MessageInputProps {
 export function MessageInput({
   onSendMessage,
   disabled = false,
-  placeholder = "Type a message..."
+  placeholder
 }: MessageInputProps) {
   const t = useTranslations("chat")
+  const resolvedPlaceholder = placeholder ?? t("input.placeholder")
   const [message, setMessage] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -134,7 +135,7 @@ export function MessageInput({
         <div className="flex-1 relative">
           <Textarea
             ref={textareaRef}
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             value={message}
             onChange={handleTextareaChange}
             onKeyDown={handleKeyPress}
@@ -210,7 +211,7 @@ export function MessageInput({
               )}
             </TooltipTrigger>
             <TooltipContent>
-              <p>{message.trim() ? "Send message" : "Voice message"}</p>
+              <p>{message.trim() ? t("input.sendMessage") : t("input.voiceMessage")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

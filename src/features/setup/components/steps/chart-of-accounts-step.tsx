@@ -23,7 +23,7 @@ const defaultChartOfAccounts = [
   {
     id: "grp-income-100",
     code: 100,
-    name: "RECEITAS E RENDIMENTOS",
+    name: "RECEITAS E RENDIMENTOS", // i18n-ignore
     type: "INCOME" as const,
     categories: [
       { id: "cat-salario", code: "100.001", name: "Salário" }, // i18n-ignore
@@ -76,7 +76,7 @@ const defaultChartOfAccounts = [
   {
     id: "grp-leisure-600",
     code: 600,
-    name: "LAZER E ESTILO DE VIDA",
+    name: "LAZER E ESTILO DE VIDA", // i18n-ignore
     type: "EXPENSE" as const,
     categories: [
       { id: "cat-cinema", code: "600.001", name: "Cinema / Shows / Viagens" },
@@ -98,7 +98,7 @@ const defaultChartOfAccounts = [
     name: "OUTROS",
     type: "EXPENSE" as const,
     categories: [
-      { id: "cat-despesas-diversas", code: "800.001", name: "Despesas Diversas" },
+      { id: "cat-despesas-diversas", code: "800.001", name: "Despesas Diversas" }, // i18n-ignore
       { id: "cat-impostos", code: "800.002", name: "Impostos / Tarifas" },
     ],
   },
@@ -114,8 +114,8 @@ const defaultChartOfAccounts = [
 ]
 
 const defaultAccounts = [
-  { id: 1, name: "Conta Corrente", type: "CHECKING" },
-  { id: 2, name: "Reserva Financeira", type: "SAVINGS" },
+  { id: 1, name: "Conta Corrente", type: "CHECKING" }, // i18n-ignore
+  { id: 2, name: "Reserva Financeira", type: "SAVINGS" }, // i18n-ignore
   { id: 3, name: "Carteira", type: "WALLET" },
 ]
 
