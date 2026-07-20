@@ -13,7 +13,7 @@ A versão open-source é **independente**, **gratuita** e foi desenhada sob o co
 - 🔁 **Transações Recorrentes**: Gerencie contas mensais, salários e assinaturas com geração de lançamentos automática.
 - 🎯 **Orçamentos Mensais**: Defina limites de gastos por grupo ou categoria e acompanhe o progresso visualmente.
 - 📈 **Análise de DRE e Forecasting**: Modelos preditivos de saldo e balanços de competência para planejamento futuro.
-- 🌍 **Tradução Multilíngue Integrada**: Suporte nativo a **Português (pt-BR)**, **Inglês (en)** e **Espanhol (es)** com alteração rápida no painel ou login.
+- 🌍 **Trilíngue de Ponta a Ponta**: 100% do sistema em **Português (pt-BR)**, **Inglês (en-US)** e **Español LatAm (es-419)** — UI, tabelas, gráficos, validações, erros de API e bot do Telegram. Seleção em Configurações → Aparência. Um harness de build (paridade de dicionários + scanner AST de strings hardcoded + type-safety de chaves) **bloqueia deploys** com tradução faltando; regras para contribuidores em `CLAUDE.md`.
 - 🔒 **Self-Hosted e Seguro**: Autenticação robusta baseada em JWT HTTP-only e controle absoluto sobre o seu banco de dados.
 
 ---
