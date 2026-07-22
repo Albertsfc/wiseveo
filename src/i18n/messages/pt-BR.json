@@ -869,6 +869,13 @@
         "onTrack": "Ritmo dentro do planejado",
         "overrun": "No ritmo atual, estoura por volta do dia {day}"
       },
+      "burnRate": {
+        "baseline": "Média 12 meses: {value}",
+        "delta": "Variação vs média 12m: {value}",
+        "how": "Média de saídas dos últimos 3 meses fechados comparada à média dos últimos 12 (saídas = despesas + transferências para fora). Alta sustentada é o sinal silencioso de erosão do orçamento.",
+        "label": "Gasto médio (burn)",
+        "perMonth": "/mês"
+      },
       "cashProjection": {
         "daysUnit": "dias",
         "event": "{account} deve ficar negativa por volta de {date}",
@@ -893,6 +900,12 @@
         "label": "Comprometimento fixo",
         "reference": "Referência: até 50% da renda média"
       },
+      "monthEndForecast": {
+        "band": "Banda histórica (12m): {p25} – {p75}",
+        "breakdown": "Já lançado: {booked} · difuso estimado: {diffuse}",
+        "how": "Saídas já lançadas no mês (pagas e agendadas) + estimativa de gasto difuso para os dias restantes (média diária dos últimos 90 dias, sem os 10% maiores). A zona compara a projeção com sua renda média mensal.",
+        "label": "Fim de mês projetado"
+      },
       "overdueCost": {
         "allClear": "Tudo em dia",
         "allClearDetail": "Nenhuma conta vencida em aberto",
@@ -900,6 +913,15 @@
         "label": "Contas vencidas",
         "oldest": "Mais antiga: {days} dias de atraso",
         "openTotal": "{total} em aberto · atraso custa ~{cost}"
+      },
+      "personalRunway": {
+        "basis": "Média dos últimos 6 meses fechados",
+        "burning": "Queima líquida média: {value}/mês",
+        "growing": "Sem queima — você poupa no ritmo atual",
+        "how": "Quantos meses seu saldo aguenta no ritmo atual: saldo de hoje ÷ queima líquida média (saídas − receitas) dos últimos 6 meses. Quando você poupa, não há queima — o card mostra o crescimento médio.",
+        "label": "Fôlego do caixa",
+        "monthsUnit": "meses",
+        "perMonth": "/mês"
       },
       "recurringLoad": {
         "annual": "{value} por ano",
@@ -923,6 +945,16 @@
         "explainer": "Receitas menos saídas, sobre as receitas",
         "how": "Quanto da sua renda sobra a cada mês: (receitas − saídas) ÷ receitas. A linha mostra os últimos 12 meses.",
         "label": "Taxa de poupança"
+      },
+      "spendingAnomaly": {
+        "allClear": "Nenhum grupo fora do padrão",
+        "allClearDetail": "Todos os grupos dentro da mediana histórica",
+        "how": "Compara o gasto do mês em cada grupo com a mediana dos últimos 12 meses usando desvio absoluto mediano (MAD, limiar 3,5) — método robusto que picos antigos não enganam. Só sinaliza gasto acima do padrão.",
+        "label": "Atipicidade do mês",
+        "method": "Detecção robusta por mediana + MAD",
+        "more": "{count, plural, one {# outro grupo acima do padrão} other {# outros grupos acima do padrão}}",
+        "unit": "{count, plural, one {# grupo} other {# grupos}}",
+        "worst": "{name}: {amount} · mediana {median}"
       }
     },
     "sections": {

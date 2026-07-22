@@ -869,6 +869,13 @@
         "onTrack": "Ritmo dentro de lo planeado",
         "overrun": "Al ritmo actual, se excede alrededor del día {day}"
       },
+      "burnRate": {
+        "baseline": "Promedio 12 meses: {value}",
+        "delta": "Variación vs promedio 12m: {value}",
+        "how": "Promedio de salidas de los últimos 3 meses cerrados comparado con el de los últimos 12 (salidas = gastos + transferencias hacia afuera). Un alza sostenida es la señal silenciosa de erosión del presupuesto.",
+        "label": "Gasto promedio (burn)",
+        "perMonth": "/mes"
+      },
       "cashProjection": {
         "daysUnit": "días",
         "event": "{account} quedaría en negativo alrededor del {date}",
@@ -893,6 +900,12 @@
         "label": "Compromiso fijo",
         "reference": "Referencia: hasta 50% del ingreso promedio"
       },
+      "monthEndForecast": {
+        "band": "Banda histórica (12m): {p25} – {p75}",
+        "breakdown": "Ya registrado: {booked} · difuso estimado: {diffuse}",
+        "how": "Salidas ya registradas en el mes (pagadas y programadas) + estimación de gasto difuso para los días restantes (promedio diario de los últimos 90 días, sin el 10% más alto). La zona compara la proyección con tu ingreso mensual promedio.",
+        "label": "Fin de mes proyectado"
+      },
       "overdueCost": {
         "allClear": "Todo al día",
         "allClearDetail": "Sin cuentas vencidas pendientes",
@@ -900,6 +913,15 @@
         "label": "Cuentas vencidas",
         "oldest": "Más antigua: {days} días de atraso",
         "openTotal": "{total} pendiente · el atraso cuesta ~{cost}"
+      },
+      "personalRunway": {
+        "basis": "Promedio de los últimos 6 meses cerrados",
+        "burning": "Quema neta promedio: {value}/mes",
+        "growing": "Sin quema — ahorras al ritmo actual",
+        "how": "Cuántos meses aguanta tu saldo al ritmo actual: saldo de hoy ÷ quema neta promedio (salidas − ingresos) de los últimos 6 meses. Cuando ahorras no hay quema — la tarjeta muestra el crecimiento promedio.",
+        "label": "Autonomía de caja",
+        "monthsUnit": "meses",
+        "perMonth": "/mes"
       },
       "recurringLoad": {
         "annual": "{value} por año",
@@ -923,6 +945,16 @@
         "explainer": "Ingresos menos salidas, sobre los ingresos",
         "how": "Cuánto de tu ingreso queda cada mes: (ingresos − salidas) ÷ ingresos. La línea muestra los últimos 12 meses.",
         "label": "Tasa de ahorro"
+      },
+      "spendingAnomaly": {
+        "allClear": "Ningún grupo fuera de patrón",
+        "allClearDetail": "Todos los grupos dentro de su mediana histórica",
+        "how": "Compara el gasto del mes en cada grupo con la mediana de los últimos 12 meses usando la desviación absoluta mediana (MAD, umbral 3,5) — método robusto al que los picos antiguos no engañan. Solo señala gasto por encima del patrón.",
+        "label": "Atipicidad del mes",
+        "method": "Detección robusta por mediana + MAD",
+        "more": "{count, plural, one {# grupo más sobre el patrón} other {# grupos más sobre el patrón}}",
+        "unit": "{count, plural, one {# grupo} other {# grupos}}",
+        "worst": "{name}: {amount} · mediana {median}"
       }
     },
     "sections": {

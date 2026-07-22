@@ -77,3 +77,27 @@ export function stdDev(values: number[]): number {
   const m = mean(values)
   return Math.sqrt(mean(values.map((v) => (v - m) ** 2)))
 }
+
+export function median(values: number[]): number {
+  if (values.length === 0) return 0
+  const sorted = [...values].sort((a, b) => a - b)
+  const mid = Math.floor(sorted.length / 2)
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2
+}
+
+/** Desvio absoluto mediano (MAD) — base do z-score modificado. */
+export function medianAbsDeviation(values: number[]): number {
+  const m = median(values)
+  return median(values.map((v) => Math.abs(v - m)))
+}
+
+/** Quantil por interpolação linear (q em 0..1). */
+export function quantile(values: number[], q: number): number {
+  if (values.length === 0) return 0
+  const sorted = [...values].sort((a, b) => a - b)
+  const pos = (sorted.length - 1) * q
+  const base = Math.floor(pos)
+  const rest = pos - base
+  if (base + 1 >= sorted.length) return sorted[base]
+  return sorted[base] + rest * (sorted[base + 1] - sorted[base])
+}

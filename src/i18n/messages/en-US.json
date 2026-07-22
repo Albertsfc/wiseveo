@@ -869,6 +869,13 @@
         "onTrack": "Pace within plan",
         "overrun": "At the current pace, you overrun around day {day}"
       },
+      "burnRate": {
+        "baseline": "12-month average: {value}",
+        "delta": "Change vs 12m average: {value}",
+        "how": "Average outflows of the last 3 closed months compared with the last 12 (outflows = expenses + transfers out). A sustained rise is the silent sign of budget erosion.",
+        "label": "Average spend (burn)",
+        "perMonth": "/mo"
+      },
       "cashProjection": {
         "daysUnit": "days",
         "event": "{account} is projected to go negative around {date}",
@@ -893,6 +900,12 @@
         "label": "Fixed commitment",
         "reference": "Reference: up to 50% of average income"
       },
+      "monthEndForecast": {
+        "band": "Historical band (12m): {p25} – {p75}",
+        "breakdown": "Booked: {booked} · estimated diffuse: {diffuse}",
+        "how": "Outflows already booked this month (paid and scheduled) + estimated diffuse spending for the remaining days (daily average of the last 90 days, top 10% excluded). The zone compares the projection with your average monthly income.",
+        "label": "Projected month end"
+      },
       "overdueCost": {
         "allClear": "All caught up",
         "allClearDetail": "No overdue bills outstanding",
@@ -900,6 +913,15 @@
         "label": "Overdue bills",
         "oldest": "Oldest: {days} days late",
         "openTotal": "{total} outstanding · lateness costs ~{cost}"
+      },
+      "personalRunway": {
+        "basis": "Average of the last 6 closed months",
+        "burning": "Average net burn: {value}/month",
+        "growing": "No burn — you save at the current pace",
+        "how": "How many months your balance lasts at the current pace: today's balance ÷ average net burn (outflows − income) over the last 6 months. When you save, there is no burn — the card shows average growth.",
+        "label": "Cash runway",
+        "monthsUnit": "months",
+        "perMonth": "/mo"
       },
       "recurringLoad": {
         "annual": "{value} per year",
@@ -923,6 +945,16 @@
         "explainer": "Income minus outflows, over income",
         "how": "How much of your income is left each month: (income − outflows) ÷ income. The line shows the last 12 months.",
         "label": "Savings rate"
+      },
+      "spendingAnomaly": {
+        "allClear": "No group out of pattern",
+        "allClearDetail": "All groups within their historical median",
+        "how": "Compares this month's spending in each group with the 12-month median using the median absolute deviation (MAD, threshold 3.5) — a robust method that old spikes can't fool. Only flags spending above the pattern.",
+        "label": "Month atypicality",
+        "method": "Robust detection via median + MAD",
+        "more": "{count, plural, one {# more group above pattern} other {# more groups above pattern}}",
+        "unit": "{count, plural, one {# group} other {# groups}}",
+        "worst": "{name}: {amount} · median {median}"
       }
     },
     "sections": {

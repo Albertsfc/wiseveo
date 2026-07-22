@@ -85,13 +85,50 @@ export interface CashProjectionKpi extends KpiBase {
   projectedDate: string | null // ISO
 }
 
+export interface BurnRateKpi extends KpiBase {
+  baselineMonthly: number
+  deltaPct: number
+  recentMonthly: number
+  series: number[] // saídas dos últimos 12 meses fechados
+}
+
+export interface SpendingAnomalyItem {
+  amount: number
+  medianAmount: number
+  name: string
+}
+
+export interface SpendingAnomalyKpi extends KpiBase {
+  anomalies: SpendingAnomalyItem[] // top 3, do maior desvio para o menor
+  count: number
+}
+
+export interface MonthEndForecastKpi extends KpiBase {
+  avgMonthlyIncome: number
+  bookedMonth: number
+  diffuseRemainder: number
+  p25: number
+  p75: number
+  projectedOutflow: number
+}
+
+export interface PersonalRunwayKpi extends KpiBase {
+  balanceToday: number
+  netMonthly: number // receitas − saídas (positivo = poupa, negativo = queima)
+  runwayMonths: number | null // null quando não há queima
+}
+
 export interface InsightsData {
   budgetPacing: BudgetPacingKpi
+  burnRate: BurnRateKpi
   cashProjection: CashProjectionKpi
   emergencyRunway: EmergencyRunwayKpi
   fixedCommitment: FixedCommitmentKpi
+  monthEndForecast: MonthEndForecastKpi
   overdueCost: OverdueCostKpi
+  personalRunway: PersonalRunwayKpi
   recurringLoad: RecurringLoadKpi
   safeToSpend: SafeToSpendKpi
   savingsRate: SavingsRateKpi
+  spendingAnomaly: SpendingAnomalyKpi
 }

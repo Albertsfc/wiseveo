@@ -1,12 +1,16 @@
 "use client"
 
 import {
+  Activity,
   Anchor,
   CalendarClock,
+  CalendarRange,
   CalendarX,
   Gauge,
+  Hourglass,
   PiggyBank,
   Repeat,
+  ScanSearch,
   Umbrella,
   Wallet,
 } from "lucide-react"
@@ -21,14 +25,18 @@ import { KpiCard } from "./kpi-card"
 import { KpiSparkline } from "./kpi-sparkline"
 import type {
   BudgetPacingKpi,
+  BurnRateKpi,
   CashProjectionKpi,
   EmergencyRunwayKpi,
   FixedCommitmentKpi,
   KpiZone,
+  MonthEndForecastKpi,
   OverdueCostKpi,
+  PersonalRunwayKpi,
   RecurringLoadKpi,
   SafeToSpendKpi,
   SavingsRateKpi,
+  SpendingAnomalyKpi,
 } from "../types"
 
 const PROGRESS_FILL: Record<Exclude<KpiZone, "neutral">, string> = {
@@ -355,6 +363,213 @@ export function OverdueCostCard({ kpi }: { kpi: OverdueCostKpi }) {
         total: monetary.formatMonetaryValue(kpi.totalAmount),
       })}
       footerDetail={t("kpis.overdueCost.oldest", { days: kpi.oldestDays })}
+    />
+  )
+}
+
+export function BurnRateCard({ kpi }: { kpi: BurnRateKpi }) {
+  const t = useTranslations("insights")
+  const monetary = useMonetaryFormattingSafe()
+
+  if (kpi.state === "insufficient") {
+    return (
+      <KpiCard
+        icon={Activity}
+        label={t("kpis.burnRate.label")}
+        how={t("kpis.burnRate.how")}
+        value="—"
+        muted
+        zone="neutral"
+        footerTitle={t("states.insufficient")}
+        footerDetail={t("states.insufficientDetail", { months: 4 })}
+      />
+    )
+  }
+
+  return (
+    <KpiCard
+      icon={Activity}
+      label={t("kpis.burnRate.label")}
+      how={t("kpis.burnRate.how")}
+      value={
+        <>
+          {monetary.formatMonetaryValue(kpi.recentMonthly)}
+          <span className="text-sm font-normal text-muted-foreground">
+            {t("kpis.burnRate.perMonth")}
+          </span>
+        </>
+      }
+      zone={kpi.zone}
+      zoneLabel={kpi.zone === "neutral" ? undefined : t(`zones.${kpi.zone}`)}
+      footerTitle={t("kpis.burnRate.delta", {
+        value: formatPercentValue(kpi.deltaPct, 0, true),
+      })}
+      footerDetail={t("kpis.burnRate.baseline", {
+        value: monetary.formatMonetaryValue(kpi.baselineMonthly),
+      })}
+    >
+      <KpiSparkline points={kpi.series} />
+    </KpiCard>
+  )
+}
+
+export function SpendingAnomalyCard({ kpi }: { kpi: SpendingAnomalyKpi }) {
+  const t = useTranslations("insights")
+  const monetary = useMonetaryFormattingSafe()
+
+  if (kpi.state === "insufficient") {
+    return (
+      <KpiCard
+        icon={ScanSearch}
+        label={t("kpis.spendingAnomaly.label")}
+        how={t("kpis.spendingAnomaly.how")}
+        value="—"
+        muted
+        zone="neutral"
+        footerTitle={t("states.insufficient")}
+        footerDetail={t("states.insufficientDetail", { months: 6 })}
+      />
+    )
+  }
+
+  if (kpi.count === 0) {
+    return (
+      <KpiCard
+        icon={ScanSearch}
+        label={t("kpis.spendingAnomaly.label")}
+        how={t("kpis.spendingAnomaly.how")}
+        value={t("kpis.spendingAnomaly.unit", { count: 0 })}
+        zone="good"
+        zoneLabel={t("zones.good")}
+        footerTitle={t("kpis.spendingAnomaly.allClear")}
+        footerDetail={t("kpis.spendingAnomaly.allClearDetail")}
+      />
+    )
+  }
+
+  const worst = kpi.anomalies[0]
+
+  return (
+    <KpiCard
+      icon={ScanSearch}
+      label={t("kpis.spendingAnomaly.label")}
+      how={t("kpis.spendingAnomaly.how")}
+      value={t("kpis.spendingAnomaly.unit", { count: kpi.count })}
+      zone={kpi.zone}
+      zoneLabel={kpi.zone === "neutral" ? undefined : t(`zones.${kpi.zone}`)}
+      footerTitle={t("kpis.spendingAnomaly.worst", {
+        amount: monetary.formatMonetaryValue(worst.amount),
+        median: monetary.formatMonetaryValue(worst.medianAmount),
+        name: worst.name,
+      })}
+      footerDetail={
+        kpi.count > 1
+          ? t("kpis.spendingAnomaly.more", { count: kpi.count - 1 })
+          : t("kpis.spendingAnomaly.method")
+      }
+    />
+  )
+}
+
+export function MonthEndForecastCard({ kpi }: { kpi: MonthEndForecastKpi }) {
+  const t = useTranslations("insights")
+  const monetary = useMonetaryFormattingSafe()
+
+  if (kpi.state === "insufficient") {
+    return (
+      <KpiCard
+        icon={CalendarRange}
+        label={t("kpis.monthEndForecast.label")}
+        how={t("kpis.monthEndForecast.how")}
+        value="—"
+        muted
+        zone="neutral"
+        footerTitle={t("states.insufficient")}
+        footerDetail={t("states.insufficientDetail", { months: 3 })}
+      />
+    )
+  }
+
+  return (
+    <KpiCard
+      icon={CalendarRange}
+      label={t("kpis.monthEndForecast.label")}
+      how={t("kpis.monthEndForecast.how")}
+      value={monetary.formatMonetaryValue(kpi.projectedOutflow)}
+      zone={kpi.zone}
+      zoneLabel={kpi.zone === "neutral" ? undefined : t(`zones.${kpi.zone}`)}
+      footerTitle={t("kpis.monthEndForecast.band", {
+        p25: monetary.formatMonetaryValue(kpi.p25),
+        p75: monetary.formatMonetaryValue(kpi.p75),
+      })}
+      footerDetail={t("kpis.monthEndForecast.breakdown", {
+        booked: monetary.formatMonetaryValue(kpi.bookedMonth),
+        diffuse: monetary.formatMonetaryValue(kpi.diffuseRemainder),
+      })}
+    />
+  )
+}
+
+export function PersonalRunwayCard({ kpi }: { kpi: PersonalRunwayKpi }) {
+  const t = useTranslations("insights")
+  const monetary = useMonetaryFormattingSafe()
+
+  if (kpi.state === "insufficient") {
+    return (
+      <KpiCard
+        icon={Hourglass}
+        label={t("kpis.personalRunway.label")}
+        how={t("kpis.personalRunway.how")}
+        value="—"
+        muted
+        zone="neutral"
+        footerTitle={t("states.insufficient")}
+        footerDetail={t("states.insufficientDetail", { months: 3 })}
+      />
+    )
+  }
+
+  if (kpi.runwayMonths === null) {
+    return (
+      <KpiCard
+        icon={Hourglass}
+        label={t("kpis.personalRunway.label")}
+        how={t("kpis.personalRunway.how")}
+        value={
+          <>
+            {`+${monetary.formatMonetaryValue(kpi.netMonthly)}`}
+            <span className="text-sm font-normal text-muted-foreground">
+              {t("kpis.personalRunway.perMonth")}
+            </span>
+          </>
+        }
+        zone="good"
+        zoneLabel={t("zones.good")}
+        footerTitle={t("kpis.personalRunway.growing")}
+        footerDetail={t("kpis.personalRunway.basis")}
+      />
+    )
+  }
+
+  return (
+    <KpiCard
+      icon={Hourglass}
+      label={t("kpis.personalRunway.label")}
+      how={t("kpis.personalRunway.how")}
+      value={
+        <>
+          {kpi.runwayMonths.toFixed(1)}{" "}
+          <span className="text-sm font-normal text-muted-foreground">
+            {t("kpis.personalRunway.monthsUnit")}
+          </span>
+        </>
+      }
+      zone={kpi.zone}
+      zoneLabel={kpi.zone === "neutral" ? undefined : t(`zones.${kpi.zone}`)}
+      footerTitle={t("kpis.personalRunway.burning", {
+        value: monetary.formatMonetaryValue(Math.abs(kpi.netMonthly)),
+      })}
+      footerDetail={t("kpis.personalRunway.basis")}
     />
   )
 }

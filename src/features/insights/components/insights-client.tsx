@@ -7,13 +7,17 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
 import {
   BudgetPacingCard,
+  BurnRateCard,
   CashProjectionCard,
   EmergencyRunwayCard,
   FixedCommitmentCard,
+  MonthEndForecastCard,
   OverdueCostCard,
+  PersonalRunwayCard,
   RecurringLoadCard,
   SafeToSpendCard,
   SavingsRateCard,
+  SpendingAnomalyCard,
 } from "./kpi-cards"
 import type { InsightsData, KpiSection } from "../types"
 
@@ -34,12 +38,16 @@ export function InsightsClient({ data }: { data: InsightsData }) {
     ],
     patterns: [
       <SavingsRateCard key="savingsRate" kpi={data.savingsRate} />,
+      <BurnRateCard key="burnRate" kpi={data.burnRate} />,
+      <SpendingAnomalyCard key="spendingAnomaly" kpi={data.spendingAnomaly} />,
       <FixedCommitmentCard key="fixedCommitment" kpi={data.fixedCommitment} />,
       <RecurringLoadCard key="recurringLoad" kpi={data.recurringLoad} />,
       <OverdueCostCard key="overdueCost" kpi={data.overdueCost} />,
     ],
     projections: [
       <CashProjectionCard key="cashProjection" kpi={data.cashProjection} />,
+      <MonthEndForecastCard key="monthEndForecast" kpi={data.monthEndForecast} />,
+      <PersonalRunwayCard key="personalRunway" kpi={data.personalRunway} />,
     ],
   }
 
