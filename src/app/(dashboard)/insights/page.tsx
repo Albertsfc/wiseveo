@@ -1,18 +1,26 @@
-import { Card, CardHeader, CardTitle } from "@/components/ui/card"
+import { getTranslations } from "next-intl/server"
 
-export default function InsightsPage() {
-  return (
-    <div className="flex-1 space-y-6 px-4 lg:px-6 pt-0">
+import { InsightsClient } from "@/features/insights/components/insights-client"
+import { getInsightsData } from "@/features/insights/services/get-insights-data"
+import { getDefaultUserId } from "@/features/transactions/services/get-default-user-id"
 
-      <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {Array.from({ length: 50 }).map((_, i) => (
-          <Card key={i} className="@container/card">
-            <CardHeader>
-              <CardTitle />
-            </CardHeader>
-          </Card>
-        ))}
+export default async function InsightsPage() {
+  const userId = await getDefaultUserId()
+
+  if (!userId) {
+    const t = await getTranslations("common")
+    return (
+      <div className="flex h-96 items-center justify-center px-4 lg:px-6">
+        <p className="text-muted-foreground">{t("noUserFound")}</p>
       </div>
+    )
+  }
+
+  const data = await getInsightsData(userId)
+
+  return (
+    <div className="flex-1 space-y-6 px-4 pt-0 lg:px-6">
+      <InsightsClient data={data} />
     </div>
   )
 }

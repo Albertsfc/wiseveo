@@ -857,6 +857,91 @@
       "projectedAbbrev": "Proj"
     }
   },
+  "insights": {
+    "kpis": {
+      "budgetPacing": {
+        "detail": "{monthPct} do mês decorrido",
+        "detailWithWorst": "{monthPct} do mês decorrido · maior uso: {name} ({pct})",
+        "empty": "Nenhum orçamento neste mês",
+        "emptyCta": "Crie orçamentos por grupo ou categoria para acompanhar o ritmo.",
+        "how": "Percentual do orçamento total já consumido comparado ao percentual do mês decorrido. A marca na barra indica o dia de hoje.",
+        "label": "Ritmo do orçamento",
+        "onTrack": "Ritmo dentro do planejado",
+        "overrun": "No ritmo atual, estoura por volta do dia {day}"
+      },
+      "cashProjection": {
+        "daysUnit": "dias",
+        "event": "{account} deve ficar negativa por volta de {date}",
+        "how": "Projeção diária do saldo das contas líquidas nos próximos 30 dias: saldo de hoje + lançamentos em aberto por data − seu gasto médio diário dos últimos 90 dias (sem os picos).",
+        "label": "Saldo projetado",
+        "method": "Considera contas em aberto e o gasto médio diário",
+        "noAccounts": "Nenhuma conta ativa para projetar",
+        "noEvent": "Nenhuma conta fica negativa nos próximos {days} dias"
+      },
+      "emergencyRunway": {
+        "avgExpense": "Despesa média mensal: {value}",
+        "how": "Saldo total de hoje dividido pela despesa média dos últimos 6 meses. O alvo é calibrado pela variação da sua renda: quanto mais irregular, maior a reserva recomendada.",
+        "label": "Reserva de emergência",
+        "monthsUnit": "meses",
+        "target": "Alvo para sua renda (varia {cv}): {value} meses"
+      },
+      "fixedCommitment": {
+        "empty": "Nenhuma recorrente cadastrada",
+        "emptyCta": "Cadastre suas contas fixas em Recorrentes para medir o comprometimento.",
+        "fixedOfIncome": "{value}/mês em contas recorrentes",
+        "how": "Soma das despesas recorrentes cadastradas dividida pela sua renda média mensal. Referência: manter abaixo de 50% (regra 50/30/20).",
+        "label": "Comprometimento fixo",
+        "reference": "Referência: até 50% da renda média"
+      },
+      "overdueCost": {
+        "allClear": "Tudo em dia",
+        "allClearDetail": "Nenhuma conta vencida em aberto",
+        "how": "Contas vencidas e não pagas, com custo estimado do atraso: multa de 2% + juros de 1% ao mês, proporcionais aos dias. Estimativa — cada boleto pode divergir.",
+        "label": "Contas vencidas",
+        "oldest": "Mais antiga: {days} dias de atraso",
+        "openTotal": "{total} em aberto · atraso custa ~{cost}"
+      },
+      "recurringLoad": {
+        "annual": "{value} por ano",
+        "count": "{count, plural, one {# conta} other {# contas}}",
+        "empty": "Nenhuma recorrente cadastrada",
+        "emptyCta": "Cadastre assinaturas e contas fixas em Recorrentes.",
+        "how": "Soma das despesas recorrentes cadastradas, mensal e anualizada. O custo anual é o número que revela o peso real das assinaturas.",
+        "label": "Carga de recorrências",
+        "perMonth": "/mês",
+        "share": "{value} da sua renda média"
+      },
+      "safeToSpend": {
+        "committed": "{value} comprometidos nos próximos 30 dias",
+        "how": "Saldo de hoje menos as despesas em aberto (pendentes, agendadas e vencidas) dos próximos 30 dias. Receitas futuras não entram.",
+        "label": "Livre para gastar",
+        "negative": "As contas em aberto superam o saldo de hoje",
+        "perDay": "≈ {value}/dia até o fim do mês"
+      },
+      "savingsRate": {
+        "avg": "Média 12 meses: {value}",
+        "explainer": "Receitas menos saídas, sobre as receitas",
+        "how": "Quanto da sua renda sobra a cada mês: (receitas − saídas) ÷ receitas. A linha mostra os últimos 12 meses.",
+        "label": "Taxa de poupança"
+      }
+    },
+    "sections": {
+      "all": "Todos",
+      "patterns": "Padrões",
+      "projections": "Projeções",
+      "today": "Hoje"
+    },
+    "sectionsLabel": "Filtrar indicadores",
+    "states": {
+      "insufficient": "Dados insuficientes",
+      "insufficientDetail": "Precisa de pelo menos {months} meses de lançamentos"
+    },
+    "zones": {
+      "critical": "Crítico",
+      "good": "Saudável",
+      "warning": "Atenção"
+    }
+  },
   "mail": {
     "addLabel": "Adicionar etiqueta",
     "allMail": "Todos os e-mails",

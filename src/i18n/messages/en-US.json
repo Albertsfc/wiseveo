@@ -857,6 +857,91 @@
       "projectedAbbrev": "Proj"
     }
   },
+  "insights": {
+    "kpis": {
+      "budgetPacing": {
+        "detail": "{monthPct} of the month elapsed",
+        "detailWithWorst": "{monthPct} of the month elapsed · highest usage: {name} ({pct})",
+        "empty": "No budgets this month",
+        "emptyCta": "Create budgets by group or category to track your pace.",
+        "how": "Share of the total budget already used compared to the share of the month elapsed. The mark on the bar is today.",
+        "label": "Budget pace",
+        "onTrack": "Pace within plan",
+        "overrun": "At the current pace, you overrun around day {day}"
+      },
+      "cashProjection": {
+        "daysUnit": "days",
+        "event": "{account} is projected to go negative around {date}",
+        "how": "Daily balance projection for your liquid accounts over the next 30 days: today's balance + open transactions by date − your average daily spending from the last 90 days (peaks excluded).",
+        "label": "Projected balance",
+        "method": "Considers open bills and your average daily spending",
+        "noAccounts": "No active accounts to project",
+        "noEvent": "No account goes negative in the next {days} days"
+      },
+      "emergencyRunway": {
+        "avgExpense": "Average monthly expenses: {value}",
+        "how": "Today's total balance divided by your average expenses over the last 6 months. The target adapts to your income volatility: the more irregular, the bigger the recommended cushion.",
+        "label": "Emergency fund",
+        "monthsUnit": "months",
+        "target": "Target for your income (varies {cv}): {value} months"
+      },
+      "fixedCommitment": {
+        "empty": "No recurring bills registered",
+        "emptyCta": "Register your fixed bills under Recurring to measure commitment.",
+        "fixedOfIncome": "{value}/month in recurring bills",
+        "how": "Sum of registered recurring expenses divided by your average monthly income. Reference: keep below 50% (50/30/20 rule).",
+        "label": "Fixed commitment",
+        "reference": "Reference: up to 50% of average income"
+      },
+      "overdueCost": {
+        "allClear": "All caught up",
+        "allClearDetail": "No overdue bills outstanding",
+        "how": "Overdue unpaid bills, with an estimated late cost: 2% fine + 1% monthly interest, prorated by days late. An estimate — each bill may differ.",
+        "label": "Overdue bills",
+        "oldest": "Oldest: {days} days late",
+        "openTotal": "{total} outstanding · lateness costs ~{cost}"
+      },
+      "recurringLoad": {
+        "annual": "{value} per year",
+        "count": "{count, plural, one {# bill} other {# bills}}",
+        "empty": "No recurring bills registered",
+        "emptyCta": "Register subscriptions and fixed bills under Recurring.",
+        "how": "Sum of registered recurring expenses, monthly and annualized. The annual figure is what reveals the real weight of subscriptions.",
+        "label": "Recurring load",
+        "perMonth": "/mo",
+        "share": "{value} of your average income"
+      },
+      "safeToSpend": {
+        "committed": "{value} committed over the next 30 days",
+        "how": "Today's balance minus open expenses (pending, scheduled and overdue) due in the next 30 days. Future income is not counted.",
+        "label": "Safe to spend",
+        "negative": "Open bills exceed today's balance",
+        "perDay": "≈ {value}/day until month end"
+      },
+      "savingsRate": {
+        "avg": "12-month average: {value}",
+        "explainer": "Income minus outflows, over income",
+        "how": "How much of your income is left each month: (income − outflows) ÷ income. The line shows the last 12 months.",
+        "label": "Savings rate"
+      }
+    },
+    "sections": {
+      "all": "All",
+      "patterns": "Patterns",
+      "projections": "Projections",
+      "today": "Today"
+    },
+    "sectionsLabel": "Filter indicators",
+    "states": {
+      "insufficient": "Not enough data",
+      "insufficientDetail": "Needs at least {months} months of records"
+    },
+    "zones": {
+      "critical": "Critical",
+      "good": "Healthy",
+      "warning": "Watch"
+    }
+  },
   "mail": {
     "addLabel": "Add label",
     "allMail": "All mail",

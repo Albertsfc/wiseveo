@@ -857,6 +857,91 @@
       "projectedAbbrev": "Proy"
     }
   },
+  "insights": {
+    "kpis": {
+      "budgetPacing": {
+        "detail": "{monthPct} del mes transcurrido",
+        "detailWithWorst": "{monthPct} del mes transcurrido · mayor uso: {name} ({pct})",
+        "empty": "Sin presupuestos este mes",
+        "emptyCta": "Crea presupuestos por grupo o categoría para seguir el ritmo.",
+        "how": "Porcentaje del presupuesto total ya consumido comparado con el porcentaje del mes transcurrido. La marca en la barra es el día de hoy.",
+        "label": "Ritmo del presupuesto",
+        "onTrack": "Ritmo dentro de lo planeado",
+        "overrun": "Al ritmo actual, se excede alrededor del día {day}"
+      },
+      "cashProjection": {
+        "daysUnit": "días",
+        "event": "{account} quedaría en negativo alrededor del {date}",
+        "how": "Proyección diaria del saldo de tus cuentas líquidas en los próximos 30 días: saldo de hoy + movimientos pendientes por fecha − tu gasto promedio diario de los últimos 90 días (sin picos).",
+        "label": "Saldo proyectado",
+        "method": "Considera cuentas pendientes y tu gasto promedio diario",
+        "noAccounts": "No hay cuentas activas para proyectar",
+        "noEvent": "Ninguna cuenta queda en negativo en los próximos {days} días"
+      },
+      "emergencyRunway": {
+        "avgExpense": "Gasto mensual promedio: {value}",
+        "how": "Saldo total de hoy dividido por el gasto promedio de los últimos 6 meses. La meta se ajusta a la variabilidad de tus ingresos: cuanto más irregulares, mayor la reserva recomendada.",
+        "label": "Fondo de emergencia",
+        "monthsUnit": "meses",
+        "target": "Meta para tus ingresos (varían {cv}): {value} meses"
+      },
+      "fixedCommitment": {
+        "empty": "Sin recurrentes registradas",
+        "emptyCta": "Registra tus cuentas fijas en Recurrentes para medir el compromiso.",
+        "fixedOfIncome": "{value}/mes en cuentas recurrentes",
+        "how": "Suma de los gastos recurrentes registrados dividida por tu ingreso mensual promedio. Referencia: mantener por debajo del 50% (regla 50/30/20).",
+        "label": "Compromiso fijo",
+        "reference": "Referencia: hasta 50% del ingreso promedio"
+      },
+      "overdueCost": {
+        "allClear": "Todo al día",
+        "allClearDetail": "Sin cuentas vencidas pendientes",
+        "how": "Cuentas vencidas sin pagar, con costo estimado del atraso: multa de 2% + interés de 1% mensual, proporcional a los días. Es una estimación — cada cuenta puede variar.",
+        "label": "Cuentas vencidas",
+        "oldest": "Más antigua: {days} días de atraso",
+        "openTotal": "{total} pendiente · el atraso cuesta ~{cost}"
+      },
+      "recurringLoad": {
+        "annual": "{value} por año",
+        "count": "{count, plural, one {# cuenta} other {# cuentas}}",
+        "empty": "Sin recurrentes registradas",
+        "emptyCta": "Registra suscripciones y cuentas fijas en Recurrentes.",
+        "how": "Suma de los gastos recurrentes registrados, mensual y anualizada. El costo anual es el número que revela el peso real de las suscripciones.",
+        "label": "Carga de recurrentes",
+        "perMonth": "/mes",
+        "share": "{value} de tu ingreso promedio"
+      },
+      "safeToSpend": {
+        "committed": "{value} comprometidos en los próximos 30 días",
+        "how": "Saldo de hoy menos los gastos pendientes (por pagar, programados y vencidos) de los próximos 30 días. Los ingresos futuros no cuentan.",
+        "label": "Libre para gastar",
+        "negative": "Las cuentas pendientes superan el saldo de hoy",
+        "perDay": "≈ {value}/día hasta fin de mes"
+      },
+      "savingsRate": {
+        "avg": "Promedio 12 meses: {value}",
+        "explainer": "Ingresos menos salidas, sobre los ingresos",
+        "how": "Cuánto de tu ingreso queda cada mes: (ingresos − salidas) ÷ ingresos. La línea muestra los últimos 12 meses.",
+        "label": "Tasa de ahorro"
+      }
+    },
+    "sections": {
+      "all": "Todos",
+      "patterns": "Patrones",
+      "projections": "Proyecciones",
+      "today": "Hoy"
+    },
+    "sectionsLabel": "Filtrar indicadores",
+    "states": {
+      "insufficient": "Datos insuficientes",
+      "insufficientDetail": "Requiere al menos {months} meses de registros"
+    },
+    "zones": {
+      "critical": "Crítico",
+      "good": "Saludable",
+      "warning": "Atención"
+    }
+  },
   "mail": {
     "addLabel": "Agregar etiqueta",
     "allMail": "Todo el correo",
