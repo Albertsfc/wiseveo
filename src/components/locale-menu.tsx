@@ -28,9 +28,13 @@ export function LocaleMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon" className="cursor-pointer">
-          <span aria-hidden className="text-base leading-none">
-            {LOCALE_META[locale].flag}
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element -- SVG estático local */}
+          <img
+            src={LOCALE_META[locale].flagSrc}
+            alt=""
+            aria-hidden
+            className="size-[1.2rem] rounded-full"
+          />
           <span className="sr-only">{t("changeLanguage")}</span>
         </Button>
       </DropdownMenuTrigger>
@@ -46,9 +50,13 @@ export function LocaleMenu() {
               }
             }}
           >
-            <span aria-hidden className="text-base leading-none">
-              {LOCALE_META[code].flag}
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element -- SVG estático local */}
+            <img
+              src={LOCALE_META[code].flagSrc}
+              alt=""
+              aria-hidden
+              className="size-4 rounded-full"
+            />
             <span className="flex-1">{LOCALE_META[code].label}</span>
             {code === locale && <Check className="size-4 text-muted-foreground" />}
           </DropdownMenuItem>

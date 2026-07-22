@@ -31,5 +31,7 @@ O sistema é trilíngue: **pt-BR, en-US, es-419 (Español LatAm)**. Toda feature
    Exceção permanente (não é catraca, é `IGNORE` fixo no scanner): `src/features/component-library`
    é o guia de estilo interno (dev-only) e deliberadamente não é localizado.
 10. Metadados de locale centralizados em `src/i18n/config.ts` (`LOCALES`, `LOCALE_META`,
-    `resolveAppLocale`). O espanhol é `es-419` (espanhol latino-americano, rótulo "Español (LatAm)").
+    `resolveAppLocale`). O espanhol é `es-419` (espanhol latino-americano, rótulo "Español (ES)").
+    Bandeiras circulares locais em `public/flags` (HatScripts/circle-flags, MIT — conjunto completo
+    para idiomas futuros).
     O seletor de idioma do usuário fica em Configurações → Aparência (`LocaleSwitcher`).

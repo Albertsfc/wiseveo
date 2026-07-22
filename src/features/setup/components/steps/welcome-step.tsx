@@ -57,7 +57,8 @@ export function WelcomeStep({ locale, onLocaleChange, onNext }: WelcomeStepProps
                   : "border-muted hover:border-muted-foreground/30"
               }`}
             >
-              <span className="text-2xl">{l.flag}</span>
+              {/* eslint-disable-next-line @next/next/no-img-element -- SVG estático local, sem otimização necessária */}
+              <img src={l.flagSrc} alt="" className="size-8 rounded-full" />
               <span className="text-xs font-medium">{l.label}</span>
             </button>
           ))}
