@@ -5,15 +5,9 @@ import {
   Calculator,
   LayoutPanelLeft,
   LayoutDashboard,
-  Mail,
-  CheckSquare,
-  MessageCircle,
   Calendar,
   Settings,
-  HelpCircle,
-  CreditCard,
   ArrowLeftRight,
-  Users,
   Landmark,
   RotateCcw,
   Wallet,
@@ -22,7 +16,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { Logo } from "@/components/logo"
-import { LocaleSwitcher } from "@/components/locale-switcher"
 
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
@@ -61,7 +54,8 @@ type SidebarNavGroup = {
 const data: { navGroups: SidebarNavGroup[] } = {
   navGroups: [
     {
-      label: "Dashboards",
+      // Sem rótulo: links principais na raiz do menu.
+      label: "",
       collapsible: false,
       items: [
         {
@@ -116,95 +110,6 @@ const data: { navGroups: SidebarNavGroup[] } = {
         },
       ],
     },
-    {
-      label: "Pages",
-      collapsible: true,
-      items: [
-        {
-          title: "Settings",
-          url: "#",
-          icon: Settings,
-          items: [
-            {
-              title: "Geral",
-              url: "/configuracoes?tab=general",
-            },
-            {
-              // i18n-ignore: chave de navegação — traduzida via t(normalizeKey(title)) em nav-main.tsx (sidebar.usersettings existe), não é texto renderizado literalmente
-              title: "User Settings",
-              url: "/configuracoes?tab=profile",
-            },
-            {
-              // i18n-ignore: chave de navegação — traduzida via t(normalizeKey(title)) em nav-main.tsx (sidebar.accountsettings existe), não é texto renderizado literalmente
-              title: "Account Settings",
-              url: "/configuracoes?tab=account",
-            },
-            {
-              title: "Plans & Billing",
-              url: "/settings/billing",
-            },
-            {
-              title: "Appearance",
-              url: "/configuracoes?tab=appearance",
-            },
-            {
-              title: "Notifications",
-              url: "/settings/notifications",
-            },
-            {
-              title: "Connections",
-              url: "/settings/connections",
-            },
-            {
-              title: "Componentes",
-              url: "/settings/components",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      label: "Apps",
-      collapsible: true,
-      items: [
-        {
-          title: "Mail",
-          url: "/mail",
-          icon: Mail,
-        },
-        {
-          title: "Tasks",
-          url: "/tasks",
-          icon: CheckSquare,
-        },
-        {
-          title: "Chat",
-          url: "/chat",
-          icon: MessageCircle,
-        },
-        {
-          title: "Users",
-          url: "/users",
-          icon: Users,
-        },
-      ],
-    },
-    {
-      label: "Support",
-      collapsible: true,
-      items: [
-        {
-          title: "FAQs",
-          url: "/faqs",
-          icon: HelpCircle,
-        },
-        {
-          title: "Pricing",
-          url: "/pricing",
-          icon: CreditCard,
-        },
-      ],
-    },
   ],
 }
 
@@ -214,35 +119,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useCurrentUser()
   const t = useTranslations("sidebar")
   const userData = user ?? { name: "...", email: "", avatar: "" }
-  const isAdmin = user?.role === "ADMIN" || user?.role === "SUPERADMIN"
-  const navGroups = React.useMemo(() => {
-    if (!isAdmin) return data.navGroups
-
-    return data.navGroups.map((group) => {
-      if (group.label !== "Pages") return group
-
-      return {
-        ...group,
-        items: group.items.map((item) => {
-          if (item.title !== "Settings" || !item.items) return item
-
-          const hasAdmin = item.items.some((subItem) => subItem.title === "Admin")
-          return {
-            ...item,
-            items: hasAdmin
-              ? item.items
-              : [
-                  ...item.items,
-                  {
-                    title: "Admin",
-                    url: "/configuracoes?tab=admin",
-                  },
-                ],
-          }
-        }),
-      }
-    })
-  }, [isAdmin])
+  const navGroups = data.navGroups
 
   return (
     <Sidebar {...props}>
@@ -277,9 +154,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
       <SidebarFooter>
-        <div className="px-2 pb-2">
-          <LocaleSwitcher />
-        </div>
         <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>

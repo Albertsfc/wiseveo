@@ -117,6 +117,11 @@ export function NavMain({
     </SidebarMenu>
   )
 
+  // Grupo sem rótulo: itens na raiz do menu, sem cabeçalho de seção.
+  if (!label) {
+    return <SidebarGroup>{menuContent}</SidebarGroup>
+  }
+
   return (
     <SidebarGroup>
       {collapsible ? (

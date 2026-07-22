@@ -6,20 +6,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Globe } from "lucide-react"
 import { LOCALES, LOCALE_META } from "@/i18n/config"
 
+/**
+ * Aplica um idioma: grava o cookie de locale e persiste no perfil do usuário
+ * (fire-and-forget), para canais sem cookie (Telegram, jobs) acompanharem.
+ * O chamador dispara o router.refresh().
+ */
+export function applyUserLocale(newLocale: string) {
+  document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
+  fetch("/api/user/preferences", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ locale: newLocale }),
+  }).catch(() => {})
+}
+
 export function LocaleSwitcher() {
   const locale = useLocale()
   const router = useRouter()
 
   const handleValueChange = (newLocale: string) => {
-    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000; SameSite=Lax`
-    // Fire-and-forget: persist the locale to the user record too, so
-    // cookie-less channels (Telegram, background jobs) also pick it up.
-    // Don't block the cookie-driven refresh below on this.
-    fetch("/api/user/preferences", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ locale: newLocale }),
-    }).catch(() => {})
+    applyUserLocale(newLocale)
     router.refresh()
   }
 
@@ -28,7 +34,7 @@ export function LocaleSwitcher() {
       <Globe className="h-4 w-4 text-muted-foreground" />
       <Select value={locale} onValueChange={handleValueChange}>
         <SelectTrigger className="w-[120px] h-8 text-xs">
-          <SelectValue placeholder="Idioma" />
+          <SelectValue />
         </SelectTrigger>
         <SelectContent>
           {LOCALES.map((code) => (

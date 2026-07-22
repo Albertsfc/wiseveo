@@ -7,6 +7,7 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { usePathname } from "next/navigation"
 import { ModeToggle } from "@/components/mode-toggle"
+import { LocaleMenu } from "@/components/locale-menu"
 import DatePicker from "@/components/date-picker"
 import { useDateRange } from "@/contexts/date-range-context"
 import { useDeviceClass } from "@/hooks/use-device-class"
@@ -71,8 +72,6 @@ export function SiteHeader({ onOpenThemeCustomizer }: SiteHeaderProps) {
   const routeKeys = [
     "/dashboard", "/insights", "/transactions", "/recurring", "/budget",
     "/analysis", "/forecasting", "/banks", "/calendar", "/configuracoes",
-    "/mail", "/tasks", "/chat", "/users", "/faqs", "/pricing",
-    "/settings/billing", "/settings/notifications", "/settings/connections", "/settings/components"
   ];
 
   const getPageInfo = (path: string) => {
@@ -161,6 +160,8 @@ export function SiteHeader({ onOpenThemeCustomizer }: SiteHeaderProps) {
                 mode="range"
               />
             )}
+
+            <LocaleMenu />
 
             <ModeToggle />
 

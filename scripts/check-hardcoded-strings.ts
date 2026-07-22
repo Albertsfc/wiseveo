@@ -17,7 +17,7 @@ const IGNORE = [
   "src/utils/tweakcn-theme-presets.ts",
   // dados mock do bloco "mail" (shadcn admin kit): remetentes/assuntos/corpos
   // de e-mail fictícios usados só para popular a demo — não é copy de UI.
-  "src/app/(dashboard)/mail/data.tsx",
+  "src/labs/mail/data.tsx",
   // componente órfão (zero imports em todo o src): mega menu de marketing de
   // um marketplace de templates de UI, sem relação com o produto WISEVEO —
   // sobra do starter kit, nunca renderizado.

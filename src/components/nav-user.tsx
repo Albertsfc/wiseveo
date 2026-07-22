@@ -1,10 +1,8 @@
 "use client"
 
 import {
-  CreditCard,
   EllipsisVertical,
   LogOut,
-  BellDot,
   CircleUser,
 } from "lucide-react"
 import Link from "next/link"
@@ -86,18 +84,6 @@ export function NavUser({
                 <Link href="/configuracoes?tab=account">
                   <CircleUser />
                   {t("accountsettings")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/settings/billing">
-                  <CreditCard />
-                  {t("plansbilling")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer">
-                <Link href="/settings/notifications">
-                  <BellDot />
-                  {t("notifications")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>

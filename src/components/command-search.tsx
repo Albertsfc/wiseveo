@@ -8,22 +8,13 @@ import {
   Calculator,
   LayoutPanelLeft,
   LayoutDashboard,
-  Mail,
-  CheckSquare,
-  MessageCircle,
   Calendar,
-  Shield,
-  AlertTriangle,
   Settings,
-  HelpCircle,
-  CreditCard,
   ArrowLeftRight,
   RotateCcw,
   Wallet,
   Landmark,
   User,
-  Bell,
-  Link2,
   Palette,
   LineChart,
   type LucideIcon,
@@ -149,39 +140,11 @@ export function CommandSearch({ open, onOpenChange }: CommandSearchProps) {
     { id: "calendario", url: "/calendar", groupId: "dashboards", icon: Calendar },
     { id: "configuracoes", url: "/configuracoes?tab=general", groupId: "dashboards", icon: Settings },
 
-    // Apps
-    { id: "mail", url: "/mail", groupId: "apps", icon: Mail },
-    { id: "tasks", url: "/tasks", groupId: "apps", icon: CheckSquare },
-    { id: "chat", url: "/chat", groupId: "apps", icon: MessageCircle },
-    { id: "calendario", url: "/calendar", groupId: "apps", icon: Calendar },
-
-    // Auth Pages
-    { id: "signIn1", url: "/auth/sign-in", groupId: "authPages", icon: Shield },
-    { id: "signIn2", url: "/auth/sign-in-2", groupId: "authPages", icon: Shield },
-    { id: "signUp1", url: "/auth/sign-up", groupId: "authPages", icon: Shield },
-    { id: "signUp2", url: "/auth/sign-up-2", groupId: "authPages", icon: Shield },
-    { id: "forgotPass1", url: "/auth/forgot-password", groupId: "authPages", icon: Shield },
-    { id: "forgotPass2", url: "/auth/forgot-password-2", groupId: "authPages", icon: Shield },
-
-    // Errors
-    { id: "unauthorized", url: "/errors/unauthorized", groupId: "errorsGroup", icon: AlertTriangle },
-    { id: "forbidden", url: "/errors/forbidden", groupId: "errorsGroup", icon: AlertTriangle },
-    { id: "notFound", url: "/errors/not-found", groupId: "errorsGroup", icon: AlertTriangle },
-    { id: "internalError", url: "/errors/internal-server-error", groupId: "errorsGroup", icon: AlertTriangle },
-    { id: "underMaintenance", url: "/errors/under-maintenance", groupId: "errorsGroup", icon: AlertTriangle },
-
-    // Settings
+    // Settings (abas reais em /configuracoes)
     { id: "geral", url: "/configuracoes?tab=general", groupId: "settings", icon: Settings },
     { id: "usersettings", url: "/configuracoes?tab=profile", groupId: "settings", icon: User },
     { id: "accountsettings", url: "/configuracoes?tab=account", groupId: "settings", icon: Settings },
-    { id: "plansbilling", url: "/settings/billing", groupId: "settings", icon: CreditCard },
     { id: "appearance", url: "/configuracoes?tab=appearance", groupId: "settings", icon: Palette },
-    { id: "notifications", url: "/settings/notifications", groupId: "settings", icon: Bell },
-    { id: "connections", url: "/settings/connections", groupId: "settings", icon: Link2 },
-
-    // Pages
-    { id: "faqs", url: "/faqs", groupId: "pages", icon: HelpCircle },
-    { id: "pricing", url: "/pricing", groupId: "pages", icon: CreditCard },
   ]
 
   const groupedItems = searchItems.reduce((acc, item) => {
