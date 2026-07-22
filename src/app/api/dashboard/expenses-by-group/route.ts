@@ -51,6 +51,10 @@ function parseDateBoundary(value: string, endOfDay: boolean): Date | null {
 
 export async function GET(request: NextRequest) {
   const t = await getTranslations("api.errors")
+  const tChart = await getTranslations("dashboard.ExpensesChart")
+  // Rótulo do bucket sintético (transferências, sem grupo, agregado do top-5).
+  // Não é dado do plano de contas — é UI gerada pela rota, por isso traduz aqui.
+  const othersLabel = tChart("othersGroup")
   const { searchParams } = request.nextUrl
   const fromParam = searchParams.get("from")
   const toParam = searchParams.get("to")
@@ -111,10 +115,12 @@ export async function GET(request: NextRequest) {
   for (const tx of transactions) {
     const isTransfer = tx.type === "TRANSFER"
     const code = isTransfer ? -1 : (tx.groupCode ?? tx.category?.group?.code ?? 0)
-    let name = isTransfer ? "OUTROS" : (tx.category?.group?.name ?? "OUTROS")
+    let name = isTransfer ? othersLabel : (tx.category?.group?.name ?? othersLabel)
 
+    // Grupo do plano de contas literalmente chamado "Outros" (seed pt-BR) é
+    // exibido com o mesmo rótulo traduzido do bucket sintético.
     if (name.toLowerCase() === "outros") {
-      name = "OUTROS"
+      name = othersLabel
     }
 
     const absAmount = Math.abs(Number(tx.amount ?? 0))
@@ -160,7 +166,7 @@ export async function GET(request: NextRequest) {
     
     top5.push({
       groupCode: "others",
-      groupName: "OUTROS",
+      groupName: othersLabel,
       amount: othersTotal,
       paid: othersPaid,
       scheduled: othersScheduled,

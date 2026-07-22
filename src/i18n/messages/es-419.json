@@ -750,6 +750,7 @@
       "description": "Distribución de gastos en el período seleccionado",
       "loading": "Cargando...",
       "noExpenses": "Sin gastos en el período",
+      "othersGroup": "OTROS",
       "paid": "Pagado:",
       "title": "Gastos por Grupo",
       "toPay": "Por Pagar:",

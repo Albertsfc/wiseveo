@@ -750,6 +750,7 @@
       "description": "Expense distribution in the selected period",
       "loading": "Loading...",
       "noExpenses": "No expenses in period",
+      "othersGroup": "OTHERS",
       "paid": "Paid:",
       "title": "Expenses by Group",
       "toPay": "To Pay:",
