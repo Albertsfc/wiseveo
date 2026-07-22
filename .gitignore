@@ -44,3 +44,6 @@ next-env.d.ts
 
 # internal agent files (credentials, scratch)
 .agent/test-credentials.md
+
+# Claude Code — config pessoal (nao versionar)
+.claude/settings.local.json
