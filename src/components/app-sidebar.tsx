@@ -127,14 +127,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/dashboard">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Logo size={24} className="text-current" />
+              <Link href="/dashboard" aria-label={t("brandLabel")}>
+                <div className="flex aspect-square size-8 items-center justify-center">
+                  <Logo size={28} />
                 </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{t("title")}</span>
-                  <span className="truncate text-xs">{t("subtitle")}</span>
-                </div>
+                <span className="flex-1 truncate text-left text-base tracking-tight">
+                  {/* i18n-ignore: wordmark da marca, palavra única e não traduzível (Brand Book cap. 04) */}
+                  <span className="font-medium">WISE</span>
+                  {/* i18n-ignore: wordmark da marca (Brand Book cap. 04) */}
+                  <span className="font-extrabold">VEO</span>
+                </span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
