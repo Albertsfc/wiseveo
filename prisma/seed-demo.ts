@@ -12,8 +12,13 @@ const prisma = new PrismaClient({ adapter })
 async function main() {
   console.log("Start seeding demo database...");
 
-  const email = "demo@wiseveo.com"
-  const password = "demo1234"
+  const email = process.env.SEED_DEMO_EMAIL?.trim().toLowerCase() || "demo@wiseveo.com"
+  const password = process.env.SEED_DEMO_PASSWORD
+  if (!password) {
+    throw new Error(
+      "SEED_DEMO_PASSWORD is required. Set it in your environment before seeding."
+    )
+  }
   const hashedPassword = await bcrypt.hash(password, 10)
 
   // 1. Create/Update demo user

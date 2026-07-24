@@ -11,8 +11,13 @@ const prisma = new PrismaClient({ adapter })
 async function main() {
   console.log("Start seeding database...");
 
-  const email = "admin@wiseveo.com"
-  const password = "admin1234"
+  const email = process.env.SEED_ADMIN_EMAIL?.trim().toLowerCase() || "admin@wiseveo.com"
+  const password = process.env.SEED_ADMIN_PASSWORD
+  if (!password) {
+    throw new Error(
+      "SEED_ADMIN_PASSWORD is required. Set it in your environment before seeding."
+    )
+  }
   const hashedPassword = await bcrypt.hash(password, 10)
 
   // 1. Create default admin user
