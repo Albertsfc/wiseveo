@@ -50,3 +50,6 @@ next-env.d.ts
 
 # Labs — referencias de design locais (nao versionar)
 src/labs/
+
+# Catalogo local de commits (descricoes reais; publico so ve mensagem generica)
+docs/commit-catalog.local.md
