@@ -221,7 +221,10 @@ MIT. See [LICENSE](LICENSE).
 
 <div align="center">
 <br>
-<img alt="Wiseveo" src=".github/assets/logo-horizontal-light.svg" width="150">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-horizontal-dark.svg">
+  <img alt="Wiseveo" src=".github/assets/logo-horizontal-light.svg" width="150">
+</picture>
 <br><br>
 <sub>Built by AFILD</sub>
 </div>
